@@ -1,0 +1,77 @@
+# Makefile for building the JAVA examples in Unix/Linux/OSX
+
+# ENSURE THE STACK VERSION IS CORRECT!
+UASTACK=Opc.Ua.Stack-1.02.337.2.jar
+
+# Check the file paths, especially for JAVAC and ANT, unless they are on path
+
+JAVAC=javac
+JAVA=java
+ANT=ant
+
+MKDIR=mkdir
+RM=rm -rf
+
+EXAMPLESPATH=examples/org/opcfoundation/ua/examples
+EXAMPLES_SRC=examples/$(EXAMPLESPATH)
+BIN=bin
+BUILD=build
+EXAMPLES_BIN=$(BIN)/$(EXAMPLESPATH)
+EXAMPLES_NS=org/opcfoundation/ua/examples
+
+# Java classpath
+CLASSPATH=examples:lib/$(UASTACK):$(BUILD)/$(UASTACK):lib/log4j-1.2.15.jar:lib/slf4j-api-1.7.7.jar:lib/slf4j-log4j12-1.7.7.jar:lib/httpcore-4.2.4.jar:lib/httpcore-nio-4.2.4.jar:lib/httpclient-4.2.5.jar:lib/bcpkix-jdk15on-152.jar:lib/bcprov-jdk15on-152.jar:lib/scpkix-1.51.0.0.jar:lib/scprov-1.51.0.0:lib/sc-core-1.51.0.0.jar:lib/commons-logging-1.1.1.jar
+JUNITPATH=lib/junit-4.10.jar
+
+# Implicit $(BUILD) rules
+.SUFFIXES: .class .java
+
+.java.class:
+	$(JAVAC) -d $(BIN) -cp $(CLASSPATH) "$<"
+
+# $(BUILD) targets
+all: bin $(BUILD) BigCertificateExample ClientExample1 ClientServerExample DiscoveryExample GenerateCertificateExample NanoServer.sh SampleClient.sh ServerExample1.sh RunUnitTests.sh
+
+$(BUILD):
+	@if test -f $(BUILD).xml && ! test -f $(BUILD)/$(UASTACK); then \
+	    $(ANT) -f $(BUILD).xml; \
+	fi
+
+bin:
+	$(MKDIR) $(BIN)
+
+BigCertificateExample: $(EXAMPLESPATH)/BigCertificateExample.class
+
+ClientExample1: $(EXAMPLESPATH)/ClientExample1.class
+
+ClientServerExample: $(EXAMPLESPATH)/ClientServerExample.class
+
+DiscoveryExample: $(EXAMPLESPATH)/DiscoveryExample.class
+
+GenerateCertificateExample: $(EXAMPLESPATH)/GenerateCertificateExample.class
+
+NanoServer: $(EXAMPLESPATH)/NanoServer.class
+
+ServerExample1: $(EXAMPLESPATH)/ServerExample1.class
+
+SampleClient: $(EXAMPLESPATH)/SampleClient.class
+
+ServerExample1.sh: $(EXAMPLESPATH)/ServerExample1.class
+	echo "$(JAVA) -cp $(CLASSPATH):$(BIN) $(EXAMPLES_NS)/ServerExample1 \$$*" > $@ && chmod a+x $@
+
+NanoServer.sh: $(EXAMPLESPATH)/NanoServer.class
+	echo "$(JAVA) -cp $(CLASSPATH):$(BIN) $(EXAMPLES_NS)/NanoServer \$$*" > $@ && chmod a+x $@
+
+SampleClient.sh: $(EXAMPLESPATH)/SampleClient.class
+	echo "$(JAVA) -cp $(CLASSPATH):$(BIN) $(EXAMPLES_NS)/SampleClient \$$*" > $@ && chmod a+x $@
+
+RunUnitTests.sh:
+	echo "$(JAVA) -cp $(CLASSPATH):$(JUNITPATH):$(BIN) junit.textui.TestRunner org.opcfoundation.ua.unittests.TestStack" > $@ && chmod a+x $@
+
+# remove all built targets
+clean:
+	$(RM) $(EXAMPLESBIN) $(BIN) ServerExample1.sh SampleClient.sh *.der *.pem
+	
+cleanall: clean
+	$(RM) $(BUILD) 
+

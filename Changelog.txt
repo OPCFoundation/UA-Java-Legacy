@@ -1,0 +1,217 @@
+1.02.337.6
+Fixed (Mantis 3149): Private keys encrypted with passwords containing non-ASCII characters cannot be loaded
+Fixed (Mantis 3139): sendPendingMessagesRunnable should not run in parallel
+Changed: TIMEOUT_TOLERANCE (constant 10%) for client side - extra time to wait before defining a request has timed out
+Changed: Generating cert with SUN JCE, to use subject names as plain string instead of CertificateIssuerName object.
+
+1.02.337.4
+Library update: Spongy Castle updated to version 1.52
+Fixed (Mantis 3114): NullPointerException from XmlDecoder.getVariant() if an unknown Structure type is read
+Fixed: potential NPE in EndpointUtil.createUserNameIdentityToken
+New (Mantis 3084): Enable connection handshake timeout to be configured
+Fixed (Mantis 3116): BAD_TIMEOUT constant loses stack trace in SecureChannelTcp
+Fixed (Mantis 3101): Renewed security token is not taken in use before the old one expires
+Fixed (Mantis 3108): Limit depth of recursion for variant arrays and diagnosticInfo.
+
+1.02.337.2
+Library update: Bouncy Castle updated to version 1.52, Spongy Castle updated to version1.51
+Library update: Support for HTTP Core classes version 4.4 added - a minor issue found in unit tests, 
+  so version 4.2 is still the default library suggested
+Changed (Mantis 2824): Extensible "security framework" allowing custom security engines to be incorporated
+- New interfaces: CryptoProvider and CertificateProvider, including fault implementations. See readme.txt for details
+New (Mantis 2823): Sample Nano Server
+- Minimal server intended to conform to Nano Embedded Device Server Profile.
+Fixed (Mantis 3041): Enable the endpointUrl check between GetEndpoints and CreateSession responses to be omitted
+- createSession can be called without discoveredEndpoints to omit the check
+Fixed (Mantis 3042): XmlDecoder.getByteString refers to javax.xml.bind, which is not available on all environments
+Fixed (Mantis 2590): Basic256Sha256 interoperability testing
+Fixed (Mantis 3005): Encoding and decoding Structures in Structures is not working against C/.NET Stack
+Fixed (Mantis 2495): GetEndpoints should return endpoints bound to the queried network interface only
+
+1.02.336.2
+
+Fixed (Mantis 2604): CloseSecureChannel never called
+Library Change (Mantis 2629): Replace Apache log4j with SLF, which is a more flexible logging framework
+- log4j can be used via the slf4-log4j bridge
+- see install.txt and readme.txt for details on usage
+Fixed (Mantis 2818): XmlElement.getNode() fails if the XML string contains a BOM
+Fixed (Mantis 2108): IPV6 should be supported
+- requires Java 7 or later
+- New: EndpointUtil.getInetAddresses(boolean enableIPv6) - called by default with 'true'
+Changed (Mantis 2633): SecureChannel should expose the SecurityConfiguration
+Changed (Mantis 2879): AsyncResult changed to a Generic class - and serviceRequestAsync changed to return AsyncResult<ServiceResponse>
+Changed: ObjectUtils.printObjectIds & shoDataType default changed to false to give prettier printing by default
+New: DateTime.is/setLocaleTimeInToString()
+
+1.02.335.7
+
+Fixed: XmlElement.toString() to not throw exception, if the XmlElement is not XML at all
+Fixed: StatusCode.getName() to provide a name for plain "BAD" as well
+Fixed: EncoderContext.getDefaultInstance() to use NamespaceTable.getDefaultInstance() (which is NEW)
+
+1.02.335.6
+
+Fixed (Mantis 2660) the FileType definition according to the fixed Nodeset2.xml 
+New (Mantis 1230): equals() and hashCode() generated to Structure types 
+New: ExpandedNode(uri,value) constructor (assuming serverIndex=0) 
+New: ObjectUtils.equals(left, right) 
+New: valueOf(int[]), valueOf(Integer[]), valueOf(UnsignedInteger[]) for all Enumeration types 
+New: LocalizedText(string) constructor (assuming NO_LOCALE) 
+New: IEncoder.put(), IDecoder.get, EncoderUtils 
+Fixed (Mantis 1810, which was supposed to be fixed already...): Do not check the securityMode when opening the channel - to enable only secure endpoints used for actual connections (since GetEndpoints must be performed over an insecure channel, anyway) 
+Fixed: Do not use namespace to calculate ExpandedNodeId.hashCode() - since the same namespace will give different hashCodes depending on which is used 
+Changed (Mantis 1534): NumericRange supports several dimensions 
+Changed: ExpandedNodeId used in places where NodeId was previously used (especially in Structure types). In addition, EncoderContext is required in some methods. The EncoderContext object is available from Server and Client objects. 
+Changed: XmlDecoder.setNamespaceTable() to enable mapping of namespace indexes between XmlElements and the target system 
+Changed: Refactored HttpsServerSecureChannel to inherit from AbstractServerSecureChannel 
+Fixed: CryptoUtil.asymmEncrypt() did not use the correct transformation - failing with 256 bit user password encryption.  
+New: DateTime.get/setStrFormat() & fromMillis() 
+New: ObjectUtils.set/getShowDataType(), set/getPrintObjectIds(), set/getShowByteDataAsHex(), set/getShowFullClassName() 
+Changed: Bad_CertificateInvalid error to Bad_SecurityChecksFailed 
+New: DataValue.clone() 
+Fixed: UnsignedLong constructor with BigInteger (equal to Long.MAX_VALUE) 
+Fixed (Mantis 2783): Use createNonce() with the symmetricEncryptionAlgorithm, instead of asymmetric, in OpenSecureChannel 
+ 
+1.02.334.10
+
+Fixed: CertificateUtils.createIssuerCertificate() dates
+Fixed: XmlDecoder, reading missing optional field.
+
+1.02.334.9
+
+Fixed: Provide Bad_TcpEndpointUrlInvalid from the server, if the requested endpoint is not found.
+
+1.02.334.8
+
+New: CertificateUtils.getApplicationUriOfCertificate()
+Fixed: BigCertificateExample
+Fixed: All compiler warnings removed (except for the generated core-classes).
+
+1.02.334.7
+
+Minor details with opening client connection.
+New: SecurityMode.ALL_102 & SECURE_102
+
+Mantis issues resolved
+
+2616: Certificate Subject does not define the hostname in the DC field
+1615: NodeId & ExpandedNodeId refer to Sun implementation of base64
+2607: Remove BASIC256SHA256 from SecurityModes.ALL
+2605: Keep HTTPS socket connection alive forever in the server
+
+
+1.02.334.6
+
+New: CertificateUtils.createIssuerCertificate()
+New: CertificateUtils.createHttpsCertificate()
+Changed: CertificateUtils.createApplicationInstanceCertificate() takes an optional issuerKeys, which is used to sign the certificate
+Changed: Examples to use createHttpsCertificate() and createIssuerCertificate() via ExampleKeys.getHttpsCertificate()
+Changed: StatusCode.OVERFLOW_MASK
+New: StatusCode.INFOTYPE_DATAVALUE & OVEFLOW_BIT
+New: CertificateUtils.set/getCertificateSignatureAlgorithm
+Removed: ClientExample2-4, TestStackExample
+
+Mantis issues resolved
+
+2588 StatusCode does not support InfoType
+2595 Incorrect CertificateSignatureAlgorithm used
+2593 Create basic implementation for Browse and Read to ServerExample1
+2590 HTTPS Certificate fields of the sample applications
+
+1.02.334.5
+
+IOP tested HTTPS against .NET and C stacks
+Updated Makefiles to enable building (and running) of samples from the command line 
+
+1.02.334.4
+
+Mantis issues resolved
+
+2493 	 GetEndpoints only returns endpoints of the "same" protocol
+2556 	 EndpointDescription.TransportProfileUri incorrect for HTTPS endpoints	
+ 	  	 
+1.02.334.3
+
+New: HttpsSecurityPolicy (moved TLS policies from SecurityMode to this separate class)
+New: HttpsSettings.get/setHttpsSecurityPolicy()
+Changed: HTTP core libraries updated to version 4.2.4/5
+
+Mantis issues resolved
+
+2467	Client side stack is not checking timeout based on RequestHeader
+
+1.02.334.2
+
+Mantis issues resolved
+
+2426	Certificate generated by SampleClient not read by the UA Configuration tool
+2436	GenerateCertificateExample fails
+2449	EndpointUtil.createX509IdentityToken defines an incorrect algorithm for UserTokenSignature/SignatureData
+
+1.02.334.1
+
+Mantis issues resolved
+
+1392	MaxRequestMessageSize not used
+2345	NPE during connection break
+2346	Bad_UnexpectedError instead of Bad_IdentityTokenRejected in client, if user token not supported by server
+2379	Uncaught exception after communication problem
+2308	XmlElement bigger than 64kB not marshalled properly via Read service
+2400	Inconsistency between UpdateEventDetails in spec and stacks
+
+
+1.02.334.0
+
+        Major features
+
+o   https
+
+o   Big certificates (keysize > 2048) and new SecurityPolicy: Basic256Sha256
+
+o   BouncyCastle upgraded to 1.47 
+
+o   SpongyCastle for Android security
+
+        Major changes
+
+o   "" URL has Endpoint socket discovery.
+
+o   Binding endpoint refactored. A socket can host different service servers.
+
+o   Cryptography refactored: enabling different security providers
+
+o   Server, Client and Application classes refactored.
+
+o   Client: Separation of connectUrl (socket address) and endpointUrl (identifier)
+
+o   IPv6 https
+
+ 
+
+        Changes & Fixes:
+
+o   Dead-lock from misbehaving Executor
+
+o   Worker thread count limited to 64 (changeble)
+
+ 
+
+Mantis issues resolved in this release:
+
+1810 GetEndpoints not available if SecurityPolicy.None not available
+
+1995 Open Secure Channel policy None  
+
+1836 Problem with key length larger 2048 bits   
+
+2074 HTTPS Support   
+
+1802 Troubleshoot with Publish Requests   
+
+1830 Provide abilility to use "available" security providers   
+
+2134 The JAVA Stack adds additional bytes to messages in the absence of security profiles that sign or encrypt the message chunk  
+
+2214 Memory leak in UaTcpServer; connections not released   
+
+ 

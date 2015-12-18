@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModelDesign
+  xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:OpcUa="http://opcfoundation.org/UA/"
+  xmlns:DI="http://opcfoundation.org/UA/DI/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  TargetNamespace="http://opcfoundation.org/UA/DI/"
+  TargetXmlNamespace="http://opcfoundation.org/UA/DI/"
+  TargetNamespaceVersion="1.00"
+  xmlns="http://opcfoundation.org/UA/ModelDesign.xsd">
+
+  <Namespaces>
+    <Namespace Name="OpcUaDi" Prefix="Opc.Ua.Di" XmlNamespace="http://opcfoundation.org/UA/DI/Types.xsd" XmlPrefix="DI">http://opcfoundation.org/UA/DI/</Namespace>
+    <Namespace Name="OpcUa" Prefix="Opc.Ua" InternalPrefix="Opc.Ua.Server" XmlNamespace="http://opcfoundation.org/UA/2008/02/Types.xsd" XmlPrefix="OpcUa">http://opcfoundation.org/UA/</Namespace>
+  </Namespaces>
+  <ReferenceType SymbolicName="DI:Uses" BaseType="OpcUa:Organizes">
+    <Description>The semantic is to indicate that the target Node is used for the source Node of the Reference</Description>
+    <InverseName>UsedBy</InverseName>
+  </ReferenceType>
+  <Object SymbolicName="DI:DeviceSet" TypeDefinition="OpcUa:BaseObjectType">
+    <Description>Contains all instances of devices</Description>
+    <References>
+      <Reference IsInverse="true">
+        <ReferenceType>OpcUa:Organizes</ReferenceType>
+        <TargetId>OpcUa:ObjectsFolder</TargetId>
+      </Reference>
+    </References>
+  </Object>
+  <ObjectType SymbolicName="DI:TopologyElementType" BaseType="OpcUa:BaseObjectType" IsAbstract="true">
+    <Description>Defines the basic information components for all configurable elements in a device topology</Description>
+    <Children>
+      <Object SymbolicName="DI:ParameterSet" TypeDefinition="OpcUa:BaseObjectType">
+        <Description>Flat list of Parameters</Description>
+        <Children>
+          <Variable SymbolicName="DI:ParameterIdentifier" TypeDefinition="OpcUa:BaseDataVariableType" ModellingRule="OptionalPlaceholder">
+            <BrowseName>&lt;ParameterIdentifier&gt;</BrowseName>
+            <Description>A parameter which belongs to the topology element.</Description>
+            <ReferenceType>OpcUa:Organizes</ReferenceType>
+          </Variable>
+        </Children>
+      </Object>
+      <Object SymbolicName="DI:MethodSet" TypeDefinition="OpcUa:BaseObjectType" ModellingRule="Optional">
+        <Description>Flat list of Methods</Description>
+        <Children>
+          <Method SymbolicName="DI:MethodIdentifier" ModellingRule="OptionalPlaceholder">
+            <BrowseName>&lt;MethodIdentifier&gt;</BrowseName>
+            <Description>A method which belongs to the topology element.</Description>
+            <ReferenceType>OpcUa:Organizes</ReferenceType>
+          </Method>
+        </Children>
+      </Object>
+      <Object SymbolicName="DI:GroupIdentifier" TypeDefinition="DI:FunctionalGroupType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;GroupIdentifier&gt;</BrowseName>
+        <Description>An application specific functional group used to organize parameters and methods.</Description>
+      </Object>
+      <Object SymbolicName="DI:Identification" TypeDefinition="DI:FunctionalGroupType" ModellingRule="Optional">
+        <Description>Used to organize parameters for identification of this TopologyElement</Description>
+      </Object>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:DeviceType" BaseType="DI:TopologyElementType" IsAbstract="true">
+    <Description>Defines the basic information components for all configurable elements in a device topology</Description>
+    <Children>
+      <Property SymbolicName="DI:SerialNumber" DataType="OpcUa:String">
+        <Description>Identifier that uniquely identifies, within a manufacturer, a device instance</Description>
+      </Property>
+      <Property SymbolicName="DI:RevisionCounter" DataType="OpcUa:Int32">
+        <Description>An incremental counter indicating the number of times the static data within the Device has been modified</Description>
+      </Property>
+      <Property SymbolicName="DI:Manufacturer" DataType="OpcUa:LocalizedText">
+        <Description>Model name of the device</Description>
+      </Property>
+      <Property SymbolicName="DI:Model" DataType="OpcUa:LocalizedText">
+        <Description>Name of the company that manufactured the device</Description>
+      </Property>
+      <Property SymbolicName="DI:DeviceManual" DataType="OpcUa:String">
+        <Description>Address (pathname in the file system or a URL | Web address) of user manual for the device</Description>
+      </Property>
+      <Property SymbolicName="DI:DeviceRevision" DataType="OpcUa:String">
+        <Description>Overall revision level of the device</Description>
+      </Property>
+      <Property SymbolicName="DI:SoftwareRevision" DataType="OpcUa:String">
+        <Description>Revision level of the software/firmware of the device</Description>
+      </Property>
+      <Property SymbolicName="DI:HardwareRevision" DataType="OpcUa:String">
+        <Description>Revision level of the hardware of the device</Description>
+      </Property>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:BlockType" BaseType="DI:TopologyElementType" IsAbstract="true">
+    <Description>Adds the concept of Blocks needed for block-oriented FieldDevices</Description>
+    <Children>
+      <Property SymbolicName="DI:RevisionCounter" ModellingRule="Optional" DataType="OpcUa:UInt32">
+        <Description>Incremental counter indicating the number of times the static data within the Block has been modified</Description>
+      </Property>
+      <Property SymbolicName="DI:ActualMode" ModellingRule="Optional" DataType="OpcUa:LocalizedText">
+        <Description>Current mode of operation the Block is able to achieve</Description>
+      </Property>
+      <Property SymbolicName="DI:PermittedMode" ModellingRule="Optional" DataType="OpcUa:LocalizedText">
+        <Description>Modes of operation that are allowed for the Block based on application requirements</Description>
+      </Property>
+      <Property SymbolicName="DI:NormalMode" ModellingRule="Optional" DataType="OpcUa:LocalizedText">
+        <Description>Mode the Block should be set to during normal operating conditions</Description>
+      </Property>
+      <Property SymbolicName="DI:TargetMode" ModellingRule="Optional" DataType="OpcUa:LocalizedText">
+        <Description>Mode of operation that is desired for the Block</Description>
+      </Property>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:ConfigurableObjectType" BaseType="OpcUa:BaseObjectType">
+    <Description>Defines a general pattern to expose and configure modular components</Description>
+    <Children>
+      <Object SymbolicName="DI:SupportedTypes" TypeDefinition="OpcUa:FolderType">
+        <Description>Folder maintaining the set of (sub-types of) BaseObjectTypes that can be instantiated in the ConfigurableComponent</Description>
+      </Object>
+      <Object SymbolicName="DI:ObjectIdentifier" TypeDefinition="OpcUa:BaseObjectType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;ObjectIdentifier&gt;</BrowseName>
+        <Description>The instances that .</Description>
+      </Object>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:FunctionalGroupType" BaseType="OpcUa:FolderType">
+    <Description>FolderType is used to organize the Parameters and Methods from the complete set (ParameterSet, MethodSet) with regard to their application</Description>
+    <Children>
+      <Object SymbolicName="DI:GroupIdentifier" TypeDefinition="DI:FunctionalGroupType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;GroupIdentifier&gt;</BrowseName>
+        <Description>An application specific functional group used to organize parameters and methods.</Description>
+      </Object>
+      <Variable SymbolicName="DI:ParameterIdentifier" TypeDefinition="OpcUa:BaseDataVariableType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;ParameterIdentifier&gt;</BrowseName>
+        <Description>A parameter which belongs to the group.</Description>
+        <ReferenceType>OpcUa:Organizes</ReferenceType>
+      </Variable>
+      <Method SymbolicName="DI:MethodIdentifier" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;MethodIdentifier&gt;</BrowseName>
+        <Description>A method which belongs to the group.</Description>
+        <ReferenceType>OpcUa:Organizes</ReferenceType>
+      </Method>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:ProtocolType" BaseType="OpcUa:BaseObjectType" IsAbstract="true">
+    <Description>General structure of a Protocol ObjectType</Description>
+  </ObjectType>
+</ModelDesign>

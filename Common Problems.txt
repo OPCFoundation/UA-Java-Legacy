@@ -1,0 +1,48 @@
+Common Problems - OPC UA Java Stack
+-----------------------------------
+
+When running the sample server (ServerExample1) and sample clients (ClientExample1 and SampleClient) you 
+might encounter problems which prevent a successful connection. We have documented below common causes 
+for connectivity problems, which include: 
+
+- EndpointUrl mismatch
+- Java Security Policies
+
+
+
+EndpointUrl Mismatch
+---------------------
+	Summary:    The EndpointUrl used by the Client must match the Server's EndpointUrl.
+	Resolution: 1. Launch the sample Server (ServerExample1)
+				2. Find the EndpointUrl in the output console (e.g. opc.tcp://MyHost:8666/UAExample)
+				3. Modify the "Run Configuration" for the Client (ClientExample1 or SampleClient): 
+					a. In Eclipse, open Run -> Run Configurations...
+					b. Expand "Java Application" in the left-navigation and choose a Client project.
+					c. Click the "Arguments" tab
+					d. Paste the Server's EndpointUrl (copied in step #2).
+					e. Click "Apply" and then "Run".
+				4. The Client should now connect successfully to the UA Server.
+
+
+
+
+Java Security Policies
+----------------------
+	Summary:	You see an error (in red) that says "Illegal key size".
+	Resolution:	1. Your Java runtime probably needs to update the Java Cryptography Extension (JCE) policy files.
+				   (JRE 6: http://www.oracle.com/technetwork/java/javase/downloads/jce-6-download-429243.html)
+				2. Extract the JCE download contents: local_policy.jar and US_export_policy.jar 
+				3. Copy the 2 files to your Java security directory (backup your original files first): 
+				   (JRE 6: C:\Program Files\Java\jre6\lib\security)
+				4. Recompile and re-run your Java sample applications, Server and Client!
+
+
+
+
+Talk to us
+----------
+	Found another problem preventing compilation? or have improvement suggestions?
+		Tell us at uajavastack@opcfoundation.org 
+
+	Found a bug in the source code? 
+		Please log a bug at www.opcfoundation.org/mantis 

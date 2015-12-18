@@ -1,0 +1,79 @@
+# Makefile for building the JAVA examples in Windows
+
+# ENSURE THE STACK VERSION IS CORRECT!
+UASTACK=Opc.Ua.Stack-1.02.337.2.jar
+
+# Check the file paths, especially for JAVAC and ANT, unless they are on path
+
+JAVAC=javac
+JAVA=java
+ANT=ant
+
+# Sample paths (JDK 1.7.21 & Eclipse 4.2/ant1.8.3):
+#JAVAC="C:\Program Files\Java\jdk1.7.0_40\bin\javac"
+#ANT=c:\eclipse\plugins\org.apache.ant_1.8.3.v201301120609\bin\ant
+
+MKDIR=md
+RM=del /s /q /f
+
+EXAMPLESPATH=org\opcfoundation\ua\examples
+EXAMPLES_SRC=examples\$(EXAMPLESPATH)
+BIN=bin
+BUILD=build
+EXAMPLES_BIN=$(BIN)\$(EXAMPLESPATH)
+EXAMPLES_NS=org/opcfoundation/ua/examples
+
+# windows classpath
+CLASSPATH=examples;lib\$(UASTACK);$(BUILD)\$(UASTACK);lib\slf4j-api-1.7.7.jar;lib\slf4j-log4j12-1.7.7.jar;lib\log4j-1.2.15.jar;lib\httpcore-4.2.4.jar;lib\httpcore-nio-4.2.4.jar;lib\httpclient-4.2.5.jar;lib\bcpkix-jdk15on-152.jar;lib\bcprov-jdk15on-152.jar;lib\scpkix-1.51.0.0.jar;lib\scprov-1.51.0.0.jar;lib\sc-core-1.51.0.0.jar;lib\commons-logging-1.2.jar
+JUNITPATH=lib\junit-4.10.jar
+
+# Implicit $(BUILD) rules
+.SUFFIXES: .class .java
+
+.java.class:
+	$(JAVAC) -d $(BIN) -cp $(CLASSPATH) "$<"	
+
+# Build targets
+all: $(BUILD) bin BigCertificateExample ClientExample1 ClientServerExample DiscoveryExample GenerateCertificateExample SampleClient.bat ServerExample1.bat RunUnitTests.bat NanoServer.bat
+
+$(BUILD):
+	@if exist $(BUILD).xml if not exist $(BUILD)\$(UASTACK) $(ANT) -f $(BUILD).xml
+  
+bin:
+	@if not exist $(BIN) $(MKDIR) $(BIN)
+
+BigCertificateExample: $(EXAMPLES_SRC)\BigCertificateExample.class
+
+ClientExample1: $(EXAMPLES_SRC)\ClientExample1.class
+
+ClientServerExample: $(EXAMPLES_SRC)\ClientServerExample.class
+
+DiscoveryExample: $(EXAMPLES_SRC)\DiscoveryExample.class
+
+GenerateCertificateExample: $(EXAMPLES_SRC)\GenerateCertificateExample.class
+
+ServerExample1: $(EXAMPLES_SRC)\ServerExample1.class
+
+NanoServer: $(EXAMPLES_SRC)\NanoServer.class
+
+SampleClient: $(EXAMPLES_SRC)\SampleClient.class
+
+ServerExample1.bat: ServerExample1
+	echo $(JAVA) -cp $(CLASSPATH);$(BIN) $(EXAMPLES_NS)/ServerExample1 %%1 %%2 %%3 > ServerExample1.bat
+
+SampleClient.bat: SampleClient
+	echo $(JAVA) -cp $(CLASSPATH);$(BIN) $(EXAMPLES_NS)/SampleClient %%1 %%2 %%3 > SampleClient.bat
+
+RunUnitTests.bat:
+	echo $(JAVA) -cp $(CLASSPATH);$(JUNITPATH);$(BIN) junit.textui.TestRunner org.opcfoundation.ua.unittests.TestStack > RunUnitTests.bat
+	
+NanoServer.bat: NanoServer
+	echo $(JAVA) -cp $(CLASSPATH);$(BIN) $(EXAMPLES_NS)/NanoServer %%1 %%2 %%3 > NanoServer.bat
+  
+# remove all built targets
+clean:
+	@for %i in ($(BIN) ServerExample1.bat SampleClient.bat NanoServer.bat *.der *.pem) do @if exist %i $(RM) %i
+	@if exist $(EXAMPLES_BIN) $(RM) $(EXAMPLES_BIN) 
+
+cleanall: clean
+	$(RM) $(BUILD)
