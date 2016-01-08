@@ -12,3 +12,7 @@ hs_err_pid*
 
 # folders
 bin/
+build/
+javadoc/
+test-output/
+tmp/
