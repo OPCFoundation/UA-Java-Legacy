@@ -1,4 +1,4 @@
-# OPC Foundation UA .NET
+# OPC Foundation UA JAVA
 
 The OPC Foundation has formally released the Unified Architecture Java Stack and Sample Code to the community.
 
