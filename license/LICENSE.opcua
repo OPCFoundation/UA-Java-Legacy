@@ -1,0 +1,17 @@
+Copyright and License Information
+
+All binaries and documentation files installed by this package are subject to the terms of the "OPC Redistributables License Version 1.00".
+
+All source files are subject to one of  
+
+- OPC Foundation MIT License Version 1.00
+- OPC Reciprocal Community License ("RCL") Version 1.00
+- OPC Reciprocal Community Binary License ("RCBL") Version 1.00
+
+The applicable license agreement is declared at the top of each source file.
+
+If a license declaration is not specified in a source file then the file is subject to the 
+OPC Reciprocal Community Binary License ("RCBL") Version 1.00.
+
+A more detailed overview of the different agreements can be found here:
+http://www.opcfoundation.org/Default.aspx/License/UALicense.asp

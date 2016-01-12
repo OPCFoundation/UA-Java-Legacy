@@ -1,0 +1,14 @@
+Importing UA Java stack into Eclipse IDE
+
+1. Extract the ZIP contents, for example to your Eclipse workspace folder
+2. Select File-Import...General-Existing Projects into Workspace
+3. Find the directory that you extracted as the Root directory
+  - if you extracted the project out of your workspace, check "Copy to your workspace"
+4. Click Finish
+5. Check the project Build Path (right-click on the project)
+  - project depends only on slf4j-api. In order to use logging functionality users must choose logger implementation at their development or runtime environment.
+  - the sample applications use log4j logging. This can be enabled by adding slf-log4j12-*.jar binding and log4j-*.jar to project build path. These .jars can be found in the lib-folder. Lib-folder also contains slf4j-simple-*.jar for those users that do not wish to use log4j logging.
+  - more information about slf4j logging can be found from: http://slf4j.org/
+6. You can now build and run the examples, or start developing your own code.
+
+

@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModelDesign 
+  xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:OpcUa="http://opcfoundation.org/UA/" 
+  xmlns:DI="http://opcfoundation.org/UA/DI/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  TargetNamespace="http://opcfoundation.org/UA/DI/"
+  TargetXmlNamespace="http://opcfoundation.org/UA/DI/"
+  TargetNamespaceVersion="1.00"
+  xmlns="http://opcfoundation.org/UA/ModelDesign.xsd">
+  
+  <Namespaces>
+    <Namespace Name="OpcUaDi" Prefix="Opc.Ua.Di" XmlNamespace="http://opcfoundation.org/UA/DI/Types.xsd" XmlPrefix="DI">http://opcfoundation.org/UA/DI/</Namespace>
+    <Namespace Name="OpcUa" Prefix="Opc.Ua" InternalPrefix="Opc.Ua.Server" XmlNamespace="http://opcfoundation.org/UA/2008/02/Types.xsd" XmlPrefix="OpcUa">http://opcfoundation.org/UA/</Namespace>
+  </Namespaces>
+  <ReferenceType SymbolicName="DI:Uses" BaseType="OpcUa:Organizes">
+    <Description>The semantic is to indicate that the target Node is used for the source Node of the Reference</Description>
+    <InverseName>UsedBy</InverseName>
+  </ReferenceType>
+  <ReferenceType SymbolicName="DI:ConnectsTo" BaseType="OpcUa:HierarchicalReferences" Symmetric="true">
+    <Description>Used to indicate that source and target Node have a topological connection.</Description>
+  </ReferenceType>
+  <ReferenceType SymbolicName="DI:IsOnline" BaseType="OpcUa:Aggregates">
+    <Description>Used to bind the offline representation of a Device to the online representation.</Description>
+    <InverseName>OnlineOf</InverseName>
+  </ReferenceType>
+  <Object SymbolicName="DI:DeviceSet" TypeDefinition="OpcUa:BaseObjectType">
+    <Description>Contains all instances of devices</Description>
+    <Children>
+      <Object SymbolicName="DI:DeviceName" TypeDefinition="DI:DeviceType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;DeviceName&gt;</BrowseName>
+        <Description>A device object.</Description>
+      </Object>
+    </Children>
+    <References>
+      <Reference IsInverse="true">
+        <ReferenceType>OpcUa:Organizes</ReferenceType>
+        <TargetId>OpcUa:ObjectsFolder</TargetId>
+      </Reference>
+    </References>
+  </Object>
+  <Object SymbolicName="DI:NetworkSet" TypeDefinition="OpcUa:BaseObjectType">
+    <Description>Contains all instances of communication networks</Description>
+    <Children>
+      <Object SymbolicName="DI:NetworkName" TypeDefinition="DI:NetworkType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;NetworkName&gt;</BrowseName>
+        <Description>A network object.</Description>
+      </Object>
+    </Children>
+    <References>
+      <Reference IsInverse="true">
+        <ReferenceType>OpcUa:Organizes</ReferenceType>
+        <TargetId>OpcUa:ObjectsFolder</TargetId>
+      </Reference>
+    </References>
+  </Object>
+  <Object SymbolicName="DI:DeviceTopology" TypeDefinition="OpcUa:BaseObjectType">
+    <Description>Starting point of the configured device topology.</Description>
+    <Children>
+      <Property SymbolicName="DI:OnlineAccess" DataType="OpcUa:Boolean">
+        <Description>Hint of whether the Server is currently able to communicate to Devices in the topology.</Description>
+      </Property>
+      <Object SymbolicName="DI:NetworkName" TypeDefinition="DI:NetworkType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;NetworkName&gt;</BrowseName>
+        <Description>A network object.</Description>
+      </Object>
+    </Children>
+    <References>
+      <Reference IsInverse="true">
+        <ReferenceType>OpcUa:Organizes</ReferenceType>
+        <TargetId>OpcUa:ObjectsFolder</TargetId>
+      </Reference>
+    </References>
+  </Object>
+  <Object SymbolicName="DI:CommunicationDevices" TypeDefinition="OpcUa:BaseObjectType">
+    <Description>Contains all instances of devices that can be used to communicate.</Description>
+    <Children>
+      <Object SymbolicName="DI:DeviceName" TypeDefinition="DI:DeviceType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;DeviceName&gt;</BrowseName>
+        <Description>A device object.</Description>
+      </Object>
+    </Children>
+    <References>
+      <Reference IsInverse="true">
+        <ReferenceType>OpcUa:Organizes</ReferenceType>
+        <TargetId>OpcUa:ObjectsFolder</TargetId>
+      </Reference>
+    </References>
+  </Object>
+  <ObjectType SymbolicName="DI:TopologyElementType" BaseType="OpcUa:BaseObjectType" IsAbstract="true">
+    <Description>Defines the basic information components for all configurable elements in a device topology</Description>
+    <Children>
+      <Object SymbolicName="DI:ParameterSet" TypeDefinition="OpcUa:BaseObjectType">
+        <Description>Flat list of Parameters</Description>
+        <Children>
+          <Variable SymbolicName="DI:ParameterIdentifier" TypeDefinition="OpcUa:BaseDataVariableType" ModellingRule="OptionalPlaceholder">
+            <BrowseName>&lt;ParameterIdentifier&gt;</BrowseName>
+            <Description>A parameter which belongs to the topology element.</Description>
+          </Variable>
+        </Children>
+      </Object>
+      <Object SymbolicName="DI:MethodSet" TypeDefinition="OpcUa:BaseObjectType" ModellingRule="Optional">
+        <Description>Flat list of Methods</Description>
+        <Children>
+          <Method SymbolicName="DI:MethodIdentifier" ModellingRule="OptionalPlaceholder">
+            <BrowseName>&lt;MethodIdentifier&gt;</BrowseName>
+            <Description>A method which belongs to the topology element.</Description>
+          </Method>
+        </Children>
+      </Object>
+      <Object SymbolicName="DI:GroupName" TypeDefinition="DI:FunctionalGroupType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;GroupIdentifier&gt;</BrowseName>
+        <Description>An application specific functional group used to organize parameters and methods.</Description>
+      </Object>
+      <Object SymbolicName="DI:Identification" TypeDefinition="DI:FunctionalGroupType" ModellingRule="Optional">
+        <Description>Used to organize parameters for identification of this TopologyElement</Description>
+      </Object>
+      <Object SymbolicName="DI:Lock" TypeDefinition="DI:LockingServicesType" ModellingRule="Optional">
+        <Description>Used to lock the topology element.</Description>
+      </Object>
+      <Object SymbolicName="DI:EditMode" TypeDefinition="DI:EditModeType" ModellingRule="Optional">
+        <Description>Used to work with the topology element in a sandbox.</Description>
+      </Object>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:DeviceType" BaseType="DI:TopologyElementType" IsAbstract="true">
+    <Description>Defines the basic information components for all configurable elements in a device topology</Description>
+    <Children>
+      <Property SymbolicName="DI:SerialNumber" DataType="OpcUa:String">
+        <Description>Identifier that uniquely identifies, within a manufacturer, a device instance</Description>
+      </Property>
+      <Property SymbolicName="DI:RevisionCounter" DataType="OpcUa:Int32">
+        <Description>An incremental counter indicating the number of times the static data within the Device has been modified</Description>
+      </Property>
+      <Property SymbolicName="DI:Manufacturer" DataType="OpcUa:LocalizedText">
+        <Description>Model name of the device</Description>
+      </Property>
+      <Property SymbolicName="DI:Model" DataType="OpcUa:LocalizedText">
+        <Description>Name of the company that manufactured the device</Description>
+      </Property>
+      <Property SymbolicName="DI:DeviceManual" DataType="OpcUa:String">
+        <Description>Address (pathname in the file system or a URL | Web address) of user manual for the device</Description>
+      </Property>
+      <Property SymbolicName="DI:DeviceRevision" DataType="OpcUa:String">
+        <Description>Overall revision level of the device</Description>
+      </Property>
+      <Property SymbolicName="DI:SoftwareRevision" DataType="OpcUa:String">
+        <Description>Revision level of the software/firmware of the device</Description>
+      </Property>
+      <Property SymbolicName="DI:HardwareRevision" DataType="OpcUa:String">
+        <Description>Revision level of the hardware of the device</Description>
+      </Property>
+      <Property SymbolicName="DI:DeviceHealth" DataType="DI:DeviceHealthEnumeration">
+        <Description>Status of a device as defined by NAMUR Recommendation NE107.</Description>
+      </Property>
+      <Object SymbolicName="DI:DeviceTypeImage" TypeDefinition="OpcUa:FolderType" ModellingRule="Optional">
+        <Description>Organizes pictures of the device.</Description>
+        <Children>
+          <Variable SymbolicName="DI:ImageIdentifier" DataType="OpcUa:Image" ModellingRule="MandatoryPlaceholder">
+            <BrowseName>&lt;ImageIdentifier&gt;</BrowseName>
+            <Description>An image of the device.</Description>
+          </Variable>
+        </Children>
+      </Object>
+      <Object SymbolicName="DI:Documentation" TypeDefinition="OpcUa:FolderType" ModellingRule="Optional">
+        <Description>Organizes documents for the device.</Description>
+        <Children>
+          <Variable SymbolicName="DI:DocumentIdentifier" DataType="OpcUa:ByteString" ModellingRule="MandatoryPlaceholder">
+            <BrowseName>&lt;DocumentIdentifier&gt;</BrowseName>
+            <Description>A document for the device.</Description>
+          </Variable>
+        </Children>
+      </Object>
+      <Object SymbolicName="DI:ProtocolSupport" TypeDefinition="OpcUa:FolderType" ModellingRule="Optional">
+        <Description>Protocol-specific files for the device.</Description>
+        <Children>
+          <Variable SymbolicName="DI:ProtocolSupportIdentifier" DataType="OpcUa:ByteString" ModellingRule="MandatoryPlaceholder">
+            <BrowseName>&lt;ProtocolSupportIdentifier&gt;</BrowseName>
+            <Description>A protocol-specific file for the device.</Description>
+          </Variable>
+        </Children>
+      </Object>
+      <Object SymbolicName="DI:ImageSet" TypeDefinition="OpcUa:FolderType" ModellingRule="Optional">
+        <Description>Organizes images that are used within UIElements.</Description>
+        <Children>
+          <Variable SymbolicName="DI:ImageIdentifier" DataType="OpcUa:Image" ModellingRule="MandatoryPlaceholder">
+            <BrowseName>&lt;ImageIdentifier&gt;</BrowseName>
+            <Description>An image for a UIElement.</Description>
+          </Variable>
+        </Children>
+      </Object>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:BlockType" BaseType="DI:TopologyElementType" IsAbstract="true">
+    <Description>Adds the concept of Blocks needed for block-oriented FieldDevices</Description>
+    <Children>
+      <Property SymbolicName="DI:RevisionCounter" ModellingRule="Optional" DataType="OpcUa:UInt32">
+        <Description>Incremental counter indicating the number of times the static data within the Block has been modified</Description>
+      </Property>
+      <Property SymbolicName="DI:ActualMode" ModellingRule="Optional" DataType="OpcUa:LocalizedText">
+        <Description>Current mode of operation the Block is able to achieve</Description>
+      </Property>
+      <Property SymbolicName="DI:PermittedMode" ModellingRule="Optional" DataType="OpcUa:LocalizedText">
+        <Description>Modes of operation that are allowed for the Block based on application requirements</Description>
+      </Property>
+      <Property SymbolicName="DI:NormalMode" ModellingRule="Optional" DataType="OpcUa:LocalizedText">
+        <Description>Mode the Block should be set to during normal operating conditions</Description>
+      </Property>
+      <Property SymbolicName="DI:TargetMode" ModellingRule="Optional" DataType="OpcUa:LocalizedText">
+        <Description>Mode of operation that is desired for the Block</Description>
+      </Property>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:ConfigurableObjectType" BaseType="OpcUa:BaseObjectType">
+    <Description>Defines a general pattern to expose and configure modular components</Description>
+    <Children>
+      <Object SymbolicName="DI:SupportedTypes" TypeDefinition="OpcUa:FolderType">
+        <Description>Folder maintaining the set of (sub-types of) BaseObjectTypes that can be instantiated in the ConfigurableComponent</Description>
+      </Object>
+      <Object SymbolicName="DI:ObjectIdentifier" TypeDefinition="OpcUa:BaseObjectType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;ObjectIdentifier&gt;</BrowseName>
+        <Description>The instances that .</Description>
+      </Object>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:FunctionalGroupType" BaseType="OpcUa:FolderType">
+    <Description>FolderType is used to organize the Parameters and Methods from the complete set (ParameterSet, MethodSet) with regard to their application</Description>
+    <Children>
+      <Object SymbolicName="DI:GroupIdentifier" TypeDefinition="DI:FunctionalGroupType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;GroupIdentifier&gt;</BrowseName>
+        <Description>An application specific functional group used to organize parameters and methods.</Description>
+      </Object>
+      <Variable SymbolicName="DI:ParameterIdentifier" TypeDefinition="OpcUa:BaseDataVariableType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;ParameterIdentifier&gt;</BrowseName>
+        <Description>A parameter which belongs to the group.</Description>
+        <ReferenceType>OpcUa:Organizes</ReferenceType>
+      </Variable>
+      <Method SymbolicName="DI:MethodIdentifier" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;MethodIdentifier&gt;</BrowseName>
+        <Description>A method which belongs to the group.</Description>
+        <ReferenceType>OpcUa:Organizes</ReferenceType>
+      </Method>
+      <Variable SymbolicName="DI:UIElement" TypeDefinition="DI:UIElementType" ModellingRule="Optional">
+        <Description>A user interface element assigned to this group.</Description>
+      </Variable>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:ProtocolType" BaseType="OpcUa:BaseObjectType" IsAbstract="true">
+    <Description>General structure of a Protocol ObjectType</Description>
+  </ObjectType>
+  <DataType SymbolicName="DI:DeviceHealthEnumeration" BaseType="OpcUa:Enumeration">
+    <Fields>
+      <Field Name="NORMAL" Identifier="0">
+        <Description>This device functions normally.</Description>
+      </Field>
+      <Field Name="FAILURE" Identifier="0">
+        <Description>Malfunction of the device or any of its peripherals.</Description>
+      </Field>
+      <Field Name="CHECK_FUNCTION" Identifier="0">
+        <Description>Functional checks are currently performed.</Description>
+      </Field>
+      <Field Name="OFF_SPEC" Identifier="0">
+        <Description>The device is currently working outside of its specified range or that internal diagnoses indicate deviations from measured or set values.</Description>
+      </Field>
+      <Field Name="MAINTENANCE_REQUIRED" Identifier="1">
+        <Description>This element is working, but a maintenance operation is required.</Description>
+      </Field>
+    </Fields>
+  </DataType>
+  <VariableType SymbolicName="DI:UIElementType" BaseType="OpcUa:BaseVariableType" DataType="OpcUa:BaseDataType" ValueRank="Scalar" IsAbstract="true">
+    <Description>The base type for all UI Element Types..</Description>
+  </VariableType>
+  <ObjectType SymbolicName="DI:NetworkType" BaseType="OpcUa:BaseObjectType" IsAbstract="false">
+    <Description>Represents the communication means for Devices that are connected to it.</Description>
+    <Children>
+      <Object SymbolicName="DI:CPIdentifier" TypeDefinition="DI:ConnectionPointType" ModellingRule="OptionalPlaceholder">
+        <BrowseName>&lt;CPIdentifier&gt;</BrowseName>
+        <Description>The ConnectionPoint(s) that have been configured for this Network.</Description>
+        <ReferenceType>DI:ConnectsTo</ReferenceType>
+      </Object>
+      <Object SymbolicName="DI:Lock" TypeDefinition="DI:LockingServicesType" ModellingRule="Optional">
+        <Description>Used to lock the Network.</Description>
+      </Object>
+    </Children>
+    <References>
+      <Reference>
+        <ReferenceType>DI:Uses</ReferenceType>
+        <TargetId>DI:ProtocolType</TargetId>
+      </Reference>
+    </References>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:ConnectionPointType" BaseType="DI:TopologyElementType" IsAbstract="true">
+    <Description>Represents the interface (interface card) of a Device to a Network.</Description>
+    <Children>
+      <Object SymbolicName="DI:NetworkIdentifier" TypeDefinition="DI:NetworkType" ModellingRule="Optional">
+        <BrowseName>&lt;CPIdentifier&gt;</BrowseName>
+        <Description>The Network to which this CP is connected to.</Description>
+        <ReferenceType>DI:ConnectsTo</ReferenceType>
+      </Object>
+      <Object SymbolicName="DI:NetworkAddress" TypeDefinition="DI:FunctionalGroupType" ModellingRule="Mandatory">
+        <Description>The address of the device on this network.</Description>
+      </Object>
+    </Children>
+    <References>
+      <Reference IsInverse="true">
+        <ReferenceType>OpcUa:HasComponent</ReferenceType>
+        <TargetId>DI:DeviceType</TargetId>
+      </Reference>
+      <Reference>
+        <ReferenceType>DI:Uses</ReferenceType>
+        <TargetId>DI:ProtocolType</TargetId>
+      </Reference>
+    </References>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:OnlineElementType" BaseType="DI:TopologyElementType" IsAbstract="true">
+    <Description>Represents the online data for a topology element.</Description>
+  </ObjectType>
+  <Property SymbolicName="DI:MaxInactiveLockTime" DataType="OpcUa:Duration">
+    <Description>Server-specific period of time in milliseconds until the Server will revoke a lock.</Description>
+    <References>
+      <Reference IsInverse="true">
+        <ReferenceType>OpcUa:HasProperty</ReferenceType>
+        <TargetId>OpcUa:Server_ServerCapabilities</TargetId>
+      </Reference>
+    </References>
+  </Property>
+  <ObjectType SymbolicName="DI:LockingServicesType" BaseType="OpcUa:BaseObjectType" IsAbstract="false">
+    <Description>An interface for Locking.</Description>
+    <Children>
+      <Property SymbolicName="DI:LockedStatus" DataType="OpcUa:Boolean" />
+      <Property SymbolicName="DI:LockingClient" DataType="OpcUa:String" />
+      <Property SymbolicName="DI:LockingUser" DataType="OpcUa:Boolean" />
+      <Property SymbolicName="DI:RemainingLockTime" DataType="OpcUa:Duration" />
+      <Method SymbolicName="DI:InitLock">
+        <InputArguments>
+          <Argument Name="Context" DataType="OpcUa:String" />
+        </InputArguments>
+        <OutputArguments>
+          <Argument Name="InitLockError" DataType="OpcUa:Int32" />
+        </OutputArguments>
+      </Method>
+      <Method SymbolicName="DI:RenewLock">
+        <OutputArguments>
+          <Argument Name="RenewLockError" DataType="OpcUa:Int32" />
+        </OutputArguments>
+      </Method>
+      <Method SymbolicName="DI:ExitLock">
+        <OutputArguments>
+          <Argument Name="ExitLockError" DataType="OpcUa:Int32" />
+        </OutputArguments>
+      </Method>
+      <Method SymbolicName="DI:BreakLock">
+        <OutputArguments>
+          <Argument Name="BreakLockError" DataType="OpcUa:Int32" />
+        </OutputArguments>
+      </Method>
+    </Children>
+  </ObjectType>
+  <ObjectType SymbolicName="DI:EditModeType" BaseType="OpcUa:BaseObjectType" IsAbstract="false">
+    <Description>An interface that supports working in a sandbox.</Description>
+    <Children>
+      <Method SymbolicName="DI:EnterEditMode">
+        <InputArguments>
+          <Argument Name="Context" DataType="OpcUa:String" />
+        </InputArguments>
+        <OutputArguments>
+          <Argument Name="EnterEditModeError" DataType="OpcUa:Int32" />
+        </OutputArguments>
+      </Method>
+      <Method SymbolicName="DI:ExitEditMode">
+        <OutputArguments>
+          <Argument Name="ExitEditModeError" DataType="OpcUa:Int32" />
+        </OutputArguments>
+      </Method>
+      <Method SymbolicName="DI:AbortEditMode">
+        <OutputArguments>
+          <Argument Name="AbortEditModeError" DataType="OpcUa:Int32" />
+        </OutputArguments>
+      </Method>
+    </Children>
+  </ObjectType>
+  <Method SymbolicName="DI:TransferToDevice">
+    <OutputArguments>
+      <Argument Name="TransferID" DataType="OpcUa:Int32" />
+      <Argument Name="InitTransferStatus" DataType="OpcUa:Int32" />
+    </OutputArguments>
+  </Method>
+  <Method SymbolicName="DI:TransferFromDevice">
+    <OutputArguments>
+      <Argument Name="TransferID" DataType="OpcUa:Int32" />
+      <Argument Name="InitTransferStatus" DataType="OpcUa:Int32" />
+    </OutputArguments>
+  </Method>
+  
+  <Method SymbolicName="DI:FetchTransferResultData">
+    <InputArguments>
+      <Argument Name="TransferID" DataType="OpcUa:Int32" />
+      <Argument Name="MaxParameterResultsToReturn" DataType="OpcUa:Int32" />
+      <Argument Name="OmitGoodResults" DataType="OpcUa:Boolean" />
+    </InputArguments>
+    <OutputArguments>
+      <Argument Name="NextResult" DataType="DI:TransferResult" />
+    </OutputArguments>
+  </Method>
+  
+  <DataType SymbolicName="DI:TransferStatusType" BaseType="OpcUa:Structure">
+    <Fields>
+      <Field Name="status" DataType="OpcUa:Int32" />
+      <Field Name="diagnostics" DataType="OpcUa:DiagnosticInfo" />
+    </Fields>
+  </DataType>
+  
+  <DataType SymbolicName="DI:TransferResult" BaseType="OpcUa:Structure">
+    <Fields>
+      <Field Name="TransferFinished" DataType="OpcUa:Boolean" />
+      <Field Name="transferStatus" DataType="DI:TransferStatusType" />
+      <Field Name="endOfResults" DataType="OpcUa:Boolean" />
+      <Field Name="parameterDefs" DataType="DI:ParameterResult" ValueRank="Array" />
+    </Fields>
+  </DataType>
+  
+  <DataType SymbolicName="DI:ParameterResult" BaseType="OpcUa:Structure">
+    <Fields>
+      <Field Name="node" DataType="OpcUa:NodeId" />
+      <Field Name="statusCode" DataType="OpcUa:StatusCode" />
+      <Field Name="diagnostics" DataType="OpcUa:DiagnosticInfo" />
+    </Fields>
+  </DataType>
+  
+</ModelDesign>
