@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Page developed based on original works by Etienne Rossignon (http://node-opcua.github.io/) // -->
+    <meta charset="utf-8"/>
+    <meta name="author" content="Nathan Pocock, nathan.pocock@opcfoundation.org"/>
+    <meta name="description" content="OPC UA Java - the OPC UA stack Java implementation">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <title>OPC UA Java! The official UA Java Stack and Sample Applications from the OPC Foundation</title>
+    <!-- css stylesheets -->
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-theme.css" media="screen"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+</head>
+<body>
+
+<!-- fixed navigation bar -->
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <img class="nav navbar-brand" src="images/OPCF_250px_72ppi_RGB.jpg"></img>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#b-menu-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">OPC UA Java</a>
+        </div>
+        <div class="collapse navbar-collapse" id="b-menu-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="https://github.com/OPCFoundation/UA-Java">GitHub</a></li>
+                <li><a href="https://opcfoundation.org/">OPCUA</a></li>
+                <li>&bpsp;&bpsp;&bpsp;</li>
+            </ul>
+        </div> <!-- /.nav-collapse -->
+    </div> <!-- /.container -->
+</div> <!-- /.navbar -->
+
+<!-- Main Header Block // -->
+<div class="container">
+    <div class="jumbotron hidden-print">
+        <h1>Build OPCUA applications with Java</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="images/OPCF_250px_72ppi_RGB.jpg"></img>
+            </div>
+            <div class="col-md-6">
+                <h3>
+                    UA Java is an <a href="https://opcfoundation.org/about/what-is-opc/">OPC UA</a> stack and a number of sample applications.<br/>Developed in Java using the Eclipse IDE.
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 3 Core Call-outs: From OPCF, High Quality, and License // -->
+<div class="container">
+    <div class="hidden-print">
+		<div id="social-buttons" class="hidden-print">
+			<ul class="list-inline">
+				<li>
+					<iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=OPCFoundation&repo=ua-Java&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+				</li>
+				<li>
+					<iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=OPCFoundation&repo=ua-Java&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="102px" height="20px"></iframe>
+				</li>
+				<li class="follow-btn">
+					<a href="https://twitter.com/opcfoundation" class="twitter-follow-button" data-link-color="#0069D6" data-show-count="true">Follow @opcfoundation</a>
+				</li>
+
+				<li class="tweet-btn hidden-phone">
+					<a href="https://twitter.com/share" class="twitter-share-button" data-text="OPC Foundation open-source #OPCUA Stack for Java" data-lang="en">Tweet</a>
+				</li>
+			</ul>
+		</div>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+		<section id="why" class="feature-list">
+			<div class="row">
+				<div class="col-md-4 col-sm-6">
+					<h4><span class="glyphicon glyphicon-home" aria-hidden="true"></span> From the OPC Foundation</h4>
+					<p>The official OPC Foundation OPC UA Java Stack and sample applications.</p>
+					<p>Donated to the community for development of OPC UA applications and to assure that OPC UA becomes the defacto-standard technology for the Industrial-Internet-of-Things and Industrie 4.0.</p>
+					<p>Numerous products, organizations, and other standards-bodies rely on OPC UA as their communications back-bone, with more joining daily.</p>
+					<p>Visit <a href="https://opcfoundation.org/" target="opcf">https://opcfoundation.org/</a> for more information.</p>
+					<br/>
+					<h4>OPC Foundation Membership</h4>
+					<p>OPC Foundation membership provides funding to continue the research and development necessary to expand the capabilities and benefits of OPC UA.</p>
+					<p><strong>Become a Member Now</strong> [<a href="https://opcfoundation.org/membership/benefits/">benefits</a>]</p>
+				</div>
+
+				<div class="col-md-4 col-sm-6">
+					<h4><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Quality</h4>
+					<p><strong>Stack:</strong> Is in the responsibility of the OPC Foundation and working groups. It will be extended and modified to match the OPC UA specifications.</p>
+					<p>OPC Foundation appointed contractors are responsible for assuring a reasonable quality, including bug-fixes and enhancements at the direction of the OPC Foundation as well as contributions from the community.</p>
+					<p>The stack is regularly tested with other applications, the OPC Compliance Test Tool, and at various Interoperability Workshops.</p>
+					<p><strong>Sample Applications:</strong> provided to the community for further enhancement.
+				</div>
+
+				<div class="col-md-4 col-sm-6">
+					<h4><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> License</h4>
+					<p>This repository includes the UA Java Stack and sample applications. The UA Java Stack follows a dual-license:<br/>
+						<ul>
+							<li><strong>OPC Foundation Members</strong>: <a href="https://opcfoundation.org/license/rcl.html" target="rcl">RCL</a></li>
+							<li><strong>Non-Members</strong>: <a href="https://opcfoundation.org/license/gpl.html" target="gpl">GPL 2.0</a></li>
+						</ul></p>
+					<p>RCL enables OPC Foundation members to deploy their applications using the UA Java stack without being required to disclose the application code. Non-members must disclose their application code when using the UA Java Stack.</p>
+					<p><strong>Note:</strong> Dual license applies to this repository only; <a href="https://opcfoundation.org/license/gpl.html" target="gpl">GPL 2.0</a> applies to all other repositories</p>
+					<p>All samples are provided under the <a href="https://opcfoundation.org/license/mit.html" target="mit">MIT license</a>.</p>
+				</div>
+			</div>
+		</section>
+    </div>
+</div>
+
+<!-- Next section: Overview. Contains Architecture, documentation, sample code -->
+<div class="container">
+    <div class="page-header">
+        <h1>Overview</h1>
+    </div>
+    <div class="row">
+		<div class="col-md-6">
+			<h3>Introduction</h3>
+			<p>The UA Java sample code consists of:</p>
+			<ul>
+				<li><strong>Stack</strong>: low-level functions for delivering messages between UA Clients and Servers.</li>
+				<li><strong>Unit Tests</strong>: validation of the stack functions</li>
+				<li><strong>Sample Applications</strong>: demonstrating how to use the stack</li>
+				<li><strong>Readme Files</strong>: a number of short documents describing the source code, project, and dependencies etc.
+			</ul>
+		</div>
+
+		<div class="col-md-6">
+			<h4><span class="glyphicon glyphicon-edit" aria-hidden="true"></span> UA Profile Documentation</h4>
+			<p>Learn how to build compliant self-describing applications using Profiles:
+			<ul>
+				<li><a href="https://opcfoundation.org/wiki/" target="wiki">https://opcfoundation.org/wiki/</a></li>
+			</ul>
+			</p>
+		</div>
+		<div class="clearfix visible-md-block"></div>
+		<div class="col-md-6">
+			<h4><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Getting Started</h4>
+			<p>Folow these steps to get started with the Java stack:<ul>
+				<li><strong>Install Dependencies</strong>: <a href="http://slf4j.org/" target="log4j">log4j</a>. More information in "Readme.txt".</li>
+				<li><strong>Import into Eclipse</strong>: <ol>
+					<li>Open Eclipse</li>
+					<li>Select File>Import>General>Existing Projects into Workspace</li>
+					<li>Select this project and check "Copy to your workspace"</li>
+					<li>Click Finish.</li>
+					<li>Source code overview of the project in "readme_source.txt"</li></ol>
+				<li><strong>Build within Eclipse</strong>: Check the build-path to ensure slf4j-api is available</li>
+				<li><strong>Build from Prompt</strong>: (make sure 'ant' and 'javac' are on the path)<ul>
+					<li>Linux/OSX with 'make': <code>make -f Makefile.examples.unix</code></li>
+					<li>Windows: <code>make -f Makefile.examples.win</code></li></ul></li>
+			</ul></p>
+		</div>
+
+		<div class="col-md-6">
+			<h4><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Launching Reference Implementations</h4>
+			<p>You can run the <strong>Samples</strong> which include:<ul>
+				<li><cite>ServerExample1</cite>: basic server</li>
+				<li><cite>SampleClient</cite>: connects to a server, browses, and then reads a value</li>
+				<li><cite>ClientExample</cite>: basic tests for connecting to various servers</li>
+				<li><cite>NanoServer</cite>: sample server that is Nano Server [profile] compliant.</li>
+				<li><strong>Launch</strong>: Scripts exist to launch applications, e.g:<ul>
+					<li>Linux/OSX: <code><br/>./ServerExample1.sh<br/>./SampleClient.sh opc.tcp://localhost:8666/UAExample</code></li>
+					<li>Windows: <code><br/>ServerExample1.bat<br/>SampleClient.bat opc.tcp://localhost:8666/UAExample</code></li></ul></li>
+			</ul></p>
+		</div>
+
+
+    </div> <!-- row // -->
+</div> <!-- container // -->
+
+<!-- Last section: Get Involved // -->
+<div class="container">
+    <a href="https://github.com/OPCFoundation/UA-Java">
+    <img style="position: absolute; top: 10px; right: 0; border: 0;z-index:1100"
+	  src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
+	  alt="Fork me on GitHub"
+	  data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+    <div class="page-header">
+        <h1>Get involved</h1>
+		<p>The OPC Foundation encourages community participation in the enhancement of the UA Java Stack.</p>
+    </div>
+
+    <div class="col-md-6">
+        <h4>Submit an issue or a suggestion</h4>
+        Submit an issue <a href="https://github.com/OPCFoundation/UA-Java/issues"> here</a>.
+    </div>
+
+	<div class="col-md-6">
+        <h4>Working Group Participation</h4>
+        <p>The OPC Foundation contains multiple <a href="https://opcfoundation.org/about/working-groups/" target="opcf">working groups</a> that work hard to deliver OPC Specifications, Sample Applications, Compliance Test Tools, and more. Your participation can help steer OPC UA technology. Get involved today!</p>
+    </div>
+
+	<div class="col-md-6">
+        <h4>Fork and contribute</h4>
+        If you find an issue in the documentation or in the code, you can fork and send a pull request to the master branch.
+    </div>
+
+
+    <div class="col-md-6">
+        <h4>Follow us</h4>
+		<a class="twitter-timeline"  href="https://twitter.com/OPCFoundation" data-widget-id="473946115788656640">Tweets by @OPCFoundation</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    </div>
+</div>
+
+<!-- Footer // -->
+<div class="container">
+    <footer class="footer">
+		<div class="">
+			<p>&nbsp;</p>
+			<p>&copy; Copyright 2015 - OPC Foundation</p>
+		</div>
+</footer>
+</div>
+
+<!-- add javascripts -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
