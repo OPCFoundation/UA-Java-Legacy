@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -32,8 +33,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.EncodeableSerializer;
@@ -50,51 +49,14 @@ import org.opcfoundation.ua.transport.tcp.impl.Acknowledge;
 import org.opcfoundation.ua.transport.tcp.impl.ErrorMessage;
 import org.opcfoundation.ua.transport.tcp.impl.Hello;
 import org.opcfoundation.ua.utils.asyncsocket.AsyncSelector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility methods for the OPC UA Java Stack.
  * 
  */
 public class StackUtils {
-	private static Logger logger = LoggerFactory.getLogger(StackUtils.class);
-
-	public static void logStatus() {
-		logExecutor("BLOCKING_EXECUTOR", (ThreadPoolExecutor)BLOCKING_EXECUTOR);
-		logExecutor("NON_BLOCKING_EXECUTOR", (ThreadPoolExecutor)NON_BLOCKING_EXECUTOR);
-	}
-
-	private static void logExecutor(String name, final ThreadPoolExecutor e) {
-		logger.debug("{}: ActiveCount={} CompletedTaskCount={} PoolSize={} LargestPoolSize={} TaskCount={}", name, e.getActiveCount(), e.getCompletedTaskCount(), e.getPoolSize(), e.getLargestPoolSize(), e.getTaskCount());
-	}
-	public static int blockingWorkerThreadPoolCoreSize = 64;
-	public static long blockingWorkerThreadPoolTimeout = 3L;
-	
-	/**
-	 * @return the timeout in seconds of the thread pool for BlockingWorkerExecutor.
-	 */
-	public static long getBlockingWorkerThreadPoolTimeout() {
-		return blockingWorkerThreadPoolTimeout;
-	}
-
-	/**
-	 * Define the timeout (in seconds) of the thread pool for BlockingWorkerExecutor.
-	 * <p>
-	 * Default: 3
-	 * 
-	 * @param defaultMaxBlockingWorkerPoolSize
-	 */
-	public static void setBlockingWorkerThreadPoolTimeout(
-			long blockingWorkerThreadPoolTimeout) {
-		StackUtils.blockingWorkerThreadPoolTimeout = blockingWorkerThreadPoolTimeout;
-	}
-
-	/**
-	 * @return the core size of the thread pool for BlockingWorkerExecutor.
-	 */
-	public static int getBlockingWorkerThreadPoolCoreSize() {
-		return blockingWorkerThreadPoolCoreSize;
-	}
-
 	/**
 	 * The default thread factory
 	 */
@@ -113,6 +75,7 @@ public class StackUtils {
 	                     "-thread-";
 	    }
 	
+		@Override
 	    public Thread newThread(Runnable r) {
 	        Thread t = new Thread(group, r,
 	                              namePrefix + threadNumber.getAndIncrement(),
@@ -126,22 +89,30 @@ public class StackUtils {
 	    }
 	}
 
+	private static Logger logger = LoggerFactory.getLogger(StackUtils.class);
+
+	public static int blockingWorkerThreadPoolCoreSize = 64;
+	public static long blockingWorkerThreadPoolTimeout = 3L;
 	public static final int CORES = Runtime.getRuntime().availableProcessors();
+
 	/**
 	 * Use {@link #getNonBlockingWorkExecutor()} instead 
 	 */
 	public static Executor NON_BLOCKING_EXECUTOR;
+
 	/**
 	 * Use {@link #getBlockingWorkExecutor()} instead 
 	 */
 	public static Executor BLOCKING_EXECUTOR;
 	
+	private static ExecutorService rejectionExecutor;
+
 	/**
 	 * Use #getSelector() instead.
 	 */
 	public static AsyncSelector SELECTOR;
-	public static Random RANDOM = new Random();
 	
+	public static Random RANDOM = new Random();
 	/** Requested token lifetime */
 	public static final UnsignedInteger CLIENT_TOKEN_LIFETIME_REQUEST = new UnsignedInteger(600000);
 	/** Maximum lifetime server is willing to offer */
@@ -150,7 +121,120 @@ public class StackUtils {
 	public static final int TCP_PROTOCOL_VERSION = 0;
 
 	private static IEncodeableSerializer DEFAULT_SERIALIZER;
+	private static volatile UncaughtExceptionHandler uncaughtExceptionHandler = new UncaughtExceptionHandler() {
 
+
+		@Override
+		public void uncaughtException(Thread t, Throwable e) {
+			logger.error("Uncaught Exception in Thread " + t, e);
+			e.printStackTrace(); // In case the logger is not enabled
+		}
+	};
+
+	/**
+	 * Wait for a group to requests to go into final state
+	 *
+	 * @param requests a group of requests
+	 * @param timeout timeout in seconds
+	 * @return true if completed ok
+	 * @throws InterruptedException
+	 */
+	public static boolean barrierWait(AsyncResult<?>[] requests, long timeout)
+			throws InterruptedException
+	{
+		final Semaphore sem = new Semaphore(0);
+
+		ResultListener l = new ResultListener() {
+			@Override
+			public void onCompleted(Object result) {
+				sem.release();
+			}
+
+			@Override
+			public void onError(ServiceResultException error) {
+				sem.release();
+			}};
+
+			for (AsyncResult<?> r : requests) {
+				synchronized(r) {
+					if (r.getStatus() != AsyncResultStatus.Waiting)
+						sem.release();
+					else
+						r.setListener(l);
+				}
+			}
+
+			return sem.tryAcquire(requests.length, timeout, TimeUnit.SECONDS);
+	}
+	public static int cores() {
+		return CORES;
+	}
+
+	/**
+	 * Get Executor for long term and potentially blocking operations.
+	 *
+	 * @param maxThreadPoolSize max number of threads to create in the thread pool
+	 *
+	 * @return executor for blocking operations
+	 */
+	public static synchronized Executor createBlockingWorkExecutor(String name, int maxThreadPoolSize) {
+		if (BLOCKING_EXECUTOR == null) {
+			final ThreadGroup tg = new ThreadGroup(name);
+			final AtomicInteger counter = new AtomicInteger(0);
+			ThreadFactory tf = new ThreadFactory() {
+				@Override
+				public Thread newThread(Runnable r) {
+					Thread t = new Thread(tg, r, "Blocking-Work-Executor-"+(counter.incrementAndGet()));
+					t.setDaemon(true);
+					t.setUncaughtExceptionHandler(uncaughtExceptionHandler);
+					return t;
+				}};
+				//SynchronousQueue queue = new SynchronousQueue<Runnable>();
+				BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>( Integer.MAX_VALUE );
+				BLOCKING_EXECUTOR =
+						new ThreadPoolExecutor(
+								blockingWorkerThreadPoolCoreSize,
+								maxThreadPoolSize,
+								blockingWorkerThreadPoolTimeout,
+								TimeUnit.SECONDS,
+								queue,
+								tf);
+
+				((ThreadPoolExecutor) BLOCKING_EXECUTOR).setRejectedExecutionHandler( new RejectedExecutionHandler() {
+					@Override
+					public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+						/*
+						 *  Technically this should happen only in shutdown because we are using Integer.MAX_VALUE bound queue. It should be enough, so this is more of a fail-safe.
+						 */
+						getRejectionExecutor().execute(r);
+					}});
+		}
+		return BLOCKING_EXECUTOR;
+	}
+
+	/**
+	 * @return the core size of the thread pool for BlockingWorkerExecutor.
+	 */
+	public static int getBlockingWorkerThreadPoolCoreSize() {
+		return blockingWorkerThreadPoolCoreSize;
+	}
+
+	/**
+	 * @return the timeout in seconds of the thread pool for BlockingWorkerExecutor.
+	 */
+	public static long getBlockingWorkerThreadPoolTimeout() {
+		return blockingWorkerThreadPoolTimeout;
+	}
+	/**
+	 * Get Executor for long term and potentially blocking operations.
+	 * <p>
+	 * Calls getBlockingWorkExecutor(getDefaultMaxBlockingWorkerThreadPoolSize())
+	 *
+	 * @return executor for blocking operations
+	 */
+	public static Executor getBlockingWorkExecutor() {
+		return createBlockingWorkExecutor( "Blocking-Work-Executor", 256 );
+	}
 	/**
 	 * Get default encodeable serializer
 	 * 
@@ -174,38 +258,6 @@ public class StackUtils {
 		}
 		return DEFAULT_SERIALIZER;
 	}	
-	private static volatile UncaughtExceptionHandler uncaughtExceptionHandler = new UncaughtExceptionHandler() {
-		
-
-		@Override
-		public void uncaughtException(Thread t, Throwable e) {
-			logger.error("Uncaught Exception in Thread " + t, e);
-			e.printStackTrace(); // In case the logger is not enabled
-		}
-	};
-	/**
-	 * The handler that is called, if any of the worker threads encounter an exception that is not handled.
-	 * @return the uncaughtexceptionhandler
-	 */
-	public static UncaughtExceptionHandler getUncaughtExceptionHandler() {
-		return uncaughtExceptionHandler;
-	}
-
-	/**
-	 * Define the handler that is called, if any of the worker threads encounter an exception that is not handled.
-	 * <p>
-	 * The default handler will just log the exception as an Error to the log4j log.
-	 * <p>
-	 * Set the handler to provide custom behavior in your application.
-	 * <p>
-	 * The handler is set when new worker threads are started and setting the value will not affect already running threads. 
-	 * 
-	 * @param uncaughtexceptionhandler the uncaughtexceptionhandler to set
-	 */
-	public static void setUncaughtExceptionHandler(
-			UncaughtExceptionHandler uncaughtexceptionhandler) {
-		uncaughtExceptionHandler = uncaughtexceptionhandler;
-	}
 
 	/**
 	 * Get Executor for non-blocking operations.  
@@ -247,117 +299,79 @@ public class StackUtils {
 	}
 	
 	/**
-	 * Get Executor for long term and potentially blocking operations.
-	 * <p>
-	 * Calls getBlockingWorkExecutor(getDefaultMaxBlockingWorkerThreadPoolSize())
-	 * 
-	 * @return executor for blocking operations
+	 * Get Executor that handles tasks that are rejected by blocking work executor
+	 * @return the executor
 	 */
-	public static Executor getBlockingWorkExecutor() {
-		return createBlockingWorkExecutor( "Blocking-Work-Executor", 256 );
-	}
-	/**
-	 * Get Executor for long term and potentially blocking operations.
-	 * 
-	 * @param maxThreadPoolSize max number of threads to create in the thread pool
-	 * 
-	 * @return executor for blocking operations
-	 */
-	public static synchronized Executor createBlockingWorkExecutor(String name, int maxThreadPoolSize) {
-		if (BLOCKING_EXECUTOR == null) {
-			final ThreadGroup tg = new ThreadGroup(name);
-			final AtomicInteger counter = new AtomicInteger(0);
+	public static synchronized Executor getRejectionExecutor(){
+		if(rejectionExecutor == null){
 			ThreadFactory tf = new ThreadFactory() {
 				@Override
 				public Thread newThread(Runnable r) {
-					Thread t = new Thread(tg, r, "Blocking-Work-Executor-"+(counter.incrementAndGet()));
+					Thread t = new Thread(r, "RejectedRunnableHanlder");
 					t.setDaemon(true);
 					t.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 					return t;
 				}};
-			//SynchronousQueue queue = new SynchronousQueue<Runnable>();
-			BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>( Integer.MAX_VALUE );
-			BLOCKING_EXECUTOR = 
-				new ThreadPoolExecutor(
-						blockingWorkerThreadPoolCoreSize, 
-						maxThreadPoolSize,
-						blockingWorkerThreadPoolTimeout, 
-						TimeUnit.SECONDS,
-                        queue,
-                        tf);
 			
-			((ThreadPoolExecutor) BLOCKING_EXECUTOR).setRejectedExecutionHandler( new RejectedExecutionHandler() {
-				@Override
-				public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-					// Fail-safe, should not occur (unless in shutdown)
-					Executors.newSingleThreadExecutor().execute(r);
-				}});
+				rejectionExecutor = Executors.newSingleThreadExecutor(tf);
 		}
-		return BLOCKING_EXECUTOR;
+		return rejectionExecutor;
 	}
 	
-	
-	public static ServiceResultException toServiceResultException(Exception e)
-	{
-		if (e instanceof ServiceResultException)
-			return (ServiceResultException) e;
-		if (e instanceof ClosedChannelException)
-			return new ServiceResultException(StatusCodes.Bad_ConnectionClosed, e);
-		if (e instanceof EOFException)
-			return new ServiceResultException(StatusCodes.Bad_ConnectionClosed, e, "Connection closed (graceful)");
-		if (e instanceof ConnectException)
-			return new ServiceResultException(StatusCodes.Bad_ConnectionRejected, e);
-		if (e instanceof SocketException)
-			return new ServiceResultException(StatusCodes.Bad_ConnectionClosed, e, "Connection closed (unexpected)");
-		if (e instanceof IOException)
-			return new ServiceResultException(StatusCodes.Bad_ConnectionClosed, e);
-		return new ServiceResultException(e);
+	public static AsyncSelector getSelector() {
+		if (SELECTOR == null)
+			try {
+				SELECTOR = new AsyncSelector(Selector.open());
+			} catch (IOException e) {
+				throw new Error(e);
 	}
-	
-	public static int cores() {
-		return CORES;
+		return SELECTOR;
 	}
 
 	/**
-	 * Wait for a group to requests to go into final state
-	 * 
-	 * @param requests a group of requests
-	 * @param timeout timeout in seconds
-	 * @return true if completed ok
-	 * @throws InterruptedException
+	 * The handler that is called, if any of the worker threads encounter an exception that is not handled.
+	 * @return the uncaughtexceptionhandler
 	 */
-	public static boolean barrierWait(AsyncResult<?>[] requests, long timeout)
-	throws InterruptedException
-	{
-		final Semaphore sem = new Semaphore(0);
-		
-		ResultListener l = new ResultListener() {
-			@Override
-			public void onCompleted(Object result) {
-				sem.release();
-			}
-
-			@Override
-			public void onError(ServiceResultException error) {
-				sem.release();
-			}};
-		
-		for (AsyncResult<?> r : requests) {
-			synchronized(r) {
-				if (r.getStatus() != AsyncResultStatus.Waiting)
-					sem.release();
-				else
-					r.setListener(l);
+	public static UncaughtExceptionHandler getUncaughtExceptionHandler() {
+		return uncaughtExceptionHandler;
 			}			
+	public static void logStatus() {
+		logExecutor("BLOCKING_EXECUTOR", (ThreadPoolExecutor)BLOCKING_EXECUTOR);
+		logExecutor("NON_BLOCKING_EXECUTOR", (ThreadPoolExecutor)NON_BLOCKING_EXECUTOR);
 		}
 		
-		return sem.tryAcquire(requests.length, timeout, TimeUnit.SECONDS); 
-	}
 	
 	public static ThreadFactory newNamedThreadFactory(String name) {
 		return new NamedThreadFactory(name);
 	}
 	
+	/**
+	 * Define the timeout (in seconds) of the thread pool for BlockingWorkerExecutor.
+	 * <p>
+	 * Default: 3
+	 *
+	 * @param defaultMaxBlockingWorkerPoolSize
+	 */
+	public static void setBlockingWorkerThreadPoolTimeout(
+			long blockingWorkerThreadPoolTimeout) {
+		StackUtils.blockingWorkerThreadPoolTimeout = blockingWorkerThreadPoolTimeout;
+	}
+
+	/**
+	 * Define the handler that is called, if any of the worker threads encounter an exception that is not handled.
+	 * <p>
+	 * The default handler will just log the exception as an Error to the log4j log.
+	 * <p>
+	 * Set the handler to provide custom behavior in your application.
+	 * <p>
+	 * The handler is set when new worker threads are started and setting the value will not affect already running threads.
+	 *
+	 * @param uncaughtexceptionhandler the uncaughtexceptionhandler to set
+	 */
+	public static void setUncaughtExceptionHandler(
+			UncaughtExceptionHandler uncaughtexceptionhandler) {
+		uncaughtExceptionHandler = uncaughtexceptionhandler;
+	}
 	
 	/**
 	 * Perform a "context shutdown" to clean up the Stack resources. Necessary for web service modules, etc.
@@ -374,6 +388,11 @@ public class StackUtils {
 			((ThreadPoolExecutor)NON_BLOCKING_EXECUTOR).shutdown();
 			NON_BLOCKING_EXECUTOR = null;
 		}
+
+		if(rejectionExecutor != null){
+			rejectionExecutor.shutdown();
+		}
+
 		if (SELECTOR != null)
 			try {
 				SELECTOR.close();
@@ -388,14 +407,26 @@ public class StackUtils {
 		}
 	}
 
-	public static AsyncSelector getSelector() {
-		if (SELECTOR == null)
-			try {
-				SELECTOR = new AsyncSelector(Selector.open());
-			} catch (IOException e) {
-				throw new Error(e);
+
+	public static ServiceResultException toServiceResultException(Exception e)
+	{
+		if (e instanceof ServiceResultException)
+			return (ServiceResultException) e;
+		if (e instanceof ClosedChannelException)
+			return new ServiceResultException(StatusCodes.Bad_ConnectionClosed, e);
+		if (e instanceof EOFException)
+			return new ServiceResultException(StatusCodes.Bad_ConnectionClosed, e, "Connection closed (graceful)");
+		if (e instanceof ConnectException)
+			return new ServiceResultException(StatusCodes.Bad_ConnectionRejected, e);
+		if (e instanceof SocketException)
+			return new ServiceResultException(StatusCodes.Bad_ConnectionClosed, e, "Connection closed (unexpected)");
+		if (e instanceof IOException)
+			return new ServiceResultException(StatusCodes.Bad_ConnectionClosed, e);
+		return new ServiceResultException(e);
 			}
-		return SELECTOR;
+
+	private static void logExecutor(String name, final ThreadPoolExecutor e) {
+		logger.debug("{}: ActiveCount={} CompletedTaskCount={} PoolSize={} LargestPoolSize={} TaskCount={}", name, e.getActiveCount(), e.getCompletedTaskCount(), e.getPoolSize(), e.getLargestPoolSize(), e.getTaskCount());
 	}
 	
 }

@@ -1,3 +1,10 @@
+1.02.337.8
+New: XMLFactoryCache, caches XML parsing related factories
+Fixed (Github #1): DateTime.parseDateTime typo fixed
+Fixed (Github #2): CloseSecureChannelRequest should be sent with CLOF header
+Fixed (Github #30): Proper shutdown for blocking work executor's rejectionhandler
+New: IEncoder.put() & EncoderUtils.put() overloads with Class argument
+
 1.02.337.6
 Fixed (Mantis 3149): Private keys encrypted with passwords containing non-ASCII characters cannot be loaded
 Fixed (Mantis 3139): sendPendingMessagesRunnable should not run in parallel

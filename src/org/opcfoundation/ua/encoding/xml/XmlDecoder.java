@@ -20,13 +20,10 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
@@ -53,6 +50,9 @@ import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.encoding.IDecoder;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.XMLFactoryCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //import java.lang.reflect.Array;
 //import java.lang.reflect.InvocationTargetException;
@@ -83,30 +83,28 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Initializes the object with an XML element to parse.
 	/// </summary>
-	public XmlDecoder(XMLStreamReader reader, EncoderContext context) throws DecodingException
+	public XmlDecoder(XmlElement element, EncoderContext context) throws DecodingException
 	{
 	    if (context == null) 
 	    	throw new NullPointerException("context");
 	    initialize();
-	    this.reader  = reader;
+		try {
+			this.reader  = XMLFactoryCache.getXMLInputFactory().createXMLStreamReader(new StringReader(element.toString()));
+		} catch (XMLStreamException e) {
+			throw new DecodingException(e);
+		}
 	    this.encoderContext = context;
 	}
 
 	/// <summary>
 	/// Initializes the object with an XML element to parse.
 	/// </summary>
-	public XmlDecoder(XmlElement element, EncoderContext context) throws DecodingException
+	public XmlDecoder(XMLStreamReader reader, EncoderContext context) throws DecodingException
 	{
 	    if (context == null) 
 	    	throw new NullPointerException("context");
 	    initialize();
-	    XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-
-	    try {
-			this.reader  = xmlInputFactory.createXMLStreamReader(new StringReader(element.toString()));
-		} catch (XMLStreamException e) {
-			throw new DecodingException(e);
-		}
+		this.reader  = reader;
 	    this.encoderContext = context;
 	}
 
@@ -139,6 +137,12 @@ public class XmlDecoder implements IDecoder {
 		}
 	}
 
+	@Override
+	public <T> T get(String fieldName, Class<T> clazz) throws DecodingException {
+		return null;
+	}
+
+	@Override
 	public Object getArrayObject(String fieldName, int builtinTypeId)
 	throws DecodingException	
 	{
@@ -175,6 +179,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a boolean from the stream.
 	/// </summary>
+	@Override
 	public Boolean getBoolean(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -195,6 +200,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a boolean array from the stream.
 	/// </summary>
+	@Override
 	public Boolean[] getBooleanArray(String fieldName) throws DecodingException
 	{           
 		List<Boolean> values = new ArrayList<Boolean>();
@@ -226,6 +232,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a byte from the stream.
 	/// </summary>
+	@Override
 	public UnsignedByte getByte(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -246,6 +253,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a byte array from the stream.
 	/// </summary>
+	@Override
 	public UnsignedByte[] getByteArray(String fieldName) throws DecodingException
 	{
 		List<UnsignedByte> values = new ArrayList<UnsignedByte>();
@@ -276,6 +284,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a byte String from the stream.
 	/// </summary>
+	@Override
 	public byte[] getByteString(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -307,8 +316,25 @@ public class XmlDecoder implements IDecoder {
 	}
 
 	/// <summary>
+	/// The type of encoding being used.
+	/// </summary>
+	//	public EncodingType EncodingType
+	//	{
+	//		get { return EncodingType.Xml; }
+	//	}
+
+	/// <summary>
+	/// The message context associated with the decoder.
+	/// </summary>
+	//	public ServiceMessageContext getContext
+	//	{
+	//		get { return m_context; }
+	//	}
+
+	/// <summary>
 	/// Reads a byte String array from the stream.
 	/// </summary>
+	@Override
 	public byte[][] getByteStringArray(String fieldName) throws DecodingException
 	{
 		List<byte[]> values = new ArrayList<byte[]>();
@@ -337,24 +363,9 @@ public class XmlDecoder implements IDecoder {
 	}
 
 	/// <summary>
-	/// The type of encoding being used.
-	/// </summary>
-	//	public EncodingType EncodingType 
-	//	{
-	//		get { return EncodingType.Xml; }
-	//	}
-
-	/// <summary>
-	/// The message context associated with the decoder.
-	/// </summary>
-	//	public ServiceMessageContext getContext 
-	//	{
-	//		get { return m_context; }
-	//	}
-
-	/// <summary>
 	/// Reads an DataValue from the stream.
 	/// </summary>
+	@Override
 	public DataValue getDataValue(String fieldName) throws DecodingException
 	{
 		DataValue value = new DataValue();
@@ -381,6 +392,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an DataValue array from the stream.
 	/// </summary>
+	@Override
 	public DataValue[] getDataValueArray(String fieldName) throws DecodingException
 	{
 		List<DataValue> values = new ArrayList<DataValue>();
@@ -411,6 +423,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UTC date/time from the stream.
 	/// </summary>
+	@Override
 	public DateTime getDateTime(String fieldName) throws DecodingException
 	{                        
 		if (beginFieldSafe(fieldName, true))
@@ -442,6 +455,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UTC date/time array from the stream.
 	/// </summary>
+	@Override
 	public DateTime[] getDateTimeArray(String fieldName) throws DecodingException
 	{
 		List<DateTime> values = new ArrayList<DateTime>();
@@ -515,6 +529,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an DiagnosticInfo from the stream.
 	/// </summary>
+	@Override
 	public DiagnosticInfo getDiagnosticInfo(String fieldName) throws DecodingException
 	{
 		DiagnosticInfo value = null;
@@ -535,6 +550,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an DiagnosticInfo array from the stream.
 	/// </summary>
+	@Override
 	public DiagnosticInfo[] getDiagnosticInfoArray(String fieldName) throws DecodingException
 	{
 		List<DiagnosticInfo> values = new ArrayList<DiagnosticInfo>();
@@ -565,6 +581,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a double from the stream.
 	/// </summary>
+	@Override
 	public Double getDouble(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -612,6 +629,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a double array from the stream.
 	/// </summary>
+	@Override
 	public Double[] getDoubleArray(String fieldName) throws DecodingException
 	{
 		List<Double> values = new ArrayList<Double>();
@@ -642,6 +660,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an encodeable object from the stream.
 	/// </summary>
+	@Override
 	public <T extends IEncodeable> T getEncodeable(
 			String      fieldName, 
 			Class<? extends T> encodeableClass) throws DecodingException
@@ -692,14 +711,10 @@ public class XmlDecoder implements IDecoder {
 //		return value;
 	}
 
-	@Override
-	public <T> T get(String fieldName, Class<T> clazz) throws DecodingException {
-		return null;
-	}
-
 	/// <summary>
 	/// Reads an encodeable object array from the stream.
 	/// </summary>
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends IEncodeable> T[] getEncodeableArray(String fieldName, Class<? extends T> encodeableClass) throws DecodingException
 	{
@@ -752,6 +767,10 @@ public class XmlDecoder implements IDecoder {
 		return (T[]) encodeables.toArray(new IEncodeable[0]);
 	}
 
+	public EncoderContext getEncoderContext() {
+		return encoderContext;
+	}
+
 	/**
 	 * @throws XMLStreamException 
 	 * @throws DecodingException 
@@ -779,6 +798,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	///  Reads an enumerated value from the stream.
 	/// </summary>
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends Enumeration> T getEnumeration(String fieldName, Class<T> enumType)
 	throws DecodingException	
@@ -850,6 +870,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an enumerated value array from the stream.
 	/// </summary>
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends Enumeration> T[] getEnumerationArray(String fieldName, Class<T> enumerationClass)
 	throws DecodingException
@@ -882,6 +903,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an ExpandedNodeId from the stream.
 	/// </summary>
+	@Override
 	public ExpandedNodeId getExpandedNodeId(String fieldName) throws DecodingException
 	{
 		ExpandedNodeId value = ExpandedNodeId.NULL;
@@ -918,6 +940,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an ExpandedNodeId array from the stream.
 	/// </summary>
+	@Override
 	public ExpandedNodeId[] getExpandedNodeIdArray(String fieldName) throws DecodingException
 	{
 		List<ExpandedNodeId> values = new ArrayList<ExpandedNodeId>();
@@ -948,6 +971,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an extension object from the stream.
 	/// </summary>
+	@Override
 	public ExtensionObject getExtensionObject(String fieldName) throws IllegalArgumentException, DecodingException
 	{
 		if (!beginFieldSafe(fieldName, true))
@@ -999,6 +1023,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an array of extension objects from the stream.
 	/// </summary>
+	@Override
 	public ExtensionObject[] getExtensionObjectArray(String fieldName) throws DecodingException
 	{
 		List<ExtensionObject> values = new ArrayList<ExtensionObject>();
@@ -1025,6 +1050,7 @@ public class XmlDecoder implements IDecoder {
 
 		return values.toArray(new ExtensionObject[0]);
 	}
+
 
 	/// <summary>
 	/// Reads the body extension object from the stream.
@@ -1078,10 +1104,10 @@ public class XmlDecoder implements IDecoder {
 //		return getOuterXml();//document.DocumentElement;
 	}
 
-
 	/// <summary>
 	/// Reads a float from the stream.
 	/// </summary>
+	@Override
 	public Float getFloat(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -1130,6 +1156,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a float array from the stream.
 	/// </summary>
+	@Override
 	public Float[] getFloatArray(String fieldName) throws DecodingException
 	{
 		List<Float> values = new ArrayList<Float>();
@@ -1161,6 +1188,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a GUID from the stream.
 	/// </summary>
+	@Override
 	public UUID getGuid(String fieldName) throws DecodingException
 	{
 		//	            UUID value = 
@@ -1181,6 +1209,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a GUID array from the stream.
 	/// </summary>
+	@Override
 	public UUID[] getGuidArray(String fieldName) throws DecodingException
 	{
 		List<UUID> values = new ArrayList<UUID>();
@@ -1212,6 +1241,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a short from the stream.
 	/// </summary>
+	@Override
 	public Short getInt16(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -1232,6 +1262,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a short array from the stream.
 	/// </summary>
+	@Override
 	public Short[] getInt16Array(String fieldName) throws DecodingException
 	{
 		List<Short> values = new ArrayList<Short>();
@@ -1262,6 +1293,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an int from the stream.
 	/// </summary>
+	@Override
 	public Integer getInt32(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -1282,6 +1314,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a int array from the stream.
 	/// </summary>
+	@Override
 	public Integer[] getInt32Array(String fieldName) throws DecodingException
 	{
 		List<Integer> values = new ArrayList<Integer>();
@@ -1312,6 +1345,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a int array from the stream.
 	/// </summary>
+	@Override
 	public int[] getInt32Array_(String fieldName) throws DecodingException
 	{
 		List<Integer> values = new ArrayList<Integer>();
@@ -1348,6 +1382,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a long from the stream.
 	/// </summary>
+	@Override
 	public Long getInt64(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -1368,6 +1403,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a long array from the stream.
 	/// </summary>
+	@Override
 	public Long[] getInt64Array(String fieldName) throws DecodingException
 	{
 		List<Long> values = new ArrayList<Long>();
@@ -1398,6 +1434,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an LocalizedText from the stream.
 	/// </summary>
+	@Override
 	public LocalizedText getLocalizedText(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -1442,6 +1479,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an LocalizedText array from the stream.
 	/// </summary>
+	@Override
 	public LocalizedText[] getLocalizedTextArray(String fieldName) throws DecodingException
 	{
 		List<LocalizedText> values = new ArrayList<LocalizedText>();
@@ -1469,6 +1507,8 @@ public class XmlDecoder implements IDecoder {
 		return values.toArray(new LocalizedText[0]);
 	}
 
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends IEncodeable> T getMessage()
 	throws DecodingException	
@@ -1480,10 +1520,17 @@ public class XmlDecoder implements IDecoder {
 		return (T) encoderContext.getEncodeableSerializer().getEncodeable(clazz, this);
 	}
 
+	/**
+	 * @return the namespaceTable
+	 */
+	public NamespaceTable getNamespaceTable() {
+		return namespaceTable;
+	}
 
 	/// <summary>
 	/// Reads an NodeId from the stream.
 	/// </summary>
+	@Override
 	public NodeId getNodeId(String fieldName) throws IllegalArgumentException, DecodingException
 	{
 		NodeId value = null;//;new NodeId();
@@ -1509,6 +1556,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an NodeId array from the stream.
 	/// </summary>
+	@Override
 	public NodeId[] getNodeIdArray(String fieldName) throws DecodingException
 	{
 		List<NodeId> values = new ArrayList<NodeId>();
@@ -1539,6 +1587,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an QualifiedName from the stream.
 	/// </summary>
+	@Override
 	public QualifiedName getQualifiedName(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -1582,6 +1631,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an QualifiedName array from the stream.
 	/// </summary>
+	@Override
 	public QualifiedName[] getQualifiedNameArray(String fieldName) throws DecodingException
 	{
 		List<QualifiedName> values = new ArrayList<QualifiedName>();
@@ -1612,6 +1662,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a sbyte from the stream.
 	/// </summary>
+	@Override
 	public Byte getSByte(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -1632,6 +1683,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a sbyte array from the stream.
 	/// </summary>
+	@Override
 	public Byte[] getSByteArray(String fieldName) throws DecodingException
 	{        
 		List<Byte> values = new ArrayList<Byte>();
@@ -1659,6 +1711,7 @@ public class XmlDecoder implements IDecoder {
 		return values.toArray(new Byte[0]);
 	}
 
+	@Override
 	public Object getScalarObject(String fieldName, int builtinTypeId)
 	throws DecodingException	
 	{
@@ -1692,6 +1745,13 @@ public class XmlDecoder implements IDecoder {
 		throw new DecodingException("Cannot decode builtin type id "+builtinTypeId);
 	}
 
+	/**
+	 * @return the serverTable
+	 */
+	public ServerTable getServerTable() {
+		return serverTable;
+	}
+
 	/// <summary>
 	/// This method calls IsStartElement followed by Read to position you on the content of that element found in the input stream.
 	/// </summary>
@@ -1708,6 +1768,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an StatusCode from the stream.
 	/// </summary>
+	@Override
 	public StatusCode getStatusCode(String fieldName) throws DecodingException
 	{
 		StatusCode value = StatusCode.getFromBits(0);
@@ -1727,6 +1788,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an StatusCode array from the stream.
 	/// </summary>
+	@Override
 	public StatusCode[] getStatusCodeArray(String fieldName) throws DecodingException
 	{
 		List<StatusCode> values = new ArrayList<StatusCode>();
@@ -1757,6 +1819,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a String from the stream.
 	/// </summary>
+	@Override
 	public String getString(String fieldName) throws DecodingException
 	{
 			if (beginFieldSafe(fieldName, true))
@@ -1778,6 +1841,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a String array from the stream.
 	/// </summary>
+	@Override
 	public String[] getStringArray(String fieldName) throws DecodingException
 	{
 		List<String> values = new ArrayList<String>();
@@ -1869,6 +1933,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a ushort from the stream.
 	/// </summary>
+	@Override
 	public UnsignedShort getUInt16(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -1889,6 +1954,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a ushort array from the stream.
 	/// </summary>
+	@Override
 	public UnsignedShort[] getUInt16Array(String fieldName) throws DecodingException
 	{
 		List<UnsignedShort> values = new ArrayList<UnsignedShort>();
@@ -1919,6 +1985,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UnsignedInteger from the stream.
 	/// </summary>
+	@Override
 	public UnsignedInteger getUInt32(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -1939,6 +2006,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UnsignedInteger array from the stream.
 	/// </summary>
+	@Override
 	public UnsignedInteger[] getUInt32Array(String fieldName) throws DecodingException
 	{
 		List<UnsignedInteger> values = new ArrayList<UnsignedInteger>();
@@ -1971,6 +2039,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UnsignedLong from the stream.
 	/// </summary>
+	@Override
 	public UnsignedLong getUInt64(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -1991,6 +2060,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UnsignedLong array from the stream.
 	/// </summary>
+	@Override
 	public UnsignedLong[] getUInt64Array(String fieldName) throws DecodingException
 	{
 		List<UnsignedLong> values = new ArrayList<UnsignedLong>();
@@ -2021,6 +2091,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an Variant from the stream.
 	/// </summary>
+	@Override
 	public Variant getVariant(String fieldName) throws DecodingException
 	{
 		Variant value = new Variant(null);
@@ -2051,6 +2122,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an Variant array from the stream.
 	/// </summary>
+	@Override
 	public Variant[] getVariantArray(String fieldName) throws DecodingException
 	{
 		List<Variant> values = new ArrayList<Variant>();
@@ -2202,17 +2274,10 @@ public class XmlDecoder implements IDecoder {
 //		}
 	}
 
-	private Object decode(ExtensionObject extensionObject) throws DecodingException {
-		return extensionObject.decode(getEncoderContext(), namespaceTable);
-	}
-
-	private Object decode(ExtensionObject[] extensionObjectArray) throws DecodingException {
-		return getEncoderContext().decode(extensionObjectArray, namespaceTable);
-	}
-
 	/// <summary>
 	/// Reads an XmlElement from the stream.
 	/// </summary>
+	@Override
 	public XmlElement getXmlElement(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
@@ -2223,54 +2288,10 @@ public class XmlDecoder implements IDecoder {
 		return null;
 	}
 
-	private String getInnerXml(String fieldName) throws DecodingException {
-	    String innerXml=""; // TODO refine and fix implementation
-	    boolean isGetme=true;
-	    int level = 0;
-    	int eventType;
-        try {
-			do {
-			    eventType = reader.getEventType();
-			    switch (eventType) {
-			        case XMLStreamConstants.START_ELEMENT:
-			            if(reader.getLocalName().equals(fieldName)){
-			                isGetme=true;
-			            }
-			            if(isGetme){
-			                innerXml+="<"+reader.getLocalName()+">";
-			            }
-			            level++;
-			            break;
-			        case XMLStreamConstants.CHARACTERS:
-			            if(isGetme){
-			                innerXml+=reader.getText();
-			            }
-			            break;
-			        case XMLStreamConstants.END_ELEMENT:
-			            if (--level < 0)
-			            	return innerXml;
-			            if(reader.getLocalName().equals(fieldName)){
-			                innerXml+="</"+reader.getLocalName()+">";
-			                isGetme=false;
-			            }
-			            if(isGetme && !reader.getLocalName().equals(fieldName)){
-			                innerXml+="</"+reader.getLocalName()+">";
-			            }
-			            break;
-			        default:
-			            break;
-			    }
-			    reader.next();
-			} while (reader.hasNext());
-			} catch (XMLStreamException e) {
-				throw new DecodingException(e);
-			}
-	    return innerXml;
-	}
-
 	/// <summary>
 	/// Reads an XmlElement array from the stream.
 	/// </summary>
+	@Override
 	public XmlElement[] getXmlElementArray(String fieldName) throws DecodingException
 	{
 		List<XmlElement> values = new ArrayList<XmlElement>();
@@ -2331,35 +2352,21 @@ public class XmlDecoder implements IDecoder {
 		}
 	}
 
-	/**
-	 * Checks whether the current node is a content (non-white space text, CDATA, Element, EndElement, 
-	 * EntityReference, or EndEntity) node. If the node is not a content node, the reader skips ahead 
-	 * to the next content node or end of file. It skips over nodes of the following type: 
-	 * ProcessingInstruction, DocumentType, Comment, Whitespace, or SignificantWhitespace.
-	 */
-	private void moveToContent() {
-		while(reader.getEventType() != XMLStreamConstants.CDATA &&
-				reader.getEventType() != XMLStreamConstants.START_ELEMENT &&
-				reader.getEventType() != XMLStreamConstants.END_ELEMENT &&
-				reader.getEventType() != XMLStreamConstants.ENTITY_REFERENCE &&
-				reader.getEventType() != XMLStreamConstants.CHARACTERS &&
-				reader.getEventType() != XMLStreamConstants.END_DOCUMENT)
-			try {
-				reader.next();
-			} catch (XMLStreamException e) {
-				return;
+	/// <summary>
+	/// Returns the qualified name for the next element in the stream.
+	/// </summary>
+	public QName peek(int nodeType)
+	{
+		moveToContent();
+
+		if (/*nodeType != XMLStreamConstants.None &&*/ nodeType != reader.getEventType())
+		{
+			return null;
 			}
+
+		return new QName(reader.getLocalName(), reader.getNamespaceURI());
 	}
 
-	private void moveToEnd() {
-		while(reader.getEventType() != XMLStreamConstants.END_ELEMENT &&
-				reader.getEventType() != XMLStreamConstants.END_DOCUMENT)
-			try {
-				reader.next();
-			} catch (XMLStreamException e) {
-				return;
-			}
-	}
 	/// <summary>
 	/// Returns true if the specified field is the next element to be extracted.
 	/// </summary>
@@ -2385,28 +2392,8 @@ public class XmlDecoder implements IDecoder {
 
 		return true;
 	}
-
-	/// <summary>
-	/// Returns the qualified name for the next element in the stream.
-	/// </summary>
-	public QName peek(int nodeType)
-	{
-		moveToContent();
-
-		if (/*nodeType != XMLStreamConstants.None &&*/ nodeType != reader.getEventType())
-		{
-			return null;
-		}
-
-		return new QName(reader.getLocalName(), reader.getNamespaceURI());
-	}
-
-
-	/**
-	 * @return the namespaceTable
-	 */
-	public NamespaceTable getNamespaceTable() {
-		return namespaceTable;
+	public void setEncoderContext(EncoderContext ctx) {
+		this.encoderContext = ctx;
 	}
 
 	/**
@@ -2425,12 +2412,6 @@ public class XmlDecoder implements IDecoder {
 
 	}
 
-	/**
-	 * @return the serverTable
-	 */
-	public ServerTable getServerTable() {
-		return serverTable;
-	}
 	
 	/**
 	 * Define the server table to use for mapping the server indexes of the XML data to the application data.
@@ -2448,73 +2429,6 @@ public class XmlDecoder implements IDecoder {
 
 	}
 	
-	/**
-	 * Equivalent to XmlReader.Skip()
-	 * @throws XMLStreamException 
-	 */
-	private void skip() throws XMLStreamException {
-		int depth = 0;
-		reader.next();
-		if(reader.getEventType() != XMLStreamConstants.END_ELEMENT)
-		{
-			depth++;
-			while(depth != 0)
-			{
-				reader.next();
-				if(reader.getEventType() != XMLStreamConstants.START_ELEMENT)
-					depth++;
-				else if(reader.getEventType() != XMLStreamConstants.START_ELEMENT)
-					depth--;
-			}
-		}
-		// Reached same level, proceed to next element
-		reader.next();
-	}
-
-
-	/// <summary>
-	/// Skips to the end of the specified element.
-	/// </summary>
-	/// <param name="qname">The qualified name of the element to skip.</param>
-	private void skip(QName qname) throws DecodingException
-	{
-		moveToContent();
-
-		int depth = 1;
-
-		while (depth > 0)
-		{
-			if (reader.getEventType() == XMLStreamConstants.END_ELEMENT)
-			{
-				if (reader.getLocalName().equals(qname.getLocalPart()) && reader.getNamespaceURI().equals(qname.getNamespaceURI()))
-				{
-					depth--;
-				}
-			}
-
-			else if (reader.getEventType() == XMLStreamConstants.START_ELEMENT)//.Element)
-				{
-				if (reader.getLocalName().equals(qname.getLocalPart()) && reader.getNamespaceURI().equals(qname.getNamespaceURI()))
-				{
-					depth++;
-				}
-				}
-
-			try {
-				skip();
-			} catch (XMLStreamException e) {
-				throw new DecodingException(e);
-			}
-			moveToContent();
-		}      
-	}
-	
-	private boolean isStartElement(String localname)//, String namespace)
-	{
-		moveToContent();
-		return peek(localname);// m_reader.getEventType() == XMLStreamConstants.START_ELEMENT;
-	}
-
 	/// <summary>
 	/// Reads the start of field.
 	/// </summary>
@@ -2573,21 +2487,6 @@ public class XmlDecoder implements IDecoder {
 		return true;
 	}
 
-	/**
-	 * @throws DecodingException
-	 */
-	private void moveToTag() throws DecodingException {
-		while(reader.getEventType() != XMLStreamConstants.START_ELEMENT &&
-				reader.getEventType() != XMLStreamConstants.END_ELEMENT &&
-				reader.getEventType() != XMLStreamConstants.ENTITY_REFERENCE &&
-				reader.getEventType() != XMLStreamConstants.END_DOCUMENT)
-			try {
-				reader.nextTag();
-			} catch (XMLStreamException e) {
-				return;
-			}
-	}
-
 	/// <summary>
 	/// Reads the start of filed where the presences of the xsi:nil attribute is not significant.
 	/// </summary>
@@ -2628,6 +2527,15 @@ public class XmlDecoder implements IDecoder {
 		return mapping;
 	}
 	
+	private Object decode(ExtensionObject extensionObject) throws DecodingException {
+		return extensionObject.decode(getEncoderContext(), namespaceTable);
+	}
+
+
+	private Object decode(ExtensionObject[] extensionObjectArray) throws DecodingException {
+		return getEncoderContext().decode(extensionObjectArray, namespaceTable);
+	}
+
 	/// <summary>
 	/// Reads the end of a field.
 	/// </summary>
@@ -2695,6 +2603,52 @@ public class XmlDecoder implements IDecoder {
 		}
 		return text;
 	}
+
+	private String getInnerXml(String fieldName) throws DecodingException {
+		String innerXml=""; // TODO refine and fix implementation
+		boolean isGetme=true;
+		int level = 0;
+		int eventType;
+		try {
+			do {
+				eventType = reader.getEventType();
+				switch (eventType) {
+				case XMLStreamConstants.START_ELEMENT:
+					if(reader.getLocalName().equals(fieldName)){
+						isGetme=true;
+					}
+					if(isGetme){
+						innerXml+="<"+reader.getLocalName()+">";
+					}
+					level++;
+					break;
+				case XMLStreamConstants.CHARACTERS:
+					if(isGetme){
+						innerXml+=reader.getText();
+					}
+					break;
+				case XMLStreamConstants.END_ELEMENT:
+					if (--level < 0)
+						return innerXml;
+					if(reader.getLocalName().equals(fieldName)){
+						innerXml+="</"+reader.getLocalName()+">";
+						isGetme=false;
+					}
+					if(isGetme && !reader.getLocalName().equals(fieldName)){
+						innerXml+="</"+reader.getLocalName()+">";
+					}
+					break;
+				default:
+					break;
+				}
+				reader.next();
+			} while (reader.hasNext());
+		} catch (XMLStreamException e) {
+			throw new DecodingException(e);
+		}
+		return innerXml;
+	}
+
 	/// <summary>
 	/// Reads a String from the stream.
 	/// </summary>
@@ -2714,6 +2668,7 @@ public class XmlDecoder implements IDecoder {
 
 		return value;
 	}
+
 	/// <summary>
 	/// Sets private members to default values.
 	/// </summary>
@@ -2728,6 +2683,31 @@ public class XmlDecoder implements IDecoder {
 		if(xml.trim().length() == 0)
 			return true;
 		return false;
+	}
+
+	private boolean isStartElement(String localname)//, String namespace)
+	{
+		moveToContent();
+		return peek(localname);// m_reader.getEventType() == XMLStreamConstants.START_ELEMENT;
+	}
+	/**
+	 * Checks whether the current node is a content (non-white space text, CDATA, Element, EndElement,
+	 * EntityReference, or EndEntity) node. If the node is not a content node, the reader skips ahead
+	 * to the next content node or end of file. It skips over nodes of the following type:
+	 * ProcessingInstruction, DocumentType, Comment, Whitespace, or SignificantWhitespace.
+	 */
+	private void moveToContent() {
+		while(reader.getEventType() != XMLStreamConstants.CDATA &&
+				reader.getEventType() != XMLStreamConstants.START_ELEMENT &&
+				reader.getEventType() != XMLStreamConstants.END_ELEMENT &&
+				reader.getEventType() != XMLStreamConstants.ENTITY_REFERENCE &&
+				reader.getEventType() != XMLStreamConstants.CHARACTERS &&
+				reader.getEventType() != XMLStreamConstants.END_DOCUMENT)
+			try {
+				reader.next();
+			} catch (XMLStreamException e) {
+				return;
+			}
 	}
 	/// <summary>
 	/// Moves to the next start element.
@@ -2756,12 +2736,88 @@ public class XmlDecoder implements IDecoder {
 		return (reader.getLocalName() == elementName);// && m_reader.getNamespaceURI() == m_namespaces.peek());
 	}
 
-	public EncoderContext getEncoderContext() {
-		return encoderContext;
+	private void moveToEnd() {
+		while(reader.getEventType() != XMLStreamConstants.END_ELEMENT &&
+				reader.getEventType() != XMLStreamConstants.END_DOCUMENT)
+			try {
+				reader.next();
+			} catch (XMLStreamException e) {
+				return;
+			}
+	}
+	/**
+	 * @throws DecodingException
+	 */
+	private void moveToTag() throws DecodingException {
+		while(reader.getEventType() != XMLStreamConstants.START_ELEMENT &&
+				reader.getEventType() != XMLStreamConstants.END_ELEMENT &&
+				reader.getEventType() != XMLStreamConstants.ENTITY_REFERENCE &&
+				reader.getEventType() != XMLStreamConstants.END_DOCUMENT)
+			try {
+				reader.nextTag();
+			} catch (XMLStreamException e) {
+				return;
+			}
 	}
 	
-	public void setEncoderContext(EncoderContext ctx) {
-		this.encoderContext = ctx;
+	/**
+	 * Equivalent to XmlReader.Skip()
+	 * @throws XMLStreamException
+	 */
+	private void skip() throws XMLStreamException {
+		int depth = 0;
+		reader.next();
+		if(reader.getEventType() != XMLStreamConstants.END_ELEMENT)
+		{
+			depth++;
+			while(depth != 0)
+			{
+				reader.next();
+				if(reader.getEventType() != XMLStreamConstants.START_ELEMENT)
+					depth++;
+				else if(reader.getEventType() != XMLStreamConstants.START_ELEMENT)
+					depth--;
+			}
+		}
+		// Reached same level, proceed to next element
+		reader.next();
+	}
+
+	/// <summary>
+	/// Skips to the end of the specified element.
+	/// </summary>
+	/// <param name="qname">The qualified name of the element to skip.</param>
+	private void skip(QName qname) throws DecodingException
+	{
+		moveToContent();
+
+		int depth = 1;
+
+		while (depth > 0)
+		{
+			if (reader.getEventType() == XMLStreamConstants.END_ELEMENT)
+			{
+				if (reader.getLocalName().equals(qname.getLocalPart()) && reader.getNamespaceURI().equals(qname.getNamespaceURI()))
+				{
+					depth--;
+				}
+			}
+
+			else if (reader.getEventType() == XMLStreamConstants.START_ELEMENT)//.Element)
+			{
+				if (reader.getLocalName().equals(qname.getLocalPart()) && reader.getNamespaceURI().equals(qname.getNamespaceURI()))
+				{
+					depth++;
+				}
+			}
+
+			try {
+				skip();
+			} catch (XMLStreamException e) {
+				throw new DecodingException(e);
+			}
+			moveToContent();
+		}
 	}
 
 }

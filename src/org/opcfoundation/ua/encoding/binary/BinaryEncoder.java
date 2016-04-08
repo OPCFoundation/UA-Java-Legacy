@@ -2103,5 +2103,10 @@ public class BinaryEncoder implements IEncoder {
 		EncoderUtils.put(this, fieldName, o);
 	}
 
+	@Override
+	public void put(String fieldName, Object o, Class<?> clazz) throws EncodingException {
+		EncoderUtils.put(this, fieldName, o, clazz);
+	}
+
 	
 }

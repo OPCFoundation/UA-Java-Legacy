@@ -334,4 +334,7 @@ public interface IEncoder {
 
 	void put(String fieldName, Object o)
 	throws EncodingException;
+
+	void put(String fieldName, Object o, Class<?> clazz)
+	throws EncodingException;
 }

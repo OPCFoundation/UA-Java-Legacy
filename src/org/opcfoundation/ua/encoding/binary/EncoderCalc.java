@@ -1315,5 +1315,11 @@ public class EncoderCalc implements IEncoder {
 		return length+"";
 	}
 
+	@Override
+	public void put(String fieldName, Object o, Class<?> clazz) throws EncodingException {
+		EncoderUtils.put(this, fieldName, o, clazz);
+		
+	}
+
 	
 }

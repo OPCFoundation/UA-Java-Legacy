@@ -236,7 +236,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
 		// or at least the Calendar interprets it so
 		final int l = s.length();
 		if (l < 10)
-			throw new ParseException("Cannot parse DateTime from " + s + " expecting format 'yyyy-MM-dd'T'mm:hh:ssZ', for example '2011-04-13T11:47:12Z' for UTC timezone", 0);
+			throw new ParseException("Cannot parse DateTime from " + s + " expecting format 'yyyy-MM-dd'T'hh:mm:ssZ', for example '2011-04-13T11:47:12Z' for UTC timezone", 0);
 		int year = Integer.parseInt(s.substring(0,4));
 		int month = Integer.parseInt(s.substring(5,7));
 		int day = Integer.parseInt(s.substring(8,10));

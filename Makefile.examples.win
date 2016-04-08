@@ -1,7 +1,7 @@
 # Makefile for building the JAVA examples in Windows
 
 # ENSURE THE STACK VERSION IS CORRECT!
-UASTACK=Opc.Ua.Stack-1.02.337.2.jar
+UASTACK=Opc.Ua.Stack-1.02.337.8.jar
 
 # Check the file paths, especially for JAVAC and ANT, unless they are on path
 

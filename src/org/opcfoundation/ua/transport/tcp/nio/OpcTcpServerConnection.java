@@ -489,9 +489,10 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 	
 	protected void handleSecureMessage(InputMessage mb) throws ServiceResultException {
 		IEncodeable msg = mb.getMessage();
-		if (logger.isDebugEnabled())
-			logger.debug("onSecureMessage: " + msg == null ? "null" : msg.getClass().getSimpleName());
 		int secureChannelId = mb.getSecureChannelId();
+		if (logger.isDebugEnabled())
+			logger.debug("handleSecureMessage: secureChannelId=" + secureChannelId + "msg=" + (msg == null ? "null" : msg.getClass().getSimpleName()));
+
 		OpcTcpServerSecureChannel chan = (OpcTcpServerSecureChannel) secureChannels.get(secureChannelId);
 		if (chan==null) 
 			throw new ServiceResultException( Bad_SecureChannelIdInvalid );

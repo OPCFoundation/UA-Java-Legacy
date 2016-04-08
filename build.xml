@@ -24,7 +24,7 @@
 	<property name="project.name" value="OpcUa" />
 
 	<property name="version" value="1.02" />
-	<property name="build" value="337.6" />
+	<property name="build" value="337.8" />
 	<property name="status" value="Stable" />
 	<property name="src.dir" value="src" />
 	<property name="build.dir" value="build" />

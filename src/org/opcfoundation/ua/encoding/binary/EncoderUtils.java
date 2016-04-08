@@ -31,175 +31,347 @@ import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.builtintypes.XmlElement;
 import org.opcfoundation.ua.encoding.EncodingException;
+import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.IEncoder;
 
 public class EncoderUtils {
-	public static void put(IEncoder binaryEncoder, String fieldName, Object o) throws EncodingException {
+	public static void put(IEncoder encoder, String fieldName, Object o) throws EncodingException {
 		if (o instanceof Boolean) {
-			binaryEncoder.putBoolean(fieldName, (Boolean) o);
+			encoder.putBoolean(fieldName, (Boolean) o);
 		}
 		else if (o instanceof Byte) {
-			binaryEncoder.putSByte(fieldName, (Byte) o);
+			encoder.putSByte(fieldName, (Byte) o);
 		}
 		else if (o instanceof UnsignedByte) {
-			binaryEncoder.putByte(fieldName, (UnsignedByte) o);
+			encoder.putByte(fieldName, (UnsignedByte) o);
 		}
 		else if (o instanceof Short) {
-			binaryEncoder.putInt16(fieldName, (Short) o);
+			encoder.putInt16(fieldName, (Short) o);
 		}
 		else if (o instanceof UnsignedShort) {
-			binaryEncoder.putUInt16(fieldName, (UnsignedShort) o);
+			encoder.putUInt16(fieldName, (UnsignedShort) o);
 		}
 		else if (o instanceof Integer) {
-			binaryEncoder.putInt32(fieldName, (Integer) o);
+			encoder.putInt32(fieldName, (Integer) o);
 		}
 		else if (o instanceof UnsignedInteger) {
-			binaryEncoder.putUInt32(fieldName, (UnsignedInteger) o);
+			encoder.putUInt32(fieldName, (UnsignedInteger) o);
 		}
 		else if (o instanceof Long) {
-			binaryEncoder.putInt64(fieldName, (Long) o);
+			encoder.putInt64(fieldName, (Long) o);
 		}
 		else if (o instanceof UnsignedLong) {
-			binaryEncoder.putUInt64(fieldName, (UnsignedLong) o);
+			encoder.putUInt64(fieldName, (UnsignedLong) o);
 		}
 		else if (o instanceof Float) {
-			binaryEncoder.putFloat(fieldName, (Float) o);
+			encoder.putFloat(fieldName, (Float) o);
 		}
 		else if (o instanceof Double) {
-			binaryEncoder.putDouble(fieldName, (Double) o);
+			encoder.putDouble(fieldName, (Double) o);
 		}
 		else if (o instanceof String) {
-			binaryEncoder.putString(fieldName, (String) o);
+			encoder.putString(fieldName, (String) o);
 		}
 		else if (o instanceof DateTime) {
-			binaryEncoder.putDateTime(fieldName, (DateTime) o);
+			encoder.putDateTime(fieldName, (DateTime) o);
 		}
 		else if (o instanceof UUID) {
-			binaryEncoder.putGuid(fieldName, (UUID) o);
+			encoder.putGuid(fieldName, (UUID) o);
 		}
 		else if (o instanceof byte[]) {
-			binaryEncoder.putByteString(fieldName, (byte[]) o);
+			encoder.putByteString(fieldName, (byte[]) o);
 		}
 		else if (o instanceof XmlElement) {
-			binaryEncoder.putXmlElement(fieldName, (XmlElement) o);
+			encoder.putXmlElement(fieldName, (XmlElement) o);
 		}
 		else if (o instanceof NodeId) {
-			binaryEncoder.putNodeId(fieldName, (NodeId) o);
+			encoder.putNodeId(fieldName, (NodeId) o);
 		}
 		else if (o instanceof ExpandedNodeId) {
-			binaryEncoder.putExpandedNodeId(fieldName, (ExpandedNodeId) o);
+			encoder.putExpandedNodeId(fieldName, (ExpandedNodeId) o);
 		}
 		else if (o instanceof StatusCode) {
-			binaryEncoder.putStatusCode(fieldName, (StatusCode) o);
+			encoder.putStatusCode(fieldName, (StatusCode) o);
 		}
 		else if (o instanceof QualifiedName) {
-			binaryEncoder.putQualifiedName(fieldName, (QualifiedName) o);
+			encoder.putQualifiedName(fieldName, (QualifiedName) o);
 		}
 		else if (o instanceof LocalizedText) {
-			binaryEncoder.putLocalizedText(fieldName, (LocalizedText) o);
+			encoder.putLocalizedText(fieldName, (LocalizedText) o);
 		}
 		else if (o instanceof ExtensionObject) {
-			binaryEncoder.putExtensionObject(fieldName, (ExtensionObject) o);
+			encoder.putExtensionObject(fieldName, (ExtensionObject) o);
 		}
 		else if (o instanceof Structure) {
-			binaryEncoder.putEncodeable(fieldName, (Structure) o);
+			encoder.putEncodeable(fieldName, (Structure) o);
 		}
 		else if (o instanceof DataValue) {
-			binaryEncoder.putDataValue(fieldName, (DataValue) o);
+			encoder.putDataValue(fieldName, (DataValue) o);
 		}
 		else if (o instanceof Variant) {
-			binaryEncoder.putVariant(fieldName, (Variant) o);
+			encoder.putVariant(fieldName, (Variant) o);
 		}
 		else if (o instanceof DiagnosticInfo) {
-			binaryEncoder.putDiagnosticInfo(fieldName, (DiagnosticInfo) o);
+			encoder.putDiagnosticInfo(fieldName, (DiagnosticInfo) o);
 		}
 		else if (o instanceof Boolean[]) {
-			binaryEncoder.putBooleanArray(fieldName, (Boolean[]) o);
+			encoder.putBooleanArray(fieldName, (Boolean[]) o);
 		}
 		else if (o instanceof Byte[]) {
-			binaryEncoder.putSByteArray(fieldName, (Byte[]) o);
+			encoder.putSByteArray(fieldName, (Byte[]) o);
 		}
 		else if (o instanceof UnsignedByte[]) {
-			binaryEncoder.putByteArray(fieldName, (UnsignedByte[]) o);
+			encoder.putByteArray(fieldName, (UnsignedByte[]) o);
 		}
 		else if (o instanceof Short[]) {
-			binaryEncoder.putInt16Array(fieldName, (Short[]) o);
+			encoder.putInt16Array(fieldName, (Short[]) o);
 		}
 		else if (o instanceof UnsignedShort[]) {
-			binaryEncoder.putUInt16Array(fieldName, (UnsignedShort[]) o);
+			encoder.putUInt16Array(fieldName, (UnsignedShort[]) o);
 		}
 		else if (o instanceof Integer[]) {
-			binaryEncoder.putInt32Array(fieldName, (Integer[]) o);
+			encoder.putInt32Array(fieldName, (Integer[]) o);
 		}
 		else if (o instanceof UnsignedInteger[]) {
-			binaryEncoder.putUInt32Array(fieldName, (UnsignedInteger[]) o);
+			encoder.putUInt32Array(fieldName, (UnsignedInteger[]) o);
 		}
 		else if (o instanceof Long[]) {
-			binaryEncoder.putInt64Array(fieldName, (Long[]) o);
+			encoder.putInt64Array(fieldName, (Long[]) o);
 		}
 		else if (o instanceof UnsignedLong[]) {
-			binaryEncoder.putUInt64Array(fieldName, (UnsignedLong[]) o);
+			encoder.putUInt64Array(fieldName, (UnsignedLong[]) o);
 		}
 		else if (o instanceof Float[]) {
-			binaryEncoder.putFloatArray(fieldName, (Float[]) o);
+			encoder.putFloatArray(fieldName, (Float[]) o);
 		}
 		else if (o instanceof Double[]) {
-			binaryEncoder.putDoubleArray(fieldName, (Double[]) o);
+			encoder.putDoubleArray(fieldName, (Double[]) o);
 		}
 		else if (o instanceof String[]) {
-			binaryEncoder.putStringArray(fieldName, (String[]) o);
+			encoder.putStringArray(fieldName, (String[]) o);
 		}
 		else if (o instanceof DateTime[]) {
-			binaryEncoder.putDateTimeArray(fieldName, (DateTime[]) o);
+			encoder.putDateTimeArray(fieldName, (DateTime[]) o);
 		}
 		else if (o instanceof UUID[]) {
-			binaryEncoder.putGuidArray(fieldName, (UUID[]) o);
+			encoder.putGuidArray(fieldName, (UUID[]) o);
 		}
 		else if (o instanceof byte[][]) {
-			binaryEncoder.putByteStringArray(fieldName, (byte[][]) o);
+			encoder.putByteStringArray(fieldName, (byte[][]) o);
 		}
 		else if (o instanceof XmlElement[]) {
-			binaryEncoder.putXmlElementArray(fieldName, (XmlElement[]) o);
+			encoder.putXmlElementArray(fieldName, (XmlElement[]) o);
 		}
 		else if (o instanceof NodeId[]) {
-			binaryEncoder.putNodeIdArray(fieldName, (NodeId[]) o);
+			encoder.putNodeIdArray(fieldName, (NodeId[]) o);
 		}
 		else if (o instanceof ExpandedNodeId[]) {
-			binaryEncoder.putExpandedNodeIdArray(fieldName, (ExpandedNodeId[]) o);
+			encoder.putExpandedNodeIdArray(fieldName, (ExpandedNodeId[]) o);
 		}
 		else if (o instanceof StatusCode[]) {
-			binaryEncoder.putStatusCodeArray(fieldName, (StatusCode[]) o);
+			encoder.putStatusCodeArray(fieldName, (StatusCode[]) o);
 		}
 		else if (o instanceof QualifiedName[]) {
-			binaryEncoder.putQualifiedNameArray(fieldName, (QualifiedName[]) o);
+			encoder.putQualifiedNameArray(fieldName, (QualifiedName[]) o);
 		}
 		else if (o instanceof LocalizedText[]) {
-			binaryEncoder.putLocalizedTextArray(fieldName, (LocalizedText[]) o);
+			encoder.putLocalizedTextArray(fieldName, (LocalizedText[]) o);
 		}
 		else if (o instanceof ExtensionObject[]) {
-			binaryEncoder.putExtensionObjectArray(fieldName, (ExtensionObject[]) o);
+			encoder.putExtensionObjectArray(fieldName, (ExtensionObject[]) o);
 		}
 		else if (o.getClass().getComponentType() != null && Structure.class.isAssignableFrom(o.getClass().getComponentType())) {
 			Object[] array = (Object[]) o;
 			Structure[] structArray = new Structure[array.length];
 			for (int i = 0; i < array.length; i++)
 				structArray[i] = (Structure) array[i];
-			binaryEncoder.putStructureArray(fieldName, structArray);
+			encoder.putStructureArray(fieldName, structArray);
 		}
 		else if (o instanceof DataValue[]) {
-			binaryEncoder.putDataValueArray(fieldName, (DataValue[]) o);
+			encoder.putDataValueArray(fieldName, (DataValue[]) o);
 		}
 		else if (o instanceof Variant[]) {
-			binaryEncoder.putVariantArray(fieldName, (Variant[]) o);
+			encoder.putVariantArray(fieldName, (Variant[]) o);
 		}
 		else if (o instanceof DiagnosticInfo[]) {
-			binaryEncoder.putDiagnosticInfoArray(fieldName, (DiagnosticInfo[]) o);
+			encoder.putDiagnosticInfoArray(fieldName, (DiagnosticInfo[]) o);
 		}
 		else if (o instanceof Enumeration) {
-			binaryEncoder.putEnumeration(fieldName, (Enumeration) o);
+			encoder.putEnumeration(fieldName, (Enumeration) o);
 		}
 		else if (o.getClass().getComponentType() != null && Enumeration.class.isAssignableFrom(o.getClass().getComponentType())) {
-			binaryEncoder.putEnumerationArray(fieldName, o);
+			encoder.putEnumerationArray(fieldName, o);
+		}
+		else throw new EncodingException("Cannot encode "+o);
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	public static void put(IEncoder encoder, String fieldName, Object o, Class<?> clazz) throws EncodingException {
+		if (o != null) {
+			put(encoder, fieldName, o);
+		}
+		else if (Boolean.class.isAssignableFrom(clazz)) {
+			encoder.putBoolean(fieldName, (Boolean) o);
+		}
+		else if (Byte.class.isAssignableFrom(clazz)) {
+			encoder.putSByte(fieldName, (Byte) o);
+		}
+		else if (UnsignedByte.class.isAssignableFrom(clazz)) {
+			encoder.putByte(fieldName, (UnsignedByte) o);
+		}
+		else if (Short.class.isAssignableFrom(clazz)) {
+			encoder.putInt16(fieldName, (Short) o);
+		}
+		else if (UnsignedShort.class.isAssignableFrom(clazz)) {
+			encoder.putUInt16(fieldName, (UnsignedShort) o);
+		}
+		else if (Integer.class.isAssignableFrom(clazz)) {
+			encoder.putInt32(fieldName, (Integer) o);
+		}
+		else if (UnsignedInteger.class.isAssignableFrom(clazz)) {
+			encoder.putUInt32(fieldName, (UnsignedInteger) o);
+		}
+		else if (Long.class.isAssignableFrom(clazz)) {
+			encoder.putInt64(fieldName, (Long) o);
+		}
+		else if (UnsignedLong.class.isAssignableFrom(clazz)) {
+			encoder.putUInt64(fieldName, (UnsignedLong) o);
+		}
+		else if (Float.class.isAssignableFrom(clazz)) {
+			encoder.putFloat(fieldName, (Float) o);
+		}
+		else if (Double.class.isAssignableFrom(clazz)) {
+			encoder.putDouble(fieldName, (Double) o);
+		}
+		else if (String.class.isAssignableFrom(clazz)) {
+			encoder.putString(fieldName, (String) o);
+		}
+		else if (DateTime.class.isAssignableFrom(clazz)) {
+			encoder.putDateTime(fieldName, (DateTime) o);
+		}
+		else if (UUID.class.isAssignableFrom(clazz)) {
+			encoder.putGuid(fieldName, (UUID) o);
+		}
+		else if (byte[].class.isAssignableFrom(clazz)) {
+			encoder.putByteString(fieldName, (byte[]) o);
+		}
+		else if (XmlElement.class.isAssignableFrom(clazz)) {
+			encoder.putXmlElement(fieldName, (XmlElement) o);
+		}
+		else if (NodeId.class.isAssignableFrom(clazz)) {
+			encoder.putNodeId(fieldName, (NodeId) o);
+		}
+		else if (ExpandedNodeId.class.isAssignableFrom(clazz)) {
+			encoder.putExpandedNodeId(fieldName, (ExpandedNodeId) o);
+		}
+		else if (StatusCode.class.isAssignableFrom(clazz)) {
+			encoder.putStatusCode(fieldName, (StatusCode) o);
+		}
+		else if (QualifiedName.class.isAssignableFrom(clazz)) {
+			encoder.putQualifiedName(fieldName, (QualifiedName) o);
+		}
+		else if (LocalizedText.class.isAssignableFrom(clazz)) {
+			encoder.putLocalizedText(fieldName, (LocalizedText) o);
+		}
+		else if (ExtensionObject.class.isAssignableFrom(clazz)) {
+			encoder.putExtensionObject(fieldName, (ExtensionObject) o);
+		}
+		else if (Structure.class.isAssignableFrom(clazz)) {
+			encoder.putEncodeable(fieldName, (Class<? extends IEncodeable>) clazz, (Structure) o);
+		}
+		else if (DataValue.class.isAssignableFrom(clazz)) {
+			encoder.putDataValue(fieldName, (DataValue) o);
+		}
+		else if (Variant.class.isAssignableFrom(clazz)) {
+			encoder.putVariant(fieldName, (Variant) o);
+		}
+		else if (DiagnosticInfo.class.isAssignableFrom(clazz)) {
+			encoder.putDiagnosticInfo(fieldName, (DiagnosticInfo) o);
+		}
+		else if (Boolean[].class.isAssignableFrom(clazz)) {
+			encoder.putBooleanArray(fieldName, (Boolean[]) o);
+		}
+		else if (Byte[].class.isAssignableFrom(clazz)) {
+			encoder.putSByteArray(fieldName, (Byte[]) o);
+		}
+		else if (UnsignedByte[].class.isAssignableFrom(clazz)) {
+			encoder.putByteArray(fieldName, (UnsignedByte[]) o);
+		}
+		else if (Short[].class.isAssignableFrom(clazz)) {
+			encoder.putInt16Array(fieldName, (Short[]) o);
+		}
+		else if (UnsignedShort[].class.isAssignableFrom(clazz)) {
+			encoder.putUInt16Array(fieldName, (UnsignedShort[]) o);
+		}
+		else if (Integer[].class.isAssignableFrom(clazz)) {
+			encoder.putInt32Array(fieldName, (Integer[]) o);
+		}
+		else if (UnsignedInteger[].class.isAssignableFrom(clazz)) {
+			encoder.putUInt32Array(fieldName, (UnsignedInteger[]) o);
+		}
+		else if (Long[].class.isAssignableFrom(clazz)) {
+			encoder.putInt64Array(fieldName, (Long[]) o);
+		}
+		else if (UnsignedLong[].class.isAssignableFrom(clazz)) {
+			encoder.putUInt64Array(fieldName, (UnsignedLong[]) o);
+		}
+		else if (Float[].class.isAssignableFrom(clazz)) {
+			encoder.putFloatArray(fieldName, (Float[]) o);
+		}
+		else if (Double[].class.isAssignableFrom(clazz)) {
+			encoder.putDoubleArray(fieldName, (Double[]) o);
+		}
+		else if (String[].class.isAssignableFrom(clazz)) {
+			encoder.putStringArray(fieldName, (String[]) o);
+		}
+		else if (DateTime[].class.isAssignableFrom(clazz)) {
+			encoder.putDateTimeArray(fieldName, (DateTime[]) o);
+		}
+		else if (UUID[].class.isAssignableFrom(clazz)) {
+			encoder.putGuidArray(fieldName, (UUID[]) o);
+		}
+		else if (byte[][].class.isAssignableFrom(clazz)) {
+			encoder.putByteStringArray(fieldName, (byte[][]) o);
+		}
+		else if (XmlElement[].class.isAssignableFrom(clazz)) {
+			encoder.putXmlElementArray(fieldName, (XmlElement[]) o);
+		}
+		else if (NodeId[].class.isAssignableFrom(clazz)) {
+			encoder.putNodeIdArray(fieldName, (NodeId[]) o);
+		}
+		else if (ExpandedNodeId[].class.isAssignableFrom(clazz)) {
+			encoder.putExpandedNodeIdArray(fieldName, (ExpandedNodeId[]) o);
+		}
+		else if (StatusCode[].class.isAssignableFrom(clazz)) {
+			encoder.putStatusCodeArray(fieldName, (StatusCode[]) o);
+		}
+		else if (QualifiedName[].class.isAssignableFrom(clazz)) {
+			encoder.putQualifiedNameArray(fieldName, (QualifiedName[]) o);
+		}
+		else if (LocalizedText[].class.isAssignableFrom(clazz)) {
+			encoder.putLocalizedTextArray(fieldName, (LocalizedText[]) o);
+		}
+		else if (ExtensionObject[].class.isAssignableFrom(clazz)) {
+			encoder.putExtensionObjectArray(fieldName, (ExtensionObject[]) o);
+		}
+		else if (Structure[].class.isAssignableFrom(clazz)) {
+			encoder.putStructureArray(fieldName, (Structure[]) null);
+		}
+		else if (DataValue[].class.isAssignableFrom(clazz)) {
+			encoder.putDataValueArray(fieldName, (DataValue[]) o);
+		}
+		else if (Variant[].class.isAssignableFrom(clazz)) {
+			encoder.putVariantArray(fieldName, (Variant[]) o);
+		}
+		else if (DiagnosticInfo[].class.isAssignableFrom(clazz)) {
+			encoder.putDiagnosticInfoArray(fieldName, (DiagnosticInfo[]) o);
+		}
+		else if (Enumeration.class.isAssignableFrom(clazz)) {
+			encoder.putEnumeration(fieldName, (Enumeration) o);
+		}
+		else if (Enumeration[].class.isAssignableFrom(clazz)) {
+			encoder.putEnumerationArray(fieldName, null);
 		}
 		else throw new EncodingException("Cannot encode "+o);
 	}

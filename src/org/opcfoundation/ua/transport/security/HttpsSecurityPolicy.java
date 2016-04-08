@@ -50,6 +50,7 @@ public final class HttpsSecurityPolicy {
 	public static final String TLS_DH_anon_WITH_RC4_128_MD5 = "TLS_DH_anon_WITH_RC4_128_MD5";
 	public static final String TLS_DH_anon_WITH_DES_CBC_SHA = "TLS_DH_anon_WITH_DES_CBC_SHA";
 	public static final String TLS_DH_anon_WITH_3DES_EDE_CBC_SHA = "TLS_DH_anon_WITH_3DES_EDE_CBC_SHA";
+	public static final String TLS_DHE_RSA_WITH_AES_256_CBC_SHA256 = "TLS_DHE_RSA_WITH_AES_256_CBC_SHA256";
 
 	public static final HttpsSecurityPolicy TLS_1_0 = new HttpsSecurityPolicy(
 			URI_TLS_1_0, 
@@ -86,7 +87,8 @@ public final class HttpsSecurityPolicy {
 			URI_TLS_1_2, 
 			2048,4096, 
 			new String[] {
-					TLS_RSA_WITH_AES_256_CBC_SHA256});
+					TLS_RSA_WITH_AES_256_CBC_SHA256,
+					TLS_DHE_RSA_WITH_AES_256_CBC_SHA256});
 
 	// TLS_1_2 does not work, so we will leave out of the default policies list
 	public static final HttpsSecurityPolicy[] ALL = new HttpsSecurityPolicy[] {TLS_1_0, TLS_1_1};  

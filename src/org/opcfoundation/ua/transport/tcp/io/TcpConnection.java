@@ -52,6 +52,7 @@ import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.common.RuntimeServiceResultException;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.ChannelSecurityToken;
+import org.opcfoundation.ua.core.CloseSecureChannelRequest;
 import org.opcfoundation.ua.core.EncodeableSerializer;
 import org.opcfoundation.ua.core.EndpointConfiguration;
 import org.opcfoundation.ua.core.EndpointDescription;
@@ -1094,7 +1095,11 @@ public class TcpConnection implements IConnection {
 										ByteBuffer chunk = chunks[i];
 										final ByteBuffer plaintext = plaintexts[i];
 										boolean finalChunk = chunk == chunks[chunks.length - 1];
-										sendSymmChunk(requestId, token, seq, chunk, plaintext, finalChunk);
+										int msgType = TcpMessageType.MSGC;
+										if(finalChunk) msgType = TcpMessageType.MSGF;
+										if(request instanceof CloseSecureChannelRequest)
+											msgType = TcpMessageType.CLOSE | TcpMessageType.FINAL;
+										sendSymmChunk(requestId, token, seq, chunk, plaintext, msgType);
 										plaintexts[i] = null;
 										chunks[i] = null;
 									}
@@ -1133,9 +1138,9 @@ public class TcpConnection implements IConnection {
 	 * @throws ServiceResultException
 	 * @throws IOException
 	 */
-	private void sendSymmChunk(int requestId, SecurityToken token, SequenceNumber seq, ByteBuffer chunk, final ByteBuffer plaintext, boolean finalChunk) throws ServiceResultException, IOException {
+	private void sendSymmChunk(int requestId, SecurityToken token, SequenceNumber seq, ByteBuffer chunk, final ByteBuffer plaintext, int msgType) throws ServiceResultException, IOException {
 		chunk.rewind();
-		chunk.putInt((finalChunk ? TcpMessageType.MSGF : TcpMessageType.MSGC));
+		chunk.putInt(msgType);
 		chunk.position(8);
 		chunk.putInt(token.getSecureChannelId());
 
