@@ -170,12 +170,12 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 					}
 				}
 		};
-		s.getStateMonitor().addStateListener(socketListener);
-		
-		s.getInputStream().createMonitor(8, inputListener);
-		
 		setState(CloseableObjectState.Opening);
-		
+
+		s.getStateMonitor().addStateListener(socketListener);
+		s.getInputStream().createMonitor(8, inputListener);
+
+
 		timeoutTimer = TimerUtil.schedule(
 				timer, timeout, 
 				StackUtils.getBlockingWorkExecutor(), 
