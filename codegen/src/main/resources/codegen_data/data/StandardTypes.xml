@@ -1,0 +1,2773 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<opc:ModelDesign
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:opc="http://opcfoundation.org/UA/ModelDesign.xsd"
+  xmlns:ua="http://opcfoundation.org/UA/"
+  xmlns="http://opcfoundation.org/UA/"
+  xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd"
+  TargetNamespace="http://opcfoundation.org/UA/"
+  TargetNamespaceVersion="1.02"
+>
+  <opc:Namespaces>
+    <opc:Namespace Name="OpcUa" Prefix="Opc.Ua" InternalPrefix="Opc.Ua.Server" XmlNamespace="http://opcfoundation.org/UA/2008/02/Types.xsd">http://opcfoundation.org/UA/</opc:Namespace>
+  </opc:Namespaces>
+
+  <opc:Property SymbolicName="NodeVersion" DataType="ua:String" PartNo="3">
+    <opc:Description>The version number of the node (used to indicate changes to references of the owning node).</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="ViewVersion" DataType="ua:UInt32" PartNo="3">
+    <opc:Description>The version number of the view.</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="Icon" DataType="Image" PartNo="3">
+    <opc:Description>A small image representing the object.</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="LocalTime" DataType="TimeZoneDataType" PartNo="3">
+    <opc:Description>The local time where the owning variable value was collected.</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="AllowNulls" DataType="ua:Boolean" PartNo="3">
+    <opc:Description>Whether the value of the owning variable is allowed to be null.</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="ValueAsText" DataType="ua:LocalizedText" PartNo="3">
+    <opc:Description>The string representation of the current value for a variable with an enumerated data type.</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="MaxStringLength" DataType="ua:UInt32" PartNo="3">
+    <opc:Description>The maximum length for a string that can be stored in the owning variable.</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="MaxArrayLength" DataType="ua:UInt32" PartNo="3">
+    <opc:Description>The maximum length for an array that can be stored in the owning variable.</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="EngineeringUnits" DataType="EUInformation" PartNo="3">
+    <opc:Description>The engineering units for the value of the owning variable.</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="EnumStrings" DataType="ua:LocalizedText" ValueRank="Array" PartNo="3">
+    <opc:Description>The human readable strings associated with the values of an enumerated value (when values are sequential).</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="EnumValues" DataType="EnumValueType" ValueRank="Array" PartNo="3">
+    <opc:Description>The human readable strings associated with the values of an enumerated value (when values have no sequence).</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="InputArguments" DataType="Argument" ValueRank="Array" PartNo="3">
+    <opc:Description>The input arguments for a method.</opc:Description>
+  </opc:Property>
+
+  <opc:Property SymbolicName="OutputArguments" DataType="Argument" ValueRank="Array" PartNo="3">
+    <opc:Description>The output arguments for a method.</opc:Description>
+  </opc:Property>
+
+  <opc:DataType SymbolicName="ImageBMP" BaseType="Image" PartNo="3">
+    <opc:Description>An image encoded in BMP format.</opc:Description>
+  </opc:DataType>
+
+  <opc:DataType SymbolicName="ImageGIF" BaseType="Image" PartNo="3">
+    <opc:Description>An image encoded in GIF format.</opc:Description>
+  </opc:DataType>
+
+  <opc:DataType SymbolicName="ImageJPG" BaseType="Image" PartNo="3">
+    <opc:Description>An image encoded in JPEG format.</opc:Description>
+  </opc:DataType>
+
+  <opc:DataType SymbolicName="ImagePNG" BaseType="Image" PartNo="3">
+    <opc:Description>An image encoded in PNG format.</opc:Description>
+  </opc:DataType>
+
+  <!-- Part 5 - Standard Object Types -->
+
+  <!-- BaseObjectType BuiltInTypes.xml -->
+
+  <opc:ObjectType SymbolicName="ServerType" BaseType="ua:BaseObjectType" PartNo="5">
+    <opc:Description>Specifies the current status and capabilities of the server.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="ServerArray" DataType="ua:String" ValueRank="Array" MinimumSamplingInterval="1000">
+        <opc:Description>The list of server URIs used by the server.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="NamespaceArray" DataType="ua:String" ValueRank="Array" MinimumSamplingInterval="1000">
+        <opc:Description>The list of namespace URIs used by the server.</opc:Description>
+      </opc:Property>
+      <opc:Variable SymbolicName="ServerStatus" TypeDefinition="ServerStatusType" MinimumSamplingInterval="1000">
+        <opc:Description>The current status of the server.</opc:Description>
+      </opc:Variable>
+      <opc:Property SymbolicName="ServiceLevel" DataType="ua:Byte" MinimumSamplingInterval="1000">
+        <opc:Description>A value indicating the level of service the server can provide. 255 indicates the best.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="Auditing" DataType="ua:Boolean" MinimumSamplingInterval="1000">
+        <opc:Description>A flag indicating whether the server is currently generating audit events.</opc:Description>
+      </opc:Property>
+      <opc:Object SymbolicName="ServerCapabilities" TypeDefinition="ServerCapabilitiesType">
+        <opc:Description>Describes capabilities supported by the server.</opc:Description>
+      </opc:Object>
+      <opc:Object SymbolicName="ServerDiagnostics" TypeDefinition="ServerDiagnosticsType">
+        <opc:Description>Reports diagnostics about the server.</opc:Description>
+      </opc:Object>
+      <opc:Object SymbolicName="VendorServerInfo" TypeDefinition="VendorServerInfoType">
+        <opc:Description>Server information provided by the vendor.</opc:Description>
+      </opc:Object>
+      <opc:Object SymbolicName="ServerRedundancy" TypeDefinition="ServerRedundancyType">
+        <opc:Description>Describes the redundancy capabilities of the server.</opc:Description>
+      </opc:Object>
+      <opc:Object SymbolicName="Namespaces" TypeDefinition="NamespacesType" ModellingRule="Optional">
+        <opc:Description>Describes the namespaces supported by the server.</opc:Description>
+      </opc:Object>
+      <opc:Method SymbolicName="GetMonitoredItems" TypeDefinition="GetMonitoredItemsMethodType" ModellingRule="Optional">
+        <opc:Description>Returns the monitored items for a subscription.</opc:Description>
+      </opc:Method>
+    </opc:Children>
+    <opc:ClassName>ServerObject</opc:ClassName>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="ServerCapabilitiesType" BaseType="ua:BaseObjectType" PartNo="5">
+    <opc:Description>Describes the capabilities supported by the server.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="ServerProfileArray" DataType="ua:String" ValueRank="Array">
+        <opc:Description>A list of profiles supported by the server.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="LocaleIdArray" DataType="ua:LocaleId" ValueRank="Array">
+        <opc:Description>A list of locales supported by the server.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MinSupportedSampleRate" DataType="ua:Duration">
+        <opc:Description>The minimum sampling interval supported by the server.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxBrowseContinuationPoints" DataType="ua:UInt16">
+        <opc:Description>The maximum number of continuation points for Browse operations per session.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxQueryContinuationPoints" DataType="ua:UInt16">
+        <opc:Description>The maximum number of continuation points for Query operations per session.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxHistoryContinuationPoints" DataType="ua:UInt16">
+        <opc:Description>The maximum number of continuation points for ReadHistory operations per session.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="SoftwareCertificates" DataType="SignedSoftwareCertificate" ValueRank="Array">
+        <opc:Description>The software certificates owned by the server.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxArrayLength" DataType="ua:UInt32"  ModellingRule="Optional">
+        <opc:Description>The maximum length for an array value supported by the server.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxStringLength" DataType="ua:UInt32"  ModellingRule="Optional">
+        <opc:Description>The maximum length for a string value supported by the server.</opc:Description>
+      </opc:Property>
+      <opc:Object SymbolicName="OperationLimits" TypeDefinition="OperationLimitsType"  ModellingRule="Optional">
+        <opc:Description>Defines the limits supported by the server for different operations.</opc:Description>
+      </opc:Object>
+      <opc:Object SymbolicName="ModellingRules" TypeDefinition="ua:FolderType">
+        <opc:Description>A folder for the modelling rules supported by the server.</opc:Description>
+      </opc:Object>
+      <opc:Object SymbolicName="AggregateFunctions" TypeDefinition="FolderType">
+        <opc:Description>A folder for the real time aggregates supported by the server.</opc:Description>
+      </opc:Object>
+      <opc:Variable SymbolicName="VendorCapability" TypeDefinition="ServerVendorCapabilityType" ModellingRule="OptionalPlaceholder">
+        <opc:BrowseName>&lt;VendorCapability&gt;</opc:BrowseName>
+      </opc:Variable>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="ServerDiagnosticsType" BaseType="ua:BaseObjectType" PartNo="5">
+    <opc:Description>The diagnostics information for a server.</opc:Description>
+    <opc:Children>
+      <opc:Variable SymbolicName="ServerDiagnosticsSummary" TypeDefinition="ServerDiagnosticsSummaryType">
+        <opc:Description>A summary of server level diagnostics.</opc:Description>
+      </opc:Variable>
+      <opc:Variable SymbolicName="SamplingIntervalDiagnosticsArray" TypeDefinition="SamplingIntervalDiagnosticsArrayType" ModellingRule="Optional">
+        <opc:Description>A list of diagnostics for each sampling interval supported by the server.</opc:Description>
+      </opc:Variable>
+      <opc:Variable SymbolicName="SubscriptionDiagnosticsArray" TypeDefinition="SubscriptionDiagnosticsArrayType">
+        <opc:Description>A list of diagnostics for each active subscription.</opc:Description>
+      </opc:Variable>
+      <opc:Object SymbolicName="SessionsDiagnosticsSummary" TypeDefinition="SessionsDiagnosticsSummaryType">
+        <opc:Description>A summary of session level diagnostics.</opc:Description>
+      </opc:Object>
+      <opc:Property SymbolicName="EnabledFlag" DataType="ua:Boolean" AccessLevel="ReadWrite">
+        <opc:Description>If TRUE the diagnostics collection is enabled.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="SessionsDiagnosticsSummaryType" BaseType="ua:BaseObjectType" PartNo="5">
+    <opc:Description>Provides a summary of session level diagnostics.</opc:Description>
+    <opc:Children>
+      <opc:Variable SymbolicName="SessionDiagnosticsArray" TypeDefinition="SessionDiagnosticsArrayType">
+        <opc:Description>A list of diagnostics for each active session.</opc:Description>
+      </opc:Variable>
+      <opc:Variable SymbolicName="SessionSecurityDiagnosticsArray" TypeDefinition="SessionSecurityDiagnosticsArrayType">
+        <opc:Description>A list of security related diagnostics for each active session.</opc:Description>
+      </opc:Variable>
+      <opc:Object SymbolicName="SessionPlaceholder" TypeDefinition="SessionDiagnosticsObjectType" ModellingRule="OptionalPlaceholder">
+        <opc:BrowseName>&lt;SessionPlaceholder&gt;</opc:BrowseName>
+      </opc:Object>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="SessionDiagnosticsObjectType" BaseType="ua:BaseObjectType" PartNo="5">
+    <opc:Description>A container for session level diagnostics information.</opc:Description>
+    <opc:Children>
+      <opc:Variable SymbolicName="SessionDiagnostics" TypeDefinition="SessionDiagnosticsVariableType">
+        <opc:Description>Diagnostics information for an active session.</opc:Description>
+      </opc:Variable>
+      <opc:Variable SymbolicName="SessionSecurityDiagnostics" TypeDefinition="SessionSecurityDiagnosticsType">
+        <opc:Description>Security related diagnostics information for an active session.</opc:Description>
+      </opc:Variable>
+      <opc:Variable SymbolicName="SubscriptionDiagnosticsArray" DataType="SubscriptionDiagnosticsDataType" ValueRank="Array" TypeDefinition="SubscriptionDiagnosticsArrayType">
+        <opc:Description>A list of diagnostics for each subscription owned by the session.</opc:Description>
+      </opc:Variable>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="VendorServerInfoType" BaseType="ua:BaseObjectType" NoClassGeneration="true" PartNo="5">
+    <opc:Description>A base type for vendor specific server information.</opc:Description>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="ServerRedundancyType" BaseType="ua:BaseObjectType" PartNo="5">
+    <opc:Description>A base type for an object that describe how a server supports redundancy.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="RedundancySupport" DataType="RedundancySupport">
+        <opc:Description>Indicates what style of redundancy is supported by the server.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="TransparentRedundancyType" BaseType="ServerRedundancyType" PartNo="5">
+    <opc:Description>Identifies the capabilties of server that supports transparent redundancy.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="CurrentServerId" DataType="ua:String">
+        <opc:Description>The ID of the server that is currently in use.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="RedundantServerArray" DataType="RedundantServerDataType" ValueRank="Array">
+        <opc:Description>A list of servers in the same redundant set.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="NonTransparentRedundancyType" BaseType="ServerRedundancyType" PartNo="5">
+    <opc:Description>Identifies the capabilties of server that supports non-transparent redundancy.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="ServerUriArray" DataType="ua:String" ValueRank="Array">
+        <opc:Description>A list of servers in the same redundant set.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="NonTransparentNetworkRedundancyType" BaseType="NonTransparentRedundancyType" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="ServerNetworkGroups" DataType="NetworkGroupDataType" ValueRank="Array">
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="OperationLimitsType" BaseType="ua:BaseObjectType" PartNo="5">
+    <opc:Description>Identifies the operation limits imposed by the server.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="MaxNodesPerRead" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single Read request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxNodesPerHistoryReadData" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single data HistoryRead request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxNodesPerHistoryReadEvents" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single event HistoryRead request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxNodesPerWrite" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single Write request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxNodesPerHistoryUpdateData" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single data HistoryUpdate request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxNodesPerHistoryUpdateEvents" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single event HistoryUpdate request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxNodesPerMethodCall" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single Call request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxNodesPerBrowse" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single Browse request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxNodesPerRegisterNodes" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single RegisterNodes request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxNodesPerTranslateBrowsePathsToNodeIds" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single TranslateBrowsePathsToNodeIds request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxNodesPerNodeManagement" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single AddNodes, AddReferences, DeleteNodes or DeleteReferences request.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="MaxMonitoredItemsPerCall" DataType="ua:UInt32" ModellingRule="Optional">
+        <opc:Description>The maximum number of operations in a single MonitoredItem related request.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="FileType" BaseType="ua:BaseObjectType" PartNo="5">
+    <opc:Description>An object that represents a file that can be accessed via the server.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="Size" DataType="ua:UInt64">
+        <opc:Description>The size of the file in bytes.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="Writable" DataType="ua:Boolean">
+        <opc:Description>Whether the file is writable.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="UserWritable" DataType="ua:Boolean">
+        <opc:Description>Whether the file is writable by the current user.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="OpenCount" DataType="ua:UInt16">
+        <opc:Description>The current number of open file handles.</opc:Description>
+      </opc:Property>
+      <opc:Method SymbolicName="Open" TypeDefinition="OpenMethodType">
+        <opc:Description>Opens the file for use by the current session.</opc:Description>
+      </opc:Method>
+      <opc:Method SymbolicName="Close" TypeDefinition="CloseMethodType">
+        <opc:Description>Closes the file.</opc:Description>
+      </opc:Method>
+      <opc:Method SymbolicName="Read" TypeDefinition="ReadMethodType">
+        <opc:Description>Reads a block of bytes from the file.</opc:Description>
+      </opc:Method>
+      <opc:Method SymbolicName="Write" TypeDefinition="WriteMethodType">
+        <opc:Description>Writes a block of bytes to the file.</opc:Description>
+      </opc:Method>
+      <opc:Method SymbolicName="GetPosition" TypeDefinition="GetPositionMethodType">
+        <opc:Description>Returns the current position in the file.</opc:Description>
+      </opc:Method>
+      <opc:Method SymbolicName="SetPosition" TypeDefinition="SetPositionMethodType">
+        <opc:Description>Sets the current position in the file.</opc:Description>
+      </opc:Method>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AddressSpaceFileType" BaseType="FileType" PartNo="5">
+    <opc:Description>A file used to store a namespace exported from the server.</opc:Description>
+    <opc:Children>
+      <opc:Method SymbolicName="ExportNamespace" ModellingRule="Optional">
+        <opc:Description>Updates the file by exporting the server namespace.</opc:Description>
+      </opc:Method>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="NamespaceMetadataType" BaseType="ua:BaseObjectType" PartNo="5">
+    <opc:Description>Provides the metadata for a namespace used by the server.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="NamespaceUri" DataType="ua:String">
+        <opc:Description>The URI of the namespace.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="NamespaceVersion" DataType="ua:String">
+        <opc:Description>The human readable string representing version of the namespace.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="NamespacePublicationDate" DataType="ua:DateTime">
+        <opc:Description>The publication date for the namespace.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="IsNamespaceSubset" DataType="ua:Boolean">
+        <opc:Description>If TRUE then the server only supports a subset of the namespace.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="StaticNodeIdIdentifierTypes" DataType="ua:IdType" ValueRank="Array">
+        <opc:Description>A list of IdTypes for nodes which are the same in every server that exposes them.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="StaticNumericNodeIdRange" DataType="ua:NumericRange" ValueRank="Array">
+        <opc:Description>A list of ranges for numeric node ids which are the same in every server that exposes them.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="StaticStringNodeIdPattern" DataType="ua:String" ValueRank="Array">
+        <opc:Description>A regular expression which matches string node ids are the same in every server that exposes them.</opc:Description>
+      </opc:Property>
+      <opc:Object SymbolicName="NamespaceFile" TypeDefinition="AddressSpaceFileType" ModellingRule="Optional">
+        <opc:Description>A file containing the nodes of the namespace.</opc:Description>
+      </opc:Object>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="NamespacesType" BaseType="ua:BaseObjectType" PartNo="5">
+    <opc:Description>A container for the namespace metadata provided by the server.</opc:Description>
+    <opc:Children>
+      <opc:Object SymbolicName="NamespaceIdentifier" TypeDefinition="NamespaceMetadataType" ModellingRule="OptionalPlaceholder">
+        <opc:BrowseName>&lt;NamespaceIdentifier&gt;</opc:BrowseName>
+      </opc:Object>
+      <opc:Object SymbolicName="AddressSpaceFile" TypeDefinition="AddressSpaceFileType" ModellingRule="Optional">
+        <opc:Description>A file containing the nodes of the namespace.</opc:Description>
+      </opc:Object>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="BaseEventType" BaseType="ua:BaseObjectType" IsAbstract="true" PartNo="5">
+    <opc:Description>The base type for all events.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="EventId" DataType="ua:ByteString">
+        <opc:Description>A globally unique identifier for the event.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="EventType" DataType="ua:NodeId">
+        <opc:Description>The identifier for the event type.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="SourceNode" DataType="ua:NodeId">
+        <opc:Description>The source of the event.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="SourceName" DataType="ua:String">
+        <opc:Description>A description of the source of the event.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="Time" DataType="UtcTime">
+        <opc:Description>When the event occurred.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="ReceiveTime" DataType="UtcTime">
+        <opc:Description>When the server received the event from the underlying system.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="LocalTime" DataType="ua:TimeZoneDataType">
+        <opc:Description>Information about the local time where the event originated.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="Message" DataType="ua:LocalizedText">
+        <opc:Description>A localized description of the event.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="Severity" DataType="ua:UInt16">
+        <opc:Description>Indicates how urgent an event is.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditEventType" BaseType="BaseEventType" IsAbstract="true" PartNo="5">
+    <opc:Description>A base type for events used to track client initiated changes to the server state.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="ActionTimeStamp" DataType="UtcTime">
+        <opc:Description>When the action triggering the event occurred.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="Status" DataType="ua:Boolean">
+        <opc:Description>If TRUE the action was performed. If FALSE the action failed and the server state did not change.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="ServerId" DataType="ua:String">
+        <opc:Description>The unique identifier for the server generating the event.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="ClientAuditEntryId" DataType="ua:String">
+        <opc:Description>The log entry id provided in the request that initiated the action.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="ClientUserId" DataType="ua:String">
+        <opc:Description>The user identity associated with the session that initiated the action.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditSecurityEventType" BaseType="AuditEventType" IsAbstract="true" PartNo="5">
+    <opc:Description>A base type for events used to track security related changes.</opc:Description>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditChannelEventType" BaseType="AuditSecurityEventType" IsAbstract="true" PartNo="5">
+    <opc:Description>A base type for events used to track related changes to a secure channel.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="SecureChannelId" DataType="ua:String">
+        <opc:Description>The identifier for the secure channel that was changed.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditOpenSecureChannelEventType" BaseType="AuditChannelEventType" IsAbstract="true" PartNo="5">
+    <opc:Description>An event that is raised when a secure channel is opened.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="ClientCertificate" DataType="ua:ByteString">
+        <opc:Description>The certificate provided by the client.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="ClientCertificateThumbprint" DataType="ua:String">
+        <opc:Description>The thumbprint for certificate provided by the client.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="RequestType" DataType="SecurityTokenRequestType">
+        <opc:Description>The type of request (NEW or RENEW).</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="SecurityPolicyUri" DataType="ua:String">
+        <opc:Description>The security policy used by the channel.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="SecurityMode" DataType="MessageSecurityMode">
+        <opc:Description>The security mode used by the channel.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="RequestedLifetime" DataType="Duration">
+        <opc:Description>The lifetime of the channel requested by the client.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditSessionEventType" BaseType="AuditEventType" IsAbstract="true" PartNo="5">
+    <opc:Description>A base type for events used to track related changes to a session.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="SessionId" DataType="ua:NodeId">
+        <opc:Description>The unique identifier for the session,.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditCreateSessionEventType" BaseType="AuditSessionEventType" IsAbstract="true" PartNo="5">
+    <opc:Description>An event that is raised when a session is created.</opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="SecureChannelId" DataType="ua:String">
+        <opc:Description>The secure channel associated with the session.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="ClientCertificate" DataType="ua:ByteString">
+        <opc:Description>The certificate provided by the client.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="ClientCertificateThumbprint" DataType="ua:String">
+        <opc:Description>The thumbprint of the certificate provided by the client.</opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="RevisedSessionTimeout" DataType="Duration">
+        <opc:Description>The timeout for the session.</opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditUrlMismatchEventType" BaseType="AuditCreateSessionEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="EndpointUrl" DataType="ua:String" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditActivateSessionEventType" BaseType="AuditSessionEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="ClientSoftwareCertificates" DataType="SignedSoftwareCertificate" ValueRank="Array" />
+      <opc:Property SymbolicName="UserIdentityToken" DataType="ua:UserIdentityToken" />
+      <opc:Property SymbolicName="SecureChannelId" DataType="ua:String" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditCancelEventType" BaseType="AuditSessionEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="RequestHandle" DataType="ua:UInt32" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditCertificateEventType" BaseType="AuditSecurityEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="Certificate" DataType="ua:ByteString" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditCertificateDataMismatchEventType" BaseType="AuditCertificateEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="InvalidHostname" DataType="ua:String" />
+      <opc:Property SymbolicName="InvalidUri" DataType="ua:String" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditCertificateExpiredEventType" BaseType="AuditCertificateEventType" IsAbstract="true" PartNo="5" />
+  <opc:ObjectType SymbolicName="AuditCertificateInvalidEventType" BaseType="AuditCertificateEventType" IsAbstract="true" PartNo="5" />
+  <opc:ObjectType SymbolicName="AuditCertificateUntrustedEventType" BaseType="AuditCertificateEventType" IsAbstract="true" PartNo="5" />
+  <opc:ObjectType SymbolicName="AuditCertificateRevokedEventType" BaseType="AuditCertificateEventType" IsAbstract="true" PartNo="5" />
+  <opc:ObjectType SymbolicName="AuditCertificateMismatchEventType" BaseType="AuditCertificateEventType" IsAbstract="true" PartNo="5" />
+
+  <opc:ObjectType SymbolicName="AuditNodeManagementEventType" BaseType="AuditEventType" IsAbstract="true" PartNo="5" />
+
+  <opc:ObjectType SymbolicName="AuditAddNodesEventType" BaseType="AuditNodeManagementEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="NodesToAdd" DataType="AddNodesItem" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditDeleteNodesEventType" BaseType="AuditNodeManagementEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="NodesToDelete" DataType="DeleteNodesItem" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditAddReferencesEventType" BaseType="AuditNodeManagementEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="ReferencesToAdd" DataType="AddReferencesItem" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditDeleteReferencesEventType" BaseType="AuditNodeManagementEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="ReferencesToDelete" DataType="DeleteReferencesItem" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditUpdateEventType" BaseType="AuditEventType" IsAbstract="true" PartNo="5" />
+
+  <opc:ObjectType SymbolicName="AuditWriteUpdateEventType" BaseType="AuditUpdateEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="AttributeId" DataType="ua:UInt32" />
+      <opc:Property SymbolicName="IndexRange" DataType="NumericRange" />
+      <opc:Property SymbolicName="OldValue" DataType="ua:BaseDataType" />
+      <opc:Property SymbolicName="NewValue" DataType="ua:BaseDataType" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditHistoryUpdateEventType" BaseType="AuditUpdateEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="ParameterDataTypeId" DataType="ua:NodeId" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditUpdateMethodEventType" BaseType="AuditEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="MethodId" DataType="ua:NodeId" />
+      <opc:Property SymbolicName="InputArguments" DataType="ua:BaseDataType" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="SystemEventType" BaseType="BaseEventType" IsAbstract="true"  PartNo="5" />
+  <opc:ObjectType SymbolicName="DeviceFailureEventType" BaseType="SystemEventType" IsAbstract="true" PartNo="5" />
+
+  <opc:ObjectType SymbolicName="SystemStatusChangeEventType" BaseType="SystemEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="SystemState" DataType="ServerState" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="BaseModelChangeEventType" BaseType="BaseEventType" IsAbstract="true" PartNo="5" />
+
+  <opc:ObjectType SymbolicName="GeneralModelChangeEventType" BaseType="BaseModelChangeEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="Changes" DataType="ModelChangeStructureDataType" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="SemanticChangeEventType" BaseType="BaseModelChangeEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="Changes" DataType="SemanticChangeStructureDataType" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="EventQueueOverflowEventType" BaseType="BaseEventType" IsAbstract="true" PartNo="5" />
+
+  <opc:ObjectType SymbolicName="ProgressEventType" BaseType="BaseEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="Context" DataType="BaseDataType" />
+      <opc:Property SymbolicName="Progress" DataType="UInt16" />
+    </opc:Children>
+  </opc:ObjectType>
+  
+  <!-- ModellingRuleType BuiltInTypes.xml -->
+  <!-- FolderType BuiltInTypes.xml -->
+  <!-- DataTypeEncodingType BuiltInTypes.xml -->
+  <!-- DataTypeSystemType BuiltInTypes.xml -->
+
+  <opc:ObjectType SymbolicName="AggregateFunctionType" BaseType="ua:BaseObjectType" PartNo="5" />
+
+  <!-- Part 5 - Standard Variable Types -->
+
+  <!-- BaseVariableType BuiltInTypes.xml -->
+  <!-- PropertyType BuiltInTypes.xml -->
+  <!-- BaseDataVariableType BuiltInTypes.xml -->
+
+  <opc:VariableType SymbolicName="ServerVendorCapabilityType" BaseType="ua:BaseDataVariableType" ValueRank="Scalar" IsAbstract="true" PartNo="5" />
+
+  <!-- DataTypeDictionaryType BuiltInTypes.xml -->
+  <!-- DataTypeDescriptionType BuiltInTypes.xml -->
+
+  <opc:VariableType SymbolicName="ServerStatusType" BaseType="ua:BaseDataVariableType" DataType="ServerStatusDataType" ValueRank="Scalar" ExposesItsChildren="true" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="StartTime" DataType="ua:UtcTime" />
+      <opc:Variable SymbolicName="CurrentTime" DataType="ua:UtcTime" />
+      <opc:Variable SymbolicName="State" DataType="ServerState" />
+      <opc:Variable SymbolicName="BuildInfo" DataType="ua:BuildInfo" TypeDefinition="ua:BuildInfoType" />
+      <opc:Variable SymbolicName="SecondsTillShutdown" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="ShutdownReason" DataType="ua:LocalizedText" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="BuildInfoType" BaseType="ua:BaseDataVariableType" DataType="BuildInfo" ValueRank="Scalar" ExposesItsChildren="true" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="ProductUri" DataType="ua:String" MinimumSamplingInterval="1000" />
+      <opc:Variable SymbolicName="ManufacturerName" DataType="ua:String" MinimumSamplingInterval="1000" />
+      <opc:Variable SymbolicName="ProductName" DataType="ua:String" MinimumSamplingInterval="1000" />
+      <opc:Variable SymbolicName="SoftwareVersion" DataType="ua:String" MinimumSamplingInterval="1000" />
+      <opc:Variable SymbolicName="BuildNumber" DataType="ua:String" MinimumSamplingInterval="1000" />
+      <opc:Variable SymbolicName="BuildDate" DataType="ua:UtcTime" MinimumSamplingInterval="1000" />
+    </opc:Children>
+    <opc:ClassName>BuildInfoVariable</opc:ClassName>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="ServerDiagnosticsSummaryType" BaseType="ua:BaseDataVariableType" DataType="ServerDiagnosticsSummaryDataType" ValueRank="Scalar" ExposesItsChildren="true" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="ServerViewCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="CurrentSessionCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="CumulatedSessionCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="SecurityRejectedSessionCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="RejectedSessionCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="SessionTimeoutCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="SessionAbortCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="PublishingIntervalCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="CurrentSubscriptionCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="CumulatedSubscriptionCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="SecurityRejectedRequestsCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="RejectedRequestsCount" DataType="ua:UInt32" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="SamplingIntervalDiagnosticsArrayType" BaseType="ua:BaseDataVariableType" DataType="SamplingIntervalDiagnosticsDataType" ValueRank="Array" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="SamplingIntervalDiagnostics" TypeDefinition="SamplingIntervalDiagnosticsType" DataType="SamplingIntervalDiagnosticsDataType" ModellingRule="ExposesItsArray" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="SamplingIntervalDiagnosticsType" BaseType="ua:BaseDataVariableType" DataType="SamplingIntervalDiagnosticsDataType" ValueRank="Scalar" ExposesItsChildren="true" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="SamplingInterval" DataType="Duration" />
+      <opc:Variable SymbolicName="SampledMonitoredItemsCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="MaxSampledMonitoredItemsCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="DisabledMonitoredItemsSamplingCount" DataType="ua:UInt32" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="SubscriptionDiagnosticsArrayType" BaseType="ua:BaseDataVariableType" DataType="SubscriptionDiagnosticsDataType" ValueRank="Array" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="SubscriptionDiagnostics" TypeDefinition="SubscriptionDiagnosticsType" DataType="SubscriptionDiagnosticsDataType" ModellingRule="ExposesItsArray" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="SubscriptionDiagnosticsType" BaseType="ua:BaseDataVariableType" DataType="SubscriptionDiagnosticsDataType" ValueRank="Scalar" ExposesItsChildren="true" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="SessionId" DataType="ua:NodeId" />
+      <opc:Variable SymbolicName="SubscriptionId" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="Priority" DataType="ua:Byte" />
+      <opc:Variable SymbolicName="PublishingInterval" DataType="ua:Double" />
+      <opc:Variable SymbolicName="MaxKeepAliveCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="MaxLifetimeCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="MaxNotificationsPerPublish" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="PublishingEnabled" DataType="ua:Boolean" />
+      <opc:Variable SymbolicName="ModifyCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="EnableCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="DisableCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="RepublishRequestCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="RepublishMessageRequestCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="RepublishMessageCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="TransferRequestCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="TransferredToAltClientCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="TransferredToSameClientCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="PublishRequestCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="DataChangeNotificationsCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="EventNotificationsCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="NotificationsCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="LatePublishRequestCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="CurrentKeepAliveCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="CurrentLifetimeCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="UnacknowledgedMessageCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="DiscardedMessageCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="MonitoredItemCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="DisabledMonitoredItemCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="MonitoringQueueOverflowCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="NextSequenceNumber" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="EventQueueOverFlowCount" DataType="ua:UInt32" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="SessionDiagnosticsArrayType" BaseType="ua:BaseDataVariableType" DataType="SessionDiagnosticsDataType" ValueRank="Array" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="SessionDiagnostics" TypeDefinition="SessionDiagnosticsVariableType" DataType="SessionDiagnosticsDataType" ModellingRule="ExposesItsArray" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="SessionDiagnosticsVariableType" BaseType="ua:BaseDataVariableType" DataType="SessionDiagnosticsDataType" ValueRank="Scalar" ExposesItsChildren="true" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="SessionId" DataType="ua:NodeId" />
+      <opc:Variable SymbolicName="SessionName" DataType="ua:String" />
+      <opc:Variable SymbolicName="ClientDescription" DataType="ApplicationDescription" />
+      <opc:Variable SymbolicName="ServerUri" DataType="ua:String" />
+      <opc:Variable SymbolicName="EndpointUrl" DataType="ua:String" />
+      <opc:Variable SymbolicName="LocaleIds" DataType="ua:LocaleId" ValueRank="Array" />
+      <opc:Variable SymbolicName="ActualSessionTimeout" DataType="Duration" />
+      <opc:Variable SymbolicName="MaxResponseMessageSize" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="ClientConnectionTime" DataType="UtcTime" />
+      <opc:Variable SymbolicName="ClientLastContactTime" DataType="UtcTime" />
+      <opc:Variable SymbolicName="CurrentSubscriptionsCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="CurrentMonitoredItemsCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="CurrentPublishRequestsInQueue" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="TotalRequestCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="UnauthorizedRequestCount" DataType="ua:UInt32" />
+      <opc:Variable SymbolicName="ReadCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="HistoryReadCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="WriteCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="HistoryUpdateCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="CallCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="CreateMonitoredItemsCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="ModifyMonitoredItemsCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="SetMonitoringModeCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="SetTriggeringCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="DeleteMonitoredItemsCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="CreateSubscriptionCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="ModifySubscriptionCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="SetPublishingModeCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="PublishCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="RepublishCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="TransferSubscriptionsCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="DeleteSubscriptionsCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="AddNodesCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="AddReferencesCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="DeleteNodesCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="DeleteReferencesCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="BrowseCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="BrowseNextCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="TranslateBrowsePathsToNodeIdsCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="QueryFirstCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="QueryNextCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="RegisterNodesCount" DataType="ServiceCounterDataType" />
+      <opc:Variable SymbolicName="UnregisterNodesCount" DataType="ServiceCounterDataType" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="SessionSecurityDiagnosticsArrayType" BaseType="ua:BaseDataVariableType" DataType="SessionSecurityDiagnosticsDataType" ValueRank="Array" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="SessionSecurityDiagnostics" TypeDefinition="SessionSecurityDiagnosticsType" DataType="SessionSecurityDiagnosticsDataType" ModellingRule="ExposesItsArray" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="SessionSecurityDiagnosticsType" BaseType="ua:BaseDataVariableType" DataType="SessionSecurityDiagnosticsDataType" ValueRank="Scalar" ExposesItsChildren="true" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="SessionId" DataType="ua:NodeId" />
+      <opc:Variable SymbolicName="ClientUserIdOfSession" DataType="ua:String" />
+      <opc:Variable SymbolicName="ClientUserIdHistory" DataType="ua:String" ValueRank="Array" />
+      <opc:Variable SymbolicName="AuthenticationMechanism" DataType="ua:String" />
+      <opc:Variable SymbolicName="Encoding" DataType="ua:String" />
+      <opc:Variable SymbolicName="TransportProtocol" DataType="ua:String" />
+      <opc:Variable SymbolicName="SecurityMode" DataType="MessageSecurityMode" />
+      <opc:Variable SymbolicName="SecurityPolicyUri" DataType="ua:String" />
+      <opc:Variable SymbolicName="ClientCertificate" DataType="ua:ByteString" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="OptionSetType" BaseType="BaseDataVariableType" DataType="BaseDataType" ValueRank="Scalar" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="OptionSetValues" DataType="ua:LocalizedText" ValueRank="Array" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="BitMask" DataType="ua:Boolean" ValueRank="Array" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <!-- Part 5 Standard Objects and Variables -->
+
+  <!-- Root BuiltInTypes.xml -->
+  <!-- Views BuiltInTypes.xml -->
+  <!-- Objects BuiltInTypes.xml -->
+  <!-- Types BuiltInTypes.xml -->
+  <!-- ObjectTypes BuiltInTypes.xml -->
+  <!-- VariableTypes BuiltInTypes.xml -->
+  <!-- ReferenceTypes BuiltInTypes.xml -->
+  <!-- DataTypes BuiltInTypes.xml -->
+  <!-- OPC Binary BuiltInTypes.xml -->
+  <!-- XML Schema BuiltInTypes.xml -->
+
+  <opc:Object SymbolicName="EventTypesFolder" TypeDefinition="ua:FolderType" ModellingRule="None" PartNo="5">
+    <opc:BrowseName>EventTypes</opc:BrowseName>
+    <opc:References>
+      <opc:Reference IsInverse="true">
+        <opc:ReferenceType>ua:Organizes</opc:ReferenceType>
+        <opc:TargetId>ua:TypesFolder</opc:TargetId>
+      </opc:Reference>
+      <opc:Reference>
+        <opc:ReferenceType>ua:Organizes</opc:ReferenceType>
+        <opc:TargetId>BaseEventType</opc:TargetId>
+      </opc:Reference>
+    </opc:References>
+  </opc:Object>
+
+  <opc:Object SymbolicName="Server" TypeDefinition="ServerType" ModellingRule="None" SupportsEvents="true" PartNo="5">
+    <opc:Children>
+      <opc:Object SymbolicName="ServerCapabilities">
+        <opc:Children>
+          <opc:Property SymbolicName="MaxArrayLength" ModellingRule="Mandatory" />
+          <opc:Property SymbolicName="MaxStringLength" ModellingRule="Mandatory" />
+          <opc:Object SymbolicName="OperationLimits">
+            <opc:Children>
+              <opc:Property SymbolicName="MaxNodesPerRead" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxNodesPerHistoryReadData" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxNodesPerHistoryReadEvents" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxNodesPerWrite" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxNodesPerHistoryUpdateData" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxNodesPerHistoryUpdateEvents" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxNodesPerMethodCall" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxNodesPerBrowse" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxNodesPerRegisterNodes" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxNodesPerTranslateBrowsePathsToNodeIds" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxNodesPerNodeManagement" ModellingRule="Mandatory" />
+              <opc:Property SymbolicName="MaxMonitoredItemsPerCall" ModellingRule="Mandatory" />
+            </opc:Children>
+          </opc:Object>
+        </opc:Children>
+      </opc:Object>
+      <opc:Object SymbolicName="ServerDiagnostics">
+        <opc:Children>
+          <opc:Variable SymbolicName="SamplingIntervalDiagnosticsArray" ModellingRule="Mandatory" />
+        </opc:Children>
+      </opc:Object>
+      <opc:Object SymbolicName="ServerRedundancy" TypeDefinition="ServerRedundancyType">
+        <opc:Children>
+          <opc:Property SymbolicName="CurrentServerId" DataType="ua:String" ModellingRule="Mandatory"  />
+          <opc:Property SymbolicName="RedundantServerArray" DataType="RedundantServerDataType" ValueRank="Array" ModellingRule="Mandatory" />
+          <opc:Property SymbolicName="ServerUriArray" DataType="ua:String" ValueRank="Array" ModellingRule="Mandatory" />
+        </opc:Children>
+      </opc:Object>
+      <opc:Object SymbolicName="Namespaces" ModellingRule="Mandatory" />
+      <opc:Method SymbolicName="GetMonitoredItems" ModellingRule="Mandatory" />
+    </opc:Children>
+    <opc:References>
+      <opc:Reference IsInverse="true">
+        <opc:ReferenceType>ua:Organizes</opc:ReferenceType>
+        <opc:TargetId>ua:ObjectsFolder</opc:TargetId>
+      </opc:Reference>
+    </opc:References>
+  </opc:Object>
+
+  <opc:Object SymbolicName="HistoryServerCapabilities" TypeDefinition="HistoryServerCapabilitiesType" ModellingRule="None" PartNo="11">
+    <opc:BrowseName>HistoryServerCapabilities</opc:BrowseName>
+    <opc:References>
+      <opc:Reference IsInverse="true">
+        <opc:ReferenceType>ua:HasComponent</opc:ReferenceType>
+        <opc:TargetId>ua:Server_ServerCapabilities</opc:TargetId>
+      </opc:Reference>
+    </opc:References>
+  </opc:Object>
+
+  <!-- ExposesItsArray BuiltInTypes.xml -->
+  <!-- Mandatory BuiltInTypes.xml -->
+  <!-- Optional BuiltInTypes.xml -->
+  <!-- OptionalPlaceholder BuiltInTypes.xml -->
+  <!-- MandatoryPlaceholder BuiltInTypes.xml -->
+
+  <!-- Part 5 Standard Methods -->
+
+  <opc:Method SymbolicName="GetMonitoredItemsMethodType" PartNo="5">
+    <opc:InputArguments>
+      <opc:Argument Name="SubscriptionId" DataType="ua:UInt32" />
+    </opc:InputArguments>
+    <opc:OutputArguments>
+      <opc:Argument Name="ServerHandles" DataType="ua:UInt32" ValueRank="Array" />
+      <opc:Argument Name="ClientHandles" DataType="ua:UInt32" ValueRank="Array" />
+    </opc:OutputArguments>
+  </opc:Method>
+
+  <!-- Part 5 Standard References -->
+
+  <!-- References BuiltInTypes.xml -->
+  <!-- HierarchicalReferences BuiltInTypes.xml -->
+  <!-- NonHierarchicalReferences BuiltInTypes.xml -->
+  <!-- HasChild BuiltInTypes.xml -->
+  <!-- Aggregates BuiltInTypes.xml -->
+  <!-- Organizes BuiltInTypes.xml -->
+  <!-- HasComponent BuiltInTypes.xml -->
+  <!-- HasOrderedComponent BuiltInTypes.xml -->
+  <!-- HasProperty BuiltInTypes.xml -->
+  <!-- HasSubtype BuiltInTypes.xml -->
+  <!-- HasModellingRule BuiltInTypes.xml -->
+  <!-- HasTypeDefinition BuiltInTypes.xml -->
+  <!-- HasEncoding BuiltInTypes.xml -->
+  <!-- HasDescription BuiltInTypes.xml -->
+  <!-- HasEventSource BuiltInTypes.xml -->
+  <!-- HasNotifier BuiltInTypes.xml -->
+  <!-- GeneratesEvent BuiltInTypes.xml -->
+  <!-- AlwaysGeneratesEvent BuiltInTypes.xml -->
+
+  <!-- Part 5 Standard DataTypes -->
+
+  <!-- BuildInfo UA Core Services.xml -->
+  <!-- RedundancySupport UA Core Services.xml -->
+  <!-- ServerState UA Core Services.xml -->
+  <!-- RedundantServerDataType UA Core Services.xml -->
+  <!-- SamplingIntervalDiagnosticsDataType UA Core Services.xml -->
+  <!-- ServerDiagnosticsSummaryDataType UA Core Services.xml -->
+  <!-- ServerStatusDataType UA Core Services.xml -->
+  <!-- SessionDiagnosticsDataType UA Core Services.xml -->
+  <!-- SessionSecurityDiagnosticsDataType UA Core Services.xml -->
+  <!-- ServiceCounterDataType UA Core Services.xml -->
+  <!-- StatusResult UA Core Services.xml -->
+  <!-- SubscriptionDiagnosticsDataType UA Core Services.xml -->
+  <!-- ModelChangeStructureDataType UA Core Services.xml -->
+  <!-- SemanticChangeStructureDataType UA Core Services.xml -->
+
+  <opc:DataType SymbolicName="BitFieldMaskDataType" BaseType="UInt64" PartNo="5">
+    <opc:Description>A mask of 32 bits that can be updated individually by using the top 32 bits as a mask.</opc:Description>
+  </opc:DataType>
+
+  <!-- Part 5 Annex B - State Machines -->
+
+  <opc:ObjectType SymbolicName="StateMachineType" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="CurrentState" TypeDefinition="StateVariableType" ModellingRule="Mandatory" />
+      <opc:Variable SymbolicName="LastTransition" TypeDefinition="TransitionVariableType" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:VariableType SymbolicName="StateVariableType" DataType="ua:LocalizedText" ValueRank="Scalar" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="Id" DataType="ua:BaseDataType" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="Name" DataType="ua:QualifiedName" ModellingRule="Optional" />
+      <opc:Property SymbolicName="Number" DataType="ua:UInt32" ModellingRule="Optional" />
+      <opc:Property SymbolicName="EffectiveDisplayName" DataType="ua:LocalizedText" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="TransitionVariableType" DataType="ua:LocalizedText" ValueRank="Scalar" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="Id" DataType="ua:BaseDataType" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="Name" DataType="ua:QualifiedName" ModellingRule="Optional" />
+      <opc:Property SymbolicName="Number" DataType="ua:UInt32" ModellingRule="Optional" />
+      <opc:Property SymbolicName="TransitionTime" DataType="ua:UtcTime" ModellingRule="Optional" />
+      <opc:Property SymbolicName="EffectiveTransitionTime" DataType="ua:UtcTime" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:ObjectType SymbolicName="FiniteStateMachineType"  BaseType="StateMachineType" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="CurrentState" TypeDefinition="FiniteStateVariableType" ModellingRule="Mandatory" />
+      <opc:Variable SymbolicName="LastTransition" TypeDefinition="FiniteTransitionVariableType" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:VariableType SymbolicName="FiniteStateVariableType" BaseType="StateVariableType" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="Id" DataType="ua:NodeId" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="FiniteTransitionVariableType" BaseType="TransitionVariableType" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="Id" DataType="ua:NodeId" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:ObjectType SymbolicName="StateType" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="StateNumber" DataType="ua:UInt32" ModellingRule="Mandatory"></opc:Property>
+    </opc:Children>
+    <opc:ClassName>StateMachineState</opc:ClassName>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="InitialStateType" BaseType="StateType" PartNo="5">
+    <opc:ClassName>StateMachineInitialState</opc:ClassName>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="TransitionType" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="TransitionNumber" DataType="ua:UInt32" ModellingRule="Mandatory"></opc:Property>
+    </opc:Children>
+    <opc:ClassName>StateMachineTransition</opc:ClassName>
+  </opc:ObjectType>
+
+  <!-- FromState BuiltInTypes.xml -->
+  <!-- ToState BuiltInTypes.xml -->
+  <!-- HasCause BuiltInTypes.xml -->
+  <!-- HasEffect BuiltInTypes.xml -->
+  <!-- HasSubStateMachine BuiltInTypes.xml -->
+
+  <opc:ObjectType SymbolicName="TransitionEventType" BaseType="BaseEventType" PartNo="5">
+    <opc:Children>
+      <opc:Variable SymbolicName="Transition" TypeDefinition="TransitionVariableType" DataType="ua:LocalizedText" />
+      <opc:Variable SymbolicName="FromState" TypeDefinition="StateVariableType" DataType="ua:LocalizedText" />
+      <opc:Variable SymbolicName="ToState" TypeDefinition="StateVariableType" DataType="ua:LocalizedText" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditUpdateStateEventType" BaseType="AuditUpdateMethodEventType" IsAbstract="true" PartNo="5">
+    <opc:Children>
+      <opc:Property SymbolicName="OldStateId" DataType="ua:BaseDataType" />
+      <opc:Property SymbolicName="NewStateId" DataType="ua:BaseDataType" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <!-- Part 5 Annex C - File Transfer -->
+
+  <!-- FileType Above In This File -->
+  <opc:DataType SymbolicName="OpenFileMode" BaseType="Enumeration">
+    <opc:Fields>
+      <opc:Field Name="Read" Identifier="1"></opc:Field>
+      <opc:Field Name="Write" Identifier="2"></opc:Field>
+      <opc:Field Name="EraseExisiting" Identifier="4"></opc:Field>
+      <opc:Field Name="Append" Identifier="8"></opc:Field>
+    </opc:Fields>
+  </opc:DataType>
+
+  <opc:Method SymbolicName="OpenMethodType" PartNo="5">
+    <opc:InputArguments>
+      <opc:Argument Name="Mode" DataType="ua:Byte" />
+    </opc:InputArguments>
+    <opc:OutputArguments>
+      <opc:Argument Name="FileHandle" DataType="ua:UInt32" />
+    </opc:OutputArguments>
+  </opc:Method>
+
+  <opc:Method SymbolicName="CloseMethodType" PartNo="5">
+    <opc:InputArguments>
+      <opc:Argument Name="FileHandle" DataType="ua:UInt32" />
+    </opc:InputArguments>
+  </opc:Method>
+
+  <opc:Method SymbolicName="ReadMethodType" PartNo="5">
+    <opc:InputArguments>
+      <opc:Argument Name="FileHandle" DataType="ua:UInt32" />
+      <opc:Argument Name="Length" DataType="ua:Int32" />
+    </opc:InputArguments>
+    <opc:OutputArguments>
+      <opc:Argument Name="Data" DataType="ua:ByteString" />
+    </opc:OutputArguments>
+  </opc:Method>
+
+  <opc:Method SymbolicName="WriteMethodType" PartNo="5">
+    <opc:InputArguments>
+      <opc:Argument Name="FileHandle" DataType="ua:UInt32" />
+      <opc:Argument Name="Data" DataType="ua:ByteString" />
+    </opc:InputArguments>
+  </opc:Method>
+
+  <opc:Method SymbolicName="GetPositionMethodType" PartNo="5">
+    <opc:InputArguments>
+      <opc:Argument Name="FileHandle" DataType="ua:UInt32" />
+    </opc:InputArguments>
+    <opc:OutputArguments>
+      <opc:Argument Name="Position" DataType="ua:UInt64" />
+    </opc:OutputArguments>
+  </opc:Method>
+
+  <opc:Method SymbolicName="SetPositionMethodType" PartNo="5">
+    <opc:InputArguments>
+      <opc:Argument Name="FileHandle" DataType="ua:UInt32" />
+      <opc:Argument Name="Position" DataType="ua:UInt64" />
+    </opc:InputArguments>
+  </opc:Method>
+
+  <!-- Part 8 -->
+
+  <opc:VariableType SymbolicName="DataItemType" BaseType="ua:BaseDataVariableType" DataType="ua:BaseDataType" ValueRank="ScalarOrArray" PartNo="8">
+    <opc:Description>
+      A variable that contains live automation data.
+    </opc:Description>
+    <opc:Children>
+      <opc:Property SymbolicName="Definition" DataType="ua:String" ModellingRule="Optional">
+        <opc:Description>
+          A vendor-specific, human readable string that specifies how the value of this DataItem is calculated.
+        </opc:Description>
+      </opc:Property>
+      <opc:Property SymbolicName="ValuePrecision" DataType="ua:Double" ModellingRule="Optional">
+        <opc:Description>
+          The maximum precision that the server can maintain for the item based on restrictions in the target environment.
+        </opc:Description>
+      </opc:Property>
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="AnalogItemType" BaseType="DataItemType" DataType="ua:Number" PartNo="8">
+    <opc:Children>
+      <opc:Property SymbolicName="InstrumentRange" DataType="Range" ModellingRule="Optional" />
+      <opc:Property SymbolicName="EURange" DataType="Range" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="EngineeringUnits" DataType="EUInformation" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="DiscreteItemType" BaseType="DataItemType" IsAbstract="true" PartNo="8" />
+
+  <opc:VariableType SymbolicName="TwoStateDiscreteType" BaseType="DiscreteItemType" DataType="ua:Boolean" PartNo="8">
+    <opc:Children>
+      <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" />
+      <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="MultiStateDiscreteType" BaseType="DiscreteItemType" DataType="ua:UInteger" PartNo="8">
+    <opc:Children>
+      <opc:Property SymbolicName="EnumStrings" DataType="ua:LocalizedText" ValueRank="Array" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="MultiStateValueDiscreteType" BaseType="DiscreteItemType" DataType="ua:Number" PartNo="8">
+    <opc:Children>
+      <opc:Property SymbolicName="EnumValues" DataType="EnumValueType" ValueRank="Array" />
+      <opc:Property SymbolicName="ValueAsText" DataType="ua:LocalizedText" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="ArrayItemType" IsAbstract="true" BaseType="DataItemType" DataType="ua:BaseDataType" ValueRank="OneOrMoreDimensions" PartNo="8">
+    <opc:Children>
+      <opc:Property SymbolicName="InstrumentRange" DataType="Range" ModellingRule="Optional" />
+      <opc:Property SymbolicName="EURange" DataType="Range" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="EngineeringUnits" DataType="EUInformation" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="Title" DataType="ua:LocalizedText" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="AxisScaleType" DataType="AxisScaleEnumeration" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="YArrayItemType" BaseType="ArrayItemType" DataType="ua:BaseDataType" ValueRank="OneOrMoreDimensions" ArrayDimensions="0" PartNo="8">
+    <opc:Children>
+      <opc:Property SymbolicName="XAxisDefinition" DataType="AxisInformation" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="XYArrayItemType" BaseType="ArrayItemType" DataType="XVType" ValueRank="OneOrMoreDimensions" ArrayDimensions="0" PartNo="8">
+    <opc:Children>
+      <opc:Property SymbolicName="XAxisDefinition" DataType="AxisInformation" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="ImageItemType" BaseType="ArrayItemType" DataType="ua:BaseDataType" ValueRank="OneOrMoreDimensions" ArrayDimensions="0,0" PartNo="8">
+    <opc:Children>
+      <opc:Property SymbolicName="XAxisDefinition" DataType="AxisInformation" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="YAxisDefinition" DataType="AxisInformation" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="CubeItemType" BaseType="ArrayItemType" DataType="ua:BaseDataType" ValueRank="OneOrMoreDimensions" ArrayDimensions="0,0,0" PartNo="8">
+    <opc:Children>
+      <opc:Property SymbolicName="XAxisDefinition" DataType="AxisInformation" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="YAxisDefinition" DataType="AxisInformation" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="ZAxisDefinition" DataType="AxisInformation" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="NDimensionArrayItemType" BaseType="ArrayItemType" DataType="ua:BaseDataType" ValueRank="OneOrMoreDimensions" PartNo="8">
+    <opc:Children>
+      <opc:Property SymbolicName="AxisDefinition" DataType="AxisInformation" ValueRank="Array" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <!-- Range UA Core Services.xml -->
+  <!-- EUInformation UA Core Services.xml -->
+
+  <!-- Part 9 -->
+
+  <opc:VariableType SymbolicName="TwoStateVariableType" BaseType="StateVariableType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="Id" DataType="ua:Boolean" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+      <opc:Property SymbolicName="EffectiveTransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+      <opc:Property SymbolicName="TrueState" DataType="LocalizedText" ModellingRule="Optional" />
+      <opc:Property SymbolicName="FalseState" DataType="LocalizedText" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:VariableType SymbolicName="ConditionVariableType" BaseType="BaseDataVariableType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="SourceTimestamp" DataType="UtcTime" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <opc:ReferenceType SymbolicName="HasTrueSubState" BaseType="ua:NonHierarchicalReferences" PartNo="9">
+    <opc:InverseName>IsTrueSubStateOf</opc:InverseName>
+  </opc:ReferenceType>
+
+  <opc:ReferenceType SymbolicName="HasFalseSubState" BaseType="ua:NonHierarchicalReferences" PartNo="9">
+    <opc:InverseName>IsFalseSubStateOf</opc:InverseName>
+  </opc:ReferenceType>
+
+  <opc:ObjectType SymbolicName="ConditionType" BaseType="BaseEventType" IsAbstract="true" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="ConditionClassId" DataType="ua:NodeId" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="ConditionClassName" DataType="ua:LocalizedText" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="ConditionName" DataType="ua:String" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="BranchId" DataType="ua:NodeId" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="Retain" DataType="ua:Boolean" ModellingRule="Mandatory" />
+      <opc:Variable SymbolicName="EnabledState" TypeDefinition="TwoStateVariableType" ModellingRule="Mandatory">
+        <opc:Children>
+          <opc:Property SymbolicName="Id" DataType="ua:Boolean" ModellingRule="Mandatory" />
+          <opc:Property SymbolicName="EffectiveDisplayName" DataType="ua:LocalizedText" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="EffectiveTransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Enabled</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+          <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Disabled</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Variable>
+      <opc:Variable SymbolicName="Quality" TypeDefinition="ConditionVariableType" DataType="ua:StatusCode" ModellingRule="Mandatory"/>
+      <opc:Variable SymbolicName="LastSeverity" TypeDefinition="ConditionVariableType" DataType="ua:UInt16" ModellingRule="Mandatory" />
+      <opc:Variable SymbolicName="Comment" TypeDefinition="ConditionVariableType" DataType="ua:LocalizedText" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="ClientUserId" DataType="ua:String" ModellingRule="Mandatory" />
+      <opc:Method SymbolicName="Disable" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>AuditConditionEnableEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Method>
+      <opc:Method SymbolicName="Enable" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>AuditConditionEnableEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Method>
+      <opc:Method SymbolicName="AddComment" TypeDefinition="AddCommentMethodType" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>AuditConditionCommentEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Method>
+      <opc:Method SymbolicName="ConditionRefresh" TypeDefinition="ConditionRefreshMethodType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>RefreshStartEventType</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>RefreshEndEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Method>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:Method SymbolicName="ConditionRefreshMethodType" PartNo="9">
+    <opc:InputArguments>
+      <opc:Argument Name="SubscriptionId" DataType="IntegerId">
+        <opc:Description>The identifier for the suscription to refresh.</opc:Description>
+      </opc:Argument>
+    </opc:InputArguments>
+  </opc:Method>
+
+  <opc:Method SymbolicName="AddCommentMethodType" ModellingRule="Mandatory" PartNo="9">
+    <opc:InputArguments>
+      <opc:Argument Name="EventId" DataType="ua:ByteString">
+        <opc:Description>The identifier for the event to comment.</opc:Description>
+      </opc:Argument>
+      <opc:Argument Name="Comment" DataType="ua:LocalizedText">
+        <opc:Description>The comment to add to the condition.</opc:Description>
+      </opc:Argument>
+    </opc:InputArguments>
+  </opc:Method>
+
+  <opc:ObjectType SymbolicName="DialogConditionType" BaseType="ConditionType" PartNo="9">
+    <opc:Children>
+      <opc:Variable SymbolicName="EnabledState" TypeDefinition="TwoStateVariableType" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>DialogConditionType_DialogState</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Variable>
+      <opc:Variable SymbolicName="DialogState" TypeDefinition="TwoStateVariableType" ModellingRule="Mandatory">
+        <opc:Children>
+          <opc:Property SymbolicName="Id" DataType="ua:Boolean" ModellingRule="Mandatory" />
+          <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Active</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+          <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Inactive</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Variable>
+      <opc:Property SymbolicName="Prompt" DataType="ua:LocalizedText" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="ResponseOptionSet" DataType="ua:LocalizedText" ValueRank="Array" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="DefaultResponse" DataType="ua:Int32" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="OkResponse" DataType="ua:Int32" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="CancelResponse" DataType="ua:Int32" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="LastResponse" DataType="ua:Int32" ModellingRule="Mandatory" />
+      <opc:Method SymbolicName="Respond" TypeDefinition="DialogResponseMethodType" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>AuditConditionRespondEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Method>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:Method SymbolicName="DialogResponseMethodType" ModellingRule="Mandatory" PartNo="9">
+    <opc:InputArguments>
+      <opc:Argument Name="SelectedResponse" DataType="ua:Int32">
+        <opc:Description>The response to the dialog condition.</opc:Description>
+      </opc:Argument>
+    </opc:InputArguments>
+  </opc:Method>
+
+  <opc:ObjectType SymbolicName="AcknowledgeableConditionType" BaseType="ConditionType" PartNo="9">
+    <opc:Children>
+      <opc:Variable SymbolicName="EnabledState" TypeDefinition="TwoStateVariableType" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>AcknowledgeableConditionType_AckedState</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>AcknowledgeableConditionType_ConfirmedState</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Variable>
+      <opc:Variable SymbolicName="AckedState" TypeDefinition="TwoStateVariableType" ModellingRule="Mandatory">
+        <opc:Children>
+          <opc:Property SymbolicName="Id" DataType="ua:Boolean" ModellingRule="Mandatory" />
+          <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Acknowledged</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+          <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Unacknowledged</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Variable>
+      <opc:Variable SymbolicName="ConfirmedState" TypeDefinition="TwoStateVariableType" ModellingRule="Optional">
+        <opc:Children>
+          <opc:Property SymbolicName="Id" DataType="ua:Boolean" ModellingRule="Mandatory" />
+          <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Confirmed</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+          <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Unconfirmed</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Variable>
+      <opc:Method SymbolicName="Acknowledge" TypeDefinition="AddCommentMethodType" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>AuditConditionAcknowledgeEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Method>
+      <opc:Method SymbolicName="Confirm" TypeDefinition="AddCommentMethodType" ModellingRule="Optional">
+        <opc:References>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>AuditConditionConfirmEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Method>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AlarmConditionType" BaseType="AcknowledgeableConditionType" PartNo="9">
+    <opc:Children>
+      <opc:Variable SymbolicName="EnabledState" TypeDefinition="TwoStateVariableType" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>AlarmConditionType_ActiveState</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>AlarmConditionType_SuppressedState</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>AlarmConditionType_ShelvingState</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Variable>
+      <opc:Variable SymbolicName="ActiveState" TypeDefinition="TwoStateVariableType" ModellingRule="Mandatory">
+        <opc:Children>
+          <opc:Property SymbolicName="Id" DataType="ua:Boolean" ModellingRule="Mandatory" />
+          <opc:Property SymbolicName="EffectiveDisplayName" DataType="ua:LocalizedText" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="EffectiveTransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Active</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+          <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Inactive</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Variable>
+      <opc:Property SymbolicName="InputNode" DataType="ua:NodeId" ModellingRule="Mandatory" />
+      <opc:Variable SymbolicName="SuppressedState" TypeDefinition="TwoStateVariableType" ModellingRule="Optional">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Suppressed</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+          <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>Unsuppressed</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Variable>
+      <opc:Object SymbolicName="ShelvingState" TypeDefinition="ShelvedStateMachineType" ModellingRule="Optional">
+        <opc:Children>
+          <opc:Variable SymbolicName="LastTransition" TypeDefinition="FiniteTransitionVariableType" ModellingRule="Optional">
+            <opc:Children>
+              <opc:Property SymbolicName="TransitionTime" DataType="ua:UtcTime" ModellingRule="Optional" />
+            </opc:Children>
+          </opc:Variable>
+        </opc:Children>
+      </opc:Object>
+      <opc:Property SymbolicName="SuppressedOrShelved" DataType="ua:Boolean" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="MaxTimeShelved" DataType="Duration" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="ShelvedStateMachineType" BaseType="FiniteStateMachineType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="UnshelveTime" DataType="Duration" ModellingRule="Mandatory" />
+      <opc:Object SymbolicName="Unshelved" TypeDefinition="StateType" ModellingRule="None" />
+      <opc:Object SymbolicName="TimedShelved" TypeDefinition="StateType" ModellingRule="None" />
+      <opc:Object SymbolicName="OneShotShelved" TypeDefinition="StateType" ModellingRule="None" />
+
+      <opc:Object SymbolicName="UnshelvedToTimedShelved" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_Unshelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_TimedShelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>AlarmConditionType</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_TimedShelve</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+
+      <opc:Object SymbolicName="UnshelvedToOneShotShelved" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_Unshelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_OneShotShelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>AlarmConditionType</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_OneShotShelve</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+
+      <opc:Object SymbolicName="TimedShelvedToUnshelved" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_TimedShelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_Unshelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>AlarmConditionType</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_Unshelve</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+
+      <opc:Object SymbolicName="TimedShelvedToOneShotShelved" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_TimedShelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_OneShotShelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>AlarmConditionType</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_OneShotShelve</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+
+      <opc:Object SymbolicName="OneShotShelvedToUnshelved" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_OneShotShelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_Unshelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>AlarmConditionType</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_Unshelve</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+
+      <opc:Object SymbolicName="OneShotShelvedToTimedShelved" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_OneShotShelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_TimedShelved</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>AlarmConditionType</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ShelvedStateMachineType_TimedShelve</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+
+      <opc:Method SymbolicName="Unshelve" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>AuditConditionShelvingEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Method>
+      <opc:Method SymbolicName="OneShotShelve" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>AuditConditionShelvingEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Method>
+      <opc:Method SymbolicName="TimedShelve" TypeDefinition="TimedShelveMethodType" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference IsOneWay="true">
+            <opc:ReferenceType>AlwaysGeneratesEvent</opc:ReferenceType>
+            <opc:TargetId>AuditConditionShelvingEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Method>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:Method SymbolicName="TimedShelveMethodType" ModellingRule="Mandatory" PartNo="9">
+    <opc:InputArguments>
+      <opc:Argument Name="ShelvingTime" DataType="Duration">
+        <opc:Description>If not 0, this parameter specifies a fixed time for which the Alarm is to be shelved.</opc:Description>
+      </opc:Argument>
+    </opc:InputArguments>
+  </opc:Method>
+
+  <opc:ObjectType SymbolicName="LimitAlarmType" BaseType="AlarmConditionType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="HighHighLimit" DataType="ua:Double" ModellingRule="Optional" />
+      <opc:Property SymbolicName="HighLimit" DataType="ua:Double" ModellingRule="Optional" />
+      <opc:Property SymbolicName="LowLimit" DataType="ua:Double" ModellingRule="Optional" />
+      <opc:Property SymbolicName="LowLowLimit" DataType="ua:Double" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="ExclusiveLimitStateMachineType" BaseType="FiniteStateMachineType" PartNo="9">
+    <opc:Children>
+      <opc:Object SymbolicName="HighHigh" TypeDefinition="StateType" ModellingRule="None" />
+      <opc:Object SymbolicName="High" TypeDefinition="StateType" ModellingRule="None" />
+      <opc:Object SymbolicName="Low" TypeDefinition="StateType" ModellingRule="None" />
+      <opc:Object SymbolicName="LowLow" TypeDefinition="StateType" ModellingRule="None" />
+      <opc:Object SymbolicName="LowLowToLow" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ExclusiveLimitStateMachineType_LowLow</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ExclusiveLimitStateMachineType_Low</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="LowToLowLow" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ExclusiveLimitStateMachineType_Low</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ExclusiveLimitStateMachineType_LowLow</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="HighHighToHigh" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ExclusiveLimitStateMachineType_HighHigh</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ExclusiveLimitStateMachineType_High</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="HighToHighHigh" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ExclusiveLimitStateMachineType_High</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ExclusiveLimitStateMachineType_HighHigh</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="ExclusiveLimitAlarmType" BaseType="LimitAlarmType" PartNo="9">
+    <opc:Children>
+      <opc:Variable SymbolicName="ActiveState" TypeDefinition="TwoStateVariableType" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>ExclusiveLimitAlarmType_LimitState</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Variable>
+      <opc:Object SymbolicName="LimitState" TypeDefinition="ExclusiveLimitStateMachineType" ModellingRule="Mandatory">
+        <opc:Children>
+          <opc:Variable SymbolicName="LastTransition" TypeDefinition="FiniteTransitionVariableType" ModellingRule="Optional">
+            <opc:Children>
+              <opc:Property SymbolicName="TransitionTime" DataType="ua:UtcTime" ModellingRule="Optional" />
+            </opc:Children>
+          </opc:Variable>
+        </opc:Children>
+      </opc:Object>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="NonExclusiveLimitAlarmType" BaseType="LimitAlarmType" PartNo="9">
+    <opc:Children>
+      <opc:Variable SymbolicName="ActiveState" TypeDefinition="TwoStateVariableType" ModellingRule="Mandatory">
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>NonExclusiveLimitAlarmType_HighHighState</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>NonExclusiveLimitAlarmType_HighState</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>NonExclusiveLimitAlarmType_LowState</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasTrueSubState</opc:ReferenceType>
+            <opc:TargetId>NonExclusiveLimitAlarmType_LowLowState</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Variable>
+      <opc:Variable SymbolicName="HighHighState" TypeDefinition="TwoStateVariableType" ModellingRule="Optional">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>HighHighInactive</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+          <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>HighHighInactive</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Variable>
+      <opc:Variable SymbolicName="HighState" TypeDefinition="TwoStateVariableType" ModellingRule="Optional">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>HighActive</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+          <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>HighInactive</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Variable>
+      <opc:Variable SymbolicName="LowState" TypeDefinition="TwoStateVariableType" ModellingRule="Optional">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>LowActive</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+          <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>LowInactive</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Variable>
+      <opc:Variable SymbolicName="LowLowState" TypeDefinition="TwoStateVariableType" ModellingRule="Optional">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionTime" DataType="UtcTime" ModellingRule="Optional" />
+          <opc:Property SymbolicName="TrueState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>LowLowActive</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+          <opc:Property SymbolicName="FalseState" DataType="ua:LocalizedText" ModellingRule="None">
+            <opc:DefaultValue>
+              <uax:LocalizedText>
+                <uax:Locale>en</uax:Locale>
+                <uax:Text>LowLowInactive</uax:Text>
+              </uax:LocalizedText>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Variable>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="NonExclusiveLevelAlarmType" BaseType="NonExclusiveLimitAlarmType" PartNo="9" />
+  <opc:ObjectType SymbolicName="ExclusiveLevelAlarmType" BaseType="ExclusiveLimitAlarmType" PartNo="9" />
+
+  <opc:ObjectType SymbolicName="NonExclusiveDeviationAlarmType" BaseType="NonExclusiveLimitAlarmType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="SetpointNode" DataType="ua:NodeId" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+  <opc:ObjectType SymbolicName="ExclusiveDeviationAlarmType" BaseType="ExclusiveLimitAlarmType" PartNo="9" >
+    <opc:Children>
+      <opc:Property SymbolicName="SetpointNode" DataType="ua:NodeId" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="NonExclusiveRateOfChangeAlarmType" BaseType="NonExclusiveLimitAlarmType" PartNo="9" />
+  <opc:ObjectType SymbolicName="ExclusiveRateOfChangeAlarmType" BaseType="ExclusiveLimitAlarmType" PartNo="9" />
+
+  <opc:ObjectType SymbolicName="DiscreteAlarmType" BaseType="AlarmConditionType" PartNo="9" />
+
+  <opc:ObjectType SymbolicName="OffNormalAlarmType" BaseType="DiscreteAlarmType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="NormalState" DataType="ua:NodeId" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="SystemOffNormalAlarmType" BaseType="OffNormalAlarmType" PartNo="9" />
+  <opc:ObjectType SymbolicName="TripAlarmType" BaseType="OffNormalAlarmType" PartNo="9" />
+
+  <opc:ObjectType SymbolicName="BaseConditionClassType" BaseType="ua:BaseObjectType" PartNo="9" />
+  <opc:ObjectType SymbolicName="ProcessConditionClassType" BaseType="BaseConditionClassType" PartNo="9" />
+  <opc:ObjectType SymbolicName="MaintenanceConditionClassType" BaseType="BaseConditionClassType" PartNo="9" />
+  <opc:ObjectType SymbolicName="SystemConditionClassType" BaseType="BaseConditionClassType" PartNo="9" />
+
+  <opc:ObjectType SymbolicName="AuditConditionEventType" BaseType="AuditUpdateMethodEventType" PartNo="9" />
+  <opc:ObjectType SymbolicName="AuditConditionEnableEventType" BaseType="AuditConditionEventType" PartNo="9" />
+
+  <opc:ObjectType SymbolicName="AuditConditionCommentEventType" BaseType="AuditConditionEventType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="EventId" DataType="ua:ByteString" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="Comment" DataType="ua:LocalizedText" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditConditionRespondEventType" BaseType="AuditConditionEventType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="SelectedResponse" DataType="ua:Int32" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditConditionAcknowledgeEventType" BaseType="AuditConditionEventType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="EventId" DataType="ua:ByteString" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="Comment" DataType="ua:LocalizedText" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditConditionConfirmEventType" BaseType="AuditConditionEventType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="EventId" DataType="ua:ByteString" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="Comment" DataType="ua:LocalizedText" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditConditionShelvingEventType" BaseType="AuditConditionEventType" PartNo="9">
+    <opc:Children>
+      <opc:Property SymbolicName="ShelvingTime" DataType="Duration" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="RefreshStartEventType" BaseType="SystemEventType" PartNo="9" />
+  <opc:ObjectType SymbolicName="RefreshEndEventType" BaseType="SystemEventType" PartNo="9" />
+  <opc:ObjectType SymbolicName="RefreshRequiredEventType" BaseType="SystemEventType" PartNo="9" />
+
+  <opc:ReferenceType SymbolicName="HasCondition" BaseType="ua:NonHierarchicalReferences" PartNo="9">
+    <opc:InverseName>IsConditionOf</opc:InverseName>
+  </opc:ReferenceType>
+
+  <!-- Part 10 -->
+
+  <opc:ObjectType SymbolicName="ProgramStateMachineType" BaseType="FiniteStateMachineType" PartNo="10">
+    <opc:Description>A state machine for a program.</opc:Description>
+    <opc:Children>
+      <opc:Variable SymbolicName="CurrentState" ModellingRule="Mandatory">
+        <opc:Children>
+          <opc:Property SymbolicName="Number" ModellingRule="Mandatory" />
+        </opc:Children>
+      </opc:Variable>
+      <opc:Variable SymbolicName="LastTransition" ModellingRule="Mandatory">
+        <opc:Children>
+          <opc:Property SymbolicName="Number" ModellingRule="Mandatory" />
+          <opc:Property SymbolicName="TransitionTime" ModellingRule="Mandatory" />
+        </opc:Children>
+      </opc:Variable>
+
+      <opc:Property SymbolicName="Creatable" DataType="ua:Boolean" ModellingRule="None" />
+      <opc:Property SymbolicName="Deletable" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="AutoDelete" DataType="ua:Boolean" ModellingRule="MandatoryShared" />
+      <opc:Property SymbolicName="RecycleCount" DataType="ua:Int32" />
+      <opc:Property SymbolicName="InstanceCount" DataType="ua:UInt32" ModellingRule="None" />
+      <opc:Property SymbolicName="MaxInstanceCount" DataType="ua:UInt32" ModellingRule="None" />
+      <opc:Property SymbolicName="MaxRecycleCount" DataType="ua:UInt32" ModellingRule="None" />
+      <opc:Variable SymbolicName="ProgramDiagnostics" TypeDefinition="ProgramDiagnosticType" ModellingRule="Optional" />
+      <opc:Object SymbolicName="FinalResultData" TypeDefinition="BaseObjectType" ModellingRule="Optional" />
+
+      <opc:Object SymbolicName="Ready" TypeDefinition="StateType" ModellingRule="None">
+        <opc:Description>The Program is properly initialized and may be started.</opc:Description>
+        <opc:Children>
+          <opc:Property SymbolicName="StateNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>1</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Object>
+      <opc:Object SymbolicName="Running" TypeDefinition="StateType" ModellingRule="None">
+        <opc:Description>The Program is executing making progress towards completion.</opc:Description>
+        <opc:Children>
+          <opc:Property SymbolicName="StateNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>2</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Object>
+      <opc:Object SymbolicName="Suspended" TypeDefinition="StateType" ModellingRule="None">
+        <opc:Description>The Program has been stopped prior to reaching a terminal state but may be resumed.</opc:Description>
+        <opc:Children>
+          <opc:Property SymbolicName="StateNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>3</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Object>
+      <opc:Object SymbolicName="Halted" TypeDefinition="StateType" ModellingRule="None">
+        <opc:Description>The Program is in a terminal or failed state, and it cannot be started or resumed without being reset.</opc:Description>
+        <opc:Children>
+          <opc:Property SymbolicName="StateNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>4</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+      </opc:Object>
+      <opc:Object SymbolicName="HaltedToReady" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>1</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Halted</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Ready</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Reset</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>ProgramTransitionEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="ReadyToRunning" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>2</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Ready</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Running</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Start</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>ProgramTransitionEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="RunningToHalted" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>3</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Running</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Halted</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Halt</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>ProgramTransitionEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="RunningToReady" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>4</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Running</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Ready</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>ProgramTransitionEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="RunningToSuspended" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>5</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Running</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Suspended</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Suspend</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>ProgramTransitionEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="SuspendedToRunning" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>6</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Suspended</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Running</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Resume</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>ProgramTransitionEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="SuspendedToHalted" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>7</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Suspended</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Halted</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Halt</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>ProgramTransitionEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="SuspendedToReady" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>8</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Suspended</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Ready</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>ProgramTransitionEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Object SymbolicName="ReadyToHalted" TypeDefinition="TransitionType" ModellingRule="None">
+        <opc:Children>
+          <opc:Property SymbolicName="TransitionNumber">
+            <opc:DefaultValue>
+              <uax:UInt32>9</uax:UInt32>
+            </opc:DefaultValue>
+          </opc:Property>
+        </opc:Children>
+        <opc:References>
+          <opc:Reference>
+            <opc:ReferenceType>FromState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Ready</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>ToState</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Halted</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasCause</opc:ReferenceType>
+            <opc:TargetId>ProgramStateMachineType_Halt</opc:TargetId>
+          </opc:Reference>
+          <opc:Reference>
+            <opc:ReferenceType>HasEffect</opc:ReferenceType>
+            <opc:TargetId>ProgramTransitionEventType</opc:TargetId>
+          </opc:Reference>
+        </opc:References>
+      </opc:Object>
+      <opc:Method SymbolicName="Start" ModellingRule="Mandatory">
+        <opc:Description>Causes the Program to transition from the Ready state to the Running state.</opc:Description>
+      </opc:Method>
+      <opc:Method SymbolicName="Suspend" ModellingRule="Mandatory">
+        <opc:Description>Causes the Program to transition from the Running state to the Suspended state.</opc:Description>
+      </opc:Method>
+      <opc:Method SymbolicName="Resume" ModellingRule="Mandatory">
+        <opc:Description>Causes the Program to transition from the Suspended state to the Running state.</opc:Description>
+      </opc:Method>
+      <opc:Method SymbolicName="Halt" ModellingRule="Mandatory">
+        <opc:Description>Causes the Program to transition from the Ready, Running or Suspended state to the Halted state.</opc:Description>
+      </opc:Method>
+      <opc:Method SymbolicName="Reset" ModellingRule="Mandatory">
+        <opc:Description>Causes the Program to transition from the Halted state to the Ready state.</opc:Description>
+      </opc:Method>
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="ProgramTransitionEventType" BaseType="TransitionEventType" PartNo="10">
+    <opc:Children>
+      <opc:Property SymbolicName="IntermediateResult" DataType="ua:BaseDataType" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditProgramTransitionEventType" BaseType="AuditUpdateStateEventType" PartNo="10">
+    <opc:Children>
+      <opc:Property SymbolicName="TransitionNumber" DataType="ua:UInt32" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="ProgramTransitionAuditEventType" BaseType="AuditUpdateStateEventType" PartNo="10">
+    <opc:Children>
+      <opc:Variable SymbolicName="Transition" TypeDefinition="FiniteTransitionVariableType" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:VariableType SymbolicName="ProgramDiagnosticType" DataType="ProgramDiagnosticDataType" ValueRank="Scalar" BaseType="ua:BaseDataVariableType" PartNo="10">
+    <opc:Children>
+      <opc:Property SymbolicName="CreateSessionId" DataType="ua:NodeId" />
+      <opc:Property SymbolicName="CreateClientName" DataType="ua:String" />
+      <opc:Property SymbolicName="InvocationCreationTime" DataType="ua:UtcTime" />
+      <opc:Property SymbolicName="LastTransitionTime" DataType="ua:UtcTime" />
+      <opc:Property SymbolicName="LastMethodCall" DataType="ua:String" />
+      <opc:Property SymbolicName="LastMethodSessionId" DataType="ua:NodeId" />
+      <opc:Property SymbolicName="LastMethodInputArguments" DataType="ua:Argument" ValueRank="Array" />
+      <opc:Property SymbolicName="LastMethodOutputArguments" DataType="ua:Argument" ValueRank="Array" />
+      <opc:Property SymbolicName="LastMethodCallTime" DataType="ua:UtcTime" />
+      <opc:Property SymbolicName="LastMethodReturnStatus" DataType="ua:StatusResult" />
+    </opc:Children>
+  </opc:VariableType>
+
+  <!-- Part 11 -->
+
+  <opc:Variable SymbolicName="Annotations" TypeDefinition="PropertyType" DataType="Annotation" ModellingRule="None" PartNo="11">
+    <opc:BrowseName>Annotations</opc:BrowseName>
+  </opc:Variable>
+
+  <opc:ObjectType SymbolicName="HistoricalDataConfigurationType" BaseType="ua:BaseObjectType" PartNo="11">
+    <opc:Children>
+      <opc:Object SymbolicName="AggregateConfiguration" TypeDefinition="AggregateConfigurationType" ModellingRule="Mandatory" />
+      <opc:Object SymbolicName="AggregateFunctions" TypeDefinition="FolderType" ModellingRule="Optional" />
+      <opc:Property SymbolicName="Stepped" DataType="ua:Boolean" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="Definition" DataType="ua:String" ModellingRule="Optional" />
+      <opc:Property SymbolicName="MaxTimeInterval" DataType="ua:Duration" ModellingRule="Optional" />
+      <opc:Property SymbolicName="MinTimeInterval" DataType="ua:Duration" ModellingRule="Optional" />
+      <opc:Property SymbolicName="ExceptionDeviation" DataType="ua:Double" ModellingRule="Optional" />
+      <opc:Property SymbolicName="ExceptionDeviationFormat" DataType="ExceptionDeviationFormat" ModellingRule="Optional" />
+      <opc:Property SymbolicName="StartOfArchive" DataType="ua:UtcTime" ModellingRule="Optional" />
+      <opc:Property SymbolicName="StartOfOnlineArchive" DataType="ua:UtcTime" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <!-- HasHistoricalConfiguration BuildInTypes.xml -->
+
+  <opc:Object SymbolicName="HAConfiguration" TypeDefinition="HistoricalDataConfigurationType" ModellingRule="None" PartNo="11">
+    <opc:BrowseName>HA Configuration</opc:BrowseName>
+  </opc:Object>
+
+  <opc:Variable SymbolicName="HistoricalEventFilter" TypeDefinition="PropertyType" DataType="EventFilter" ModellingRule="None" PartNo="11">
+    <opc:BrowseName>HistoricalEventFilter</opc:BrowseName>
+  </opc:Variable>
+
+  <opc:ObjectType SymbolicName="HistoryServerCapabilitiesType" BaseType="ua:BaseObjectType" PartNo="11">
+    <opc:Children>
+      <opc:Property SymbolicName="AccessHistoryDataCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="AccessHistoryEventsCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="MaxReturnDataValues" DataType="ua:UInt32" />
+      <opc:Property SymbolicName="MaxReturnEventValues" DataType="ua:UInt32" />
+      <opc:Property SymbolicName="InsertDataCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="ReplaceDataCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="UpdateDataCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="DeleteRawCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="DeleteAtTimeCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="InsertEventCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="ReplaceEventCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="UpdateEventCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="DeleteEventCapability" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="InsertAnnotationCapability" DataType="ua:Boolean" />
+      <opc:Object SymbolicName="AggregateFunctions" TypeDefinition="FolderType" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <!-- Annotation UA Core Services.xml -->
+
+  <opc:ObjectType SymbolicName="AuditHistoryEventUpdateEventType" BaseType="AuditHistoryUpdateEventType" IsAbstract="true" PartNo="11">
+    <opc:Children>
+      <opc:Property SymbolicName="UpdatedNode" DataType="ua:NodeId" />
+      <opc:Property SymbolicName="PerformInsertReplace" DataType="PerformUpdateType" />
+      <opc:Property SymbolicName="Filter" DataType="EventFilter" />
+      <opc:Property SymbolicName="NewValues" DataType="HistoryEventFieldList" ValueRank="Array" />
+      <opc:Property SymbolicName="OldValues" DataType="HistoryEventFieldList" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditHistoryValueUpdateEventType" BaseType="AuditHistoryUpdateEventType" IsAbstract="true" PartNo="11">
+    <opc:Children>
+      <opc:Property SymbolicName="UpdatedNode" DataType="ua:NodeId" />
+      <opc:Property SymbolicName="PerformInsertReplace" DataType="PerformUpdateType" />
+      <opc:Property SymbolicName="NewValues" DataType="ua:DataValue" ValueRank="Array" />
+      <opc:Property SymbolicName="OldValues" DataType="ua:DataValue" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditHistoryDeleteEventType" BaseType="AuditHistoryUpdateEventType" IsAbstract="true" PartNo="11">
+    <opc:Children>
+      <opc:Property SymbolicName="UpdatedNode" DataType="ua:NodeId" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditHistoryRawModifyDeleteEventType" BaseType="AuditHistoryDeleteEventType" IsAbstract="true" PartNo="11">
+    <opc:Children>
+      <opc:Property SymbolicName="IsDeleteModified" DataType="ua:Boolean" />
+      <opc:Property SymbolicName="StartTime" DataType="ua:UtcTime" />
+      <opc:Property SymbolicName="EndTime" DataType="ua:UtcTime" />
+      <opc:Property SymbolicName="OldValues" DataType="ua:DataValue" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditHistoryAtTimeDeleteEventType" BaseType="AuditHistoryDeleteEventType" IsAbstract="true" PartNo="11">
+    <opc:Children>
+      <opc:Property SymbolicName="ReqTimes" DataType="ua:UtcTime" ValueRank="Array"  />
+      <opc:Property SymbolicName="OldValues" DataType="ua:DataValue" ValueRank="Array" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="AuditHistoryEventDeleteEventType" BaseType="AuditHistoryDeleteEventType" IsAbstract="true" PartNo="11">
+    <opc:Children>
+      <opc:Property SymbolicName="EventIds" DataType="ua:ByteString" ValueRank="Array"  />
+      <opc:Property SymbolicName="OldValues" DataType="ua:HistoryEventFieldList" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <!-- Part 12 -->
+  <opc:Method SymbolicName="OpenWithMasksMethodType">
+    <opc:InputArguments>
+      <opc:Argument Name="Masks" DataType="ua:UInt32"></opc:Argument>
+    </opc:InputArguments>
+    <opc:OutputArguments>
+      <opc:Argument Name="FileHandle" DataType="ua:UInt32"></opc:Argument>
+    </opc:OutputArguments>
+  </opc:Method>
+  
+  <opc:Method SymbolicName="CloseAndUpdateMethodType">
+    <opc:InputArguments>
+      <opc:Argument Name="FileHandle" DataType="ua:UInt32"></opc:Argument>
+    </opc:InputArguments>
+    <opc:OutputArguments>
+      <opc:Argument Name="RestartRequired" DataType="ua:Boolean"></opc:Argument>
+    </opc:OutputArguments>
+  </opc:Method>
+  
+  <opc:Method SymbolicName="AddCertificateMethodType">
+    <opc:InputArguments>
+      <opc:Argument Name="Certificate" DataType="ua:ByteString"></opc:Argument>
+      <opc:Argument Name="IsTrustedCertificate" DataType="ua:Boolean"></opc:Argument>
+    </opc:InputArguments>
+  </opc:Method>
+
+  <opc:Method SymbolicName="RemoveCertificateMethodType">
+    <opc:InputArguments>
+      <opc:Argument Name="Thumbprint" DataType="ua:String"></opc:Argument>
+      <opc:Argument Name="IsTrustedCertificate" DataType="ua:Boolean"></opc:Argument>
+    </opc:InputArguments>
+  </opc:Method>
+
+  <opc:ObjectType SymbolicName="TrustListType" BaseType="ua:FileType" PartNo="12">
+    <opc:Children>
+      <opc:Property SymbolicName="LastUpdateTime" DataType="ua:UtcTime" />
+      <opc:Method SymbolicName="OpenWithMasks" TypeDefinition="OpenWithMasksMethodType" ModellingRule="Mandatory" />
+      <opc:Method SymbolicName="CloseAndUpdate" TypeDefinition="CloseAndUpdateMethodType" ModellingRule="Optional" />
+      <opc:Method SymbolicName="AddCertificate" TypeDefinition="AddCertificateMethodType" ModellingRule="Optional" />
+      <opc:Method SymbolicName="RemoveCertificate" TypeDefinition="RemoveCertificateMethodType" ModellingRule="Optional" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:DataType SymbolicName="TrustListMasks" PartNo="12" BaseType="ua:Enumeration" NoArraysAllowed="true">
+    <opc:Fields>
+      <opc:Field Name="None" Identifier="0" />
+      <opc:Field Name="TrustedCertificates" Identifier="1" />
+      <opc:Field Name="TrustedCrls" Identifier="2" />
+      <opc:Field Name="IssuerCertificates" Identifier="4" />
+      <opc:Field Name="IssuerCrls" Identifier="8" />
+      <opc:Field Name="All" Identifier="15" />
+    </opc:Fields>
+  </opc:DataType>
+
+  <opc:DataType SymbolicName="TrustListDataType" BaseType="ua:Structure" PartNo="12">
+    <opc:Fields>
+      <opc:Field Name="SpecifiedLists" DataType="ua:UInt32" />
+      <opc:Field Name="TrustedCertificates" DataType="ua:ByteString" ValueRank="Array" />
+      <opc:Field Name="TrustedCrls" DataType="ua:ByteString" ValueRank="Array" />
+      <opc:Field Name="IssuerCertificates" DataType="ua:ByteString" ValueRank="Array" />
+      <opc:Field Name="IssuerCrls" DataType="ua:ByteString" ValueRank="Array" />
+    </opc:Fields>
+  </opc:DataType>
+  
+  <opc:ObjectType SymbolicName="AuthorityType" BaseType="ua:BaseObjectType" PartNo="12"></opc:ObjectType>
+  <opc:ObjectType SymbolicName="CertificateType" BaseType="ua:BaseObjectType" IsAbstract="true" PartNo="12"></opc:ObjectType>
+  <opc:ObjectType SymbolicName="ApplicationCertificateType" BaseType="CertificateType" IsAbstract="true" PartNo="12"></opc:ObjectType>
+  <opc:ObjectType SymbolicName="HttpsCertificateType" BaseType="CertificateType" PartNo="12"></opc:ObjectType>
+  <opc:ObjectType SymbolicName="RsaBasicApplicationCertificateType" BaseType="ApplicationCertificateType" PartNo="12"></opc:ObjectType>
+  <opc:ObjectType SymbolicName="Rsa2084ApplicationCertificateType" BaseType="ApplicationCertificateType" PartNo="12"></opc:ObjectType>
+  
+  <opc:ObjectType SymbolicName="TrustListUpdatedAuditEventType" BaseType="ua:AuditUpdateMethodEventType" IsAbstract="true" PartNo="12">
+  </opc:ObjectType>
+
+  <opc:Method SymbolicName="UpdateCertificateMethodType">
+    <opc:InputArguments>
+      <opc:Argument Name="CertificateType" DataType="ua:NodeId" />
+      <opc:Argument Name="Certificate" DataType="ua:ByteString"></opc:Argument>
+      <opc:Argument Name="PrivateKeyFormat" DataType="ua:String"></opc:Argument>
+      <opc:Argument Name="PrivateKey" DataType="ua:ByteString"></opc:Argument>
+    </opc:InputArguments>
+    <opc:OutputArguments>
+      <opc:Argument Name="RestartRequired" DataType="ua:Boolean"></opc:Argument>
+    </opc:OutputArguments>
+  </opc:Method>
+
+  <opc:ObjectType SymbolicName="ServerConfigurationType" BaseType="ua:BaseObjectType" PartNo="12">
+    <opc:Children>
+      <opc:Property SymbolicName="ServerCapabilities" DataType="ua:String" ValueRank="Array" />
+      <opc:Property SymbolicName="SupportedCertificateTypes" DataType="ua:NodeId" ValueRank="Array" />
+      <opc:Property SymbolicName="SupportedPrivateKeyFormats" DataType="ua:String" ValueRank="Array" />
+      <opc:Property SymbolicName="MaxTrustListSize" DataType="ua:UInt32" />>
+      <opc:Property SymbolicName="MulticastDnsEnabled" DataType="ua:Boolean" />
+      <opc:Object SymbolicName="TrustList" TypeDefinition="TrustListType"  ModellingRule="Mandatory" />
+      <opc:Method SymbolicName="UpdateCertificate" TypeDefinition="UpdateCertificateMethodType" ModellingRule="Mandatory" />
+      <opc:Method SymbolicName="Restart" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:ObjectType SymbolicName="CertificateUpdatedAuditEventType" BaseType="ua:AuditUpdateMethodEventType" IsAbstract="true" PartNo="12">
+  </opc:ObjectType>
+
+  <opc:Object SymbolicName="ServerConfiguration" TypeDefinition="ServerConfigurationType">
+    <opc:Children>
+      <opc:Property SymbolicName="ServerCapabilities" />
+      <opc:Property SymbolicName="SupportedCertificateTypes" />
+      <opc:Property SymbolicName="SupportedPrivateKeyFormats" />
+      <opc:Property SymbolicName="MaxTrustListSize" />
+      <opc:Property SymbolicName="MulticastDnsEnabled" />
+      <opc:Object SymbolicName="TrustList" ModellingRule="Mandatory">
+        <opc:Children>
+          <opc:Method SymbolicName="OpenWithMasks" ModellingRule="Mandatory" />
+          <opc:Method SymbolicName="CloseAndUpdate" ModellingRule="Mandatory" />
+          <opc:Method SymbolicName="AddCertificate" ModellingRule="Mandatory" />
+          <opc:Method SymbolicName="RemoveCertificate" ModellingRule="Mandatory" />
+        </opc:Children>
+      </opc:Object>
+    </opc:Children>
+    <opc:References>
+      <opc:Reference IsInverse="true">
+        <opc:ReferenceType>ua:HasComponent</opc:ReferenceType>
+        <opc:TargetId>ua:Server</opc:TargetId>
+      </opc:Reference>
+    </opc:References>
+  </opc:Object>
+
+  <!-- Part 13 -->
+  <opc:ObjectType SymbolicName="AggregateConfigurationType" BaseType="ua:BaseObjectType" PartNo="13">
+    <opc:Children>
+      <opc:Property SymbolicName="TreatUncertainAsBad" DataType="ua:Boolean" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="PercentDataBad" DataType="ua:Byte" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="PercentDataGood" DataType="ua:Byte" ModellingRule="Mandatory" />
+      <opc:Property SymbolicName="UseSlopedExtrapolation" DataType="ua:Boolean" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:Object SymbolicName="AggregateFunction_Interpolative" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Interpolative</opc:BrowseName>
+    <opc:Description>At the beginning of each interval, retrieve the calculated value from the data points on either side of the requested timestamp.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Average" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Average</opc:BrowseName>
+    <opc:Description>Retrieve the average value of the data over the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_TimeAverage" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>TimeAverage</opc:BrowseName>
+    <opc:Description>Retrieve the time weighted average data over the interval using Interpolated Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_TimeAverage2" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>TimeAverage2</opc:BrowseName>
+    <opc:Description>Retrieve the time weighted average data over the interval using Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Total" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Total</opc:BrowseName>
+    <opc:Description>Retrieve the total (time integral) of the data over the interval using Interpolated Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Total2" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Total2</opc:BrowseName>
+    <opc:Description>Retrieve the total (time integral) of the data over the interval using Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Minimum" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Minimum</opc:BrowseName>
+    <opc:Description>Retrieve the minimum raw value in the interval with the timestamp of the start of the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Maximum" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Maximum</opc:BrowseName>
+    <opc:Description>Retrieve the maximum raw value in the interval with the timestamp of the start of the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_MinimumActualTime" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>MinimumActualTime</opc:BrowseName>
+    <opc:Description>Retrieve the minimum value in the interval and the Timestamp of the minimum value.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_MaximumActualTime" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>MaximumActualTime</opc:BrowseName>
+    <opc:Description>Retrieve the maximum value in the interval and the Timestamp of the maximum value.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Range" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Range</opc:BrowseName>
+    <opc:Description>Retrieve the difference between the minimum and maximum Value over the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Minimum2" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Minimum2</opc:BrowseName>
+    <opc:Description>Retrieve the minimum value in the interval including the Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Maximum2" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Maximum2</opc:BrowseName>
+    <opc:Description>Retrieve the maximum value in the interval including the Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_MinimumActualTime2" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>MinimumActualTime2</opc:BrowseName>
+    <opc:Description>Retrieve the minimum value with the actual timestamp including the Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_MaximumActualTime2" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>MaximumActualTime2</opc:BrowseName>
+    <opc:Description>Retrieve the maximum value with the actual timestamp including the Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Range2" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Range2</opc:BrowseName>
+    <opc:Description>Retrieve the difference between the Minimum2 and Maximum2 value over the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_AnnotationCount" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>AnnotationCount</opc:BrowseName>
+    <opc:Description>Retrieve the number of Annotations in the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Count" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Count</opc:BrowseName>
+    <opc:Description>Retrieve the number of raw values over the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_DurationInStateZero" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>DurationInStateZero</opc:BrowseName>
+    <opc:Description>Retrieve the time a Boolean or numeric was in a zero state using Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_DurationInStateNonZero" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>DurationInStateNonZero</opc:BrowseName>
+    <opc:Description>Retrieve the time a Boolean or numeric was in a non-zero state using Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_NumberOfTransitions" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>NumberOfTransitions</opc:BrowseName>
+    <opc:Description>Retrieve the number of changes between zero and non-zero that a Boolean or Numeric value experienced in the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Start" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Start</opc:BrowseName>
+    <opc:Description>Retrieve the value at the beginning of the interval using Interpolated Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_End" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>End</opc:BrowseName>
+    <opc:Description>Retrieve the value at the end of the interval using Interpolated Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_Delta" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>Delta</opc:BrowseName>
+    <opc:Description>Retrieve the difference between the Start and End value in the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_StartBound" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>StartBound</opc:BrowseName>
+    <opc:Description>Retrieve the value at the beginning of the interval using Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_EndBound" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>EndBound</opc:BrowseName>
+    <opc:Description>Retrieve the value at the end of the interval using Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_DeltaBounds" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>DeltaBounds</opc:BrowseName>
+    <opc:Description>Retrieve the difference between the StartBound and EndBound value in the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_DurationGood" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>DurationGood</opc:BrowseName>
+    <opc:Description>Retrieve the total duration of time in the interval during which the data is good.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_DurationBad" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>DurationBad</opc:BrowseName>
+    <opc:Description>Retrieve the total duration of time in the interval during which the data is bad.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_PercentGood" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>PercentGood</opc:BrowseName>
+    <opc:Description>Retrieve the percent of data (0 to 100) in the interval which has a good StatusCode.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_PercentBad" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>PercentBad</opc:BrowseName>
+    <opc:Description>Retrieve the percent of data (0 to 100) in the interval which has a bad StatusCode.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_WorstQuality" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>WorstQuality</opc:BrowseName>
+    <opc:Description>Retrieve the worst StatusCode of data in the interval.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_WorstQuality2" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>WorstQuality2</opc:BrowseName>
+    <opc:Description>Retrieve the worst StatusCode of data in the interval including the Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_StandardDeviationSample" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>StandardDeviationSample</opc:BrowseName>
+    <opc:Description>Retrieve the standard deviation for the interval for a sample of the population (n-1).</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_StandardDeviationPopulation" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>StandardDeviationPopulation</opc:BrowseName>
+    <opc:Description>Retrieve the standard deviation for the interval for a complete population (n) which includes Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_VarianceSample" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>VarianceSample</opc:BrowseName>
+    <opc:Description>Retrieve the variance for the interval as calculated by the StandardDeviationSample.</opc:Description>
+  </opc:Object>
+
+  <opc:Object SymbolicName="AggregateFunction_VariancePopulation" TypeDefinition="AggregateFunctionType" ModellingRule="None" PartNo="13">
+    <opc:BrowseName>VariancePopulation</opc:BrowseName>
+    <opc:Description>Retrieve the variance for the interval as calculated by the StandardDeviationPopulation which includes Simple Bounding Values.</opc:Description>
+  </opc:Object>
+
+  <!-- Sample Code -->
+  <opc:ObjectType SymbolicName="LockType" PartNo="999">
+    <opc:Children>
+      <opc:Method SymbolicName="Lock" ModellingRule="Mandatory" />
+      <opc:Method SymbolicName="Unlock" ModellingRule="Mandatory" />
+    </opc:Children>
+  </opc:ObjectType>
+
+  <opc:Object SymbolicName="ServerLock" TypeDefinition="LockType" PartNo="999" />
+
+</opc:ModelDesign>

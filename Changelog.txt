@@ -1,3 +1,12 @@
+1.03.340
+New (Github #32): Converted toa maven project 
+New (Github #28): Codegen classes to 1.03 spec
+Fixed (Github #39): StackUtils Executors fields changed to private
+Fixed (Github #36): Possible overflow when checking lenghts in BinaryDecoder
+Fixed (Github #30): StackUtils.shutdown clears all resources
+Fixed (Github #35): ExpandedNodeId.isNullNodeId should work also when the standard namespace URI is used instead of namespace index
+Note (Github #27 and #26): No changes needed for Union and Optional Structure Fields, because it is purely serializer implementation and out of scope for the stack, because the standard model does not define such types.
+
 1.02.337.8
 New: XMLFactoryCache, caches XML parsing related factories
 Fixed (Github #1): DateTime.parseDateTime typo fixed

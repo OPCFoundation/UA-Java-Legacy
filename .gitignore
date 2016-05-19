@@ -1,18 +1,13 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-# folders
-bin/
 build/
-javadoc/
-test-output/
 tmp/
+javadoc/
+bin/
+/test-output
+/target/
+
+/TestCA_https.der
+/TestCA.der
+/TestCert_https.der
+/TestCert.der
+/TestKey_https.pem
+/TestKey.pem

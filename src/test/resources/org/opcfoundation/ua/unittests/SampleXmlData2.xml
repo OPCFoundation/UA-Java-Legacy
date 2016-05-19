@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Recipe xmlns="http://cookiemaker.com/recipies/">
+
+	<Title>Original Chocolate Chip Cookies</Title>
+	
+	<Background>
+		<Author>Mike Mueller</Author>
+	</Background>
+	
+	<RecipeKeywords>
+		<Keyword>cookies</Keyword>
+		<Keyword>snacks</Keyword>
+		<Keyword>chocolate</Keyword>
+	</RecipeKeywords>
+	
+	<RecipeInfo>
+		<Difficulty>Easy</Difficulty>
+		<PreparationTime>10 minutes </PreparationTime>
+		<CookTime>11 minutes</CookTime>
+		<Yield>5 dozen cookies or about 4 dozen bars</Yield>
+	</RecipeInfo>
+	
+	<NutritionalInfo>
+		<Calories Quantity="108" />
+		<Fat Unit="g" Quantity="6"/>
+		<Protein Quantity="1" Unit="g"/>
+		<Carbohydrates Quantity="13" Unit="g"/>
+		<Cholesterol Quantity="15" Unit="mg"/>
+		<Sodium Quantity="94" Unit="mg"/>
+		<Fiber Quantity="0" Unit="g"/>
+	</NutritionalInfo>
+	
+	<Comments> Mom recommends increasing the cooking time to 20 minutes or until the cookies resemble igneous rocks.</Comments>
+	
+	<Ingredients>
+		<Item Quantity="1" Unit="c">butter</Item>
+		<Item Quantity=".75" Unit="c">brown sugar</Item>
+		<Item Quantity=".75" Unit="c"> granulated sugar</Item>
+		<Item Quantity="1" Unit="tsp"> vanilla</Item>
+		<Item Quantity="2.25" Unit="c"> all-purpose flour</Item>
+		<Item Quantity="1" Unit="tsp">baking soda</Item>
+		<Item Quantity="1" Unit="tsp">salt</Item>
+		<Item Quantity="2">eggs</Item>
+		<Item Quantity="1" Unit="c">chopped nuts</Item>
+		<Item Quantity="12" Unit="oz">Semi-Sweet Chocolate Morsels</Item>
+	</Ingredients>
+	
+	<Directions>
+		<Step>Preheat oven to 375 degrees. </Step>
+		<Step>Combine flour, baking soda and salt in a small bowl.</Step>
+		<Step>Beat butter, granulated sugar, brown sugar, and vanilla extract in a large mixing bowl.</Step>
+		<Step>Add eggs one at a time, beating well after each addition.</Step>
+		<Step>Gradually beat in the flour mixture. </Step>
+		<Step>Stir in morsels and nuts. </Step>
+		<Step>Drop by rounded tablespoon onto ungreased baking sheets.</Step>
+		<Step>Bake for 9 to 11 minutes or until golden brown. </Step>
+		<Step>Let stand for two minutes; remove to wire racks to cool completely. </Step>
+	</Directions>
+	
+	<Rating>5</Rating>
+	
+	<Attachments>
+		<Picture Name="Cookies" Source="ChocolateChipCookies.jpg" />
+	</Attachments>
+	
+</Recipe>

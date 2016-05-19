@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Recipe xmlns="http://somenamespace.com/recipies/">
+	<Title>
+	    Different Title
+	</Title>
+	<Background>
+		<Author>
+		    Alokas N N
+		</Author>
+	</Background>
+	<RecipeKeywords>
+		<Keyword>chocolate</Keyword>
+	</RecipeKeywords>
+	<RecipeInfo>
+		<Difficulty>Easy</Difficulty>
+		<PreparationTime>10 minutes </PreparationTime>
+		<CookTime>11 minutes</CookTime>
+		<Yield>5 dozen cookies or about 4 dozen bars</Yield>
+	</RecipeInfo>
+	<NutritionalInfo>
+		<Calories Quantity="108" />
+		<Fat Quantity="6" Unit="g"/>
+		<Protein Quantity="1" Unit="g"/>
+		<Carbohydrates Quantity="13" Unit="g"/>
+		<Cholesterol Quantity="15" Unit="mg"/>
+		<Sodium Quantity="94" Unit="mg"/>
+		<Fiber Quantity="0" Unit="g"/>
+	</NutritionalInfo>
+	<Comments> Mom recommends increasing the cooking time to 20 minutes or until the cookies resemble igneous rocks.</Comments>
+</Recipe>

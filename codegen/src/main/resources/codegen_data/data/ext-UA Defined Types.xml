@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModelDesign xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" TargetNamespace="http://opcfoundation.org/UA/" TargetXmlNamespace="http://opcfoundation.org/UA/" tns:ns="http://opcfoundation.org/UA/" uax:ns="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:tns="http://opcfoundation.org/UA/" xmlns="http://opcfoundation.org/UA/ModelDesign.xsd">
+  <Namespaces>
+    <Namespace Name="OpcUa" Prefix="Opc.Ua" XmlNamespace="http://opcfoundation.org/UA/2008/02/Types.xsd">http://opcfoundation.org/UA/</Namespace>
+  </Namespaces>
+  <DataType SymbolicName="tns:AccessLevel" SymbolicId="tns:AccessLevel" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+    <Fields>
+      <Field Name="CurrentRead" Identifier="1" />
+      <Field Name="CurrentWrite" Identifier="2" />
+      <Field Name="HistoryRead" Identifier="4" />
+      <Field Name="HistoryWrite" Identifier="8" />
+      <Field Name="SemanticChange" Identifier="16" />
+    </Fields>
+  </DataType>
+</ModelDesign>
