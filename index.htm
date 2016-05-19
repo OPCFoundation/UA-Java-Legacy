@@ -49,7 +49,7 @@
             </div>
             <div class="col-md-6">
                 <h3>
-                    UA Java is an <a href="https://opcfoundation.org/about/what-is-opc/">OPC UA</a> stack and a number of sample applications.<br/>Developed in Java using the Eclipse IDE.
+                    UA Java is an <a href="https://opcfoundation.org/about/what-is-opc/">OPC UA</a> stack and a number of sample applications.
                 </h3>
             </div>
         </div>
@@ -124,12 +124,12 @@
     <div class="row">
 		<div class="col-md-6">
 			<h3>Introduction</h3>
-			<p>The UA Java sample code consists of:</p>
+			<p>This UA-Java repo consists of:</p>
 			<ul>
 				<li><strong>Stack</strong>: low-level functions for delivering messages between UA Clients and Servers.</li>
 				<li><strong>Unit Tests</strong>: validation of the stack functions</li>
 				<li><strong>Sample Applications</strong>: demonstrating how to use the stack</li>
-				<li><strong>Readme Files</strong>: a number of short documents describing the source code, project, and dependencies etc.
+                <li><strong>Documentation</strong>: Instructions on building and using the stack</li>
 			</ul>
 		</div>
 
@@ -145,31 +145,30 @@
 		<div class="col-md-6">
 			<h4><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Getting Started</h4>
 			<p>Folow these steps to get started with the Java stack:<ul>
-				<li><strong>Install Dependencies</strong>: <a href="http://slf4j.org/" target="log4j">log4j</a>. More information in "Readme.txt".</li>
-				<li><strong>Import into Eclipse</strong>: <ol>
-					<li>Open Eclipse</li>
-					<li>Select File>Import>General>Existing Projects into Workspace</li>
-					<li>Select this project and check "Copy to your workspace"</li>
-					<li>Click Finish.</li>
-					<li>Source code overview of the project in "readme_source.txt"</li></ol>
-				<li><strong>Build within Eclipse</strong>: Check the build-path to ensure slf4j-api is available</li>
-				<li><strong>Build from Prompt</strong>: (make sure 'ant' and 'javac' are on the path)<ul>
-					<li>Linux/OSX with 'make': <code>make -f Makefile.examples.unix</code></li>
-					<li>Windows: <code>make -f Makefile.examples.win</code></li></ul></li>
-			</ul></p>
+                <li><strong>Install JDK 6</strong>: See README.md section 'Building the Stack' for more details</li>
+                <li><strong>Install Maven</strong> (or use maven integration provided by your favorite IDE) </li><ul>
+                    <li>Latest Maven releases require JDK 7+, so you need to install it too</li></ul>
+                <li><strong>Setup</strong> toolchains.xml for maven as described in the Readme.md</li>
+                <li><strong>Clone</strong> this repo</li>
+                <li><strong>Run</strong> <code>mvn clean package</code> from command line (or IDE equivalent)</li>
+
+			</p>
 		</div>
 
 		<div class="col-md-6">
 			<h4><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Launching Reference Implementations</h4>
-			<p>You can run the <strong>Samples</strong> which include:<ul>
+			<p>The folloing <strong>Samples</strong> are provided:<ul>
 				<li><cite>ServerExample1</cite>: basic server</li>
 				<li><cite>SampleClient</cite>: connects to a server, browses, and then reads a value</li>
 				<li><cite>ClientExample</cite>: basic tests for connecting to various servers</li>
 				<li><cite>NanoServer</cite>: sample server that is Nano Server [profile] compliant.</li>
-				<li><strong>Launch</strong>: Scripts exist to launch applications, e.g:<ul>
-					<li>Linux/OSX: <code><br/>./ServerExample1.sh<br/>./SampleClient.sh opc.tcp://localhost:8666/UAExample</code></li>
-					<li>Windows: <code><br/>ServerExample1.bat<br/>SampleClient.bat opc.tcp://localhost:8666/UAExample</code></li></ul></li>
-			</ul></p>
+                </ul>
+            </p>
+            <p>	The samples are provided as a separate maven project under 'examples' folder<ul>
+				<li>Import the examples maven project to your IDE</li>
+                <li>In most cases the IDEs are smart enough to link the examples and the main stack projects so you can start the examples right away from the IDE. If not you might need to <code>mvn install</code> the stack first</li>
+                </ul>
+			</p>
 		</div>
 
 
