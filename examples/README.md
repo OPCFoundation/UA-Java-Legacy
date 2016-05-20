@@ -12,6 +12,8 @@ List of samples:
 ## Using
 Import this Maven project to your IDE. Assuming your IDE can match the main stack project and this example one, you can start the samples within the IDE directly (works on eclipse). Assuming not or if you want to build the samples using maven, you need to first build the Stack and install/deploy it to your local/internal repository. 
 
+Alternatively to use from command line: ```mvn clean install``` the main project and then ```mvn clean package``` this project. Bat/sh scripts used for starting the samples are generated to 'target/assemblies/bin'.
+
 
 ## Certificates
 
