@@ -144,20 +144,19 @@
 		<div class="clearfix visible-md-block"></div>
 		<div class="col-md-6">
 			<h4><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Getting Started</h4>
-			<p>Folow these steps to get started with the Java stack:<ul>
-                <li><strong>Install JDK 6</strong>: See README.md section 'Building the Stack' for more details</li>
-                <li><strong>Install Maven</strong> (or use maven integration provided by your favorite IDE) </li><ul>
-                    <li>Latest Maven releases require JDK 7+, so you need to install it too</li></ul>
+			<p>Follow these steps to build the Java stack:<ul>
+                <li><strong>Install JDK 6</strong> Needed for compiling JRE 6 compatible version of the stack, see README.md section 'Building the Stack' for more details</li>
+                <li><strong>Install Maven</strong> (or use maven integration provided by your favorite IDE) </li>
                 <li><strong>Setup</strong> toolchains.xml for maven as described in the Readme.md</li>
                 <li><strong>Clone</strong> this repo</li>
                 <li><strong>Run</strong> <code>mvn clean package</code> from command line (or IDE equivalent)</li>
-
+            </ul>
 			</p>
 		</div>
 
 		<div class="col-md-6">
 			<h4><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Launching Reference Implementations</h4>
-			<p>The folloing <strong>Samples</strong> are provided:<ul>
+			<p>The following <strong>Samples</strong> are provided:<ul>
 				<li><cite>ServerExample1</cite>: basic server</li>
 				<li><cite>SampleClient</cite>: connects to a server, browses, and then reads a value</li>
 				<li><cite>ClientExample</cite>: basic tests for connecting to various servers</li>
@@ -166,7 +165,12 @@
             </p>
             <p>	The samples are provided as a separate maven project under 'examples' folder<ul>
 				<li>Import the examples maven project to your IDE</li>
-                <li>In most cases the IDEs are smart enough to link the examples and the main stack projects so you can start the examples right away from the IDE. If not you might need to <code>mvn install</code> the stack first</li>
+                <li>In most cases the IDEs are smart enough to link the examples and the main stack projects so you can start the examples right away from the IDE. If not you might need to <code>mvn install</code> the stack first</li></ul>
+            </p>
+            <p>In case you want to start the samples from the command line:<ul>
+                    <li>First install the stack jar to your local repo, run <code>mvn install</code> in the project root</li>
+                    <li>Compile and package the samples, run <code>mvn package</code> in the examples folder</li>
+                    <li>Bat/sh scripts used for starting the samples are generated to examples/target/assemblies/bin</li>
                 </ul>
 			</p>
 		</div>
