@@ -13,3 +13,9 @@
 /ServerExample1_https.pem
 /ServerExample1.der
 /ServerExample1.pem
+/Cert.der
+/Cert.pem
+/ClientServerExample_https.der
+/ClientServerExample_https.pem
+/ClientServerExample.der
+/ClientServerExample.pem
