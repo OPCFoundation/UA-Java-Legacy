@@ -15,12 +15,12 @@ You must agree to the contributor license agreement before we can accept your ch
 
 OPC UA, empowering the Industrial Internet of Things (IIOT) and Industrie 4.0.
 
-## Runtime Dependencies Requirements
+## Runtime Dependencies
 The Stack requires Java SE 6 or later to run (for building requirements, see under 'Building the Stack').
 
-See pom.xml for details about jar versions.
+See pom.xml for details about dependency jar versions.
 
-For using the build stack jar you need
+The following dependencies are mandatory
 * org.slf4j, SLF4J logging facade
 
 Additionally the following dependencies are optional
@@ -36,9 +36,12 @@ Bouncy Castle and Spongy Castle use the Bouncy Castle License.
 ## Building the Stack
 As of 1.03 the project is a maven project. Note that these instrucrtions are for building the stack so that it works in Java 6.
 
-You need a Java 6 JDK that has the sunjce_provider, e.g. Oracle or OpenJDK (because of optional support for the sun jce crypto provider). In addition, because newest maven versions require at least Java 7, you need to also install it, or later.
+#### JDK requirements ####
+You need a Java 6 JDK that has the sunjce_provider, e.g. Oracle or OpenJDK (because of optional support for the sun jce crypto provider). In addition, because newest maven versions require at least Java 7, you need to also install it (or later) too.
 
-Because newest maven versions do need at least Java 7, you need to setup a toolchain (the project uses the maven-toolchains-plugin which expect the following to be configured). Do this by creating a file 'toolchains.xml' in your .m2 folder (which exists in your home folder) with the following contents:
+The reason for requiring a version 6 of the JDK is that, while some newer versions of JDK have support for compiling to older versios of Java it is not enough to just define the ```source``` and the ```target``` arguments to ```1.6```. In addition a ```bootstrapclasspath``` argument needs to be defined (and pointed to a Java 6 installation) in order to use correct versions of the standard java libraries. Another option is using the older JDK version to compile by using maven-toolchains-plugin, which this project uses. It should also make this more future proof in case future JDK versions drop support for target 1.6, with JDK 9 being the last to support it (see https://bugs.openjdk.java.net/browse/JDK-8028563)
+
+Maven needs to know where your JDK 6 installation is. To setup this create a file 'toolchains.xml' in your .m2 folder (which exists in your home folder) with the following contents:
 ```xml
 <toolchains>
   <toolchain>
@@ -53,10 +56,13 @@ Because newest maven versions do need at least Java 7, you need to setup a toolc
   </toolchain>
 </toolchains>
 ```
+If you have no need to have a Java 6 supported build artifact, then you can remove the maven-toolchains-plugin from the pom.xml before building the project.
+
+#### Compiling ####
 
 * Import the project in your favorite IDE
  * e.g. in Eclipse Import->Existing Maven
-* Execute the 'package' goal.
+* Execute the 'package' phase.
 
 Alternatively assuming you have Maven installed and in PATH, you can build from the command line:
 ```
