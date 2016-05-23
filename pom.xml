@@ -140,29 +140,6 @@
   			</executions>
       </plugin>
       <!-- This plugin ensures we are actually building on JDK 6 -->
-      <!-- You need to create toolchains.xml in your .m2 folder -->
-      <plugin>
-      	<groupId>org.apache.maven.plugins</groupId>
-      	<artifactId>maven-toolchains-plugin</artifactId>
-      	<version>1.1</version>
-      	<executions>
-      		<execution>
-      		<id>check-toolchain</id>
-      		<phase>validate</phase>
-            <goals>
-              <goal>toolchain</goal>
-            </goals>
-          </execution>
-      	</executions>
-      	<configuration>
-      		<toolchains>
-      			<jdk>
-      				<version>1.6</version>
-      				<vendor>sun</vendor>
-      			</jdk>
-      		</toolchains>
-      	</configuration>
-      </plugin>
     </plugins>
     <pluginManagement>
     	<plugins>
@@ -247,4 +224,49 @@
   		<scope>test</scope>
   	</dependency>
   </dependencies>
+
+	<profiles>
+		<profile>
+			<id>jdk6</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<systemPropertyVariables>
+								<useJdk6Toolchain>true</useJdk6Toolchain>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+					<!-- This plugin ensures we are actually building on JDK 6 -->
+					<!-- You need to create toolchains.xml in your .m2 folder -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-toolchains-plugin</artifactId>
+						<version>1.1</version>
+						<executions>
+							<execution>
+								<id>check-toolchain</id>
+								<phase>validate</phase>
+								<goals>
+									<goal>toolchain</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<toolchains>
+								<jdk>
+									<version>1.6</version>
+									<vendor>sun</vendor>
+								</jdk>
+							</toolchains>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

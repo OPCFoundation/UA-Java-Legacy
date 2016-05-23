@@ -56,7 +56,7 @@ Maven needs to know where your JDK 6 installation is. To setup this create a fil
   </toolchain>
 </toolchains>
 ```
-If you have no need to have a Java 6 supported build artifact, then you can remove the maven-toolchains-plugin from the pom.xml before building the project.
+If you have no need to have a Java 6 supported build artifact, then you can run the build with the `jdk6` profile disabled.
 
 #### Compiling ####
 
