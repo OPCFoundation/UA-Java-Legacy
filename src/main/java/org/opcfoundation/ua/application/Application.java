@@ -43,8 +43,8 @@ import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.StackUtils;
 
 /**
- * This class contains the mechanisms that are commong for both client and server
- * application.
+ * This class contains the mechanisms that are common for both client and server
+ * applications.
  * 
  * @see Client OPC UA Client Application
  * @see Server OPC UA Server Application
