@@ -28,7 +28,7 @@
  * ======================================================================*/
 
  
-package org.opcfoundation.ua.examples;
+package samples.com.microsoft.azure.iothub;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,11 +60,6 @@ import org.opcfoundation.ua.core.ReadValueId;
 import org.opcfoundation.ua.core.TestStackRequest;
 import org.opcfoundation.ua.core.TestStackResponse;
 import org.opcfoundation.ua.core.TimestampsToReturn;
-import org.opcfoundation.ua.examples.SendReceive.Counter;
-import org.opcfoundation.ua.examples.SendReceive.EventCallback;
-import org.opcfoundation.ua.examples.SendReceive.MessageCallback;
-import org.opcfoundation.ua.examples.SendReceive.MessageCallbackMqtt;
-import org.opcfoundation.ua.examples.certs.ExampleKeys;
 import org.opcfoundation.ua.transport.ServiceChannel;
 import org.opcfoundation.ua.transport.security.Cert;
 import org.opcfoundation.ua.transport.security.KeyPair;
@@ -72,18 +67,9 @@ import org.opcfoundation.ua.transport.security.PrivKey;
 import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.opcfoundation.ua.utils.CertificateUtils;
 
-import com.sun.jna.Pointer;
-
 import static org.opcfoundation.ua.utils.EndpointUtil.*;
 
-import javawrapper.DeviceClient;
-import javawrapper.DeviceClient.IotHubClientProtocol;
-import javawrapper.IotHubMessageResult;
-import javawrapper.IotHubStatusCode;
-import javawrapper.Iothub_client_wrapperLibrary.IOTHUB_MESSAGE_HANDLE;
-import javawrapper.Iothub_client_wrapperLibrary.IotHubEventCallback;
-import javawrapper.Iothub_client_wrapperLibrary.IotHubMessageCallback;
-import javawrapper.Message;
+import com.microsoft.azure.iothub.*;
 
 
 /**
@@ -94,70 +80,90 @@ import javawrapper.Message;
  *
  * This sample requires Azure IotHub to publish data.
  *
- * In order to run this sample a Azure IoT javawrapper Java library is 
- * necessary. The library can be obtained and be built from the following
- * Github project: http://www.github.com/Azure/azure-iot-sdks/javawrapper
+ * Please follow instructions of the following 
+ * Github project: http://www.github.com/Azure/azure-iot-sdks/java
+ * to obtain a connection string for this sample.
  *
  * ======================================================================*/
 
- * 
- */
-public class OPCClient2IotHub {
 
-		private static final String PRIVKEY_PASSWORD = "Opc.Ua";
+public class ClientPublisher {
 
-		/**
-		 * Load file certificate and private key from applicationName.der & .pfx - or create ones if they do not exist
-		 * @return the KeyPair composed of the certificate and private key
-		 * @throws ServiceResultException
-		 */
-		private static KeyPair getOPCCert(String applicationName)
-		throws ServiceResultException
-		{
-			File certFile = new File(applicationName + ".der");
-			File privKeyFile =  new File(applicationName+ ".pem");
-			try {
-				Cert myServerCertificate = Cert.load( certFile );
-				PrivKey myServerPrivateKey = PrivKey.load(privKeyFile, PRIVKEY_PASSWORD);
-				return new KeyPair(myServerCertificate, myServerPrivateKey); 
-			} catch (CertificateException e) {
-				throw new ServiceResultException( e );
-			} catch (IOException e) {		
-				try {
-					String hostName = InetAddress.getLocalHost().getHostName();
-					String applicationUri = "urn:"+hostName+":"+applicationName;
-					KeyPair keys = CertificateUtils.createApplicationInstanceCertificate(applicationName, null, applicationUri, 3650, hostName);
-					keys.getCertificate().save(certFile);
-					PrivKey privKeySecure = keys.getPrivateKey();
-					privKeySecure.save(privKeyFile, PRIVKEY_PASSWORD);
-					return keys;
-				} catch (Exception e1) {
-					throw new ServiceResultException( e1 );
-				}
-			} catch (NoSuchAlgorithmException e) {
-				throw new ServiceResultException( e );
-			} catch (Exception e) {
-				throw new ServiceResultException( e );
-			}
-		}	
-	
-	/** 
-	 * IotHub message callback function 
-	 */
-	protected static class MessageCallback
-		implements IotHubMessageCallback
+	/** Used as a counter in the message callback. */
+	protected static class Counter
 	{
-			
-		public int execute(IOTHUB_MESSAGE_HANDLE msg,
-				Pointer context)
+		protected int num;
+
+		public Counter(int num)
 		{
-			Counter counter = new Counter(context);
-			
-			Message message = new Message();
+			this.num = num;
+		}
+
+		public int get()
+		{
+			return this.num;
+		}
+
+		public void increment()
+		{
+			this.num++;
+		}
+
+		@Override
+		public String toString()
+		{
+			return Integer.toString(this.num);
+		}
+	}
+
+	private static final String PRIVKEY_PASSWORD = "Opc.Ua";
+
+	/**
+		* Load file certificate and private key from applicationName.der & .pfx - or create ones if they do not exist
+		* @return the KeyPair composed of the certificate and private key
+		* @throws ServiceResultException
+		*/
+	private static KeyPair getOPCCert(String applicationName)
+	throws ServiceResultException
+	{
+		File certFile = new File(applicationName + ".der");
+		File privKeyFile =  new File(applicationName+ ".pem");
+		try {
+			Cert myServerCertificate = Cert.load( certFile );
+			PrivKey myServerPrivateKey = PrivKey.load(privKeyFile, PRIVKEY_PASSWORD);
+			return new KeyPair(myServerCertificate, myServerPrivateKey); 
+		} catch (CertificateException e) {
+			throw new ServiceResultException( e );
+		} catch (IOException e) {		
+			try {
+				String hostName = InetAddress.getLocalHost().getHostName();
+				String applicationUri = "urn:"+hostName+":"+applicationName;
+				KeyPair keys = CertificateUtils.createApplicationInstanceCertificate(applicationName, null, applicationUri, 3650, hostName);
+				keys.getCertificate().save(certFile);
+				PrivKey privKeySecure = keys.getPrivateKey();
+				privKeySecure.save(privKeyFile, PRIVKEY_PASSWORD);
+				return keys;
+			} catch (Exception e1) {
+				throw new ServiceResultException( e1 );
+			}
+		} catch (NoSuchAlgorithmException e) {
+			throw new ServiceResultException( e );
+		} catch (Exception e) {
+			throw new ServiceResultException( e );
+		}
+	}	
+
+	protected static class MessageCallback
+			implements com.microsoft.azure.iothub.MessageCallback
+	{
+		public IotHubMessageResult execute(Message msg,
+				Object context)
+		{
+			Counter counter = (Counter) context;
 			System.out.println(
 					"Received message " + counter.toString()
-					+ " with content: " + message.getString());
-		
+							+ " with content: " + new String(msg.getBytes(), Message.DEFAULT_IOTHUB_MESSAGE_CHARSET));
+
 			int switchVal = counter.get() % 3;
 			IotHubMessageResult res;
 			switch (switchVal)
@@ -176,44 +182,39 @@ public class OPCClient2IotHub {
 					throw new IllegalStateException(
 							"Invalid message result specified.");
 			}
-		
+
 			System.out.println(
 					"Responding to message " + counter.toString()
-					   + " with " + res.name());
-		
-			counter.increment();;
-			counter.write();
-			
-			return res.ordinal();
+							+ " with " + res.name());
+
+			counter.increment();
+
+			return res;
 		}
 	}
 	
 	// Our MQTT doesn't support abandon/reject, so we will only display the messaged received
 	// from IoTHub and return COMPLETE
-	protected static class MessageCallbackMqtt implements IotHubMessageCallback
+	protected static class MessageCallbackMqtt implements com.microsoft.azure.iothub.MessageCallback
 	{
-		public int execute(IOTHUB_MESSAGE_HANDLE msg, Pointer context)
+		public IotHubMessageResult execute(Message msg, Object context)
 		{
-			Counter counter = new Counter(context);
-			
-			Message message = new Message();
+			Counter counter = (Counter) context;
 			System.out.println(
 					"Received message " + counter.toString()
-					+ " with content: " + message.getString());
-		
-			counter.increment();;
-		
-			return IotHubMessageResult.COMPLETE.ordinal();
+							+ " with content: " + new String(msg.getBytes(), Message.DEFAULT_IOTHUB_MESSAGE_CHARSET));
+
+			counter.increment();
+
+			return IotHubMessageResult.COMPLETE;
 		}
 	}
-	
+
 	protected static class EventCallback implements IotHubEventCallback{
-		public void execute(int status, Pointer context){
-			Integer i = (int) Pointer.nativeValue(context);  
-			IotHubStatusCode status1 = IotHubStatusCode.values()[status];
-			
+		public void execute(IotHubStatusCode status, Object context){
+			Integer i = (Integer) context;
 			System.out.println("IoT Hub responded to message "+i.toString()
-				+ " with status " + status1.name());
+				+ " with status " + status.name());
 		}
 	}
 
@@ -223,12 +224,12 @@ public class OPCClient2IotHub {
 			"Argument error.\n"
 			+ " Call: ClientPublisher \n"
 			+ "[OPC Server string] - OPC server,e.g. [opc.tcp://server:51210/UA/SampleServer]\n"
-			+ "[Device connection string] - Connection String to Azure IoTHub, [HostName=<iothub_host_name>;DeviceId=<device_id>;SharedAccessKey=<device_key>]\n"
-			+ "[Protocol] - (https | amqps | mqtt).\n");
+			+ "[Device connection string] - String containing Hostname, Device Id & Device Key in the following format: HostName=<iothub_host_name>;DeviceId=<device_id>;SharedAccessKey=<device_key>\n"
+			+ "[Protocol] - (https | amqps | mqtt | amqps_ws).\n");
 		System.exit(1);
 	}
 	
-public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
 		
 		System.out.println("Starting ClientPublisher sample");
 
@@ -256,10 +257,13 @@ public static void main(String[] args) throws Exception {
 			{
 				protocol = IotHubClientProtocol.MQTT;
 			}
+			else if (protocolStr.equals("amqps_ws"))
+			{
+				protocol = IotHubClientProtocol.AMQPS_WS;
+			}
 			else
 			{
 				System.out.format("Protocol: %s not found, using AMQPS instead\n", protocolStr);
-				printHelp();
 			}
 		}
 		 
@@ -269,7 +273,7 @@ public static void main(String[] args) throws Exception {
 
 		//////////////  CLIENT  //////////////
 		// Load Client's Application Instance Certificate from file
-		KeyPair myClientApplicationInstanceCertificate = getOPCCert("OPC.Client.2.IoTHub");
+		KeyPair myClientApplicationInstanceCertificate = getOPCCert("ClientPublisher");
 		// Create Client
 		Client myClient = Client.createClientApplication( myClientApplicationInstanceCertificate );
 
@@ -317,27 +321,39 @@ public static void main(String[] args) throws Exception {
 
 		////////////////////// AZURE IotHub ////////////////////////////
 		// connect to Azure IotHub with connection string and protocol
-		// see http://www.github.com/Azure/azure-iot-sdks/javawrapper
+		// see http://www.github.com/Azure/azure-iot-sdks/java
 		//         
 		DeviceClient client = new DeviceClient(connString, protocol);
 		
+		System.out.println("Successfully created an IoT Hub client.");
+
 		if (protocol == IotHubClientProtocol.MQTT)
 		{
 			MessageCallbackMqtt callback = new MessageCallbackMqtt();
 			Counter counter = new Counter(0);
-			client.setMessageCallback(callback, counter.getPointer());
+			client.setMessageCallback(callback, counter);
 		}
 		else
 		{
 			MessageCallback callback = new MessageCallback();
 			Counter counter = new Counter(0);
-			client.setMessageCallback(callback, counter.getPointer());
+			client.setMessageCallback(callback, counter);
 		}
-		
+		System.out.println("Successfully set message callback.");
+
+		client.open();
+
+		System.out.println("Opened connection to IoT Hub.");
+
+		System.out.println("Beginning to receive messages...");
+
+
 		////////////  SESSION  ////////////
 		// Create Session
 		SessionChannel mySession = myClient.createSessionChannel( endpoint );
 		mySession.activate();
+
+		System.out.println("Opened session to OPC Server.");
 		
 		/////////////  EXECUTE  //////////////		
 		// Browse Root
@@ -386,10 +402,10 @@ public static void main(String[] args) throws Exception {
 			{
 				Message msg = new Message(msgStr);
 				msg.setProperty("messageCount", Integer.toString(count));
+								msg.setExpiryTime(5000);
 				System.out.println(msgStr);
 				EventCallback eventCallback = new EventCallback();
-				Pointer ii = new Pointer(count);
-				client.sendEventAsync(msg, eventCallback, ii);
+				client.sendEventAsync(msg, eventCallback, count);
 			}
 			catch (Exception e)
 			{
@@ -413,7 +429,10 @@ public static void main(String[] args) throws Exception {
 		mySession.closeAsync();
 		//////////////////////////////////////	
 		
-		//////////////////////////////////////		
+		client.close();
+
+		//////////////////////////////////////	
 		System.exit(0);
 	}
+
 }
