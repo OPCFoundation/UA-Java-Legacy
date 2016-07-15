@@ -139,6 +139,9 @@ public class XmlDecoder implements IDecoder {
 
 	@Override
 	public <T> T get(String fieldName, Class<T> clazz) throws DecodingException {
+		if(beginFieldSafe(fieldName, true)) {
+			endField(fieldName);
+		}
 		return null;
 	}
 
