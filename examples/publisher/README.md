@@ -36,5 +36,5 @@ The Java sample application does not validate the certificates, so it accepts se
 
 ## Common Problems - OPC UA Java Stack
 
-Please refer to [examples](../examples/README.md).
+Please refer to [examples](../basic/README.md).
 
