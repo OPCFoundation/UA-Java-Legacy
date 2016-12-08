@@ -543,7 +543,7 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 			if (next > req.timeoutTime) {
 				next = req.timeoutTime;
 				result = req;
-				break;
+	//			break;
 			}
 		}
 		return result;
