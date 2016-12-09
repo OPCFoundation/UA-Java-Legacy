@@ -51,19 +51,28 @@ import org.opcfoundation.ua.utils.CryptoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>BcCryptoProvider class.</p>
+ *
+ */
 public class BcCryptoProvider implements CryptoProvider {
 
 	static Logger logger = LoggerFactory.getLogger(BcCryptoProvider.class);
 
+	/**
+	 * <p>Constructor for BcCryptoProvider.</p>
+	 */
 	public BcCryptoProvider() {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public byte[] base64Decode(String string) {
 		return Base64.decode(string);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String base64Encode(byte[] bytes) {
 		try {
@@ -73,6 +82,7 @@ public class BcCryptoProvider implements CryptoProvider {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Mac createMac(SecurityAlgorithm algorithm, byte[] secret)
 			throws ServiceResultException {
@@ -91,23 +101,7 @@ public class BcCryptoProvider implements CryptoProvider {
 		return hmac;
 	}
 
-	/*
-	 * @Override public void encryptAsymm(SecurityConfiguration profile, byte[]
-	 * dataToEncrypt, java.security.interfaces.RSAPublicKey
-	 * encryptingCertificate, byte[] output, int outputOffset) throws
-	 * ServiceResultException {
-	 * 
-	 * SecurityPolicy policy = profile.getSecurityPolicy(); SecurityAlgorithm
-	 * algorithm = policy.getAsymmetricEncryptionAlgorithm();
-	 * 
-	 * try { encryptAsymm(algorithm, dataToEncrypt,
-	 * getCertificate(encryptingCertificate), output, outputOffset); } catch
-	 * (CertificateEncodingException e) { throw new
-	 * ServiceResultException(StatusCodes.Bad_InternalError, e); }
-	 * 
-	 * }
-	 */
-
+	/** {@inheritDoc} */
 	@Override
 	public int decryptAsymm(PrivateKey decryptingKey,
 			SecurityAlgorithm algorithm, byte[] dataToDecrypt, byte[] output,
@@ -146,32 +140,7 @@ public class BcCryptoProvider implements CryptoProvider {
 
 	}
 
-	/*
-	 * private RSAPublicKey getRSAPublicKey(Certificate cert) {
-	 * SubjectPublicKeyInfo subjectPublicKeyInfo = cert
-	 * .getSubjectPublicKeyInfo(); DERBitString publicKeyData =
-	 * subjectPublicKeyInfo.getPublicKeyData(); return
-	 * RSAPublicKey.getInstance(publicKeyData.getBytes()); }
-	 */
-
-	/*
-	 * @Override public int decryptAsymm(SecurityConfiguration profile, byte[]
-	 * dataToDecrypt, java.security.cert.Certificate decryptingCertificate,
-	 * byte[] output, int outputOffset) throws ServiceResultException {
-	 * 
-	 * java.security.interfaces.RSAPrivateCrtKey rsaPrivateKey =
-	 * (java.security.interfaces.RSAPrivateCrtKey) profile
-	 * .getLocalPrivateKey(); RSAPrivateKey privateKey = new RSAPrivateKey(
-	 * rsaPrivateKey.getModulus(), rsaPrivateKey.getPublicExponent(),
-	 * rsaPrivateKey.getPrivateExponent(), rsaPrivateKey.getPrimeP(),
-	 * rsaPrivateKey.getPrimeQ(), rsaPrivateKey.getPrimeExponentP(),
-	 * rsaPrivateKey.getPrimeExponentQ(), rsaPrivateKey.getCrtCoefficient());
-	 * return decryptAsymm(profile, dataToDecrypt, privateKey, output,
-	 * outputOffset);
-	 * 
-	 * }
-	 */
-
+	/** {@inheritDoc} */
 	@Override
 	public int decryptSymm(SecurityToken token, byte[] dataToDecrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
@@ -206,33 +175,8 @@ public class BcCryptoProvider implements CryptoProvider {
 
 	}
 
-	/*
-	 * public int decryptAsymm(SecurityConfiguration profile, byte[]
-	 * dataToDecrypt, RSAPrivateKey privateKey, byte[] output, int outputOffset)
-	 * throws ServiceResultException {
-	 * 
-	 * SecurityPolicy policy = profile.getSecurityPolicy(); SecurityAlgorithm
-	 * algorithm = policy.getAsymmetricEncryptionAlgorithm();
-	 * AsymmetricBlockCipher cipher = getAsymmetricCipher(algorithm,
-	 * privateKey);
-	 * 
-	 * try {
-	 * 
-	 * int len = 0; int inputBlockSize = cipher.getInputBlockSize(); int
-	 * outputBlockSize = cipher.getOutputBlockSize(); logger.info(
-	 * "Decrypt: inputBlockSize={}, outputBlockSize={}, dataToDecrypt.length={}"
-	 * , inputBlockSize, outputBlockSize, dataToDecrypt.length); for (int i = 0;
-	 * i < dataToDecrypt.length; i += inputBlockSize) { int size =
-	 * Math.min(dataToDecrypt.length - i, inputBlockSize); byte[] tmp =
-	 * cipher.processBlock(dataToDecrypt, i, size); System.arraycopy(tmp, 0,
-	 * output, outputOffset + len, tmp.length); len += tmp.length; } return len;
-	 * 
-	 * } catch (CryptoException e) { throw new
-	 * ServiceResultException(StatusCodes.Bad_InternalError, e); }
-	 * 
-	 * }
-	 */
 
+	/** {@inheritDoc} */
 	public void encryptAsymm(PublicKey encryptingCertificate,
 			SecurityAlgorithm algorithm, byte[] dataToEncrypt, byte[] output,
 			int outputOffset) throws ServiceResultException {
@@ -264,6 +208,7 @@ public class BcCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int encryptSymm(SecurityToken token, byte[] dataToEncrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
@@ -298,6 +243,7 @@ public class BcCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public byte[] signAsymm(PrivateKey senderPrivate,
 			SecurityAlgorithm algorithm, byte[] dataToSign)
@@ -331,6 +277,7 @@ public class BcCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void signSymm(SecurityToken token, byte[] input, int verifyLen,
 			byte[] output) throws ServiceResultException {
@@ -344,6 +291,7 @@ public class BcCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean verifyAsymm(PublicKey signingCertificate,
 			SecurityAlgorithm algorithm, byte[] dataToVerify, byte[] signature)
@@ -364,6 +312,7 @@ public class BcCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void verifySymm(SecurityToken token, byte[] dataToVerify,
 			byte[] signature) throws ServiceResultException {

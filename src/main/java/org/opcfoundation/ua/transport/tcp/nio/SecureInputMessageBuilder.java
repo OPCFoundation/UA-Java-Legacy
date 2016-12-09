@@ -42,8 +42,8 @@ import org.opcfoundation.ua.utils.bytebuffer.InputStreamReadable;
  * SecureInputMessageBuilder deciphers and decodes chunks into messages.
  * <p>
  * Message is decoded and chunks are deciphered and validated in background threads.
- * Deciphering is executed in StackUtils.getNonBlockerExecutor() which has one thread for each CPU core.  
- * Decoding is executed in StackUtils.getBlockerExecutor() which creates new threads as needed.  
+ * Deciphering is executed in StackUtils.getNonBlockerExecutor() which has one thread for each CPU core.
+ * Decoding is executed in StackUtils.getBlockerExecutor() which creates new threads as needed.
  */
 public class SecureInputMessageBuilder implements InputMessage {
 	
@@ -91,11 +91,12 @@ public class SecureInputMessageBuilder implements InputMessage {
 	
 	/**
 	 * Create message builder. Message builder compiles inbound chunks into a message.
-	 * 
-	 * @param token {@link SecurityToken} (symm) or {@link SecurityConfiguration} (asymm) 
-	 * @param listener
-	 * @param ctx
-	 * @param expectedSequenceNumber
+	 *
+	 * @param token {@link SecurityToken} (symm) or {@link SecurityConfiguration} (asymm)
+	 * @param listener a {@link org.opcfoundation.ua.transport.tcp.nio.SecureInputMessageBuilder.MessageListener} object.
+	 * @param ctx a {@link org.opcfoundation.ua.transport.tcp.impl.TcpConnectionParameters} object.
+	 * @param expectedSequenceNumber a {@link java.util.concurrent.atomic.AtomicInteger} object.
+	 * @param encoderCtx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
 	 */
 	public SecureInputMessageBuilder(Object token, MessageListener listener, TcpConnectionParameters ctx, EncoderContext encoderCtx, AtomicInteger expectedSequenceNumber)
 	{
@@ -153,6 +154,7 @@ public class SecureInputMessageBuilder implements InputMessage {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -162,6 +164,12 @@ public class SecureInputMessageBuilder implements InputMessage {
 		return sb.toString();
 	}
 
+	/**
+	 * <p>addChunk.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public synchronized void addChunk(final ByteBuffer chunk) throws ServiceResultException
 	{
 		if (!acceptsChunks) throw new ServiceResultException(StatusCodes.Bad_UnexpectedError, "Final chunk added to message builder");
@@ -248,10 +256,18 @@ public class SecureInputMessageBuilder implements InputMessage {
 			StackUtils.getBlockingWorkExecutor().execute(messageDecoderRun);		
 	}	
 	
+	/**
+	 * <p>fireComplete.</p>
+	 */
 	protected void fireComplete() {
 		if (listener!=null) listener.onMessageComplete(this);
 	}
 	
+	/**
+	 * <p>Setter for the field <code>error</code>.</p>
+	 *
+	 * @param e a {@link java.lang.Exception} object.
+	 */
 	protected void setError(Exception e)
 	{
 		synchronized (this) {
@@ -266,6 +282,11 @@ public class SecureInputMessageBuilder implements InputMessage {
 		fireComplete();
 	}	
 	
+	/**
+	 * <p>setMessage.</p>
+	 *
+	 * @param msg a {@link org.opcfoundation.ua.encoding.IEncodeable} object.
+	 */
 	protected void setMessage(IEncodeable msg)
 	{
 		synchronized (this) {
@@ -285,67 +306,124 @@ public class SecureInputMessageBuilder implements InputMessage {
 		this.requestId = requestId;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>requestId</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getRequestId() {
 		return requestId;
 	}
 	
+	/**
+	 * <p>isDone.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public synchronized boolean isDone() {
 		return done;
 	}
 	
+	/**
+	 * <p>moreChunksRequired.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public synchronized boolean moreChunksRequired() {
 		return acceptsChunks;
 	}
 	
+	/**
+	 * <p>close.</p>
+	 */
 	public void close() {
 		if (done) return;
 		done = true;
 		chunkSink.forceClose();
 	}
 	
+	/**
+	 * <p>getMessage.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.IEncodeable} object.
+	 */
 	public IEncodeable getMessage() {
 		return msg;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>error</code>.</p>
+	 *
+	 * @return a {@link java.lang.Exception} object.
+	 */
 	public Exception getError() {
 		return error;
 	}
 		
+	/**
+	 * <p>Getter for the field <code>messageType</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getMessageType() {
 		return messageType;
 	}
 	
+	/**
+	 * <p>getSecureChannelId.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSecureChannelId() {
 		return securityChannelId;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>securityPolicyUri</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSecurityPolicyUri() {
 		return securityPolicyUri;
 	}
 
+	/**
+	 * <p>Getter for the field <code>senderCertificate</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getSenderCertificate() {
 		return senderCertificate;
 	}
 
+	/**
+	 * <p>getReceiverCertificateThumbprint.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getReceiverCertificateThumbprint() {
 		return receiverCertificateThumbPrint;
 	}	
 	
 	/**
 	 * Return sequence number of each chunk
+	 *
 	 * @return list of sequnce numbers
 	 */
 	public List<Integer> getSequenceNumbers() {
 		return chunkSequenceNumbers;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getToken() {
 		return token;
 	}
 
 	/**
-	 * @return
+	 * <p>hasError.</p>
+	 *
+	 * @return a boolean.
 	 */
 	protected synchronized boolean hasError() {
 		return error!=null;

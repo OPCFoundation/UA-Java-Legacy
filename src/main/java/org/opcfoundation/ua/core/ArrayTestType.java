@@ -49,10 +49,11 @@ import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.builtintypes.XmlElement;
 import org.opcfoundation.ua.core.EnumeratedTestType;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ArrayTestType extends Object implements Structure, Cloneable {
+public class ArrayTestType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ArrayTestType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ArrayTestType_Encoding_DefaultBinary);
@@ -372,7 +373,7 @@ public class ArrayTestType extends Object implements Structure, Cloneable {
       */
     public ArrayTestType clone()
     {
-        ArrayTestType result = new ArrayTestType();
+        ArrayTestType result = (ArrayTestType) super.clone();
         result.Booleans = Booleans==null ? null : Booleans.clone();
         result.SBytes = SBytes==null ? null : SBytes.clone();
         result.Int16s = Int16s==null ? null : Int16s.clone();

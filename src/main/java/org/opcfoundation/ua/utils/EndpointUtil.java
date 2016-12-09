@@ -65,12 +65,20 @@ import org.opcfoundation.ua.utils.bytebuffer.ByteBufferUtils;
 
 /**
  * Discovery client enumerates endpoints.
- * Current version supports only opc.tcp protocol. 
+ * Current version supports only opc.tcp protocol.
  */
 public class EndpointUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(EndpointUtil.class);
 
+	/**
+	 * <p>select.</p>
+	 *
+	 * @param endpoints an array of {@link org.opcfoundation.ua.core.EndpointDescription} objects.
+	 * @param url a {@link java.lang.String} object.
+	 * @return a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public static EndpointDescription select(EndpointDescription[] endpoints, String url)
 	throws ServiceResultException
 	{
@@ -94,10 +102,10 @@ public class EndpointUtil {
 	/**
 	 * Select an endpoint that is supported by the stack and has
 	 * the highest security level.
-	 * 
-	 * @param endpoints
+	 *
+	 * @param endpoints an array of {@link org.opcfoundation.ua.core.EndpointDescription} objects.
 	 * @return encrypted endpoint
-	 * @throws ServiceResultException error
+	 * @throws org.opcfoundation.ua.common.ServiceResultException error
 	 */
 	public static EndpointDescription select(EndpointDescription[] endpoints)
 	throws ServiceResultException
@@ -129,13 +137,14 @@ public class EndpointUtil {
 	
 	/**
 	 * Filter endpoints by various criteria
-	 * 
-	 * @param searchSet set of endpoints 
+	 *
+	 * @param searchSet set of endpoints
 	 * @param url filter by url (inclusive, case insensitive) or null
 	 * @param protocol filter by protocol (inclusive) or null
 	 * @param mode filter by mode or null
 	 * @param policy filter by policy or null
 	 * @return filtered endpoints
+	 * @param serverCertificate an array of byte.
 	 */
 	public static EndpointDescription[] select(EndpointDescription[] searchSet, String url, String protocol, MessageSecurityMode mode, SecurityPolicy policy, byte[] serverCertificate)
 	{
@@ -153,6 +162,14 @@ public class EndpointUtil {
 		return result.toArray(new EndpointDescription[result.size()]);		
 	}
 
+	/**
+	 * <p>select.</p>
+	 *
+	 * @param searchSet an array of {@link org.opcfoundation.ua.core.EndpointDescription} objects.
+	 * @param minKeySize a int.
+	 * @param maxKeySize a int.
+	 * @return an array of {@link org.opcfoundation.ua.core.EndpointDescription} objects.
+	 */
 	public static EndpointDescription[] select(EndpointDescription[] searchSet, int minKeySize, int maxKeySize)
 	{
 		List<EndpointDescription> result = new ArrayList<EndpointDescription>();
@@ -171,10 +188,10 @@ public class EndpointUtil {
 	
 	/**
 	 * Selects all endpoints that conform to given protcol
-	 * 
-	 * @param searchSet
-	 * @param protocol
-	 * @return A subset of searchSet whose elements use given protocol 
+	 *
+	 * @param searchSet an array of {@link org.opcfoundation.ua.core.EndpointDescription} objects.
+	 * @param protocol a {@link java.lang.String} object.
+	 * @return A subset of searchSet whose elements use given protocol
 	 */
 	public static EndpointDescription[] selectByProtocol(EndpointDescription[] searchSet, String protocol)
 	{
@@ -187,9 +204,9 @@ public class EndpointUtil {
 
 	/**
 	 * Selects all endpoints that conform to given message security mode
-	 * 
-	 * @param searchSet
-	 * @param mode
+	 *
+	 * @param searchSet an array of {@link org.opcfoundation.ua.core.EndpointDescription} objects.
+	 * @param mode a {@link org.opcfoundation.ua.core.MessageSecurityMode} object.
 	 * @return A subset of searchSet whose elements use given message security mode
 	 */
 	public static EndpointDescription[] selectByMessageSecurityMode(EndpointDescription[] searchSet, MessageSecurityMode mode)
@@ -203,9 +220,9 @@ public class EndpointUtil {
 	
 	/**
 	 * Selects all endpoints that conform to given message security mode
-	 * 
-	 * @param searchSet
-	 * @param policy
+	 *
+	 * @param searchSet an array of {@link org.opcfoundation.ua.core.EndpointDescription} objects.
+	 * @param policy a {@link org.opcfoundation.ua.transport.security.SecurityPolicy} object.
 	 * @return A subset of searchSet whose elements use given message security mode
 	 */
 	public static EndpointDescription[] selectBySecurityPolicy(EndpointDescription[] searchSet, SecurityPolicy policy)
@@ -219,9 +236,9 @@ public class EndpointUtil {
 	
 	/**
 	 * Selects all endpoints with the given url. Compare is case-insensitive.
-	 * 
+	 *
 	 * @param searchSet an array of urls
-	 * @param url
+	 * @param url a {@link java.lang.String} object.
 	 * @return A subset of searchSet whose elements use given message security mode
 	 */
 	public static EndpointDescription[] selectByUrl(EndpointDescription[] searchSet, String url)
@@ -235,7 +252,7 @@ public class EndpointUtil {
 
 	/**
 	 * Sorts endpoints by their security level. The highest security level last.
-	 * 
+	 *
 	 * @param set set of endpoints
 	 * @return sorted array of endpoints
 	 */
@@ -255,12 +272,12 @@ public class EndpointUtil {
 	 * <p>
 	 * Selection uses the following precedence:
 	 *   1) Protocol must be opc.tcp (as http is not implemented)
-	 *   2) Security uses sign & encrypt
+	 *   2) Security uses sign and encrypt
 	 *   3) Select highest security level (determined by the server)
-	 *   4) Prefer hostname over localhost 
-	 * 
-	 * @param endpoints
-	 * @return compatible endpoint or null 
+	 *   4) Prefer hostname over localhost
+	 *
+	 * @param endpoints an array of {@link org.opcfoundation.ua.core.EndpointDescription} objects.
+	 * @return compatible endpoint or null
 	 */
 	public static EndpointDescription selectEndpoint(EndpointDescription[] endpoints)
 	{
@@ -280,7 +297,8 @@ public class EndpointUtil {
 	
 	/**
 	 * Reverse elements of an array
-	 * @param array
+	 *
+	 * @param array a {@link java.lang.Object} object.
 	 */
 	public static void reverse(Object array) {
 		int length = Array.getLength(array);
@@ -294,12 +312,13 @@ public class EndpointUtil {
 		
 	/**
 	 * Create user identity token based on username and password
-	 * 
-	 * @param ep
-	 * @param username
-	 * @param password
-	 * @return user identity token 
-	 * @throws ServiceResultException if endpoint or the stack doesn't support UserName token policy
+	 *
+	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 * @param username a {@link java.lang.String} object.
+	 * @param password a {@link java.lang.String} object.
+	 * @return user identity token
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support UserName token policy
+	 * @param senderNonce an array of byte.
 	 */
 	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, byte[] senderNonce, String username, String password)	
 	throws ServiceResultException
@@ -361,12 +380,12 @@ public class EndpointUtil {
 
 	/**
 	 * Create user identity token based on an issued token
-	 * 
-	 * @param ep
-	 * @param senderNonce
-	 * @param issuedIdentityToken
-	 * @return user identity token 
-	 * @throws ServiceResultException if endpoint or the stack doesn't support UserName token policy
+	 *
+	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 * @param senderNonce an array of byte.
+	 * @param issuedIdentityToken an array of byte.
+	 * @return user identity token
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support UserName token policy
 	 */
 	public static UserIdentityToken createIssuedIdentityToken(EndpointDescription ep, byte[] senderNonce, byte[] issuedIdentityToken)	
 	throws ServiceResultException
@@ -414,9 +433,9 @@ public class EndpointUtil {
 
 	/**
 	 * Get all Internet addresses of this computer. Excludes IPv6 addresses.
-	 * 
+	 *
 	 * @return all Internet addresses of this computer.
-	 * @throws SocketException
+	 * @throws java.net.SocketException if any.
 	 */
 	public static Set<InetAddress> getInetAddresses() throws SocketException {
 		return getInetAddresses(false); 
@@ -424,11 +443,10 @@ public class EndpointUtil {
 
 	/**
 	 * Get all Internet addresses of this computer.
-	 * 
+	 *
 	 * @param enableIPv6 Set true to enable IPv6 addressing. Requires Java 7 or later on Windows platforms.
-	 * 
 	 * @return all Internet addresses of this computer
-	 * @throws SocketException
+	 * @throws java.net.SocketException if any.
 	 */
 	public static Set<InetAddress> getInetAddresses(boolean enableIPv6) 
 	throws SocketException
@@ -449,8 +467,9 @@ public class EndpointUtil {
 	
 	/**
 	 * Figure out some random hostname for this computer
-	 * @return
-	 * @throws SocketException 
+	 *
+	 * @throws java.net.SocketException if any.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getHostname() throws SocketException {
 		try {
@@ -471,9 +490,9 @@ public class EndpointUtil {
 	
 	/**
 	 * Get all internet address names of this computer.
-	 * 
+	 *
 	 * @return all internet address names of this computer in URL compatible format
-	 * @throws SocketException
+	 * @throws java.net.SocketException if any.
 	 */
 	public static Set<String> getInetAddressNames() 
 	throws SocketException
@@ -494,6 +513,12 @@ public class EndpointUtil {
 		return result;
 	}
 	
+	/**
+	 * <p>inetAddressToName.</p>
+	 *
+	 * @param addr a {@link java.net.InetAddress} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String inetAddressToName( InetAddress addr ) {
 		String hostname = addr.getHostName();
 		String hostaddr = addr.getHostAddress();				
@@ -508,10 +533,10 @@ public class EndpointUtil {
 
 	/**
 	 * Convert endpoint url to socket addresses.
-	 * 
-	 * @param endpointUrl
+	 *
+	 * @param endpointUrl a {@link java.lang.String} object.
 	 * @return a collection of bind addresses
-	 * @throws IllegalArgumentException endpointUrl is problematic some way
+	 * @throws java.lang.IllegalArgumentException endpointUrl is problematic some way
 	 */
 	public static List<SocketAddress> toSocketAddresses(String endpointUrl) 
 	throws IllegalArgumentException {
@@ -519,11 +544,11 @@ public class EndpointUtil {
 	}
 	/**
 	 * Convert endpoint url to socket addresses.
-	 * 
-	 * @param endpointUrl
+	 *
+	 * @param endpointUrl a {@link java.lang.String} object.
 	 * @param enableIPv6 Set true to enable IPv6 addressing. Requires Java 7 or later on Windows platforms.
 	 * @return a collection of bind addresses
-	 * @throws IllegalArgumentException endpointUrl is problematic some way
+	 * @throws java.lang.IllegalArgumentException endpointUrl is problematic some way
 	 */
 	public static List<SocketAddress> toSocketAddresses(String endpointUrl, boolean enableIPv6) 
 	throws IllegalArgumentException
@@ -606,10 +631,11 @@ public class EndpointUtil {
 
 	
 	/**
-	 * Create anonymous user identity token 
-	 * @param ep
-	 * @return user identity token 
-	 * @throws ServiceResultException if endpoint or the stack doesn't support Anonymous token policy
+	 * Create anonymous user identity token
+	 *
+	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 * @return user identity token
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support Anonymous token policy
 	 */
 	public static UserIdentityToken createAnonymousIdentityToken(EndpointDescription ep)	
 	throws ServiceResultException
@@ -619,6 +645,17 @@ public class EndpointUtil {
 		return new AnonymousIdentityToken( policy.getPolicyId() );
 	}
 	
+	/**
+	 * <p>createX509IdentityToken.</p>
+	 *
+	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 * @param serverNonce an array of byte.
+	 * @param certificate a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 * @param key a {@link java.security.PrivateKey} object.
+	 * @param signatureData a {@link org.opcfoundation.ua.core.SignatureData} object.
+	 * @return a {@link org.opcfoundation.ua.core.X509IdentityToken} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public static X509IdentityToken createX509IdentityToken(
 			EndpointDescription ep, byte[] serverNonce, Cert certificate, PrivateKey key, SignatureData signatureData) throws ServiceResultException{
 		if (signatureData == null)
@@ -677,9 +714,10 @@ public class EndpointUtil {
 
 	/**
 	 * Check if the endpointUrl matches the url, except for the hostname part.
-	 * @param uri
-	 * @param requestedUri
-	 * @return
+	 *
+	 * @param uri a {@link java.net.URI} object.
+	 * @param requestedUri a {@link java.net.URI} object.
+	 * @return a boolean.
 	 */
 	public static boolean urlEqualsHostIgnoreCase(URI uri, URI requestedUri) {
 		return uri.getScheme().equalsIgnoreCase(requestedUri.getScheme())
@@ -689,9 +727,10 @@ public class EndpointUtil {
 
 	/**
 	 * Check if the endpointUrl matches the url, except for the hostname part.
-	 * @param endpointUrl
-	 * @param url
-	 * @return
+	 *
+	 * @param endpointUrl a {@link java.lang.String} object.
+	 * @param url a {@link java.lang.String} object.
+	 * @return a boolean.
 	 */
 	public static boolean urlEqualsHostIgnoreCase(String endpointUrl,
 			String url) {
@@ -702,6 +741,12 @@ public class EndpointUtil {
 		}
 	}
 
+	/**
+	 * <p>containsSecureUserTokenPolicy.</p>
+	 *
+	 * @param userIdentityTokens an array of {@link org.opcfoundation.ua.core.UserTokenPolicy} objects.
+	 * @return a boolean.
+	 */
 	public static boolean containsSecureUserTokenPolicy(
 			UserTokenPolicy[] userIdentityTokens) {
 		if (userIdentityTokens != null)

@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.QueryDataSet;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class QueryNextResponse extends Object implements ServiceResponse {
+public class QueryNextResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.QueryNextResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.QueryNextResponse_Encoding_DefaultBinary);
@@ -94,7 +95,7 @@ public class QueryNextResponse extends Object implements ServiceResponse {
       */
     public QueryNextResponse clone()
     {
-        QueryNextResponse result = new QueryNextResponse();
+        QueryNextResponse result = (QueryNextResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         if (QueryDataSets!=null) {
             result.QueryDataSets = new QueryDataSet[QueryDataSets.length];

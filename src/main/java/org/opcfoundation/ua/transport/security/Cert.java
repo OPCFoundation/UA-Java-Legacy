@@ -38,8 +38,8 @@ import sun.security.provider.X509Factory;
  * The instance is valid and encodedable.
  * Wrapper to {@link java.security.cert.Certificate}.
  * <p>
- * To Create a new certificate See {@link CertificateUtils#generateKeyPair(String)}
- * 
+ * To Create a new certificate See {@link CertificateUtils}
+ *
  * @author Mikko Salonen
  * @author Toni Kalajainen (toni.kalajainen@iki.fi)
  */
@@ -49,13 +49,13 @@ public class Cert {
 	public final byte[] encodedCertificate; 
 	public final byte[] encodedCertificateThumbprint;
 	
-	/** 
+	/**
 	 * Load X.509 Certificate from an url
-	 * 
-	 * @param url
+	 *
+	 * @param url a {@link java.net.URL} object.
 	 * @return Certificate
-	 * @throws IOException 
-	 * @throws CertificateException In case the certificate is not valid
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.cert.CertificateException In case the certificate is not valid
 	 */
 	public static Cert load(URL url) 
 	throws IOException, CertificateException
@@ -64,13 +64,13 @@ public class Cert {
 		return new Cert(cert);
 	}
 	
-	/** 
+	/**
 	 * Load X.509 Certificate from a file
-	 * 
-	 * @param file
+	 *
+	 * @param file a {@link java.io.File} object.
 	 * @return Certificate
-	 * @throws IOException 
-	 * @throws CertificateException In case the certificate is not valid
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.cert.CertificateException In case the certificate is not valid
 	 */
 	public static Cert load(File file) 
 	throws IOException, CertificateException
@@ -79,12 +79,24 @@ public class Cert {
 	}
 	
 	
+	/**
+	 * <p>save.</p>
+	 *
+	 * @param file a {@link java.io.File} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public void save(File file)
 	throws IOException
 	{
 		FileUtil.writeFile(file, encodedCertificate);
 	}
 	
+	/**
+	 * <p>saveToPem.</p>
+	 *
+	 * @param file a {@link java.io.File} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public void saveToPem(File file) throws IOException
 	{
 		FileWriter fw = new FileWriter(file);
@@ -98,6 +110,11 @@ public class Cert {
 		//CertificateUtils.writeToPem(certificate, file);
 	}
 	
+	/**
+	 * <p>getKeySize.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getKeySize() {
 		PublicKey key = certificate.getPublicKey();
 		if ( key instanceof RSAPublicKey == false ) return -1;
@@ -106,10 +123,10 @@ public class Cert {
 	}
 	
 	/**
-	 * Create Certificate 
-	 * 
+	 * Create Certificate
+	 *
 	 * @param data encoded Certificate
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
 	public Cert(byte[] data) 
 	throws ServiceResultException
@@ -129,6 +146,12 @@ public class Cert {
 		}
 	}
 	
+	/**
+	 * <p>Constructor for Cert.</p>
+	 *
+	 * @param certificate a {@link java.security.cert.X509Certificate} object.
+	 * @throws java.security.cert.CertificateEncodingException if any.
+	 */
 	public Cert(X509Certificate certificate) throws CertificateEncodingException
 	{
 		encodedCertificate = certificate.getEncoded();
@@ -136,11 +159,13 @@ public class Cert {
 		encodedCertificateThumbprint = CertificateUtils.createThumbprint(encodedCertificate);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		return Arrays.hashCode(encodedCertificate);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -155,18 +180,34 @@ public class Cert {
 		return true;
 	}
 
+	/**
+	 * <p>Getter for the field <code>certificate</code>.</p>
+	 *
+	 * @return a {@link java.security.cert.X509Certificate} object.
+	 */
 	public X509Certificate getCertificate() {
 		return certificate;
 	}
 
+	/**
+	 * <p>getEncoded.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getEncoded() {
 		return encodedCertificate;
 	}
 	
+	/**
+	 * <p>getEncodedThumbprint.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getEncodedThumbprint() {
 		return encodedCertificateThumbprint;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return certificate.toString();

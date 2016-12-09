@@ -94,19 +94,25 @@ import org.opcfoundation.ua.utils.asyncsocket.AsyncServerSocket;
 
 /**
  * Host for an https endpoint
- *
  */
 public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResultException> implements EndpointServer {
 	
 	/** Logger */
 	static Logger log = LoggerFactory.getLogger(HttpsServer.class);
 	
+    /** Constant <code>DEFAULT_HTTPPARAMS</code> */
     public static final HttpParams DEFAULT_HTTPPARAMS = new SyncBasicHttpParams()
     	.setIntParameter(CoreConnectionPNames.SO_TIMEOUT, 0)
     	.setIntParameter(CoreConnectionPNames.SOCKET_BUFFER_SIZE, 8 * 1024) // or 64?
     	.setParameter(CoreProtocolPNames.ORIGIN_SERVER, "OpcUA/1.1")
     	.setParameter(CoreProtocolPNames.USER_AGENT, "OpcUA/1.1");
 
+	/**
+	 * <p>makeTrustManager.</p>
+	 *
+	 * @param validators a {@link org.opcfoundation.ua.transport.security.CertificateValidator} object.
+	 * @return an array of {@link javax.net.ssl.TrustManager} objects.
+	 */
 	public static TrustManager[] makeTrustManager(CertificateValidator...validators) {
 		TrustManager[] result = new TrustManager[ validators.length ];
 		for ( int i=0; i<result.length; i++ ) {
@@ -163,6 +169,12 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 	/** Discovery endpoint handler uri="" */
 	HttpsServerEndpointHandler discoveryHandler;
 
+	/**
+	 * <p>Constructor for HttpsServer.</p>
+	 *
+	 * @param application a {@link org.opcfoundation.ua.application.Application} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public HttpsServer(Application application) throws ServiceResultException {
 		super(CloseableObjectState.Closed, CloseableObjectState.Closed);
 
@@ -171,7 +183,7 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		this.securityPolicies = application.getHttpsSettings().getHttpsSecurityPolicies();
 		
 		// Disable Nagle's
-		ioConfig.setTcpNoDelay(false);
+		ioConfig.setTcpNoDelay(true);
 		
         HttpProcessor httpproc = new ImmutableHttpProcessor(new HttpResponseInterceptor[] {
                 // Use standard server-side protocol interceptors
@@ -255,6 +267,11 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		return cipherSuitePatternList.toArray( new String[ cipherSuitePatternList.size() ] );
 	}
 	
+	/**
+	 * <p>getSupportedSecurityPolicies.</p>
+	 *
+	 * @return a {@link java.util.Collection} object.
+	 */
 	public Collection<HttpsSecurityPolicy> getSupportedSecurityPolicies() {
 		if (securityPolicies == null)
 			return HttpsSecurityPolicy.getAvailablePolicies().values();
@@ -267,8 +284,8 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 
 	/**
 	 * Set worker thread count. Defines how many worker treads are initialized to handle incoming HTTPS requests. Note that this does not limit the number of UA sessions, since all sessions will share these threads. Set this value before calling binding the first socket address.
-	 * 
-	 * @param workerThreadCount
+	 *
+	 * @param workerThreadCount a int.
 	 */
 	public void setWorkerThreadCount(int workerThreadCount) {
 		if ( ioReactor!=null ) 
@@ -277,6 +294,8 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 	}
 	
 	/**
+	 * <p>getWorkerThreadCount.</p>
+	 *
 	 * @return the current workerThreadCount
 	 * @see #setWorkerThreadCount(int)
 	 */
@@ -284,6 +303,9 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		return ioConfig.getIoThreadCount();
 	}
 	
+	/**
+	 * <p>shutdownReactor.</p>
+	 */
 	protected void shutdownReactor() {
 		for ( SocketHandle sh : socketHandleSnapshot() ) {
 			ListenerEndpoint le = sh.listenerEndpoint;
@@ -318,6 +340,11 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		}
 	}
 	
+	/**
+	 * <p>initReactor.</p>
+	 *
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	protected void initReactor() throws ServiceResultException {
 		boolean https = false, http = false;
 		for ( SocketHandle sh : socketHandles.values() ) {
@@ -327,7 +354,20 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		
 		try {
 			if ( https && sslSetupHandler == null ) {
-			    SSLContext sslcontext = SSLContext.getInstance("TLS");
+			    SSLContext sslcontext;
+			   
+		       /*
+	            * Try first create tls 1.2 supporting context.
+	            * This should work at least on java 8 out of the box.
+	            * Might work on java 7 if tls 1.2 is enabled.
+	            */
+			    try{
+			      sslcontext = SSLContext.getInstance("TLSv1.2");
+			    }catch(NoSuchAlgorithmException noSuchAlgorithmException){
+			      //fallback option
+			      log.debug("No TLSv1.2 implementation found, trying TLS");
+			      sslcontext = SSLContext.getInstance("TLS");
+			    }			   
 			    sslcontext.init( application.getHttpsSettings().getKeyManagers(), application.getHttpsSettings().getTrustManagers(), null );
 	
 			    // SSL Setup Handler
@@ -385,6 +425,11 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		}
 	}
 
+	/**
+	 * <p>getHttpsSettings.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.https.HttpsSettings} object.
+	 */
 	public HttpsSettings getHttpsSettings() {
 		return application.getHttpsSettings();
 	}
@@ -403,6 +448,7 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		return handle;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public EndpointHandle bind(SocketAddress socketAddress, EndpointBinding endpointBinding) throws ServiceResultException {
 		if ( endpointBinding == null || socketAddress == null || endpointBinding.endpointServer!=this )
@@ -502,21 +548,25 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		return endpointHandle;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void addConnectionListener(org.opcfoundation.ua.transport.ConnectionMonitor.ConnectListener l) {
 		connections.addConnectionListener(l);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void getConnections(Collection<ServerConnection> result) {
 		connections.getConnections(result);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void removeConnectionListener(org.opcfoundation.ua.transport.ConnectionMonitor.ConnectListener l) {
 		connections.removeConnectionListener(l);
 	}	
 
+	/** {@inheritDoc} */
 	@Override
 	public List<SocketAddress> getBoundSocketAddresses() {
 		ArrayList<SocketAddress> result = new ArrayList<SocketAddress>();
@@ -524,16 +574,23 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EncoderContext getEncoderContext() {
 		return application.getEncoderContext();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EndpointBindingCollection getEndpointBindings() {
 		return endpointBindings;
 	}
 	
+	/**
+	 * <p>close.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.CloseableObject} object.
+	 */
 	public synchronized CloseableObject close() {
 		for (EndpointBinding eb : endpointBindings.getAll()) {
 			eb.endpointServer.getEndpointBindings().remove(eb);
@@ -568,6 +625,7 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		return this;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -578,6 +636,11 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		return sb.toString();
 	}
 
+	/**
+	 * <p>socketHandleSnapshot.</p>
+	 *
+	 * @return an array of {@link org.opcfoundation.ua.transport.https.HttpsServer.SocketHandle} objects.
+	 */
 	public SocketHandle[] socketHandleSnapshot() {
 		return socketHandles.values().toArray( new SocketHandle[ socketHandles.size()] );		
 	}

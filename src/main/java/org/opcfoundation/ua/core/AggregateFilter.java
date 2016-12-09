@@ -40,7 +40,7 @@ import org.opcfoundation.ua.core.MonitoringFilter;
 
 
 
-public class AggregateFilter extends MonitoringFilter implements Structure, Cloneable {
+public class AggregateFilter extends MonitoringFilter {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.AggregateFilter);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.AggregateFilter_Encoding_DefaultBinary);
@@ -108,7 +108,7 @@ public class AggregateFilter extends MonitoringFilter implements Structure, Clon
       */
     public AggregateFilter clone()
     {
-        AggregateFilter result = new AggregateFilter();
+        AggregateFilter result = (AggregateFilter) super.clone();
         result.StartTime = StartTime;
         result.AggregateType = AggregateType;
         result.ProcessingInterval = ProcessingInterval;

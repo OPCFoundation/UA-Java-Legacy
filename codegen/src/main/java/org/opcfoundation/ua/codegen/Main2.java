@@ -52,6 +52,7 @@ import java.util.TreeMap;
 import org.opcfoundation.ua.codegen.DictionaryTypes.TypeDictionary.Constant;
 import org.opcfoundation.ua.codegen.DictionaryTypes2.AbstractDictionary.FieldType;
 import org.opcfoundation.ua.codegen.DictionaryTypes2.ModelDesign.DataType;
+import org.opcfoundation.ua.codegen.EngineeringUnitsUtil.EUnit;
 import org.opcfoundation.ua.codegen.IdentifiersUtil.Identifier;
 import org.xml.sax.SAXException;
 
@@ -88,6 +89,10 @@ public class Main2 {
 		// Build Identifiers.java
 		buildIdentifiers("org.opcfoundation.ua.core.Identifiers", identifiers);
 		
+		// Build Standard Engineering Units
+		List<EUnit> eunits = EngineeringUnitsUtil.readUnits(new File("src/main/resources/codegen_data/data/UNECE_rec20_Rev10e_2014_utf16.txt"));
+		buildEngineeringUnits("org.opcfoundation.ua.core.StandardEngineeringUnits", eunits);
+		
 		// Build *ServiceSetHandler.java
 		List<IdentifiersUtil.Identifier> serviceSets = new ArrayList<IdentifiersUtil.Identifier>();
 		IdentifiersUtil.readIdentifiers(new File("src/main/resources/codegen_data/data/ServiceSets.csv"), serviceSets);			
@@ -102,6 +107,32 @@ public class Main2 {
 		attributes.TargetNamespace = "http://opcfoundation.org/UA/Attributes";
 		if (attributes.Name.equals("StatusCodes")) attributes.Name = "Attributes";
 		buildAttributes(attributes);		
+	}
+	
+	public static void buildEngineeringUnits(String fullClassName, List<EUnit> eunits) throws Exception{
+		Template euTemplate = Template.load("src/main/resources/codegen_data/templates/StandardEngineeringUnitsTemplate.java");
+		String className = JavaUtils.getClassName(fullClassName);
+		
+		File file = JavaUtils.toFile(DEST, fullClassName);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		List<String> content = new ArrayList<String>();
+		List<String> imports = new ArrayList<String>();
+		
+		map.put(Template.KEY_PACKAGE_NAME, getPackageName(fullClassName));
+		map.put(Template.KEY_CLASSNAME, className);
+		map.put(Template.KEY_CONTENT, content);
+		map.put(Template.KEY_IMPORTS, imports);
+		
+		//TODO maybe sort based on some logic
+		for(EUnit unit : eunits){
+			content.add("public static final EUInformation "+unit.javaName+" = init("
+					+"\""+unit.commonCode+"\", "
+					+unit.id
+					+", \""+unit.displayName+ "\", \""+ unit.description+"\");");
+		}
+		
+		euTemplate.buildToFile(map, file);
 	}
 		
 	public static void buildIdentifiers(
@@ -441,7 +472,8 @@ public class Main2 {
 		if (superTypeClassName.equals("org.opcfoundation.ua.builtintypes.ExtensionObject") |
 			superTypeClassName.equals("org.opcfoundation.ua.builtintypes.Structure") | 
 			superTypeClassName.equals("org.opcfoundation.ua.builtintypes.IEncodeable")) { 
-			superTypeClassName = "java.lang.Object";
+			superTypeClassName = "org.opcfoundation.ua.utils.AbstractStructure";
+			imports.add(superTypeClassName);
 		} else {
 			imports.add(superTypeClassName);
 		}
@@ -539,7 +571,7 @@ public class Main2 {
 		content.add("  */");
 		content.add("public "+className+" clone()");
 		content.add("{");
-		content.add("    "+className+" result = new "+className+"();");
+		content.add("    "+className+" result = ("+className+") super.clone();");
 		for (FieldType f : allFieldTypes)
 		{
 			DictionaryTypes2.ModelDesign.DataType ft = dom.getDataType( f.getDataType() );

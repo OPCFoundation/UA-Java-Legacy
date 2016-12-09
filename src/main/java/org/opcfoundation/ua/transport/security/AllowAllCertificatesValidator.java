@@ -14,8 +14,13 @@ package org.opcfoundation.ua.transport.security;
 
 import org.opcfoundation.ua.builtintypes.StatusCode;
 
+/**
+ * <p>AllowAllCertificatesValidator class.</p>
+ *
+ */
 public class AllowAllCertificatesValidator implements CertificateValidator {
 
+	/** {@inheritDoc} */
 	@Override
 	public StatusCode validateCertificate(org.opcfoundation.ua.transport.security.Cert c) {
 		return null;

@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class TrustListDataType extends Object implements Structure, Cloneable {
+public class TrustListDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TrustListDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TrustListDataType_Encoding_DefaultBinary);
@@ -118,7 +119,7 @@ public class TrustListDataType extends Object implements Structure, Cloneable {
       */
     public TrustListDataType clone()
     {
-        TrustListDataType result = new TrustListDataType();
+        TrustListDataType result = (TrustListDataType) super.clone();
         result.SpecifiedLists = SpecifiedLists;
         result.TrustedCertificates = TrustedCertificates==null ? null : TrustedCertificates.clone();
         result.TrustedCrls = TrustedCrls==null ? null : TrustedCrls.clone();

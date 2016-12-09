@@ -28,16 +28,11 @@
  * ======================================================================*/
 
 package org.opcfoundation.ua.unittests;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
 import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.opcfoundation.ua.BuildHelper;
 import org.opcfoundation.ua.application.Client;
 import org.opcfoundation.ua.application.Server;
 import org.opcfoundation.ua.application.TestStackService;
@@ -48,6 +43,7 @@ import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.TestStackRequest;
 import org.opcfoundation.ua.core.TestStackResponse;
 import org.opcfoundation.ua.transport.AsyncResult;
+import org.opcfoundation.ua.transport.Endpoint;
 import org.opcfoundation.ua.transport.SecureChannel;
 import org.opcfoundation.ua.transport.security.BcCryptoProvider;
 import org.opcfoundation.ua.transport.security.HttpsSecurityPolicy;
@@ -56,11 +52,13 @@ import org.opcfoundation.ua.transport.security.SecurityMode;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.StackUtils;
 
+import junit.framework.TestCase;
+
 /**
  * Stress test & performance test using a loop-back server.
  *
  */
-public class TestStack {
+public class TestStack extends TestCase {
 
 	/** Timeout for a single test (Seconds) */
 	final static int ITERATION_TIMEOUT = 300;
@@ -68,6 +66,7 @@ public class TestStack {
 	String uri;
 	int keySize;
 	Server server;
+	Endpoint endpoint;
 	SecureChannel secureChannel;
 
 	// Fill array with debug data
@@ -79,9 +78,7 @@ public class TestStack {
 			data[i] = (byte) (r.nextInt(256) - 128);
 	}
 
-	@Test
-	@Ignore
-	public void ignoreTestHttps_TLS_1_2() throws Exception {
+	public void ignoreHttps_TLS_1_2() throws Exception {
 		try {
 			_setupTest("https://localhost:6125/TestServer", HttpsSecurityPolicy.TLS_1_2, 4096);
 			executeTest();
@@ -90,9 +87,16 @@ public class TestStack {
 		}
 	}
 
-	@Test
+	public void ignoreHttps_TLS_1_2_PFS() throws Exception {
+		try {
+			_setupTest("https://localhost:6125/TestServer", HttpsSecurityPolicy.TLS_1_2_PFS, 4096);
+			executeTest();
+		} finally {
+			_tearDown();
+		}
+	}
+
 	public void testHttps_TLS_1_0() throws Exception {
-		Assume.assumeTrue(BuildHelper.isJdk6Toolchain());
 		try {
 			_setupTest("https://localhost:6125/TestServer", HttpsSecurityPolicy.TLS_1_0, 2048);
 			executeTest();
@@ -101,7 +105,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testHttps_TLS_1_1() throws Exception {
 		try {
 			_setupTest("https://localhost:6125/TestServer", HttpsSecurityPolicy.TLS_1_1, 2048);
@@ -111,7 +114,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_BASIC128RSA15_SIGN_BC() throws Exception {
 		try {
 			CryptoUtil.setCryptoProvider(new BcCryptoProvider());
@@ -122,7 +124,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_BASIC128RSA15_SIGN_ENCRYPT_BC() throws Exception {
 		try {
 			CryptoUtil.setCryptoProvider(new BcCryptoProvider());
@@ -133,7 +134,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_BASIC128RSA15_SIGN_ENCRYPT_JCE() throws Exception {
 		try {
 			_setupTest("opc.tcp://localhost:6125/TestServer", SecurityMode.BASIC128RSA15_SIGN_ENCRYPT, 2048);
@@ -143,7 +143,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_BASIC128RSA15_SIGN_JCE() throws Exception {
 		try {
 			_setupTest("opc.tcp://localhost:6125/TestServer", SecurityMode.BASIC128RSA15_SIGN, 2048);
@@ -153,7 +152,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_BASIC256_SIGN_ENCRYPT_BC() throws Exception {
 		try {
 			CryptoUtil.setCryptoProvider(new BcCryptoProvider());
@@ -165,7 +163,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_BASIC256_SIGN_ENCRYPT_JCE() throws Exception {
 		try {
 			_setupTest("opc.tcp://localhost:6125/TestServer", SecurityMode.BASIC256_SIGN_ENCRYPT, 2048);
@@ -175,7 +172,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_BASIC256_SIGN_JCE() throws Exception {
 		try {
 			_setupTest("opc.tcp://localhost:6125/TestServer", SecurityMode.BASIC256_SIGN, 2048);
@@ -185,7 +181,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_BASIC256SHA256_SIGN_ENCRYPT_BC() throws Exception {
 		try {
 			CryptoUtil.setCryptoProvider(new BcCryptoProvider());
@@ -197,7 +192,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_BASIC256SHA256_SIGN_ENCRYPT_JCE() throws Exception {
 		try {
 			_setupTest("opc.tcp://localhost:6125/TestServer", SecurityMode.BASIC256SHA256_SIGN_ENCRYPT, 4096);
@@ -207,7 +201,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_BASIC256SHA256_SIGN_JCE() throws Exception {
 		try {
 			_setupTest("opc.tcp://localhost:6125/TestServer", SecurityMode.BASIC256SHA256_SIGN, 4096);
@@ -217,7 +210,6 @@ public class TestStack {
 		}
 	}
 
-	@Test
 	public void testOPC_TCP_NONE() throws Exception {
 		try {
 			_setupTest("opc.tcp://localhost:6125/TestServer", SecurityMode.NONE, 2048);

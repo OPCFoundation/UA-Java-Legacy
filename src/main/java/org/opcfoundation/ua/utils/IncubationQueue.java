@@ -20,24 +20,24 @@ import java.util.Map;
 
 /**
  * IncubationQueue is ordered queue where objects are added in two phases;
- * (a) as incubating, they are given queuing number, and as (b) hatched they become 
+ * (a) as incubating, they are given queuing number, and as (b) hatched they become
  * available to the consumer. Objects become consumable when they are hatch()ed.
- * The order of incubation is maintained. Objects become consumable in the order they 
+ * The order of incubation is maintained. Objects become consumable in the order they
  * were incubate()ed. This class is synchronized and is multi-thread-safe.
  * <p>
- * Example: 
- * 
+ * Example:
+ *
  *  IncubationQueue q = new IncubationQueue();
  *  q.incubate("a");
  *  q.incubate("b");
  *  q.incubate("c");
- *  q.hatch("b");  
+ *  q.hatch("b");
  *  q.removeNextHatchedIfAvailable(); // returns null
- *  q.hatch("a");          
+ *  q.hatch("a");
  *  q.removeNextHatched(); // returns "a"
  *  q.removeNextHatched(); // returns "b"
  *  q.removeNextHatchedIfAvailable(); // returns null
- *  q.hatch("c");    
+ *  q.hatch("c");
  *  q.removeNextHatched(); // returns "c"
  *
  * @author Toni Kalajainen (toni.kalajainen@iki.fi)
@@ -57,7 +57,7 @@ public class IncubationQueue<T> {
 	
 	/**
 	 * Create new Incubation queue
-	 * 
+	 *
 	 * @param identityComparison if true objects are compared with ==, false compare with equals()/hashCode()
 	 */
 	public IncubationQueue(boolean identityComparison)
@@ -70,7 +70,7 @@ public class IncubationQueue<T> {
 	
 	/**
 	 * Add object to the queue
-	 * 
+	 *
 	 * @param o object not null and not in queue
 	 */
 	public synchronized void incubate(T o) {
@@ -87,11 +87,11 @@ public class IncubationQueue<T> {
 	 * Hatch incubating object o.
 	 * If all objects in the queue before o are hatched, all of them are returned
 	 * in the order they were added to the queue.
-	 * 
-	 * If there is an object still incubating before o, an empty list is returned. 
-	 * 
+	 *
+	 * If there is an object still incubating before o, an empty list is returned.
+	 *
 	 * @param o object not null
-	 * @throws IllegalArgumentException if o was not incubating 
+	 * @throws java.lang.IllegalArgumentException if o was not incubating
 	 * @return true if o was incubating
 	 */
 	public synchronized boolean hatch(T o)
@@ -109,7 +109,7 @@ public class IncubationQueue<T> {
 
 	/**
 	 * Remove next hatched object if available
-	 * 
+	 *
 	 * @return next hatched object or null
 	 */
 	public synchronized T removeNextHatchedIfAvailable() 
@@ -124,9 +124,9 @@ public class IncubationQueue<T> {
 		
 	/**
 	 * Remove next hatched object. Blocks until next is available.
-	 * 
+	 *
 	 * @return next hatched object
-	 * @throws InterruptedException 
+	 * @throws java.lang.InterruptedException if any.
 	 */
 	public synchronized T removeNextHatched() 
 	throws InterruptedException
@@ -140,9 +140,8 @@ public class IncubationQueue<T> {
 	
 	/**
 	 * Remove next hatched object. Blocks until next is available.
-	 * 
+	 *
 	 * @return next hatched object
-	 * @throws InterruptedException 
 	 */
 	public synchronized T removeNextHatchedUninterruptibly()
 	{
@@ -157,7 +156,7 @@ public class IncubationQueue<T> {
 	
 	/**
 	 * Is next object hatched
-	 * 
+	 *
 	 * @return true if there is an object in queue and it is hatched
 	 */
 	public synchronized boolean nextIsHatched()
@@ -169,6 +168,7 @@ public class IncubationQueue<T> {
 
 	/**
 	 * Get next hatched object
+	 *
 	 * @return next hatched object or null
 	 */
 	public synchronized T getNextHatchedIfAvailable()
@@ -181,8 +181,9 @@ public class IncubationQueue<T> {
 
 	/**
 	 * Get next hatched object, blocks if empty or unhatched
-	 * @return next hatched object 
-	 * @throws InterruptedException 
+	 *
+	 * @return next hatched object
+	 * @throws java.lang.InterruptedException if any.
 	 */
 	public T getNextHatched() 
 	throws InterruptedException
@@ -196,6 +197,12 @@ public class IncubationQueue<T> {
 		}
 	}
 	
+	/**
+	 * <p>getNext.</p>
+	 *
+	 * @return a T object.
+	 * @throws java.lang.InterruptedException if any.
+	 */
 	public synchronized T getNext()
 	throws InterruptedException
 	{
@@ -203,46 +210,83 @@ public class IncubationQueue<T> {
 		return orderList.getFirst();		
 	}
 	
+	/**
+	 * <p>isEmpty.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public synchronized boolean isEmpty() {
 		return hatchMap.isEmpty();
 	}
 	
+	/**
+	 * <p>clear.</p>
+	 */
 	public synchronized void clear() {
 		orderList.clear();
 		hatchMap.clear();
 		notifyAll();
 	}
 	
+	/**
+	 * <p>size.</p>
+	 *
+	 * @return a int.
+	 */
 	public synchronized int size() {
 		return hatchMap.size();
 	}
 	
 	/**
 	 * Non-thread safe iterator. Removing is not allowed.
-	 * 
+	 *
 	 * @return iterator
 	 */
 	public Iterator<T> iterator() {
 		return orderList.iterator();
 	}
 	
+	/**
+	 * <p>contains.</p>
+	 *
+	 * @param o a T object.
+	 * @return a boolean.
+	 */
 	public synchronized boolean contains(T o)
 	{
 		return hatchMap.containsKey(o);
 	}
 	
+	/**
+	 * <p>isHatched.</p>
+	 *
+	 * @param o a T object.
+	 * @return a boolean.
+	 */
 	public synchronized boolean isHatched(T o)
 	{
 		if (!hatchMap.containsKey(o)) return false;
 		return hatchMap.get(o) == null;
 	}
 
+	/**
+	 * <p>isIncubating.</p>
+	 *
+	 * @param o a T object.
+	 * @return a boolean.
+	 */
 	public synchronized boolean isIncubating(T o)
 	{
 		if (!hatchMap.containsKey(o)) return false;
 		return hatchMap.get(o) != null;
 	}
 	
+	/**
+	 * <p>waitUntilIncubated.</p>
+	 *
+	 * @param o a T object.
+	 * @throws java.lang.InterruptedException if any.
+	 */
 	public synchronized void waitUntilIncubated(T o) 
 	throws InterruptedException
 	{

@@ -24,44 +24,88 @@ import org.opcfoundation.ua.transport.EndpointBinding;
 import org.opcfoundation.ua.transport.EndpointServer;
 import org.opcfoundation.ua.utils.EndpointUtil;
 
+/**
+ * <p>EndpointBindingCollection class.</p>
+ *
+ */
 public class EndpointBindingCollection {
 
 	List<EndpointBinding> bindings;
 	
 	CopyOnWriteArrayList<EndpointBindingListener> listeners = new CopyOnWriteArrayList<EndpointBindingListener>(); 
 	
+	/**
+	 * <p>Constructor for EndpointBindingCollection.</p>
+	 */
 	public EndpointBindingCollection() {
 		bindings = new CopyOnWriteArrayList<EndpointBinding>();
 	}
 	
+	/**
+	 * <p>Constructor for EndpointBindingCollection.</p>
+	 *
+	 * @param bindings a {@link java.util.List} object.
+	 */
 	public EndpointBindingCollection(List<EndpointBinding> bindings) {
 		this.bindings = Collections.synchronizedList( bindings );
 	}
 	
+	/**
+	 * <p>add.</p>
+	 *
+	 * @param binding a {@link org.opcfoundation.ua.transport.EndpointBinding} object.
+	 */
 	public void add(EndpointBinding binding) {
 		if ( bindings.contains(binding) ) return; 
 //			throw new RuntimeException("Collection already contains the endpoint binding");
 		bindings.add( binding );
 	}
 	
+	/**
+	 * <p>remove.</p>
+	 *
+	 * @param binding a {@link org.opcfoundation.ua.transport.EndpointBinding} object.
+	 */
 	public void remove(EndpointBinding binding) {
 		bindings.remove( binding );
 	}
 	
+	/**
+	 * <p>contains.</p>
+	 *
+	 * @param binding a {@link org.opcfoundation.ua.transport.EndpointBinding} object.
+	 * @return a boolean.
+	 */
 	public boolean contains(EndpointBinding binding) {
 		return bindings.contains(binding);				
 	}
 	
+	/**
+	 * <p>isEmpty.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isEmpty() 
 	{
 		return bindings.isEmpty();
 	}
 	
+	/**
+	 * <p>size.</p>
+	 *
+	 * @return a int.
+	 */
 	public int size() 
 	{
 		return bindings.size();
 	}
 
+	/**
+	 * <p>getDefault.</p>
+	 *
+	 * @param url a {@link java.lang.String} object.
+	 * @return a {@link org.opcfoundation.ua.transport.EndpointBinding} object.
+	 */
 	public EndpointBinding getDefault(String url) {
 		if (url == null)
 			throw new NullPointerException("url must be defined");
@@ -81,11 +125,22 @@ public class EndpointBindingCollection {
 		return null;
 	}	
 	
+	/**
+	 * <p>getAll.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<EndpointBinding> getAll() {
 		return bindings;
 	}
 	
 	// Query functions - all 6 permutations
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param endpointAddress a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<EndpointBinding> get( Endpoint endpointAddress )
 	{
 		List<EndpointBinding> result = new ArrayList<EndpointBinding>();
@@ -97,6 +152,12 @@ public class EndpointBindingCollection {
 		return result;
 	}
 
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param endpointUrl a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<EndpointBinding> get( String endpointUrl )
 	{
 		List<EndpointBinding> result = new ArrayList<EndpointBinding>();
@@ -108,6 +169,12 @@ public class EndpointBindingCollection {
 		return result;
 	}
 	
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param endpointServer a {@link org.opcfoundation.ua.transport.EndpointServer} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<EndpointBinding> get( EndpointServer endpointServer )
 	{
 		List<EndpointBinding> result = new ArrayList<EndpointBinding>();
@@ -119,6 +186,12 @@ public class EndpointBindingCollection {
 		return result;
 	}
 	
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param serviceServer a {@link org.opcfoundation.ua.application.Server} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<EndpointBinding> get( Server serviceServer )
 	{
 		List<EndpointBinding> result = new ArrayList<EndpointBinding>();
@@ -130,6 +203,13 @@ public class EndpointBindingCollection {
 		return result;
 	}
 	
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param endpointServer a {@link org.opcfoundation.ua.transport.EndpointServer} object.
+	 * @param endpointAddress a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<EndpointBinding> get( EndpointServer endpointServer, Endpoint endpointAddress )
 	{
 		List<EndpointBinding> result = new ArrayList<EndpointBinding>();
@@ -143,6 +223,13 @@ public class EndpointBindingCollection {
 		return result;
 	}
 
+	/**
+	 * <p>getSingle.</p>
+	 *
+	 * @param endpointServer a {@link org.opcfoundation.ua.transport.EndpointServer} object.
+	 * @param endpointAddress a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 * @return a {@link org.opcfoundation.ua.transport.EndpointBinding} object.
+	 */
 	public EndpointBinding getSingle( EndpointServer endpointServer, Endpoint endpointAddress )
 	{
 		for ( EndpointBinding b : bindings ) {
@@ -155,6 +242,13 @@ public class EndpointBindingCollection {
 	}
 	
 	
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param endpointAddress a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 * @param serviceServer a {@link org.opcfoundation.ua.application.Server} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<EndpointBinding> get( Endpoint endpointAddress, Server serviceServer )
 	{
 		List<EndpointBinding> result = new ArrayList<EndpointBinding>();
@@ -168,6 +262,13 @@ public class EndpointBindingCollection {
 		return result;
 	}
 	
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param endpointServer a {@link org.opcfoundation.ua.transport.EndpointServer} object.
+	 * @param serviceServer a {@link org.opcfoundation.ua.application.Server} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<EndpointBinding> get( EndpointServer endpointServer, Server serviceServer )
 	{
 		List<EndpointBinding> result = new ArrayList<EndpointBinding>();
@@ -181,22 +282,38 @@ public class EndpointBindingCollection {
 		return result;
 	}
 
+	/**
+	 * <p>getEndpointAddresses.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<Endpoint> getEndpointAddresses() {
 		return getEndpointAddresses( bindings );
 	}
 	
+	/**
+	 * <p>getServiceServers.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<Server> getServiceServers() {
 		return getServiceServers( bindings );
 	}
 	
+	/**
+	 * <p>getEndpointServers.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<EndpointServer> getEndpointServers() {
 		return getEndpointServers( bindings );
 	}
 	
 	/**
 	 * Get a list of service servers in an bindingList
-	 * @param bindingList
-	 * @return
+	 *
+	 * @param bindingList a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
 	 */
 	public static List<Server> getServiceServers(List<EndpointBinding> bindingList) 
 	{
@@ -209,8 +326,9 @@ public class EndpointBindingCollection {
 	
 	/**
 	 * Get a list of endpoint servers in an bindingList
-	 * @param bindingList
-	 * @return
+	 *
+	 * @param bindingList a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
 	 */
 	public static List<EndpointServer> getEndpointServers(List<EndpointBinding> bindingList) 
 	{
@@ -223,8 +341,9 @@ public class EndpointBindingCollection {
 
 	/**
 	 * Get a list of endpoint addresses in an bindingList
-	 * @param bindingList
-	 * @return
+	 *
+	 * @param bindingList a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
 	 */
 	public static List<Endpoint> getEndpointAddresses(List<EndpointBinding> bindingList) 
 	{
@@ -235,6 +354,9 @@ public class EndpointBindingCollection {
 		return result;
 	}
 
+	/**
+	 * <p>clear.</p>
+	 */
 	public void clear() {
 		bindings.clear();
 	}
@@ -247,16 +369,27 @@ public class EndpointBindingCollection {
 		
 	}
 	
+	/**
+	 * <p>addListener.</p>
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.endpoint.EndpointBindingCollection.EndpointBindingListener} object.
+	 */
 	public void addListener(EndpointBindingListener listener) 
 	{
 		listeners.add(listener);
 	}
 	
+	/**
+	 * <p>removeListener.</p>
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.endpoint.EndpointBindingCollection.EndpointBindingListener} object.
+	 */
 	public void removeListener(EndpointBindingListener listener)
 	{
 		listeners.remove(listener);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

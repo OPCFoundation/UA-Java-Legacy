@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class UserIdentityToken extends Object implements Structure, Cloneable {
+public class UserIdentityToken extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.UserIdentityToken);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.UserIdentityToken_Encoding_DefaultBinary);
@@ -68,7 +69,7 @@ public class UserIdentityToken extends Object implements Structure, Cloneable {
       */
     public UserIdentityToken clone()
     {
-        UserIdentityToken result = new UserIdentityToken();
+        UserIdentityToken result = (UserIdentityToken) super.clone();
         result.PolicyId = PolicyId;
         return result;
     }

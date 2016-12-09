@@ -22,37 +22,37 @@ import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
 
 /**
  * Service Handler reads {@link ServiceRequest} from client, processes it, and returns
- * a {@link ServiceResponse}. 
- * 
+ * a {@link ServiceResponse}.
+ *
  * @see ServiceHandlerComposition
  * @see AbstractServiceHandler
  */
 public interface ServiceHandler {
 
 	/**
-	 * Serve a service request. 
+	 * Serve a service request.
 	 * <p>
-	 * The implementation is allowed to may submit the response 
+	 * The implementation is allowed to may submit the response
 	 * later and from another thread.
-	 * 
-	 * @param request
-	 * @throws ServiceResultException 
+	 *
+	 * @param request the service request
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	void serve(EndpointServiceRequest<?, ?> request) throws ServiceResultException;
 
 	/**
 	 * Queries whether this handler supports a given request class.
-	 *  
+	 *
 	 * @param requestMessageClass class
 	 * @return true if this service handler can handle given class
 	 */
 	boolean supportsService(Class<? extends IEncodeable> requestMessageClass);
 	
 	/**
-	 * Get supported services. Result will be filled with the request class of 
-	 * the supported services. 
-	 * 
-	 * @param result to be filled with request classes of supported services. 
+	 * Get supported services. Result will be filled with the request class of
+	 * the supported services.
+	 *
+	 * @param result to be filled with request classes of supported services.
 	 */
 	void getSupportedServices(Collection<Class<? extends IEncodeable>> result);
 	

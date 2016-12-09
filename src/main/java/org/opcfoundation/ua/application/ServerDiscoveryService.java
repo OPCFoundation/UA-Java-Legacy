@@ -21,17 +21,23 @@ import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
 
 /**
  * This class is the service implementation of a discovery Server.
- * 
+ *
  * NOTE! This class is not yet implemented.
- * 
+ *
  * The plan is to create discovery server that supports various back-ends
  * using Java Naming and Directory Interface (JNDI). JNDI is extendable and
- * out-of-box it supports LDAP. 
- * 
+ * out-of-box it supports LDAP.
+ *
  * See http://java.sun.com/products/jndi/
  */
 public class ServerDiscoveryService {
 
+    /**
+     * <p>onFindServers.</p>
+     *
+     * @param req a {@link org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest} object.
+     * @throws org.opcfoundation.ua.common.ServiceFaultException if any.
+     */
     public void onFindServers(EndpointServiceRequest<FindServersRequest, FindServersResponse> req) 
     throws ServiceFaultException 
     {

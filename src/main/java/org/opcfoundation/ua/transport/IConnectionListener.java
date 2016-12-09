@@ -14,12 +14,16 @@ package org.opcfoundation.ua.transport;
 
 import org.opcfoundation.ua.common.ServiceResultException;
 
+/**
+ * <p>IConnectionListener interface.</p>
+ *
+ */
 public interface IConnectionListener {
 
 	/**
 	 * The connection has been closed
-	 * 
-	 * @param errorCode close error 
+	 *
+	 * @param closeError a {@link org.opcfoundation.ua.common.ServiceResultException} object.
 	 */
 	void onClosed(ServiceResultException closeError);
 	

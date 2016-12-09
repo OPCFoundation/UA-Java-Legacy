@@ -44,7 +44,7 @@ import org.opcfoundation.ua.core.TypeNode;
 
 
 
-public class ReferenceTypeNode extends TypeNode implements Structure, Cloneable {
+public class ReferenceTypeNode extends TypeNode {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ReferenceTypeNode);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ReferenceTypeNode_Encoding_DefaultBinary);
@@ -101,7 +101,7 @@ public class ReferenceTypeNode extends TypeNode implements Structure, Cloneable 
       */
     public ReferenceTypeNode clone()
     {
-        ReferenceTypeNode result = new ReferenceTypeNode();
+        ReferenceTypeNode result = (ReferenceTypeNode) super.clone();
         result.NodeId = NodeId;
         result.NodeClass = NodeClass;
         result.BrowseName = BrowseName;

@@ -16,8 +16,8 @@ import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.core.ResponseHeader;
 
 /**
+ * <p>DecoderUtils class.</p>
  *
- * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class DecoderUtils {
@@ -25,7 +25,8 @@ public class DecoderUtils {
 	/**
 	 * Fixes DiagnosticInfos of a Response header to point to the string
 	 * table of the response header.
-	 * @param rh
+	 *
+	 * @param rh a {@link org.opcfoundation.ua.core.ResponseHeader} object.
 	 */
 	public static void fixResponseHeader(ResponseHeader rh)
 	{

@@ -106,39 +106,39 @@ import org.opcfoundation.ua.utils.bytebuffer.OutputStreamWriteable;
  * This class implements OPC UA Secure Conversation (UASC) for client to server
  * communication.
  * <p>
- * 
+ *
  * OPC UA TCP is a simple TCP based protocol that establishes a full duplex
  * channel between a client and server. This protocol has two key features that
  * differentiate it from HTTP. First, this protocol allows responses to be
  * returned in any order. Second, this protocol allows responses to be returned
  * on a different socket if communication failures causes temporary socket
  * interruption.
- * 
+ *
  * The OPC UA TCP protocol is designed to work with the SecureChannel
  * implemented by a layer higher in the stack. For this reason, the OPC UA TCP
  * protocol defines its interactions with the SecureChannel in addition to the
  * wire protocol.
  * <p>
- * 
- * Features included in this class: 
- * o Establishing connection, Handshake 
- * o Sync & Async encryption Features excluded in this class: 
- * o Reconnect (See SecureChannel) 
+ *
+ * Features included in this class:
+ * o Establishing connection, Handshake
+ * o Sync and Async encryption Features excluded in this class:
+ * o Reconnect (See SecureChannel)
  * o Token Renewal (See SecureChannel)
- * 
+ *
  * TcpConnection is instantiated and managed by {@link SecureChannel} which also
  * handles Reconnection and token renewal.
  * <p>
- * 
+ *
  * {@link OpenSecureChannelRequest} and {@link OpenSecureChannelResponse} is
  * ciphered with asymmetric encryption using the certificates set in initialize.
  * Asymmetric encryption is omited if server certificate is null. (This is not
  * allowed in Part 4, but is in Part 6). DiscoveryClient uses unencrypted
  * connection.
- * 
+ *
  * TcpConnection captures security tokens from OpenSecureChannel conversation
  * and uses them for symmetric messaging. The oldest non-expired token is used.
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class TcpConnection implements IConnection {
@@ -225,6 +225,8 @@ public class TcpConnection implements IConnection {
 	private Socket socket = null;
 
 	/**
+	 * <p>Setter for the field <code>socket</code>.</p>
+	 *
 	 * @param socket
 	 *            the socket to set
 	 */
@@ -285,6 +287,8 @@ public class TcpConnection implements IConnection {
 	private static int receiveBufferSize = 0;
 
 	/**
+	 * <p>Getter for the field <code>receiveBufferSize</code>.</p>
+	 *
 	 * @return the receiveBufferSize to use for the connection socket.
 	 */
 	public static int getReceiveBufferSize() {
@@ -298,10 +302,10 @@ public class TcpConnection implements IConnection {
 	 * <p>
 	 * Default value: 0, which omits the parameter and the default value for the
 	 * socket (depending on the operating system) is used.
-	 * 
+	 *
 	 * @param receiveBufferSize
 	 *            the new size in bytes
-	 * @see http://fasterdata.es.net/host-tuning/background/
+	 * @see "http://fasterdata.es.net/host-tuning/background/"
 	 */
 	public static void setReceiveBufferSize(int receiveBufferSize) {
 		TcpConnection.receiveBufferSize = receiveBufferSize;
@@ -310,6 +314,8 @@ public class TcpConnection implements IConnection {
 	private static int sendBufferSize = 0;
 
 	/**
+	 * <p>Getter for the field <code>sendBufferSize</code>.</p>
+	 *
 	 * @return the sendBufferSize to use for the connection socket.
 	 */
 	public static int getSendBufferSize() {
@@ -323,7 +329,7 @@ public class TcpConnection implements IConnection {
 	 * <p>
 	 * Default value: 0, which omits the parameter and the default value for the
 	 * socket (depending on the operating system) is used.
-	 * 
+	 *
 	 * @param sendBufferSize
 	 *            the new size in bytes
 	 */
@@ -331,10 +337,18 @@ public class TcpConnection implements IConnection {
 		TcpConnection.sendBufferSize = sendBufferSize;
 	}
 
+	/**
+	 * <p>initialize.</p>
+	 *
+	 * @param settings a {@link org.opcfoundation.ua.transport.TransportChannelSettings} object.
+	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public void initialize(TransportChannelSettings settings, EncoderContext ctx) throws ServiceResultException {
 		initialize(settings.getDescription().getEndpointUrl(), settings, ctx);
 	}
 
+	/** {@inheritDoc} */
 	public void initialize(String url, TransportChannelSettings settings, EncoderContext ctx) throws ServiceResultException {
 		try {
 			URI uri = new URI(url);
@@ -348,6 +362,7 @@ public class TcpConnection implements IConnection {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void initialize(InetSocketAddress addr, TransportChannelSettings settings, EncoderContext ctx) throws ServiceResultException {
 		lock.lock();
@@ -384,6 +399,11 @@ public class TcpConnection implements IConnection {
 		}
 	}
 
+	/**
+	 * <p>open.</p>
+	 *
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public void open() throws ServiceResultException {
 		lock.lock();
 		try {
@@ -396,6 +416,8 @@ public class TcpConnection implements IConnection {
 				logger.info("{} Connecting", addr);
 				int connectTimeout = handshakeTimeout;
 				s = new Socket();
+				// Disable Nagle's algorithm
+				s.setTcpNoDelay(true);
 				if (receiveBufferSize > 0)
 					s.setReceiveBufferSize(receiveBufferSize);
 				if (sendBufferSize > 0)
@@ -581,7 +603,7 @@ public class TcpConnection implements IConnection {
 	 * Close the socket connection. This method does not request
 	 * CloseSecureChannel. Does nothing if it is already closed or was never
 	 * opened.
-	 * 
+	 *
 	 * This method is invoked by the user and internally by read thread.
 	 */
 	public void close() {
@@ -619,7 +641,9 @@ public class TcpConnection implements IConnection {
 	}
 
 	/**
-	 * @return
+	 * <p>Getter for the field <code>socket</code>.</p>
+	 *
+	 * @return a {@link java.net.Socket} object.
 	 */
 	protected Socket getSocket() {
 		// return socket.get();
@@ -631,6 +655,11 @@ public class TcpConnection implements IConnection {
 		}
 	}
 
+	/**
+	 * <p>reconnect.</p>
+	 *
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public void reconnect() throws ServiceResultException {
 		lock.lock();
 		try {
@@ -972,20 +1001,38 @@ public class TcpConnection implements IConnection {
 				ServiceResultException sre = (ServiceResultException) e.getCause();
 				logger.warn(addr+" Error", sre);
 				closeError = sre;
+			} catch (Exception e){
+				closeError = new ServiceResultException(StatusCodes.Bad_InternalError, e);
+				logger.error("Error in ReadThread", closeError);
 			}
 
 			close(closeError);
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>endpointConfiguration</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.EndpointConfiguration} object.
+	 */
 	public EndpointConfiguration getEndpointConfiguration() {
 		return endpointConfiguration;
 	}
 
+	/**
+	 * <p>Getter for the field <code>endpointDescription</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 */
 	public EndpointDescription getEndpointDescription() {
 		return endpointDescription;
 	}
 
+	/**
+	 * <p>getMessageContext.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public EncoderContext getMessageContext() {
 		return ctx;
 	}
@@ -1016,16 +1063,12 @@ public class TcpConnection implements IConnection {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Send service request using a given secure channel and operation time out.
-	 * 
+	 *
 	 * The operation may be interrupted by interrupting the calling thread with
 	 * {@link Thread#interrupt()}.
-	 * 
-	 * @param request
-	 * @param secureChannelId
-	 *            secure channel id, or -1 to open new secure channel
-	 * @return
-	 * @throws ServiceResultException
 	 */
 	public void sendRequest(ServiceRequest request, int secureChannelId, int requestId) throws ServiceResultException {
 		if (request == null)
@@ -1350,10 +1393,20 @@ public class TcpConnection implements IConnection {
 				tokens.remove(t); // works with COW list
 	}
 
+	/**
+	 * <p>Getter for the field <code>handshakeTimeout</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getHandshakeTimeout() {
 		return handshakeTimeout;
 	}
 
+	/**
+	 * <p>Setter for the field <code>handshakeTimeout</code>.</p>
+	 *
+	 * @param handshakeTimeout a int.
+	 */
 	public void setHandshakeTimeout(int handshakeTimeout) {
 		this.handshakeTimeout = handshakeTimeout;
 	}
@@ -1361,10 +1414,10 @@ public class TcpConnection implements IConnection {
 	/**
 	 * Add input stream message listener. All incoming messages are notified to
 	 * the listener.
-	 * 
+	 *
 	 * The listener may not block in message handling as the message is handled
 	 * in read thread.
-	 * 
+	 *
 	 * @param listener
 	 *            message listener
 	 */
@@ -1372,15 +1425,22 @@ public class TcpConnection implements IConnection {
 		listeners.add(listener);
 	}
 
+	/**
+	 * <p>removeMessageListener.</p>
+	 *
+	 * @param listener a IMessageListener object.
+	 */
 	public void removeMessageListener(IMessageListener listener) {
 		listeners.remove(listener);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addConnectionListener(IConnectionListener listener) {
 		connectionListeners.add(listener);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void removeConnectionListener(IConnectionListener listener) {
 		connectionListeners.remove(listener);
@@ -1388,7 +1448,7 @@ public class TcpConnection implements IConnection {
 
 	/**
 	 * Get the protocol version agreen in the hand-shake
-	 * 
+	 *
 	 * @return connection protocol version
 	 */
 	public int getProtocolVersion() {
@@ -1397,7 +1457,7 @@ public class TcpConnection implements IConnection {
 
 	/**
 	 * Get the initialized socket address
-	 * 
+	 *
 	 * @return socket address or null if the connection has not been initialized
 	 */
 	public SocketAddress getSocketAddress() {

@@ -34,184 +34,40 @@ import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.IEncoder;
 
+/**
+ * <p>EncoderUtils class.</p>
+ *
+ */
 public class EncoderUtils {
+	/**
+	 * <p>put.</p>
+	 *
+	 * @param encoder a {@link org.opcfoundation.ua.encoding.IEncoder} object.
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param o a {@link java.lang.Object} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public static void put(IEncoder encoder, String fieldName, Object o) throws EncodingException {
-		if (o instanceof Boolean) {
-			encoder.putBoolean(fieldName, (Boolean) o);
+		if(o == null){
+			throw new EncodingException("Cannot encode null object without Class information");
 		}
-		else if (o instanceof Byte) {
-			encoder.putSByte(fieldName, (Byte) o);
-		}
-		else if (o instanceof UnsignedByte) {
-			encoder.putByte(fieldName, (UnsignedByte) o);
-		}
-		else if (o instanceof Short) {
-			encoder.putInt16(fieldName, (Short) o);
-		}
-		else if (o instanceof UnsignedShort) {
-			encoder.putUInt16(fieldName, (UnsignedShort) o);
-		}
-		else if (o instanceof Integer) {
-			encoder.putInt32(fieldName, (Integer) o);
-		}
-		else if (o instanceof UnsignedInteger) {
-			encoder.putUInt32(fieldName, (UnsignedInteger) o);
-		}
-		else if (o instanceof Long) {
-			encoder.putInt64(fieldName, (Long) o);
-		}
-		else if (o instanceof UnsignedLong) {
-			encoder.putUInt64(fieldName, (UnsignedLong) o);
-		}
-		else if (o instanceof Float) {
-			encoder.putFloat(fieldName, (Float) o);
-		}
-		else if (o instanceof Double) {
-			encoder.putDouble(fieldName, (Double) o);
-		}
-		else if (o instanceof String) {
-			encoder.putString(fieldName, (String) o);
-		}
-		else if (o instanceof DateTime) {
-			encoder.putDateTime(fieldName, (DateTime) o);
-		}
-		else if (o instanceof UUID) {
-			encoder.putGuid(fieldName, (UUID) o);
-		}
-		else if (o instanceof byte[]) {
-			encoder.putByteString(fieldName, (byte[]) o);
-		}
-		else if (o instanceof XmlElement) {
-			encoder.putXmlElement(fieldName, (XmlElement) o);
-		}
-		else if (o instanceof NodeId) {
-			encoder.putNodeId(fieldName, (NodeId) o);
-		}
-		else if (o instanceof ExpandedNodeId) {
-			encoder.putExpandedNodeId(fieldName, (ExpandedNodeId) o);
-		}
-		else if (o instanceof StatusCode) {
-			encoder.putStatusCode(fieldName, (StatusCode) o);
-		}
-		else if (o instanceof QualifiedName) {
-			encoder.putQualifiedName(fieldName, (QualifiedName) o);
-		}
-		else if (o instanceof LocalizedText) {
-			encoder.putLocalizedText(fieldName, (LocalizedText) o);
-		}
-		else if (o instanceof ExtensionObject) {
-			encoder.putExtensionObject(fieldName, (ExtensionObject) o);
-		}
-		else if (o instanceof Structure) {
-			encoder.putEncodeable(fieldName, (Structure) o);
-		}
-		else if (o instanceof DataValue) {
-			encoder.putDataValue(fieldName, (DataValue) o);
-		}
-		else if (o instanceof Variant) {
-			encoder.putVariant(fieldName, (Variant) o);
-		}
-		else if (o instanceof DiagnosticInfo) {
-			encoder.putDiagnosticInfo(fieldName, (DiagnosticInfo) o);
-		}
-		else if (o instanceof Boolean[]) {
-			encoder.putBooleanArray(fieldName, (Boolean[]) o);
-		}
-		else if (o instanceof Byte[]) {
-			encoder.putSByteArray(fieldName, (Byte[]) o);
-		}
-		else if (o instanceof UnsignedByte[]) {
-			encoder.putByteArray(fieldName, (UnsignedByte[]) o);
-		}
-		else if (o instanceof Short[]) {
-			encoder.putInt16Array(fieldName, (Short[]) o);
-		}
-		else if (o instanceof UnsignedShort[]) {
-			encoder.putUInt16Array(fieldName, (UnsignedShort[]) o);
-		}
-		else if (o instanceof Integer[]) {
-			encoder.putInt32Array(fieldName, (Integer[]) o);
-		}
-		else if (o instanceof UnsignedInteger[]) {
-			encoder.putUInt32Array(fieldName, (UnsignedInteger[]) o);
-		}
-		else if (o instanceof Long[]) {
-			encoder.putInt64Array(fieldName, (Long[]) o);
-		}
-		else if (o instanceof UnsignedLong[]) {
-			encoder.putUInt64Array(fieldName, (UnsignedLong[]) o);
-		}
-		else if (o instanceof Float[]) {
-			encoder.putFloatArray(fieldName, (Float[]) o);
-		}
-		else if (o instanceof Double[]) {
-			encoder.putDoubleArray(fieldName, (Double[]) o);
-		}
-		else if (o instanceof String[]) {
-			encoder.putStringArray(fieldName, (String[]) o);
-		}
-		else if (o instanceof DateTime[]) {
-			encoder.putDateTimeArray(fieldName, (DateTime[]) o);
-		}
-		else if (o instanceof UUID[]) {
-			encoder.putGuidArray(fieldName, (UUID[]) o);
-		}
-		else if (o instanceof byte[][]) {
-			encoder.putByteStringArray(fieldName, (byte[][]) o);
-		}
-		else if (o instanceof XmlElement[]) {
-			encoder.putXmlElementArray(fieldName, (XmlElement[]) o);
-		}
-		else if (o instanceof NodeId[]) {
-			encoder.putNodeIdArray(fieldName, (NodeId[]) o);
-		}
-		else if (o instanceof ExpandedNodeId[]) {
-			encoder.putExpandedNodeIdArray(fieldName, (ExpandedNodeId[]) o);
-		}
-		else if (o instanceof StatusCode[]) {
-			encoder.putStatusCodeArray(fieldName, (StatusCode[]) o);
-		}
-		else if (o instanceof QualifiedName[]) {
-			encoder.putQualifiedNameArray(fieldName, (QualifiedName[]) o);
-		}
-		else if (o instanceof LocalizedText[]) {
-			encoder.putLocalizedTextArray(fieldName, (LocalizedText[]) o);
-		}
-		else if (o instanceof ExtensionObject[]) {
-			encoder.putExtensionObjectArray(fieldName, (ExtensionObject[]) o);
-		}
-		else if (o.getClass().getComponentType() != null && Structure.class.isAssignableFrom(o.getClass().getComponentType())) {
-			Object[] array = (Object[]) o;
-			Structure[] structArray = new Structure[array.length];
-			for (int i = 0; i < array.length; i++)
-				structArray[i] = (Structure) array[i];
-			encoder.putStructureArray(fieldName, structArray);
-		}
-		else if (o instanceof DataValue[]) {
-			encoder.putDataValueArray(fieldName, (DataValue[]) o);
-		}
-		else if (o instanceof Variant[]) {
-			encoder.putVariantArray(fieldName, (Variant[]) o);
-		}
-		else if (o instanceof DiagnosticInfo[]) {
-			encoder.putDiagnosticInfoArray(fieldName, (DiagnosticInfo[]) o);
-		}
-		else if (o instanceof Enumeration) {
-			encoder.putEnumeration(fieldName, (Enumeration) o);
-		}
-		else if (o.getClass().getComponentType() != null && Enumeration.class.isAssignableFrom(o.getClass().getComponentType())) {
-			encoder.putEnumerationArray(fieldName, o);
-		}
-		else throw new EncodingException("Cannot encode "+o);
+		
+		put(encoder, fieldName, o, o.getClass());		
 	}
 	
 
+	/**
+	 * <p>put.</p>
+	 *
+	 * @param encoder a {@link org.opcfoundation.ua.encoding.IEncoder} object.
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param o a {@link java.lang.Object} object.
+	 * @param clazz a {@link java.lang.Class} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	@SuppressWarnings("unchecked")
 	public static void put(IEncoder encoder, String fieldName, Object o, Class<?> clazz) throws EncodingException {
-		if (o != null) {
-			put(encoder, fieldName, o);
-		}
-		else if (Boolean.class.isAssignableFrom(clazz)) {
+		if (Boolean.class.isAssignableFrom(clazz)) {
 			encoder.putBoolean(fieldName, (Boolean) o);
 		}
 		else if (Byte.class.isAssignableFrom(clazz)) {
@@ -356,7 +212,7 @@ public class EncoderUtils {
 			encoder.putExtensionObjectArray(fieldName, (ExtensionObject[]) o);
 		}
 		else if (Structure[].class.isAssignableFrom(clazz)) {
-			encoder.putStructureArray(fieldName, (Structure[]) null);
+			encoder.putStructureArray(fieldName, (Structure[]) o);
 		}
 		else if (DataValue[].class.isAssignableFrom(clazz)) {
 			encoder.putDataValueArray(fieldName, (DataValue[]) o);
@@ -371,7 +227,7 @@ public class EncoderUtils {
 			encoder.putEnumeration(fieldName, (Enumeration) o);
 		}
 		else if (Enumeration[].class.isAssignableFrom(clazz)) {
-			encoder.putEnumerationArray(fieldName, null);
+			encoder.putEnumerationArray(fieldName, (Enumeration[])o);
 		}
 		else throw new EncodingException("Cannot encode "+o);
 	}	

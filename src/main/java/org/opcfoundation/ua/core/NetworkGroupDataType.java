@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.EndpointUrlListDataType;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class NetworkGroupDataType extends Object implements Structure, Cloneable {
+public class NetworkGroupDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.NetworkGroupDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.NetworkGroupDataType_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class NetworkGroupDataType extends Object implements Structure, Cloneable
       */
     public NetworkGroupDataType clone()
     {
-        NetworkGroupDataType result = new NetworkGroupDataType();
+        NetworkGroupDataType result = (NetworkGroupDataType) super.clone();
         result.ServerUri = ServerUri;
         if (NetworkPaths!=null) {
             result.NetworkPaths = new EndpointUrlListDataType[NetworkPaths.length];

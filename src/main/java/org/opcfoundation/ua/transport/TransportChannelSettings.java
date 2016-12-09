@@ -40,18 +40,21 @@ public class TransportChannelSettings implements Cloneable {
 	///// HTTPS Settings /////	
 	HttpsSettings httpsSettings = new HttpsSettings();
 	
+	/**
+	 * <p>Constructor for TransportChannelSettings.</p>
+	 */
 	public TransportChannelSettings() {}
 
 	/**
 	 * Create Transport channel settings for a opctcp connection
-	 * 
-	 * @param description
-	 * @param configuration
-	 * @param clientCertificate
-	 * @param privateKey
-	 * @param certificateValidator
+	 *
+	 * @param description a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 * @param configuration a {@link org.opcfoundation.ua.core.EndpointConfiguration} object.
+	 * @param clientCertificate a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 * @param privateKey a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
+	 * @param certificateValidator a {@link org.opcfoundation.ua.transport.security.CertificateValidator} object.
 	 * @param namespaceUris (optional)
-	 * @throws RuntimeServiceResultException
+	 * @throws org.opcfoundation.ua.common.RuntimeServiceResultException if any.
 	 */
 	public TransportChannelSettings(
 			EndpointDescription description,
@@ -73,14 +76,13 @@ public class TransportChannelSettings implements Cloneable {
 
 	/**
 	 * Create Transport channel settings for a https connection
-	 * 
-	 * @param description
-	 * @param configuration
-	 * @param clientCertificate
-	 * @param privateKey
-	 * @param certificateValidator
-	 * @param namespaceUris
-	 * @throws RuntimeServiceResultException
+	 *
+	 * @param description a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 * @param configuration a {@link org.opcfoundation.ua.core.EndpointConfiguration} object.
+	 * @throws org.opcfoundation.ua.common.RuntimeServiceResultException if any.
+	 * @param keypair a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
+	 * @param certValidator a {@link org.opcfoundation.ua.transport.security.CertificateValidator} object.
+	 * @param hostnameVerifier a {@link org.apache.http.conn.ssl.X509HostnameVerifier} object.
 	 */
 	public TransportChannelSettings(
 			EndpointDescription description,
@@ -99,6 +101,11 @@ public class TransportChannelSettings implements Cloneable {
 	}
 	
 	
+	/**
+	 * <p>getServerCertificate.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public Cert getServerCertificate() {
 		try {
 			return (this.description!=null && this.description.getServerCertificate()!=null && this.description.getServerCertificate().length > 0) 
@@ -110,38 +117,83 @@ public class TransportChannelSettings implements Cloneable {
 	
 	
 	
+	/**
+	 * <p>Getter for the field <code>description</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 */
 	public EndpointDescription getDescription() {
 		return description;
 	}
 
+	/**
+	 * <p>Setter for the field <code>description</code>.</p>
+	 *
+	 * @param description a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 */
 	public void setDescription(EndpointDescription description) {
 		this.description = description;
 	}
 
+	/**
+	 * <p>Getter for the field <code>configuration</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.EndpointConfiguration} object.
+	 */
 	public EndpointConfiguration getConfiguration() {
 		return configuration;
 	}
 
+	/**
+	 * <p>Setter for the field <code>configuration</code>.</p>
+	 *
+	 * @param configuration a {@link org.opcfoundation.ua.core.EndpointConfiguration} object.
+	 */
 	public void setConfiguration(EndpointConfiguration configuration) {
 		this.configuration = configuration;
 	}
 
+	/**
+	 * <p>Getter for the field <code>opctcpSettings</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.tcp.io.OpcTcpSettings} object.
+	 */
 	public OpcTcpSettings getOpctcpSettings() {
 		return opctcpSettings;
 	}
 
+	/**
+	 * <p>Setter for the field <code>opctcpSettings</code>.</p>
+	 *
+	 * @param opctcpSettings a {@link org.opcfoundation.ua.transport.tcp.io.OpcTcpSettings} object.
+	 */
 	public void setOpctcpSettings(OpcTcpSettings opctcpSettings) {
 		this.opctcpSettings = opctcpSettings;
 	}
 
+	/**
+	 * <p>Getter for the field <code>httpsSettings</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.https.HttpsSettings} object.
+	 */
 	public HttpsSettings getHttpsSettings() {
 		return httpsSettings;
 	}
 
+	/**
+	 * <p>Setter for the field <code>httpsSettings</code>.</p>
+	 *
+	 * @param httpsSettings a {@link org.opcfoundation.ua.transport.https.HttpsSettings} object.
+	 */
 	public void setHttpsSettings(HttpsSettings httpsSettings) {
 		this.httpsSettings = httpsSettings;
 	}
 
+	/**
+	 * <p>readFrom.</p>
+	 *
+	 * @param tcs a {@link org.opcfoundation.ua.transport.TransportChannelSettings} object.
+	 */
 	public void readFrom(TransportChannelSettings tcs) {
 		if (tcs.description!=null) description = tcs.description.clone();
 		if (tcs.configuration!=null) configuration = tcs.configuration.clone();
@@ -150,6 +202,7 @@ public class TransportChannelSettings implements Cloneable {
 		if (tcs.namespaceUris!=null) namespaceUris = tcs.namespaceUris;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public TransportChannelSettings clone() {
 		TransportChannelSettings result = new TransportChannelSettings();
@@ -167,9 +220,19 @@ public class TransportChannelSettings implements Cloneable {
 		return result;
 	}	
 	
+	/**
+	 * <p>Getter for the field <code>namespaceUris</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.common.NamespaceTable} object.
+	 */
 	public NamespaceTable getNamespaceUris() {
 		return namespaceUris;
 	}
+	/**
+	 * <p>Setter for the field <code>namespaceUris</code>.</p>
+	 *
+	 * @param namespaceUris a {@link org.opcfoundation.ua.common.NamespaceTable} object.
+	 */
 	public void setNamespaceUris(NamespaceTable namespaceUris) {
 		this.namespaceUris = namespaceUris;
 	}

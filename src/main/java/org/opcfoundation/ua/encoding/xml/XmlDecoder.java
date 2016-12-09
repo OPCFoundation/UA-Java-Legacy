@@ -58,6 +58,10 @@ import org.slf4j.LoggerFactory;
 //import java.lang.reflect.InvocationTargetException;
 //import java.lang.reflect.Method;
 
+/**
+ * <p>XmlDecoder class.</p>
+ *
+ */
 public class XmlDecoder implements IDecoder {
 
 	private static final String XML_SCHEMA_INSTANCE = "http://www.w3.org/2001/XMLSchema-instance";
@@ -83,6 +87,13 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Initializes the object with an XML element to parse.
 	/// </summary>
+	/**
+	 * <p>Constructor for XmlDecoder.</p>
+	 *
+	 * @param element a {@link org.opcfoundation.ua.builtintypes.XmlElement} object.
+	 * @param context a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	public XmlDecoder(XmlElement element, EncoderContext context) throws DecodingException
 	{
 		if (context == null)
@@ -99,6 +110,13 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Initializes the object with an XML element to parse.
 	/// </summary>
+	/**
+	 * <p>Constructor for XmlDecoder.</p>
+	 *
+	 * @param reader a {@link javax.xml.stream.XMLStreamReader} object.
+	 * @param context a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	public XmlDecoder(XMLStreamReader reader, EncoderContext context) throws DecodingException
 	{
 		if (context == null)
@@ -111,6 +129,11 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Closes the stream used for reading.
 	/// </summary>
+	/**
+	 * <p>close.</p>
+	 *
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	public void close() throws DecodingException
 	{
 		try {
@@ -123,6 +146,12 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Closes the stream used for reading.
 	/// </summary>
+	/**
+	 * <p>close.</p>
+	 *
+	 * @param checkEof a boolean.
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	public void close(boolean checkEof) throws DecodingException
 	{
 		if (checkEof && reader.getEventType() != XMLStreamConstants.END_DOCUMENT)
@@ -137,6 +166,7 @@ public class XmlDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public <T> T get(String fieldName, Class<T> clazz) throws DecodingException {
 		if(beginFieldSafe(fieldName, true)) {
@@ -145,6 +175,7 @@ public class XmlDecoder implements IDecoder {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getArrayObject(String fieldName, int builtinTypeId)
 			throws DecodingException
@@ -182,6 +213,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a boolean from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Boolean getBoolean(String fieldName) throws DecodingException
 	{
@@ -203,6 +235,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a boolean array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Boolean[] getBooleanArray(String fieldName) throws DecodingException
 	{
@@ -235,6 +268,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a byte from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedByte getByte(String fieldName) throws DecodingException
 	{
@@ -256,6 +290,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a byte array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedByte[] getByteArray(String fieldName) throws DecodingException
 	{
@@ -287,6 +322,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a byte String from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getByteString(String fieldName) throws DecodingException
 	{
@@ -337,6 +373,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a byte String array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public byte[][] getByteStringArray(String fieldName) throws DecodingException
 	{
@@ -368,6 +405,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an DataValue from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public DataValue getDataValue(String fieldName) throws DecodingException
 	{
@@ -395,6 +433,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an DataValue array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public DataValue[] getDataValueArray(String fieldName) throws DecodingException
 	{
@@ -426,6 +465,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UTC date/time from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public DateTime getDateTime(String fieldName) throws DecodingException
 	{
@@ -458,6 +498,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UTC date/time array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public DateTime[] getDateTimeArray(String fieldName) throws DecodingException
 	{
@@ -489,6 +530,12 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an DiagnosticInfo from the stream.
 	/// </summary>
+	/**
+	 * <p>getDiagnosticInfo.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.DiagnosticInfo} object.
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	public DiagnosticInfo getDiagnosticInfo() throws DecodingException
 	{
 		DiagnosticInfo value = new DiagnosticInfo();
@@ -532,6 +579,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an DiagnosticInfo from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public DiagnosticInfo getDiagnosticInfo(String fieldName) throws DecodingException
 	{
@@ -553,6 +601,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an DiagnosticInfo array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public DiagnosticInfo[] getDiagnosticInfoArray(String fieldName) throws DecodingException
 	{
@@ -584,6 +633,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a double from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Double getDouble(String fieldName) throws DecodingException
 	{
@@ -632,6 +682,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a double array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Double[] getDoubleArray(String fieldName) throws DecodingException
 	{
@@ -663,6 +714,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an encodeable object from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public <T extends IEncodeable> T getEncodeable(
 			String      fieldName,
@@ -717,6 +769,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an encodeable object array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends IEncodeable> T[] getEncodeableArray(String fieldName, Class<? extends T> encodeableClass) throws DecodingException
@@ -770,14 +823,19 @@ public class XmlDecoder implements IDecoder {
 		return (T[]) encodeables.toArray(new IEncodeable[0]);
 	}
 
+	/**
+	 * <p>Getter for the field <code>encoderContext</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public EncoderContext getEncoderContext() {
 		return encoderContext;
 	}
 
 	/**
-	 * @throws XMLStreamException
-	 * @throws DecodingException
+	 * <p>getEndElement.</p>
 	 *
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
 	 */
 	public void getEndElement() throws DecodingException {
 		//		m_reader.getEndElement();
@@ -801,6 +859,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	///  Reads an enumerated value from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends Enumeration> T getEnumeration(String fieldName, Class<T> enumType)
@@ -873,6 +932,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an enumerated value array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends Enumeration> T[] getEnumerationArray(String fieldName, Class<T> enumerationClass)
@@ -906,6 +966,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an ExpandedNodeId from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public ExpandedNodeId getExpandedNodeId(String fieldName) throws DecodingException
 	{
@@ -943,6 +1004,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an ExpandedNodeId array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public ExpandedNodeId[] getExpandedNodeIdArray(String fieldName) throws DecodingException
 	{
@@ -974,6 +1036,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an extension object from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public ExtensionObject getExtensionObject(String fieldName) throws IllegalArgumentException, DecodingException
 	{
@@ -1026,6 +1089,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an array of extension objects from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public ExtensionObject[] getExtensionObjectArray(String fieldName) throws DecodingException
 	{
@@ -1058,6 +1122,13 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads the body extension object from the stream.
 	/// </summary>
+	/**
+	 * <p>getExtensionObjectBody.</p>
+	 *
+	 * @param typeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @return a {@link java.lang.Object} object.
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	public Object getExtensionObjectBody(ExpandedNodeId typeId) throws DecodingException
 	{
 		moveToTag();
@@ -1110,6 +1181,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a float from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Float getFloat(String fieldName) throws DecodingException
 	{
@@ -1159,6 +1231,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a float array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Float[] getFloatArray(String fieldName) throws DecodingException
 	{
@@ -1191,6 +1264,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a GUID from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public UUID getGuid(String fieldName) throws DecodingException
 	{
@@ -1212,6 +1286,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a GUID array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public UUID[] getGuidArray(String fieldName) throws DecodingException
 	{
@@ -1244,6 +1319,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a short from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Short getInt16(String fieldName) throws DecodingException
 	{
@@ -1265,6 +1341,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a short array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Short[] getInt16Array(String fieldName) throws DecodingException
 	{
@@ -1296,6 +1373,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an int from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Integer getInt32(String fieldName) throws DecodingException
 	{
@@ -1317,6 +1395,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a int array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Integer[] getInt32Array(String fieldName) throws DecodingException
 	{
@@ -1348,6 +1427,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a int array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public int[] getInt32Array_(String fieldName) throws DecodingException
 	{
@@ -1385,6 +1465,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a long from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Long getInt64(String fieldName) throws DecodingException
 	{
@@ -1406,6 +1487,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a long array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Long[] getInt64Array(String fieldName) throws DecodingException
 	{
@@ -1437,6 +1519,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an LocalizedText from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public LocalizedText getLocalizedText(String fieldName) throws DecodingException
 	{
@@ -1482,6 +1565,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an LocalizedText array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public LocalizedText[] getLocalizedTextArray(String fieldName) throws DecodingException
 	{
@@ -1511,6 +1595,7 @@ public class XmlDecoder implements IDecoder {
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends IEncodeable> T getMessage()
@@ -1524,6 +1609,8 @@ public class XmlDecoder implements IDecoder {
 	}
 
 	/**
+	 * <p>Getter for the field <code>namespaceTable</code>.</p>
+	 *
 	 * @return the namespaceTable
 	 */
 	public NamespaceTable getNamespaceTable() {
@@ -1533,6 +1620,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an NodeId from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public NodeId getNodeId(String fieldName) throws IllegalArgumentException, DecodingException
 	{
@@ -1559,6 +1647,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an NodeId array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public NodeId[] getNodeIdArray(String fieldName) throws DecodingException
 	{
@@ -1590,6 +1679,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an QualifiedName from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public QualifiedName getQualifiedName(String fieldName) throws DecodingException
 	{
@@ -1634,6 +1724,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an QualifiedName array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public QualifiedName[] getQualifiedNameArray(String fieldName) throws DecodingException
 	{
@@ -1665,6 +1756,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a sbyte from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Byte getSByte(String fieldName) throws DecodingException
 	{
@@ -1686,6 +1778,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a sbyte array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Byte[] getSByteArray(String fieldName) throws DecodingException
 	{
@@ -1714,6 +1807,7 @@ public class XmlDecoder implements IDecoder {
 		return values.toArray(new Byte[0]);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getScalarObject(String fieldName, int builtinTypeId)
 			throws DecodingException
@@ -1749,6 +1843,8 @@ public class XmlDecoder implements IDecoder {
 	}
 
 	/**
+	 * <p>Getter for the field <code>serverTable</code>.</p>
+	 *
 	 * @return the serverTable
 	 */
 	public ServerTable getServerTable() {
@@ -1758,6 +1854,11 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// This method calls IsStartElement followed by Read to position you on the content of that element found in the input stream.
 	/// </summary>
+	/**
+	 * <p>getStartElement.</p>
+	 *
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	public void getStartElement() throws DecodingException
 	{
 		if(reader.isStartElement())
@@ -1771,6 +1872,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an StatusCode from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public StatusCode getStatusCode(String fieldName) throws DecodingException
 	{
@@ -1791,6 +1893,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an StatusCode array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public StatusCode[] getStatusCodeArray(String fieldName) throws DecodingException
 	{
@@ -1822,6 +1925,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a String from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public String getString(String fieldName) throws DecodingException
 	{
@@ -1844,6 +1948,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a String array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public String[] getStringArray(String fieldName) throws DecodingException
 	{
@@ -1872,6 +1977,7 @@ public class XmlDecoder implements IDecoder {
 		return values.toArray(new String[0]);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Structure getStructure(String fieldName)
 			throws DecodingException
@@ -1896,6 +2002,7 @@ public class XmlDecoder implements IDecoder {
 		//		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Structure[] getStructureArray(String fieldName)
 			throws DecodingException
@@ -1936,6 +2043,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a ushort from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedShort getUInt16(String fieldName) throws DecodingException
 	{
@@ -1957,6 +2065,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a ushort array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedShort[] getUInt16Array(String fieldName) throws DecodingException
 	{
@@ -1988,6 +2097,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UnsignedInteger from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedInteger getUInt32(String fieldName) throws DecodingException
 	{
@@ -2009,6 +2119,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UnsignedInteger array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedInteger[] getUInt32Array(String fieldName) throws DecodingException
 	{
@@ -2042,6 +2153,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UnsignedLong from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedLong getUInt64(String fieldName) throws DecodingException
 	{
@@ -2063,6 +2175,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads a UnsignedLong array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedLong[] getUInt64Array(String fieldName) throws DecodingException
 	{
@@ -2094,6 +2207,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an Variant from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Variant getVariant(String fieldName) throws DecodingException
 	{
@@ -2125,6 +2239,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an Variant array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public Variant[] getVariantArray(String fieldName) throws DecodingException
 	{
@@ -2157,6 +2272,12 @@ public class XmlDecoder implements IDecoder {
 	/// Reads the contents of an Variant object.
 	/// </summary>
 	/// <returns></returns>
+	/**
+	 * <p>getVariantContents.</p>
+	 *
+	 * @return a {@link java.lang.Object} object.
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	public Object getVariantContents() throws DecodingException//out TypeInfo typeInfo)
 	{
 		//		typeInfo = TypeInfo.Unknown;
@@ -2280,6 +2401,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an XmlElement from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public XmlElement getXmlElement(String fieldName) throws DecodingException
 	{
@@ -2294,6 +2416,7 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Reads an XmlElement array from the stream.
 	/// </summary>
+	/** {@inheritDoc} */
 	@Override
 	public XmlElement[] getXmlElementArray(String fieldName) throws DecodingException
 	{
@@ -2327,6 +2450,15 @@ public class XmlDecoder implements IDecoder {
 	/// <param name="elementName">Name of the element.</param>
 	/// <param name="stringTable">The String table.</param>
 	/// <returns>True if the table was found. False otherwise.</returns>
+	/**
+	 * <p>loadStringTable.</p>
+	 *
+	 * @param tableName a {@link java.lang.String} object.
+	 * @param elementName a {@link java.lang.String} object.
+	 * @param stringTable a {@link java.util.List} object.
+	 * @return a boolean.
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	public boolean loadStringTable(String tableName, String elementName, List<String> stringTable) throws DecodingException
 	{
 		//pushNamespace(OPC_UA_XSD_NAMESPACE);
@@ -2358,6 +2490,12 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Returns the qualified name for the next element in the stream.
 	/// </summary>
+	/**
+	 * <p>peek.</p>
+	 *
+	 * @param nodeType a int.
+	 * @return a {@link javax.xml.namespace.QName} object.
+	 */
 	public QName peek(int nodeType)
 	{
 		moveToContent();
@@ -2373,6 +2511,12 @@ public class XmlDecoder implements IDecoder {
 	/// <summary>
 	/// Returns true if the specified field is the next element to be extracted.
 	/// </summary>
+	/**
+	 * <p>peek.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @return a boolean.
+	 */
 	public boolean peek(String fieldName)
 	{
 		moveToContent();
@@ -2395,13 +2539,19 @@ public class XmlDecoder implements IDecoder {
 
 		return true;
 	}
+	/**
+	 * <p>Setter for the field <code>encoderContext</code>.</p>
+	 *
+	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public void setEncoderContext(EncoderContext ctx) {
 		this.encoderContext = ctx;
 	}
 
 	/**
 	 * Define the namespace table to use for mapping the namespace indexes of the XML data to the application data.
-	 * @param namespaceTable
+	 *
+	 * @param namespaceTable a {@link org.opcfoundation.ua.common.NamespaceTable} object.
 	 */
 	public void setNamespaceTable(NamespaceTable namespaceTable)
 	{
@@ -2418,7 +2568,8 @@ public class XmlDecoder implements IDecoder {
 
 	/**
 	 * Define the server table to use for mapping the server indexes of the XML data to the application data.
-	 * @param serverTable
+	 *
+	 * @param serverTable a {@link org.opcfoundation.ua.common.ServerTable} object.
 	 */
 	public void setServerTable(ServerTable serverTable)
 	{
@@ -2597,14 +2748,21 @@ public class XmlDecoder implements IDecoder {
 	 * @throws XMLStreamException
 	 */
 	private String getContentAsString() throws DecodingException{
-		//		return m_reader.getContentAsString();
-		String text = reader.getText();
-		try {
-			reader.next();
-		} catch (XMLStreamException e) {
-			//throw new DecodingException(e);
+		StringBuilder sb = new StringBuilder();
+		while(true){
+			String str = reader.getText();
+			if(str != null){
+				sb.append(str);
+			}
+			try {
+				if(XMLStreamConstants.CHARACTERS != reader.next()){
+					break;
+				}
+			} catch (XMLStreamException e) {
+				break;
+			}
 		}
-		return text;
+		return sb.toString();
 	}
 
 	private String getInnerXml(String fieldName) throws DecodingException {

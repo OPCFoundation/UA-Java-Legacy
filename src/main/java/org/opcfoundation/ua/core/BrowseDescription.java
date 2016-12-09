@@ -41,10 +41,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.BrowseDirection;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class BrowseDescription extends Object implements Structure, Cloneable {
+public class BrowseDescription extends AbstractStructure implements Structure, Cloneable {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.BrowseDescription);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.BrowseDescription_Encoding_DefaultBinary);
@@ -136,7 +137,7 @@ public class BrowseDescription extends Object implements Structure, Cloneable {
       */
     public BrowseDescription clone()
     {
-        BrowseDescription result = new BrowseDescription();
+        BrowseDescription result = (BrowseDescription) super.clone();
         result.NodeId = NodeId;
         result.BrowseDirection = BrowseDirection;
         result.ReferenceTypeId = ReferenceTypeId;

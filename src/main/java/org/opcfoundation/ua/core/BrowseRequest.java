@@ -38,9 +38,10 @@ import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.BrowseDescription;
 import org.opcfoundation.ua.core.RequestHeader;
 import org.opcfoundation.ua.core.ViewDescription;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class BrowseRequest extends Object implements ServiceRequest {
+public class BrowseRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.BrowseRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.BrowseRequest_Encoding_DefaultBinary);
@@ -108,7 +109,7 @@ public class BrowseRequest extends Object implements ServiceRequest {
       */
     public BrowseRequest clone()
     {
-        BrowseRequest result = new BrowseRequest();
+        BrowseRequest result = (BrowseRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.View = View==null ? null : View.clone();
         result.RequestedMaxReferencesPerNode = RequestedMaxReferencesPerNode;

@@ -39,7 +39,7 @@ import org.opcfoundation.ua.core.NotificationData;
 
 
 
-public class EventNotificationList extends NotificationData implements Structure, Cloneable {
+public class EventNotificationList extends NotificationData {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.EventNotificationList);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.EventNotificationList_Encoding_DefaultBinary);
@@ -71,7 +71,7 @@ public class EventNotificationList extends NotificationData implements Structure
       */
     public EventNotificationList clone()
     {
-        EventNotificationList result = new EventNotificationList();
+        EventNotificationList result = (EventNotificationList) super.clone();
         if (Events!=null) {
             result.Events = new EventFieldList[Events.length];
             for (int i=0; i<Events.length; i++)

@@ -37,9 +37,10 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.core.AddNodesResult;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class AddNodesResponse extends Object implements ServiceResponse {
+public class AddNodesResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.AddNodesResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.AddNodesResponse_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class AddNodesResponse extends Object implements ServiceResponse {
       */
     public AddNodesResponse clone()
     {
-        AddNodesResponse result = new AddNodesResponse();
+        AddNodesResponse result = (AddNodesResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         if (Results!=null) {
             result.Results = new AddNodesResult[Results.length];

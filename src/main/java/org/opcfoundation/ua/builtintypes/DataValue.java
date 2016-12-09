@@ -17,8 +17,13 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 
 
 
+/**
+ * <p>DataValue class.</p>
+ *
+ */
 public class DataValue implements Cloneable {
 
+	/** Constant <code>ID</code> */
 	public static final NodeId ID = Identifiers.DataValue;
 	
 	Variant value;
@@ -28,10 +33,23 @@ public class DataValue implements Cloneable {
     DateTime serverTimestamp;
     UnsignedShort serverPicoseconds;
 
+	/**
+	 * <p>Constructor for DataValue.</p>
+	 */
 	public DataValue() {
       this(StatusCode.GOOD);
     }
     
+    /**
+     * <p>Constructor for DataValue.</p>
+     *
+     * @param value a {@link org.opcfoundation.ua.builtintypes.Variant} object.
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     * @param sourceTimestamp a {@link org.opcfoundation.ua.builtintypes.DateTime} object.
+     * @param sourcePicoseconds a {@link org.opcfoundation.ua.builtintypes.UnsignedShort} object.
+     * @param serverTimestamp a {@link org.opcfoundation.ua.builtintypes.DateTime} object.
+     * @param serverPicoseconds a {@link org.opcfoundation.ua.builtintypes.UnsignedShort} object.
+     */
     public DataValue(Variant value, StatusCode statusCode, DateTime sourceTimestamp, UnsignedShort sourcePicoseconds, DateTime serverTimestamp, UnsignedShort serverPicoseconds) {
         super();
         this.statusCode = statusCode;
@@ -44,63 +62,132 @@ public class DataValue implements Cloneable {
         setValue(value);
     }
 
+    /**
+     * <p>Constructor for DataValue.</p>
+     *
+     * @param value a {@link org.opcfoundation.ua.builtintypes.Variant} object.
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     * @param sourceTimestamp a {@link org.opcfoundation.ua.builtintypes.DateTime} object.
+     * @param serverTimestamp a {@link org.opcfoundation.ua.builtintypes.DateTime} object.
+     */
     public DataValue(Variant value, StatusCode statusCode, DateTime sourceTimestamp, DateTime serverTimestamp) {
 		this(value, statusCode, sourceTimestamp, null, serverTimestamp, null);
     }
 
+    /**
+     * <p>Constructor for DataValue.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     */
     public DataValue(StatusCode statusCode) {
     	this(Variant.NULL, statusCode); 
     }
 
+    /**
+     * <p>Constructor for DataValue.</p>
+     *
+     * @param value a {@link org.opcfoundation.ua.builtintypes.Variant} object.
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     */
     public DataValue(Variant value, StatusCode statusCode) {
 		this(value, statusCode, null, null, null, null);
 	}
 
+	/**
+	 * <p>Constructor for DataValue.</p>
+	 *
+	 * @param variant a {@link org.opcfoundation.ua.builtintypes.Variant} object.
+	 */
 	public DataValue(Variant variant) {
 		this(variant, StatusCode.GOOD);
 	}
 
+	/**
+	 * <p>Getter for the field <code>serverTimestamp</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.DateTime} object.
+	 */
 	public DateTime getServerTimestamp() {
         return serverTimestamp;
     }
 
+    /**
+     * <p>Setter for the field <code>serverTimestamp</code>.</p>
+     *
+     * @param serverTimestamp a {@link org.opcfoundation.ua.builtintypes.DateTime} object.
+     */
     public void setServerTimestamp(DateTime serverTimestamp) {
         this.serverTimestamp = serverTimestamp;
     }
 
+    /**
+     * <p>Getter for the field <code>sourceTimestamp</code>.</p>
+     *
+     * @return a {@link org.opcfoundation.ua.builtintypes.DateTime} object.
+     */
     public DateTime getSourceTimestamp() {
         return sourceTimestamp;
     }
 
+    /**
+     * <p>Setter for the field <code>sourceTimestamp</code>.</p>
+     *
+     * @param sourceTimestamp a {@link org.opcfoundation.ua.builtintypes.DateTime} object.
+     */
     public void setSourceTimestamp(DateTime sourceTimestamp) {
         this.sourceTimestamp = sourceTimestamp;
     }
 
+    /**
+     * <p>Getter for the field <code>statusCode</code>.</p>
+     *
+     * @return a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     */
     public StatusCode getStatusCode() {
         return statusCode;
     }
 
+    /**
+     * <p>Setter for the field <code>statusCode</code>.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     */
     public void setStatusCode(StatusCode statusCode) {
         this.statusCode = statusCode;
     }
 
+	/**
+	 * <p>Setter for the field <code>statusCode</code>.</p>
+	 *
+	 * @param value a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public void setStatusCode(UnsignedInteger value) {
 		setStatusCode(new StatusCode(value));
 	}
 
+	/**
+	 * <p>Getter for the field <code>value</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.Variant} object.
+	 */
 	public Variant getValue() {
         return value;
     }
 	
 	/**
 	 * Check if Value is null.
-	 * 
+	 *
 	 * @return true if Value is null or the Variant returned by it contains a null.
 	 */
 	public boolean isNull() {
 		return value.getValue() == null;
 	}
 
+    /**
+     * <p>Setter for the field <code>value</code>.</p>
+     *
+     * @param value a {@link org.opcfoundation.ua.builtintypes.Variant} object.
+     */
     public void setValue(Variant value) {
     	if (value == null)
 			this.value = Variant.NULL;
@@ -108,6 +195,7 @@ public class DataValue implements Cloneable {
 			this.value = value;
     }
     
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
     	return 
@@ -119,6 +207,7 @@ public class DataValue implements Cloneable {
 		ObjectUtils.hashCode(serverPicoseconds);
     }
     
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
     	if (!(obj instanceof DataValue)) return false;
@@ -132,22 +221,43 @@ public class DataValue implements Cloneable {
 			ObjectUtils.objectEquals(o.serverPicoseconds, serverPicoseconds);		
     }
     
+    /**
+     * <p>Getter for the field <code>sourcePicoseconds</code>.</p>
+     *
+     * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedShort} object.
+     */
     public UnsignedShort getSourcePicoseconds() {
 		return sourcePicoseconds;
 	}
 
+	/**
+	 * <p>Setter for the field <code>sourcePicoseconds</code>.</p>
+	 *
+	 * @param sourcePicoseconds a {@link org.opcfoundation.ua.builtintypes.UnsignedShort} object.
+	 */
 	public void setSourcePicoseconds(UnsignedShort sourcePicoseconds) {
 		this.sourcePicoseconds = sourcePicoseconds;
 	}
 
+	/**
+	 * <p>Getter for the field <code>serverPicoseconds</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedShort} object.
+	 */
 	public UnsignedShort getServerPicoseconds() {
 		return serverPicoseconds;
 	}
 
+	/**
+	 * <p>Setter for the field <code>serverPicoseconds</code>.</p>
+	 *
+	 * @param serverPicoseconds a {@link org.opcfoundation.ua.builtintypes.UnsignedShort} object.
+	 */
 	public void setServerPicoseconds(UnsignedShort serverPicoseconds) {
 		this.serverPicoseconds = serverPicoseconds;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -162,6 +272,7 @@ public class DataValue implements Cloneable {
 		return sb.toString();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object clone() {
 		return new DataValue(getValue(),

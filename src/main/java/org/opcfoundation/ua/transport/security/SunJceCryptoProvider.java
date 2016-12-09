@@ -19,13 +19,21 @@ import org.opcfoundation.ua.utils.CryptoUtil;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
+/**
+ * <p>SunJceCryptoProvider class.</p>
+ *
+ */
 public class SunJceCryptoProvider extends JceCryptoProvider implements CryptoProvider {
 
+	/**
+	 * <p>Constructor for SunJceCryptoProvider.</p>
+	 */
 	public SunJceCryptoProvider() {
 		CryptoUtil.setSecurityProviderName("SunJCE");
 		this.provider = Security.getProvider("SunJCE");
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public byte[] base64Decode(String string) {
 		// Probably better, but not available on the default jars!
@@ -38,6 +46,7 @@ public class SunJceCryptoProvider extends JceCryptoProvider implements CryptoPro
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String base64Encode(byte[] bytes) {
 		// See above: base64Decode

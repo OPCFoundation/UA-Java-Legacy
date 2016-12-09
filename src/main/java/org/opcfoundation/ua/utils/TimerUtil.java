@@ -18,14 +18,20 @@ import java.util.TimerTask;
 import java.util.concurrent.Executor;
 
 /**
+ * <p>TimerUtil class.</p>
  *
- * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class TimerUtil {
 	
+	/** Constant <code>timer</code> */
 	public static WeakReference<Timer> timer;
 	
+	/**
+	 * <p>Getter for the field <code>timer</code>.</p>
+	 *
+	 * @return a {@link java.util.Timer} object.
+	 */
 	public synchronized static Timer getTimer()
 	{
 		Timer t = timer!=null ? timer.get() : null;
@@ -37,6 +43,14 @@ public class TimerUtil {
 		return t;
 	}
 	
+	/**
+	 * <p>schedule.</p>
+	 *
+	 * @param run a {@link java.lang.Runnable} object.
+	 * @param executor a {@link java.util.concurrent.Executor} object.
+	 * @param systemTime a long.
+	 * @return a {@link java.util.TimerTask} object.
+	 */
 	public static TimerTask schedule(final Runnable run, final Executor executor, long systemTime)
 	{
 		if (run==null || executor==null)
@@ -62,7 +76,7 @@ public class TimerUtil {
 	}
 	
 	/**
-	 * 
+	 * <p>purge.</p>
 	 */
 	protected static void purge() {
 		Timer t = timer!=null ? timer.get() : null;
@@ -70,6 +84,15 @@ public class TimerUtil {
 			t.purge();
 	}
 	
+	/**
+	 * <p>schedule.</p>
+	 *
+	 * @param timer a {@link java.util.Timer} object.
+	 * @param run a {@link java.lang.Runnable} object.
+	 * @param executor a {@link java.util.concurrent.Executor} object.
+	 * @param systemTime a long.
+	 * @return a {@link java.util.TimerTask} object.
+	 */
 	public static TimerTask schedule(Timer timer, final Runnable run, final Executor executor, long systemTime)
 	{
 		if (run==null || executor==null)

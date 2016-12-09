@@ -39,9 +39,10 @@ import org.opcfoundation.ua.core.ContentFilterResult;
 import org.opcfoundation.ua.core.ParsingResult;
 import org.opcfoundation.ua.core.QueryDataSet;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class QueryFirstResponse extends Object implements ServiceResponse {
+public class QueryFirstResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.QueryFirstResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.QueryFirstResponse_Encoding_DefaultBinary);
@@ -133,7 +134,7 @@ public class QueryFirstResponse extends Object implements ServiceResponse {
       */
     public QueryFirstResponse clone()
     {
-        QueryFirstResponse result = new QueryFirstResponse();
+        QueryFirstResponse result = (QueryFirstResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         if (QueryDataSets!=null) {
             result.QueryDataSets = new QueryDataSet[QueryDataSets.length];

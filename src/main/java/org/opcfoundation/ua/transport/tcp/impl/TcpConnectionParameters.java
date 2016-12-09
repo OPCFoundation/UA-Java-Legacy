@@ -16,7 +16,6 @@ import org.opcfoundation.ua.utils.StackUtils;
 
 /**
  * TCP Connection parameters
- * 
  */
 public class TcpConnectionParameters implements Cloneable {
 	
@@ -30,6 +29,7 @@ public class TcpConnectionParameters implements Cloneable {
 	
 	public String endpointUrl;
 
+	/** {@inheritDoc} */
 	@Override
 	public TcpConnectionParameters clone() {
 		try {

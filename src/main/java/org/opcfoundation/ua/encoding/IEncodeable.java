@@ -16,8 +16,8 @@ import org.opcfoundation.ua.encoding.utils.EncodeableDesc;
 import org.opcfoundation.ua.encoding.utils.EncodeableDiscovery;
 
 /**
- * IEncodeable is a serializable object. The serialization methods are 
- * externalized to IEncodeableSerializer.   
+ * IEncodeable is a serializable object. The serialization methods are
+ * externalized to IEncodeableSerializer.
  *
  * @see EncodeableDesc Description of IEncodeable class
  * @see EncodeableDiscovery Discovers all builtin IEncodeable classes

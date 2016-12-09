@@ -46,10 +46,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.core.ServiceFault;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ServiceFault extends Object implements Structure, Cloneable {
+public class ServiceFault extends AbstractStructure implements Structure, Cloneable {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ServiceFault);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ServiceFault_Encoding_DefaultBinary);
@@ -130,7 +131,7 @@ public class ServiceFault extends Object implements Structure, Cloneable {
       */
     public ServiceFault clone()
     {
-        ServiceFault result = new ServiceFault();
+        ServiceFault result = (ServiceFault) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         return result;
     }

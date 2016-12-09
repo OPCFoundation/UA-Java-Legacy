@@ -37,9 +37,10 @@ import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.MessageSecurityMode;
 import org.opcfoundation.ua.core.RequestHeader;
 import org.opcfoundation.ua.core.SecurityTokenRequestType;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class OpenSecureChannelRequest extends Object implements ServiceRequest {
+public class OpenSecureChannelRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.OpenSecureChannelRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.OpenSecureChannelRequest_Encoding_DefaultBinary);
@@ -131,7 +132,7 @@ public class OpenSecureChannelRequest extends Object implements ServiceRequest {
       */
     public OpenSecureChannelRequest clone()
     {
-        OpenSecureChannelRequest result = new OpenSecureChannelRequest();
+        OpenSecureChannelRequest result = (OpenSecureChannelRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.ClientProtocolVersion = ClientProtocolVersion;
         result.RequestType = RequestType;

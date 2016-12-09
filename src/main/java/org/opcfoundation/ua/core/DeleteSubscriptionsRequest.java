@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class DeleteSubscriptionsRequest extends Object implements ServiceRequest {
+public class DeleteSubscriptionsRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DeleteSubscriptionsRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteSubscriptionsRequest_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class DeleteSubscriptionsRequest extends Object implements ServiceRequest
       */
     public DeleteSubscriptionsRequest clone()
     {
-        DeleteSubscriptionsRequest result = new DeleteSubscriptionsRequest();
+        DeleteSubscriptionsRequest result = (DeleteSubscriptionsRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.SubscriptionIds = SubscriptionIds==null ? null : SubscriptionIds.clone();
         return result;

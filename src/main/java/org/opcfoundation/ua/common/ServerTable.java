@@ -14,10 +14,15 @@ package org.opcfoundation.ua.common;
 
 
 /**
- * Table for keeping the ServerUris, which are exposed by the server via the property Server.ServerArray. 
- * 
+ * Table for keeping the ServerUris, which are exposed by the server via the property Server.ServerArray.
  */
 public class ServerTable extends UriTable {
+	/**
+	 * <p>createFromArray.</p>
+	 *
+	 * @param serverArray an array of {@link java.lang.String} objects.
+	 * @return a {@link org.opcfoundation.ua.common.ServerTable} object.
+	 */
 	public static ServerTable createFromArray(String[] serverArray) {
 		ServerTable result = new ServerTable();
 		result.addAll(serverArray);

@@ -42,7 +42,7 @@ import org.opcfoundation.ua.core.NodeAttributes;
 
 
 
-public class VariableTypeAttributes extends NodeAttributes implements Structure, Cloneable {
+public class VariableTypeAttributes extends NodeAttributes {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.VariableTypeAttributes);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.VariableTypeAttributes_Encoding_DefaultBinary);
@@ -123,7 +123,7 @@ public class VariableTypeAttributes extends NodeAttributes implements Structure,
       */
     public VariableTypeAttributes clone()
     {
-        VariableTypeAttributes result = new VariableTypeAttributes();
+        VariableTypeAttributes result = (VariableTypeAttributes) super.clone();
         result.SpecifiedAttributes = SpecifiedAttributes;
         result.DisplayName = DisplayName;
         result.Description = Description;

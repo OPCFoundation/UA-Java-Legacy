@@ -28,7 +28,6 @@ import org.opcfoundation.ua.utils.CryptoUtil;
 
 /**
  * Security Token of a tcp connection
- * 
  */
 public class SecurityToken {
 
@@ -52,15 +51,15 @@ public class SecurityToken {
     
 	/**
 	 * Create new security token.
-	 * 
-	 * @param securityProfile
-	 * @param secureChannelId
-	 * @param tokenId
-	 * @param creationTime
-	 * @param lifetime
-	 * @param localNonce
-	 * @param remoteNonce
-	 * @throws ServiceResultException
+	 *
+	 * @param securityProfile a {@link org.opcfoundation.ua.transport.security.SecurityConfiguration} object.
+	 * @param secureChannelId a int.
+	 * @param tokenId a int.
+	 * @param creationTime a long.
+	 * @param lifetime a long.
+	 * @param localNonce an array of byte.
+	 * @param remoteNonce an array of byte.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
 	public SecurityToken(SecurityConfiguration securityProfile, 
 			int secureChannelId, int tokenId, 
@@ -192,21 +191,21 @@ public class SecurityToken {
         return output;
     }
 
-    /**
-     * Return security token validity. Security token is still valid if it has expired
-     * up to 25% after its lifetime. (See Part 6, 5.5.2.1/3)
-     * 
-     * @return true if less than 125% of tokens life time has elapsed. 
-     */
+	/**
+	 * Return security token validity. Security token is still valid if it has expired
+	 * up to 25% after its lifetime. (See Part 6, 5.5.2.1/3)
+	 *
+	 * @return true if less than 125% of tokens life time has elapsed.
+	 */
 	public boolean isValid()
 	{
 		return System.currentTimeMillis() < creationTime + lifetime + (lifetime / 4);
 	}
 	
 	/**
-	 * Return security token time to renew status. 
+	 * Return security token time to renew status.
 	 * True if 75% of security tokens life-time has elapsed.
-	 *  
+	 *
 	 * @return true if 75% of tokens life-time has passed
 	 */
 	public boolean isTimeToRenew()
@@ -217,80 +216,155 @@ public class SecurityToken {
 	/**
 	 * Return security tokens expired status.
 	 * Token is expired if its 100% of its life time has elapsed. Note, the token
-	 * is valid for use until 125% of its life time has passed.  
-	 * 
-	 * @return true if 100% of security tokens life time has elapsed. 
+	 * is valid for use until 125% of its life time has passed.
+	 *
+	 * @return true if 100% of security tokens life time has elapsed.
 	 */
 	public boolean isExpired()
 	{
 		return System.currentTimeMillis() >= creationTime + lifetime;
 	}
 
+	/**
+	 * <p>getSecurityPolicy.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.SecurityPolicy} object.
+	 */
 	public SecurityPolicy getSecurityPolicy() {
 		return securityConfiguration.getSecurityPolicy();
 	}
 	
+	/**
+	 * <p>Getter for the field <code>securityConfiguration</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.SecurityConfiguration} object.
+	 */
 	public SecurityConfiguration getSecurityConfiguration() {
 		return securityConfiguration;
 	}
 	
+	/**
+	 * <p>getMessageSecurityMode.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.MessageSecurityMode} object.
+	 */
 	public MessageSecurityMode getMessageSecurityMode() {
 		return securityConfiguration.getMessageSecurityMode();
 	}
 	
+	/**
+	 * <p>Getter for the field <code>localSigningKey</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getLocalSigningKey() {
 		return localSigningKey;
 	}
 
+	/**
+	 * <p>Setter for the field <code>localSigningKey</code>.</p>
+	 *
+	 * @param localSigningKey an array of byte.
+	 */
 	public void setLocalSigningKey(byte[] localSigningKey) {
 		this.localSigningKey = localSigningKey;
 	}
 
+	/**
+	 * <p>Getter for the field <code>localEncryptingKey</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getLocalEncryptingKey() {
 		return localEncryptingKey;
 	}
 
+	/**
+	 * <p>Setter for the field <code>localEncryptingKey</code>.</p>
+	 *
+	 * @param localEncryptingKey an array of byte.
+	 */
 	public void setLocalEncryptingKey(byte[] localEncryptingKey) {
 		this.localEncryptingKey = localEncryptingKey;
 	}
 
+	/**
+	 * <p>Getter for the field <code>localInitializationVector</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getLocalInitializationVector() {
 		return localInitializationVector;
 	}
 
+	/**
+	 * <p>Setter for the field <code>localInitializationVector</code>.</p>
+	 *
+	 * @param localInitializationVector an array of byte.
+	 */
 	public void setLocalInitializationVector(byte[] localInitializationVector) {
 		this.localInitializationVector = localInitializationVector;
 	}
 
+	/**
+	 * <p>Getter for the field <code>remoteSigningKey</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getRemoteSigningKey() {
 		return remoteSigningKey;
 	}
 
+	/**
+	 * <p>Setter for the field <code>remoteSigningKey</code>.</p>
+	 *
+	 * @param remoteSigningKey an array of byte.
+	 */
 	public void setRemoteSigningKey(byte[] remoteSigningKey) {
 		this.remoteSigningKey = remoteSigningKey;
 	}
 
+	/**
+	 * <p>Getter for the field <code>remoteEncryptingKey</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getRemoteEncryptingKey() {
 		return remoteEncryptingKey;
 	}
 
+	/**
+	 * <p>Setter for the field <code>remoteEncryptingKey</code>.</p>
+	 *
+	 * @param remoteEncryptingKey an array of byte.
+	 */
 	public void setRemoteEncryptingKey(byte[] remoteEncryptingKey) {
 		this.remoteEncryptingKey = remoteEncryptingKey;
 	}
 
+	/**
+	 * <p>Getter for the field <code>remoteInitializationVector</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getRemoteInitializationVector() {
 		return remoteInitializationVector;
 	}
 
+	/**
+	 * <p>Setter for the field <code>remoteInitializationVector</code>.</p>
+	 *
+	 * @param remoteInitializationVector an array of byte.
+	 */
 	public void setRemoteInitializationVector(byte[] remoteInitializationVector) {
 		this.remoteInitializationVector = remoteInitializationVector;
 	}
 
 	/**
-	 * Crate new remoteHmac 
-	 * 
+	 * Crate new remoteHmac
+	 *
 	 * @return hmac
-	 * @throws ServiceResultException 
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
 	public Mac createRemoteHmac() throws ServiceResultException 
 	{
@@ -298,10 +372,10 @@ public class SecurityToken {
 	}
 	
 	/**
-	 * Create new localHmac 
-	 * 
+	 * Create new localHmac
+	 *
 	 * @return hmac
-	 * @throws ServiceResultException 
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
 	public Mac createLocalHmac() throws ServiceResultException 
 	{
@@ -309,9 +383,11 @@ public class SecurityToken {
 	}
 
 	/**
-	 * @param keySpec
-	 * @return
-	 * @throws ServiceResultException
+	 * <p>createHmac.</p>
+	 *
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 * @param secret an array of byte.
+	 * @return a {@link javax.crypto.Mac} object.
 	 */
 	protected Mac createHmac(byte[] secret) throws ServiceResultException {
 		SecurityPolicy policy = securityConfiguration.getSecurityPolicy();
@@ -319,37 +395,73 @@ public class SecurityToken {
 	}
 	
 
+	/**
+	 * <p>Getter for the field <code>localNonce</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getLocalNonce() {
 		return localNonce;
 	}
 
+	/**
+	 * <p>Getter for the field <code>remoteNonce</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getRemoteNonce() {
 		return remoteNonce;
 	}
 
+	/**
+	 * <p>Getter for the field <code>secureChannelId</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSecureChannelId() {
 		return secureChannelId;
 	}
 
+	/**
+	 * <p>Getter for the field <code>tokenId</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getTokenId() {
 		return tokenId;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>creationTime</code>.</p>
+	 *
+	 * @return a long.
+	 */
 	public long getCreationTime()
 	{
 		return creationTime;
 	}
 	
+	/**
+	 * <p>getLifeTime.</p>
+	 *
+	 * @return a long.
+	 */
 	public long getLifeTime()
 	{
 		return lifetime;
 	}
 	
+	/**
+	 * <p>getRenewTime.</p>
+	 *
+	 * @return a long.
+	 */
 	public long getRenewTime()
 	{
 		return creationTime + ((lifetime *3)/4);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		final GregorianCalendar cal = new GregorianCalendar();

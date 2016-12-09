@@ -21,7 +21,7 @@ import java.util.Map.Entry;
 
 /**
  * Bijection map is a 1:1 binding of 2-tuples.
- * For each binding one value has role "left" and the other one the role "right". 
+ * For each binding one value has role "left" and the other one the role "right".
  *
  * @author Toni Kalajainen
  */
@@ -32,12 +32,23 @@ public class BijectionMap<L, R> {
 	/** The keys of this map are rights and values lefts */
 	private Map<R, L> tableRight = new HashMap<R, L>();
 	
+	/**
+	 * <p>addAll.</p>
+	 *
+	 * @param map a {@link org.opcfoundation.ua.utils.BijectionMap} object.
+	 */
 	public void addAll(BijectionMap<L, R> map)
 	{
 		for (Entry<L, R> e : map.getEntries())
 			map(e.getKey(), e.getValue());
 	}
 	
+    /**
+     * <p>retainAllLeft.</p>
+     *
+     * @param values a {@link java.util.Collection} object.
+     * @return a boolean.
+     */
     public boolean retainAllLeft(Collection<L> values)
     {
         boolean result = false;
@@ -49,6 +60,12 @@ public class BijectionMap<L, R> {
         return result;
     }
     
+    /**
+     * <p>retainAllRight.</p>
+     *
+     * @param values a {@link java.util.Collection} object.
+     * @return a boolean.
+     */
     public boolean retainAllRight(Collection<R> values)
     {
         boolean result = false;
@@ -60,16 +77,33 @@ public class BijectionMap<L, R> {
         return result;
     }
     
+	/**
+	 * <p>getEntries.</p>
+	 *
+	 * @return a {@link java.util.Set} object.
+	 */
 	public Set<Entry<L, R>> getEntries()
 	{
 		return tableLeft.entrySet();
 	}
 	
+	/**
+	 * <p>containsLeft.</p>
+	 *
+	 * @param leftValue a L object.
+	 * @return a boolean.
+	 */
 	public boolean containsLeft(L leftValue)
 	{
 		return tableLeft.containsKey(leftValue);
 	}
 	
+	/**
+	 * <p>containsRight.</p>
+	 *
+	 * @param rightValue a R object.
+	 * @return a boolean.
+	 */
 	public boolean containsRight(R rightValue)
 	{
 		return tableRight.containsKey(rightValue);
@@ -77,9 +111,9 @@ public class BijectionMap<L, R> {
 	
 	/**
 	 * Contains binding
-	 * 
-	 * @param leftValue
-	 * @param rightValue
+	 *
+	 * @param leftValue a L object.
+	 * @param rightValue a R object.
 	 * @return true if there is a mapping between left and right value
 	 */
 	public boolean contains(L leftValue, R rightValue)
@@ -93,9 +127,9 @@ public class BijectionMap<L, R> {
 	
 	/**
 	 * Add value to the map
-	 * 
-	 * @param leftValue
-	 * @param rightValue
+	 *
+	 * @param leftValue a L object.
+	 * @param rightValue a R object.
 	 */
 	public void map(L leftValue, R rightValue)
 	{
@@ -114,34 +148,39 @@ public class BijectionMap<L, R> {
 		tableRight.put(rightValue, leftValue);
 	}
 	
+	/**
+	 * <p>isEmpty.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isEmpty() {
 	    return tableLeft.isEmpty();
 	}
     
-	/**
-	 * Get the number of mappings
-	 * 
-	 * @return the number of mappings
-	 */
+    /**
+     * Get the number of mappings
+     *
+     * @return the number of mappings
+     */
     public int size() 
     {
         return tableLeft.size();
     }
 	
-    /**
-     * Get left value with right key
-     * 
-     * @param rightValue
-     * @return left value
-     */
+	/**
+	 * Get left value with right key
+	 *
+	 * @param rightValue a R object.
+	 * @return left value
+	 */
 	public L getLeft(R rightValue) {
 		return tableRight.get(rightValue);		
 	}
 
 	/**
 	 * Get right value with left key
-	 * 
-	 * @param leftValue
+	 *
+	 * @param leftValue a L object.
 	 * @return right vlaue
 	 */
 	public R getRight(L leftValue) {
@@ -150,8 +189,8 @@ public class BijectionMap<L, R> {
 	
 	/**
 	 * Remove a binding with left key
-	 * 
-	 * @param leftValue
+	 *
+	 * @param leftValue a L object.
 	 * @return old right value
 	 */
 	public R removeWithLeft(L leftValue) {
@@ -163,8 +202,8 @@ public class BijectionMap<L, R> {
 
 	/**
 	 * Remove a binding with right key
-	 * 
-	 * @param rightValue
+	 *
+	 * @param rightValue a R object.
 	 * @return old left value
 	 */
 	public L removeWithRight(R rightValue) {
@@ -174,18 +213,18 @@ public class BijectionMap<L, R> {
 		return leftValue;
 	}
     
-	/**
-	 * Get all left values
-	 * 
-	 * @return all left values
-	 */
+    /**
+     * Get all left values
+     *
+     * @return all left values
+     */
     public Set<L> getLeftSet() {
         return Collections.unmodifiableSet( tableLeft.keySet() ); 
     }
     
     /**
-     * Get all right values. 
-     * 
+     * Get all right values.
+     *
      * @return all right values
      */
     public Set<R> getRightSet() {
@@ -200,6 +239,7 @@ public class BijectionMap<L, R> {
         tableRight.clear();
     }
     
+    /** {@inheritDoc} */
     @Override
     public String toString() {
     	int count = 0;

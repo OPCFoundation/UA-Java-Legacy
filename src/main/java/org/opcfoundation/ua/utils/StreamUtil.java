@@ -23,18 +23,18 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 /**
+ * <p>StreamUtil class.</p>
  *
- * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class StreamUtil {
 
 	/**
 	 * Reads entire resource from an input stream
-	 * 
-	 * @param is
+	 *
+	 * @param is a {@link java.io.InputStream} object.
 	 * @return resource
-	 * @throws IOException
+	 * @throws java.io.IOException if any.
 	 */
 	public static byte[] readFully(InputStream is) throws IOException {
 		byte[] buf = new byte[4096];		
@@ -49,6 +49,13 @@ public class StreamUtil {
 		return os.toByteArray();
 	}
 	
+    /**
+     * <p>copyStream.</p>
+     *
+     * @param is a {@link java.io.InputStream} object.
+     * @param out a {@link java.io.OutputStream} object.
+     * @throws java.io.IOException if any.
+     */
     public static void copyStream(InputStream is, OutputStream out)
     throws IOException
     {
@@ -71,6 +78,14 @@ public class StreamUtil {
     	}
     }
 
+	/**
+	 * <p>read.</p>
+	 *
+	 * @param is a {@link java.io.InputStream} object.
+	 * @param buf a {@link java.nio.ByteBuffer} object.
+	 * @param bytes a int.
+	 * @throws java.io.IOException if any.
+	 */
 	public static void read(InputStream is, ByteBuffer buf, int bytes)
 	throws IOException
 	{
@@ -82,6 +97,13 @@ public class StreamUtil {
 		}
 	}
 	
+	/**
+	 * <p>readFully.</p>
+	 *
+	 * @param is a {@link java.io.InputStream} object.
+	 * @param buf a {@link java.nio.ByteBuffer} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static void readFully(InputStream is, ByteBuffer buf)
 	throws IOException
 	{
@@ -92,12 +114,28 @@ public class StreamUtil {
 		}
 	}
 	
+	/**
+	 * <p>readFully.</p>
+	 *
+	 * @param is a {@link java.io.InputStream} object.
+	 * @param b an array of byte.
+	 * @throws java.io.IOException if any.
+	 */
 	public static void readFully(InputStream is, byte[] b)
 	throws IOException
 	{
 		readFully(is, b, 0, b.length);		
 	}
 	
+	/**
+	 * <p>readFully.</p>
+	 *
+	 * @param is a {@link java.io.InputStream} object.
+	 * @param b an array of byte.
+	 * @param off a int.
+	 * @param len a int.
+	 * @throws java.io.IOException if any.
+	 */
 	public static void readFully(InputStream is, byte[] b, int off, int len)
 	throws IOException
 	{

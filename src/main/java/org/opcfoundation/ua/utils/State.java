@@ -13,37 +13,63 @@
 package org.opcfoundation.ua.utils;
 
 /**
+ * <p>State class.</p>
  *
- * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class State<StateType> extends AbstractState<StateType, RuntimeException> {
 
+	/**
+	 * <p>Constructor for State.</p>
+	 *
+	 * @param initialState a StateType object.
+	 */
 	public State(StateType initialState) {
 		super(initialState);
 	}
 	
+	/**
+	 * <p>setState.</p>
+	 *
+	 * @param state a StateType object.
+	 * @return a boolean.
+	 */
 	public boolean setState(StateType state) {
 		return super.setState(state);
 	}
 	
+	/** {@inheritDoc} */
 	public StateType setState(StateType state, java.util.concurrent.Executor listenerExecutor, java.util.Set<StateType> prerequisiteStates) {
 		return super.setState(state, listenerExecutor, prerequisiteStates);
 	};
 	
+	/**
+	 * <p>setError.</p>
+	 *
+	 * @param error a {@link java.lang.RuntimeException} object.
+	 */
 	public void setError(RuntimeException error) {
 		super.setError(error);
 	}
 	
+	/**
+	 * <p>attemptSetState.</p>
+	 *
+	 * @param prerequisiteState a {@link java.util.Set} object.
+	 * @param newState a StateType object.
+	 * @return a StateType object.
+	 */
 	public StateType attemptSetState(java.util.Set<StateType> prerequisiteState, StateType newState) {
 		return super.attemptSetState(prerequisiteState, newState);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void assertNoError() throws RuntimeException {
 		super.assertNoError();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	protected void clearError() {
 		super.clearError();

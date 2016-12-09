@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opcfoundation.ua</groupId>
   <artifactId>opc-ua-stack</artifactId>
-  <version>1.03.340.0-SNAPSHOT</version>
+  <version>1.03.341.0-SNAPSHOT</version>
   <name>OPC Foundation Unified Architecture Java Stack</name>
     <properties>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,8 +44,18 @@
             </configuration>
           </execution>
       	</executions>
-      </plugin>     
-       <plugin>
+      </plugin>
+      <plugin>
+      	<groupId>org.apache.maven.plugins</groupId>
+      	<artifactId>maven-jar-plugin</artifactId>
+      	<version>2.6</version>
+      	<configuration>
+      		<archive>
+      			<addMavenDescriptor>false</addMavenDescriptor>
+      		</archive>
+      	</configuration>      	
+      </plugin>
+      <plugin>
   			<groupId>org.apache.maven.plugins</groupId>
   			<artifactId>maven-source-plugin</artifactId>
   			<version>2.4</version>
@@ -62,18 +72,26 @@
   			<groupId>org.apache.maven.plugins</groupId>
   			<artifactId>maven-javadoc-plugin</artifactId>
   			<version>2.10.3</version>
+			<configuration>
+            			<!--  
+            			enable these to show more warnings/errors, 
+            			wont work on JDK6 so commented out by default 
+            			<additionalJOptions>
+            				<additionalJOption>-Xmaxerrs</additionalJOption>
+            				<additionalJOption>1000</additionalJOption>
+            				<additionalJOption>-Xmaxwarns</additionalJOption>
+            				<additionalJOption>1000</additionalJOption>
+            			</additionalJOptions>   
+            			-->
+            			<!-- these are for javadoc:fix goal -->
+            			<fixTags>param,return,throws</fixTags>        			
+			</configuration>
   			<executions>
       			<execution>
            			<id>attach-javadoc</id>	
             		<goals>
               			<goal>jar</goal>
             		</goals>
-            		<configuration>
-            			<!-- This removed javadoc error checking, remove this after all javadoc is fixed -->
-            			<!-- This only matters if building on JDK 8
-            			<additionalparam>-Xdoclint:none</additionalparam>
-            			-->
-            		</configuration>
          		</execution>
       		</executions> 
   		</plugin>
@@ -139,7 +157,17 @@
 	          	</execution>
   			</executions>
       </plugin>
-      <!-- This plugin ensures we are actually building on JDK 6 -->
+
+      <plugin>
+	 	<groupId>org.codehaus.mojo</groupId>
+	 	<artifactId>versions-maven-plugin</artifactId>
+	 	<version>2.2</version>
+  	 </plugin>
+      <plugin>
+      	<groupId>org.codehaus.mojo</groupId>
+      	<artifactId>build-helper-maven-plugin</artifactId>
+      	<version>1.10</version>
+      </plugin>
     </plugins>
     <pluginManagement>
     	<plugins>
@@ -206,67 +234,64 @@
   		<version>1.7.7</version>
   	</dependency>
   	<dependency>
-  		<groupId>org.slf4j</groupId>
-  		<artifactId>slf4j-log4j12</artifactId>
-  		<version>1.7.7</version>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>log4j</groupId>
-  		<artifactId>log4j</artifactId>
-  		<version>1.2.12</version>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
   		<version>4.12</version>
   		<scope>test</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>org.mockito</groupId>
+  		<artifactId>mockito-core</artifactId>
+  		<version>2.2.17</version>
+  		<scope>test</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.slf4j</groupId>
+  		<artifactId>slf4j-simple</artifactId>
+  		<version>1.7.21</version>
+  		<scope>test</scope>
+  	</dependency>
   </dependencies>
-
-	<profiles>
-		<profile>
-			<id>jdk6</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<systemPropertyVariables>
-								<useJdk6Toolchain>true</useJdk6Toolchain>
-							</systemPropertyVariables>
-						</configuration>
-					</plugin>
-					<!-- This plugin ensures we are actually building on JDK 6 -->
-					<!-- You need to create toolchains.xml in your .m2 folder -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-toolchains-plugin</artifactId>
-						<version>1.1</version>
-						<executions>
-							<execution>
-								<id>check-toolchain</id>
-								<phase>validate</phase>
-								<goals>
-									<goal>toolchain</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<toolchains>
-								<jdk>
-									<version>1.6</version>
-									<vendor>sun</vendor>
-								</jdk>
-							</toolchains>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+  <profiles>
+  	<profile>
+      <id>jdk6</id>
+	  <build>
+	  	<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemPropertyVariables>
+						<useJdk6Toolchain>true</useJdk6Toolchain>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			
+			<!-- This plugin ensures we are actually building on JDK 6 -->
+			<!-- You need to create toolchains.xml in your .m2 folder -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-toolchains-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<id>check-toolchain</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>toolchain</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<toolchains>
+						<jdk>
+							<version>1.6</version>
+							<vendor>sun</vendor>
+						</jdk>
+					</toolchains>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	</profile>
+  </profiles>
 </project>

@@ -34,9 +34,10 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class CloseSessionRequest extends Object implements ServiceRequest {
+public class CloseSessionRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CloseSessionRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CloseSessionRequest_Encoding_DefaultBinary);
@@ -80,7 +81,7 @@ public class CloseSessionRequest extends Object implements ServiceRequest {
       */
     public CloseSessionRequest clone()
     {
-        CloseSessionRequest result = new CloseSessionRequest();
+        CloseSessionRequest result = (CloseSessionRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.DeleteSubscriptions = DeleteSubscriptions;
         return result;

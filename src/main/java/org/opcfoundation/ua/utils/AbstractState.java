@@ -43,6 +43,11 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 	private SnapshotArray<StateListener<StateType>> notifiableList = null;
 	private Object lock = new Object();
 
+	/**
+	 * <p>Constructor for AbstractState.</p>
+	 *
+	 * @param initialState a StateType object.
+	 */
 	public AbstractState(StateType initialState)
 	{
 		state = initialState;
@@ -51,8 +56,8 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 	/**
 	 * Creates a state with a error state. The state object goes to errorState on setError().
 	 *
-	 * @param initialState
-	 * @param errorState
+	 * @param initialState a StateType object.
+	 * @param errorState a StateType object.
 	 */
 	public AbstractState(StateType initialState, StateType errorState)
 	{
@@ -61,6 +66,8 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Add on-event listener.
 	 */
 	@Override
@@ -73,10 +80,10 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Add post-event notification listener. The prosessing thread is random.
 	 * The prosessing order is not guaranteed if the handling is not synchronized.
-	 *
-	 * @param listener
 	 */
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -87,22 +94,30 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 		notifiableList.add(listener);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ErrorType getError()
 	{
 		return errorCause;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public synchronized StateType getState() {
 		return state;
 	}
 
+	/**
+	 * <p>hasError.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean hasError()
 	{
 		return errorCause!=null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public synchronized void removeStateListener(StateListener<StateType> listener) {
 		if (listener==null) throw new IllegalArgumentException("null arg");
@@ -112,6 +127,7 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 		return;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public synchronized void removeStateNotifiable(StateListener<StateType> listener)
 	{
@@ -119,6 +135,7 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 		if (notifiableList.isEmpty()) notifiableList = null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StateType waitForState(Set<StateType> set)
 			throws InterruptedException, ErrorType
@@ -134,6 +151,7 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StateType waitForState(
 			Set<StateType> set,
@@ -155,6 +173,7 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StateType waitForStateUninterruptibly(Set<StateType> set)
 			throws ErrorType
@@ -172,6 +191,11 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 		}
 	}
 
+	/**
+	 * <p>assertNoError.</p>
+	 *
+	 * @throws ErrorType if any.
+	 */
 	protected void assertNoError()
 			throws ErrorType
 	{
@@ -185,7 +209,7 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 	 * state is one of the expected states.
 	 *
 	 * @param prerequisiteState expected current state
-	 * @param newState
+	 * @param newState a StateType object.
 	 * @return state after attempt
 	 */
 	protected StateType attemptSetState(Set<StateType> prerequisiteState, StateType newState)
@@ -195,6 +219,9 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 		return setState(newState, null, prerequisiteState);
 	}
 
+	/**
+	 * <p>clearError.</p>
+	 */
 	protected void clearError()
 	{
 		errorCause = null;
@@ -204,8 +231,8 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 	 * Checks whether state transition is allowed.
 	 * Override this
 	 *
-	 * @param oldState
-	 * @param newState
+	 * @param oldState a StateType object.
+	 * @param newState a StateType object.
 	 * @return true if state transition is allowed
 	 */
 	protected boolean isStateTransitionAllowed(StateType oldState, StateType newState)
@@ -215,7 +242,8 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 
 	/**
 	 * Override this.
-	 * @param rte
+	 *
+	 * @param rte a {@link java.lang.RuntimeException} object.
 	 */
 	protected void onListenerException(RuntimeException rte)
 	{
@@ -225,13 +253,18 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 	/**
 	 * Override this.
 	 *
-	 * @param oldState
-	 * @param newState
+	 * @param oldState a StateType object.
+	 * @param newState a StateType object.
 	 */
 	protected void onStateTransition(StateType oldState, StateType newState)
 	{
 	}
 
+	/**
+	 * <p>setError.</p>
+	 *
+	 * @param error a ErrorType object.
+	 */
 	protected void setError(ErrorType error)
 	{
 		this.errorCause = error;
@@ -245,6 +278,12 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 		}
 	}
 
+	/**
+	 * <p>Setter for the field <code>state</code>.</p>
+	 *
+	 * @param state a StateType object.
+	 * @return a boolean.
+	 */
 	protected boolean setState(StateType state)
 	{
 		return setState(state, null, null) == state;
@@ -253,7 +292,7 @@ public abstract class AbstractState<StateType, ErrorType extends Throwable> impl
 	/**
 	 * Set state
 	 *
-	 * @param state
+	 * @param state a StateType object.
 	 * @param listenerExecutor executor for post listener handling or null for immediate
 	 * @param prerequisiteStates old state prerequisite or null
 	 * @return state after attempt

@@ -47,8 +47,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * EndpointOpcTcp hosts an endpoint for opc.tcp socket. 
- * 
+ * EndpointOpcTcp hosts an endpoint for opc.tcp socket.
+ *
  * Endpoint discovery is provided if endpoint url is unknown.
  *
  * @see Executors for creating executor instances
@@ -73,11 +73,18 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 	/** Endpoint handles */
 	Map<SocketAddress, SocketHandle> socketHandles = new HashMap<SocketAddress, SocketHandle>();
 
+	/**
+	 * <p>getEncoderContext.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public EncoderContext getEncoderContext() {
 		return application.getEncoderContext();
 	}
 
 	/**
+	 * <p>Getter for the field <code>receiveBufferSize</code>.</p>
+	 *
 	 * @return the receiveBufferSize to use for the connection socket of the server.
 	 */
 	public int getReceiveBufferSize() {
@@ -89,10 +96,10 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 	 * <p>
 	 * Default value: 0, which omits the parameter and the default value for the
 	 * socket (depending on the operating system) is used.
-
+	 *
 	 * @param receiveBufferSize the new size in bytes
-	 * @throws ServiceResultException
-	 * @see http://fasterdata.es.net/host-tuning/background/ 
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 * @see "http://fasterdata.es.net/host-tuning/background/"
 	 */
 	public void setReceiveBufferSize(int receiveBufferSize) throws ServiceResultException {
 		this.receiveBufferSize = receiveBufferSize;
@@ -129,6 +136,12 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 		}};
 	ConnectionCollection connections = new ConnectionCollection(this);	
 	
+	/**
+	 * <p>Constructor for OpcTcpServer.</p>
+	 *
+	 * @param application a {@link org.opcfoundation.ua.application.Application} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public OpcTcpServer(Application application) throws ServiceResultException
 	{
 		super(CloseableObjectState.Closed, CloseableObjectState.Closed);
@@ -146,6 +159,7 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EndpointHandle bind(SocketAddress socketAddress, EndpointBinding endpointBinding) throws ServiceResultException {
 		if ( endpointBinding == null || socketAddress == null || endpointBinding.endpointServer!=this )
@@ -181,6 +195,7 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 		return endpointHandle;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<SocketAddress> getBoundSocketAddresses() {
 		ArrayList<SocketAddress> result = new ArrayList<SocketAddress>();
@@ -188,6 +203,11 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 		return result;
 	}
 
+	/**
+	 * <p>getBoundAddress.</p>
+	 *
+	 * @return a {@link java.net.SocketAddress} object.
+	 */
 	public SocketAddress getBoundAddress() {
 		SocketHandle[] shs = socketHandleSnapshot();
 		for (SocketHandle sh: shs) {
@@ -197,7 +217,7 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 	}
 	
 	/**
-	 * Disconnect all existing connections. 
+	 * Disconnect all existing connections.
 	 */
 	public void disconnectAll()
 	{
@@ -210,6 +230,8 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Closes server socket. Does not disconnect existing connections.
 	 */
 	@Override
@@ -228,26 +250,31 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 		return this;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addConnectionListener(org.opcfoundation.ua.transport.ConnectionMonitor.ConnectListener l) {
 		connections.addConnectionListener(l);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void getConnections(Collection<ServerConnection> result) {
 		connections.getConnections(result);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void removeConnectionListener(org.opcfoundation.ua.transport.ConnectionMonitor.ConnectListener l) {
 		connections.removeConnectionListener(l);
 	}	
 	
+	/** {@inheritDoc} */
 	@Override
 	public EndpointBindingCollection getEndpointBindings() {
 		return endpointBindings;
 	}	
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -269,6 +296,11 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 		return handle;
 	}
 	
+	/**
+	 * <p>socketHandleSnapshot.</p>
+	 *
+	 * @return an array of {@link org.opcfoundation.ua.transport.tcp.nio.OpcTcpServer.SocketHandle} objects.
+	 */
 	public SocketHandle[] socketHandleSnapshot() {
 		return socketHandles.values().toArray( new SocketHandle[ socketHandles.size()] );		
 	}

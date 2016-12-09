@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ServerDiagnosticsSummaryDataType extends Object implements Structure, Cloneable {
+public class ServerDiagnosticsSummaryDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ServerDiagnosticsSummaryDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ServerDiagnosticsSummaryDataType_Encoding_DefaultBinary);
@@ -201,7 +202,7 @@ public class ServerDiagnosticsSummaryDataType extends Object implements Structur
       */
     public ServerDiagnosticsSummaryDataType clone()
     {
-        ServerDiagnosticsSummaryDataType result = new ServerDiagnosticsSummaryDataType();
+        ServerDiagnosticsSummaryDataType result = (ServerDiagnosticsSummaryDataType) super.clone();
         result.ServerViewCount = ServerViewCount;
         result.CurrentSessionCount = CurrentSessionCount;
         result.CumulatedSessionCount = CumulatedSessionCount;

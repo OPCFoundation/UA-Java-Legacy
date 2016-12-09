@@ -35,9 +35,10 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.core.RegisteredServer;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class RegisterServerRequest extends Object implements ServiceRequest {
+public class RegisterServerRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RegisterServerRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RegisterServerRequest_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class RegisterServerRequest extends Object implements ServiceRequest {
       */
     public RegisterServerRequest clone()
     {
-        RegisterServerRequest result = new RegisterServerRequest();
+        RegisterServerRequest result = (RegisterServerRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.Server = Server==null ? null : Server.clone();
         return result;

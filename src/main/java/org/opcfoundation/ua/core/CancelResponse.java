@@ -35,9 +35,10 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class CancelResponse extends Object implements ServiceResponse {
+public class CancelResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CancelResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CancelResponse_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class CancelResponse extends Object implements ServiceResponse {
       */
     public CancelResponse clone()
     {
-        CancelResponse result = new CancelResponse();
+        CancelResponse result = (CancelResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.CancelCount = CancelCount;
         return result;

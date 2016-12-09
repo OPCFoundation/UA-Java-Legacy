@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class SignatureData extends Object implements Structure, Cloneable {
+public class SignatureData extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SignatureData);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SignatureData_Encoding_DefaultBinary);
@@ -80,7 +81,7 @@ public class SignatureData extends Object implements Structure, Cloneable {
       */
     public SignatureData clone()
     {
-        SignatureData result = new SignatureData();
+        SignatureData result = (SignatureData) super.clone();
         result.Algorithm = Algorithm;
         result.Signature = Signature;
         return result;

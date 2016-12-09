@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.DateTime;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class Annotation extends Object implements Structure, Cloneable {
+public class Annotation extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.Annotation);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.Annotation_Encoding_DefaultBinary);
@@ -93,7 +94,7 @@ public class Annotation extends Object implements Structure, Cloneable {
       */
     public Annotation clone()
     {
-        Annotation result = new Annotation();
+        Annotation result = (Annotation) super.clone();
         result.Message = Message;
         result.UserName = UserName;
         result.AnnotationTime = AnnotationTime;

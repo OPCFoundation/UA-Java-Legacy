@@ -70,10 +70,9 @@ import sun.security.x509.X509CertImpl;
 import sun.security.x509.X509CertInfo;
 
 /**
- * SunJCE specific implementations of certain Crypto Utilities. 
- * Called normally from the {@link CryptoUtil} or {@link CertificateUtils} class, 
+ * SunJCE specific implementations of certain Crypto Utilities.
+ * Called normally from the {@link CryptoUtil} or {@link CertificateUtils} class,
  * so use those methods instead.
- *
  */
 public class SunJceUtils {
 	private static Logger logger = LoggerFactory.getLogger(CertificateUtils.class);
@@ -81,6 +80,12 @@ public class SunJceUtils {
 	static private final String KUE_SERVER_AUTH = "1.3.6.1.5.5.7.3.1";
 	static private final String KUE_CLIENT_AUTH = "1.3.6.1.5.5.7.3.2";
 
+	/**
+	 * <p>base64Decode.</p>
+	 *
+	 * @param string a {@link java.lang.String} object.
+	 * @return an array of byte.
+	 */
 	public static byte[] base64Decode(String string) {
 		// Probably better, but not available on the default jars!
 		// return javax.xml.bind.DatatypeConverter.parseBase64Binary(string);
@@ -92,6 +97,12 @@ public class SunJceUtils {
 		}
 	}
 
+	/**
+	 * <p>base64Encode.</p>
+	 *
+	 * @param bytes an array of byte.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String base64Encode(byte[] bytes) {
 		// See above: base64Decode
 		// return javax.xml.bind.DatatypeConverter.printBase64Binary(bytes);
@@ -103,7 +114,7 @@ public class SunJceUtils {
 	 * Build a X509 V3 certificate to use as an issuer (CA) certificate. The
 	 * certificate does not define OPC UA specific fields, so it cannot be used
 	 * for an application instance certificate.
-	 * 
+	 *
 	 * @param publicKey
 	 *            the public key to use for the certificate
 	 * @param privateKey
@@ -113,10 +124,12 @@ public class SunJceUtils {
 	 *            null a self-signed certificate is created.
 	 * @param domainName
 	 *            the CommonName to use for the subject of the certificate.
-	 * @param serialNumber
-	 * @param startDate
-	 * @param expiryDate
-	 * @throws OperatorCreationException
+	 * @param serialNumber a {@link java.math.BigInteger} object.
+	 * @param startDate a {@link java.util.Date} object.
+	 * @param expiryDate a {@link java.util.Date} object.
+	 * @return a {@link java.security.cert.X509Certificate} object.
+	 * @throws java.security.GeneralSecurityException if any.
+	 * @throws java.io.IOException if any.
 	 */
 	public static X509Certificate generateIssuerCert(PublicKey publicKey,
 			PrivateKey privateKey, KeyPair issuerKeys, String domainName, BigInteger serialNumber, Date startDate, Date expiryDate)
@@ -228,7 +241,7 @@ public class SunJceUtils {
 	 * {@link CertificateUtils#createApplicationInstanceCertificate(String, String, String, int, String...)}
 	 * and
 	 * {@link CertificateUtils#renewApplicationInstanceCertificate(String, String, String, int, org.opcfoundation.ua.transport.security.KeyPair, String...)}
-	 * 
+	 *
 	 * @param domainName
 	 *            the X500 domain name for the certificate
 	 * @param publicKey
@@ -249,9 +262,9 @@ public class SunJceUtils {
 	 * @param hostNames
 	 *            the additional host names to ass to SubjectAlternativeName
 	 * @return the generated certificate
-	 * @throws GeneralSecurityException
+	 * @throws java.security.GeneralSecurityException
 	 *             if the generation fails
-	 * @throws IOException
+	 * @throws java.io.IOException
 	 *             if the generation fails due to an IO exception
 	 */
 	public static X509Certificate generateCertificate(String domainName,
@@ -453,6 +466,13 @@ public class SunJceUtils {
 	 * This code is copied from the openJDK, which checks the AltNames correctly
 	 * and raises exceptions. We try to enable reading the UriName field without
 	 * raising exceptions, even if the format is invalid.
+	 */
+	/**
+	 * <p>getSubjectAlternativeNames.</p>
+	 *
+	 * @param cert a {@link java.security.cert.X509Certificate} object.
+	 * @return a {@link java.util.Collection} object.
+	 * @throws java.security.cert.CertificateParsingException if any.
 	 */
 	public static Collection<List<?>> getSubjectAlternativeNames(
 			X509Certificate cert) throws CertificateParsingException {

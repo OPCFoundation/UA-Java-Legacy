@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.HistoryEventFieldList;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class HistoryEvent extends Object implements Structure, Cloneable {
+public class HistoryEvent extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryEvent);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryEvent_Encoding_DefaultBinary);
@@ -70,7 +71,7 @@ public class HistoryEvent extends Object implements Structure, Cloneable {
       */
     public HistoryEvent clone()
     {
-        HistoryEvent result = new HistoryEvent();
+        HistoryEvent result = (HistoryEvent) super.clone();
         if (Events!=null) {
             result.Events = new HistoryEventFieldList[Events.length];
             for (int i=0; i<Events.length; i++)

@@ -34,9 +34,10 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class CloseSessionResponse extends Object implements ServiceResponse {
+public class CloseSessionResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CloseSessionResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CloseSessionResponse_Encoding_DefaultBinary);
@@ -68,7 +69,7 @@ public class CloseSessionResponse extends Object implements ServiceResponse {
       */
     public CloseSessionResponse clone()
     {
-        CloseSessionResponse result = new CloseSessionResponse();
+        CloseSessionResponse result = (CloseSessionResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         return result;
     }

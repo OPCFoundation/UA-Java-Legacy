@@ -40,7 +40,7 @@ import org.opcfoundation.ua.core.HistoryUpdateDetails;
 
 
 
-public class DeleteAtTimeDetails extends HistoryUpdateDetails implements Structure, Cloneable {
+public class DeleteAtTimeDetails extends HistoryUpdateDetails {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DeleteAtTimeDetails);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteAtTimeDetails_Encoding_DefaultBinary);
@@ -73,7 +73,7 @@ public class DeleteAtTimeDetails extends HistoryUpdateDetails implements Structu
       */
     public DeleteAtTimeDetails clone()
     {
-        DeleteAtTimeDetails result = new DeleteAtTimeDetails();
+        DeleteAtTimeDetails result = (DeleteAtTimeDetails) super.clone();
         result.NodeId = NodeId;
         result.ReqTimes = ReqTimes==null ? null : ReqTimes.clone();
         return result;

@@ -35,7 +35,6 @@ import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
 
 /**
  * Composition of ServiceHandlers.
- * 
  */
 public class ServiceHandlerComposition implements ServiceHandler {
 
@@ -44,10 +43,10 @@ public class ServiceHandlerComposition implements ServiceHandler {
 	
 	/**
 	 * Create service handler composed of a set of service handlers.
-	 * 
+	 *
 	 * Service handlers either (a) implement {@link ServiceHandler} or
-	 * implement service request methods, e.g. methods in {@link SessionServiceSetHandler}. 
-	 * 
+	 * implement service request methods, e.g. methods in {@link SessionServiceSetHandler}.
+	 *
 	 * @param handlers service handlers.
 	 * @return a new service handler
 	 */
@@ -67,28 +66,30 @@ public class ServiceHandlerComposition implements ServiceHandler {
 		new HashMap<Class<? extends IEncodeable>, Object>();
 	ServiceHandler[] handlers;
 	
+	/**
+	 * <p>Constructor for ServiceHandlerComposition.</p>
+	 */
 	public ServiceHandlerComposition() 
 	{		
 	}
 	
 	/**
 	 * Add <tt>ServiceHandler</tt> or Service handling object.
-	 * 
+	 *
 	 * <tt>ServiceHandler</tt> is added as is, other objects are
-	 * inspectew with reflected and suitable service handling 
+	 * inspectew with reflected and suitable service handling
 	 * methods are added.
-	 *  
+	 *
 	 * A method is suitable for service handing if it has no return arguments
 	 * and one parametrized argument of EndpointServiceReqest.
-	 * 
+	 *
 	 * For example:
-	 * 
+	 *
 	 * new Object() {
 	 * 	public void onTestStack(
-	 *		EndpointServiceRequest<TestStackRequest, TestStackResponse> req) {}
+	 *		EndpointServiceRequest&lt;TestStackRequest, TestStackResponse&gt; req) {}
 	 * }
-	 * 
-	 * 
+	 *
 	 * @param o <tt>ServiceHandler</tt> or Service handling object.
 	 */
 	public void add(Object o)
@@ -113,11 +114,17 @@ public class ServiceHandlerComposition implements ServiceHandler {
 		handlers = handlerMap.values().toArray(new ServiceHandler[0]);
 	}
 	
+	/**
+	 * <p>getServiceHandlers.</p>
+	 *
+	 * @return an array of {@link org.opcfoundation.ua.application.ServiceHandler} objects.
+	 */
 	public ServiceHandler[] getServiceHandlers()
 	{
 		return handlers;
 	}	
 	
+	/** {@inheritDoc} */
 	@Override
 	public void serve(EndpointServiceRequest<?, ?> request) throws ServiceResultException 
 	{
@@ -160,20 +167,23 @@ public class ServiceHandlerComposition implements ServiceHandler {
 		return;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean supportsService(Class<? extends IEncodeable> clazz) {
 		return handlerMap.containsKey(clazz);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void getSupportedServices(Collection<Class<? extends IEncodeable>> result) {
 		result.addAll(handlerMap.keySet());
 	}
 
 	/**
-	 * Returns the service handler that handles given request
-	 * 
-	 * @param requestClass
+	 * Returns the service handler that handles given request.
+	 *
+	 * @param <T> service handler class
+	 * @param requestClass request class
 	 * @return the service handler or null
 	 */
 	@SuppressWarnings("unchecked")
@@ -183,9 +193,9 @@ public class ServiceHandlerComposition implements ServiceHandler {
 	}	
 	
 	/**
-	 * Reads supported service handler methods with reflection
-	 * 
-	 * @param serviceHandler
+	 * Reads supported service handler methods with reflection.
+	 *
+	 * @param serviceHandler service handler
 	 * @param result composition where reflection based handlers are added
 	 */
 	@SuppressWarnings("unchecked")

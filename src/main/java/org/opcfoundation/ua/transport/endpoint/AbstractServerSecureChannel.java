@@ -28,11 +28,11 @@ import org.opcfoundation.ua.utils.StackUtils;
 
 /**
  * Super class for endpoint secure channels.
- * 
+ *
  * Common mechanism:
  *  - Secure channel id
  *  - Security tokens
- *  - State & Error State
+ *  - State and Error State
  */
 public abstract class AbstractServerSecureChannel extends AbstractState<CloseableObjectState, ServiceResultException> implements ServerSecureChannel {
 
@@ -46,19 +46,39 @@ public abstract class AbstractServerSecureChannel extends AbstractState<Closeabl
 	/** Logger */
 	static Logger logger = LoggerFactory.getLogger(AbstractServerSecureChannel.class);
 	
+	/**
+	 * <p>Constructor for AbstractServerSecureChannel.</p>
+	 *
+	 * @param secureChannelId a int.
+	 */
 	protected AbstractServerSecureChannel(int secureChannelId) {
 		super(CloseableObjectState.Closed);
 		this.secureChannelId = secureChannelId;
 	}
 
+	/**
+	 * <p>Getter for the field <code>secureChannelId</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSecureChannelId() {
 		return secureChannelId;
 	}
 
+	/**
+	 * <p>getActiveSecurityToken.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.tcp.impl.SecurityToken} object.
+	 */
 	public SecurityToken getActiveSecurityToken() {
 		return activeToken;
 	}
 	
+	/**
+	 * <p>setActiveSecurityToken.</p>
+	 *
+	 * @param token a {@link org.opcfoundation.ua.transport.tcp.impl.SecurityToken} object.
+	 */
 	public void setActiveSecurityToken(SecurityToken token) {
 		if (token==null) 
 			throw new IllegalArgumentException("null");
@@ -67,6 +87,12 @@ public abstract class AbstractServerSecureChannel extends AbstractState<Closeabl
 		pruneInvalidTokens();
 	}
 	
+	/**
+	 * <p>getSecurityToken.</p>
+	 *
+	 * @param tokenId a int.
+	 * @return a {@link org.opcfoundation.ua.transport.tcp.impl.SecurityToken} object.
+	 */
 	public synchronized SecurityToken getSecurityToken(int tokenId) {
 		logger.debug("tokens({})={}", tokens.size(), tokens.values());
 		return tokens.get(tokenId);
@@ -83,16 +109,31 @@ public abstract class AbstractServerSecureChannel extends AbstractState<Closeabl
 			}
 	}
 
+	/**
+	 * <p>getMessageSecurityMode.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.MessageSecurityMode} object.
+	 */
 	public MessageSecurityMode getMessageSecurityMode() {
 		SecurityToken token = getActiveSecurityToken();
 		return token==null ? null : token.getMessageSecurityMode();
 	}
 
+	/**
+	 * <p>getSecurityPolicy.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.SecurityPolicy} object.
+	 */
 	public SecurityPolicy getSecurityPolicy() {
 		SecurityToken token = getActiveSecurityToken();
 		return token==null ? null : token.getSecurityPolicy();
 	}	
 	
+	/**
+	 * <p>getLatestNonExpiredToken.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.tcp.impl.SecurityToken} object.
+	 */
 	public synchronized SecurityToken getLatestNonExpiredToken()
 	{
 		SecurityToken result = null;
@@ -105,32 +146,46 @@ public abstract class AbstractServerSecureChannel extends AbstractState<Closeabl
 		return result;
 	}
 	
+	/**
+	 * <p>setError.</p>
+	 *
+	 * @param e a {@link org.opcfoundation.ua.common.ServiceResultException} object.
+	 */
 	public synchronized void setError(ServiceResultException e) {
 		super.setError( e );
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	protected void onListenerException(RuntimeException rte) {
 		setError( StackUtils.toServiceResultException(rte) );
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return String.format("SecureChannelId=%d State=%s URL=%s SecurityPolicy=%s RemoteAddress=%s",
 				getSecureChannelId(), getState(), getConnectURL(), getSecurityPolicy(), getRemoteAddress());
 	}
 
+	/**
+	 * <p>getRemoteAddress.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getRemoteAddress() {
 		if (getConnection() == null)
 			return "(no connection)";
 		return "" + getConnection().getRemoteAddress();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isOpen() {
 		return getState().isOpen();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void close() {
 		if (getState()!=CloseableObjectState.Open) return;				
@@ -140,6 +195,7 @@ public abstract class AbstractServerSecureChannel extends AbstractState<Closeabl
 		return;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public AsyncResult<ServerSecureChannel> closeAsync() {
 		AsyncResultImpl<ServerSecureChannel> result = new AsyncResultImpl<ServerSecureChannel>(); 

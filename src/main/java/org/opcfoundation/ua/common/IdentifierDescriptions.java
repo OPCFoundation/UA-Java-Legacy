@@ -22,7 +22,7 @@ import org.opcfoundation.ua.builtintypes.StatusCode;
 /**
  * Reads statuscode description annotations from generated StatusCode class
  * using reflection. Based on StatusCodeDescriptions.
- * 
+ *
  * @see StatusCode
  * @author Otso Palonen (otso.palonen@prosys.fi)
  */
@@ -57,6 +57,12 @@ public class IdentifierDescriptions {
 
 	}
 
+	/**
+	 * <p>toNodeId.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @return a {@link org.opcfoundation.ua.builtintypes.NodeId} object.
+	 */
 	public static NodeId toNodeId(String name) {
 		readDescriptions();
 		NodeId nodeId = NAME_MAP.get(name);

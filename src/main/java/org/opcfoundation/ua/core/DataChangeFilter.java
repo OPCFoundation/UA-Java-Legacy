@@ -39,7 +39,7 @@ import org.opcfoundation.ua.core.MonitoringFilter;
 
 
 
-public class DataChangeFilter extends MonitoringFilter implements Structure, Cloneable {
+public class DataChangeFilter extends MonitoringFilter {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DataChangeFilter);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DataChangeFilter_Encoding_DefaultBinary);
@@ -95,7 +95,7 @@ public class DataChangeFilter extends MonitoringFilter implements Structure, Clo
       */
     public DataChangeFilter clone()
     {
-        DataChangeFilter result = new DataChangeFilter();
+        DataChangeFilter result = (DataChangeFilter) super.clone();
         result.Trigger = Trigger;
         result.DeadbandType = DeadbandType;
         result.DeadbandValue = DeadbandValue;

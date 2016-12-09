@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.core.FilterOperator;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ContentFilterElement extends Object implements Structure, Cloneable {
+public class ContentFilterElement extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ContentFilterElement);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ContentFilterElement_Encoding_DefaultBinary);
@@ -83,7 +84,7 @@ public class ContentFilterElement extends Object implements Structure, Cloneable
       */
     public ContentFilterElement clone()
     {
-        ContentFilterElement result = new ContentFilterElement();
+        ContentFilterElement result = (ContentFilterElement) super.clone();
         result.FilterOperator = FilterOperator;
         result.FilterOperands = FilterOperands==null ? null : FilterOperands.clone();
         return result;

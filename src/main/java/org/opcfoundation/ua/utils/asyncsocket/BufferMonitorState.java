@@ -21,10 +21,10 @@ import java.util.EnumSet;
  * Final states: Triggered, Canceled, Error
  * 
  * State transitions:
- *   Waiting -> Triggered  
- *   Waiting -> Canceled
- *   Waiting -> Closed
- *   Waiting -> Error 
+ *   Waiting -&gt; Triggered  
+ *   Waiting -&gt; Canceled
+ *   Waiting -&gt; Closed
+ *   Waiting -&gt; Error 
  * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */

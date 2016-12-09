@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.builtintypes.StatusCode;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class HistoryUpdateResult extends Object implements Structure, Cloneable {
+public class HistoryUpdateResult extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryUpdateResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryUpdateResult_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class HistoryUpdateResult extends Object implements Structure, Cloneable 
       */
     public HistoryUpdateResult clone()
     {
-        HistoryUpdateResult result = new HistoryUpdateResult();
+        HistoryUpdateResult result = (HistoryUpdateResult) super.clone();
         result.StatusCode = StatusCode;
         result.OperationResults = OperationResults==null ? null : OperationResults.clone();
         result.DiagnosticInfos = DiagnosticInfos==null ? null : DiagnosticInfos.clone();

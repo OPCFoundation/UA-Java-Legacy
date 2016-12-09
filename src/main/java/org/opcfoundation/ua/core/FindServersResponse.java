@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.ApplicationDescription;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class FindServersResponse extends Object implements ServiceResponse {
+public class FindServersResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.FindServersResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.FindServersResponse_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class FindServersResponse extends Object implements ServiceResponse {
       */
     public FindServersResponse clone()
     {
-        FindServersResponse result = new FindServersResponse();
+        FindServersResponse result = (FindServersResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         if (Servers!=null) {
             result.Servers = new ApplicationDescription[Servers.length];

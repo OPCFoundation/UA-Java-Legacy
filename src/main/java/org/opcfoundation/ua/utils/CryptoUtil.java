@@ -56,9 +56,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This is class contains Cryptographic utilities
- * 
+ *
  * http://www.ietf.org/rfc/rfc2437.txt
- * 
  */
 public class CryptoUtil {
 
@@ -95,17 +94,17 @@ public class CryptoUtil {
 	/**
 	 * Convenience method for {@link CryptoProvider#encryptAsymm}. Deprecated: Use
 	 * {@link #encryptAsymm} instead.
-	 * 
-	 * @param input
-	 * @param key
-	 * @param algorithm
-	 * @return
-	 * @throws InvalidKeyException
-	 * @throws IllegalBlockSizeException
-	 * @throws BadPaddingException
-	 * @throws ServiceResultException
-	 * @throws NoSuchAlgorithmException
-	 * @throws NoSuchPaddingException
+	 *
+	 * @param input an array of byte.
+	 * @param key a {@link java.security.Key} object.
+	 * @param algorithm a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 * @throws java.security.InvalidKeyException if any.
+	 * @throws javax.crypto.IllegalBlockSizeException if any.
+	 * @throws javax.crypto.BadPaddingException if any.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws javax.crypto.NoSuchPaddingException if any.
+	 * @return an array of byte.
 	 */
 	@Deprecated
 	public static byte[] asymmEncrypt(byte[] input, Key key,
@@ -116,22 +115,34 @@ public class CryptoUtil {
 		return encryptAsymm(input, (PublicKey) key, algorithm);
 	}
 
+	/**
+	 * <p>base64Decode.</p>
+	 *
+	 * @param string a {@link java.lang.String} object.
+	 * @return an array of byte.
+	 */
 	public static byte[] base64Decode(String string) {
 		return getCryptoProvider().base64Decode(string);
 	}
 
+	/**
+	 * <p>base64Encode.</p>
+	 *
+	 * @param bytes an array of byte.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String base64Encode(byte[] bytes) {
 		return getCryptoProvider().base64Encode(bytes);
 	}
 
 	/**
 	 * Create Message Authentication Code (MAC)
-	 * 
+	 *
 	 * @param algorithm
 	 *            encryption algorithm
-	 * @param secret
+	 * @param secret an array of byte.
 	 * @return MAC
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             Bad_SecurityPolicyRejected algorithm not supported
 	 */
 	public static Mac createMac(SecurityAlgorithm algorithm, byte[] secret)
@@ -141,7 +152,7 @@ public class CryptoUtil {
 
 	/**
 	 * Create a non-repeatable set of bytes.
-	 * 
+	 *
 	 * @param bytes
 	 *            number of byte
 	 * @return nonce
@@ -154,6 +165,13 @@ public class CryptoUtil {
 		return nonce;
 	}
 
+	/**
+	 * <p>createNonce.</p>
+	 *
+	 * @param algorithm a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 * @return an array of byte.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public static byte[] createNonce(SecurityAlgorithm algorithm)
 			throws ServiceResultException {
 		return createNonce(getNonceLength(algorithm));
@@ -164,13 +182,13 @@ public class CryptoUtil {
 	 * {@link CryptoProvider#decryptAsymm(PrivateKey, SecurityAlgorithm, byte[], byte[], int)}
 	 * Possible to use only SecurityConfiguration instead of specifying
 	 * SecurityAlgorithm explicitly.
-	 * 
-	 * @param decryptingKey
-	 * @param profile
-	 * @param dataToDecrypt
-	 * @param output
-	 * @param outputOffset
-	 * @throws ServiceResultException
+	 *
+	 * @param decryptingKey a {@link java.security.PrivateKey} object.
+	 * @param profile a {@link org.opcfoundation.ua.transport.security.SecurityConfiguration} object.
+	 * @param dataToDecrypt an array of byte.
+	 * @param output output
+	 * @param outputOffset output offset
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
 	public static void decryptAsymm(PrivateKey decryptingKey,
 			SecurityConfiguration profile, byte[] dataToDecrypt, byte[] output,
@@ -183,17 +201,17 @@ public class CryptoUtil {
 
 	/**
 	 * Convenience method for {@link CryptoProvider#encryptAsymm}.
-	 * 
-	 * @param input
-	 * @param key
-	 * @param algorithm
-	 * @return
-	 * @throws InvalidKeyException
-	 * @throws IllegalBlockSizeException
-	 * @throws BadPaddingException
-	 * @throws ServiceResultException
-	 * @throws NoSuchAlgorithmException
-	 * @throws NoSuchPaddingException
+	 *
+	 * @param input an array of byte.
+	 * @param key a {@link java.security.PublicKey} object.
+	 * @param algorithm a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 * @throws java.security.InvalidKeyException if any.
+	 * @throws javax.crypto.IllegalBlockSizeException if any.
+	 * @throws javax.crypto.BadPaddingException if any.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws javax.crypto.NoSuchPaddingException if any.
+	 * @return an array of byte.
 	 */
 	public static byte[] encryptAsymm(byte[] input, PublicKey key,
 			SecurityAlgorithm algorithm) throws InvalidKeyException,
@@ -212,7 +230,7 @@ public class CryptoUtil {
 	 * {@link CryptoProvider#encryptAsymm(PublicKey, SecurityAlgorithm, byte[], byte[], int)}
 	 * Possible to use only Certificate and SecurityConfiguration instead of
 	 * specifying PublicKey and SecurityAlgorithm explicitly.
-	 * 
+	 *
 	 * @param encryptingCertificate
 	 *            Certificate which public key will be used during encryption.
 	 * @param profile
@@ -220,9 +238,9 @@ public class CryptoUtil {
 	 *            SecurityConfiguration
 	 * @param dataToEncrypt
 	 *            Data to encrypt
-	 * @param output
-	 * @param outputOffset
-	 * @throws ServiceResultException
+	 * @param output output
+	 * @param outputOffset output offset
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
 	public static void encryptAsymm(Certificate encryptingCertificate,
 			SecurityConfiguration profile, byte[] dataToEncrypt, byte[] output,
@@ -234,6 +252,13 @@ public class CryptoUtil {
 				dataToEncrypt, output, outputOffset);
 	}
 
+	/**
+	 * <p>filterCipherSuiteList.</p>
+	 *
+	 * @param cipherSuiteSet an array of {@link java.lang.String} objects.
+	 * @param cipherSuitePatterns an array of {@link java.lang.String} objects.
+	 * @return an array of {@link java.lang.String} objects.
+	 */
 	public static String[] filterCipherSuiteList(String[] cipherSuiteSet,
 			String[] cipherSuitePatterns) {
 		List<String> result = new ArrayList<String>(cipherSuiteSet.length);
@@ -260,11 +285,11 @@ public class CryptoUtil {
 	 * Create signer instance using an algorithm uri.
 	 * http://www.ietf.org/rfc/rfc2437.txt Ciphers are defined in PKCS #1: RSA
 	 * Cryptography Specifications
-	 * 
+	 *
 	 * @param algorithm
 	 *            UA Specified algorithm
 	 * @return Cipher
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             if algorithm is not supported by the stack
 	 */
 	public static Cipher getAsymmetricCipher(SecurityAlgorithm algorithm)
@@ -297,6 +322,13 @@ public class CryptoUtil {
 				"Unsupported asymmetric signature algorithm: " + algorithm);
 	}
 
+	/**
+	 * <p>getAsymmInputBlockSize.</p>
+	 *
+	 * @param algorithm a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 * @return a int.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public static int getAsymmInputBlockSize(SecurityAlgorithm algorithm)
 			throws ServiceResultException {
 		// http://www.w3.org/2001/04/xmlenc#rsa-1_5
@@ -314,13 +346,13 @@ public class CryptoUtil {
 
 	/**
 	 * Get cipher block (=output) size in bytes
-	 * 
+	 *
 	 * @param algorithm
 	 *            algorithm
 	 * @param key
 	 *            Optional, required for asymmetric encryption algorithms
 	 * @return cipher block size
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             Bad_SecurityPolicyRejected algorithm not supported
 	 */
 	public static int getCipherBlockSize(SecurityAlgorithm algorithm, Key key)
@@ -359,7 +391,7 @@ public class CryptoUtil {
 
 	/**
 	 * Create an intersection of two lists of cipher suite lists
-	 * 
+	 *
 	 * @param cipherSuiteSet1
 	 *            enabled cipher suites
 	 * @param cipherSuiteSet2
@@ -382,6 +414,11 @@ public class CryptoUtil {
 		return result.toArray(new String[result.size()]);
 	}
 
+	/**
+	 * <p>Getter for the field <code>cryptoProvider</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.CryptoProvider} object.
+	 */
 	public static CryptoProvider getCryptoProvider() {
 		if (cryptoProvider == null) {
 			if ("SC".equals(getSecurityProviderName())) {
@@ -403,11 +440,11 @@ public class CryptoUtil {
 	 * <p>
 	 * For symmetric algorithms, returns the algorithm key size (in bytes). For
 	 * asymmetric algorithms, returns 32.
-	 * 
+	 *
 	 * @param algorithm
 	 *            encryption algorithm or null (=no encryption)
 	 * @return the length of the nonce in bytes
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             Bad_SecurityPolicyRejected, if the algorithm is not supported
 	 */
 	public static int getNonceLength(SecurityAlgorithm algorithm)
@@ -428,13 +465,13 @@ public class CryptoUtil {
 
 	/**
 	 * Get plain text block (=input) size in bytes
-	 * 
+	 *
 	 * @param securityAlgorithm
 	 *            algorithm
 	 * @param key
 	 *            Optional, required for asymmetric encryption algorithms
 	 * @return cipher block size
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             Bad_SecurityPolicyRejected algorithm not supported
 	 */
 	public static int getPlainTextBlockSize(
@@ -460,6 +497,8 @@ public class CryptoUtil {
 	}
 
 	/**
+	 * <p>Getter for the field <code>random</code>.</p>
+	 *
 	 * @return the random
 	 */
 	public static SecureRandom getRandom() {
@@ -473,9 +512,9 @@ public class CryptoUtil {
 	 * <p>
 	 * If none of these is available will default to SunJCE or the first
 	 * initialized provider, if SunJCE is not available either.
-	 * 
+	 *
 	 * @return the provider name to use for specific crypto tasks
-	 * @throws RuntimeException
+	 * @throws java.lang.RuntimeException
 	 *             if none is available and none cannot be initialized.
 	 */
 	public static String getSecurityProviderName() {
@@ -524,6 +563,12 @@ public class CryptoUtil {
 		return securityProviderName;
 	}
 
+	/**
+	 * <p>Getter for the field <code>securityProviderName</code>.</p>
+	 *
+	 * @param class1 a {@link java.lang.Class} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSecurityProviderName(Class<?> class1) {
 		if ("SunJCE".equals(getSecurityProviderName())) {
 			if (Signature.class.equals(class1))
@@ -536,11 +581,11 @@ public class CryptoUtil {
 
 	/**
 	 * Get signature size in bytes
-	 * 
-	 * @param signatureAlgorithm
-	 * @param key
+	 *
+	 * @param signatureAlgorithm a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 * @param key a {@link java.security.Key} object.
 	 * @return signature size in bytes
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             Bad_SecurityPolicyRejected algorithm not supported
 	 */
 	public static int getSignatureSize(SecurityAlgorithm signatureAlgorithm,
@@ -581,6 +626,12 @@ public class CryptoUtil {
 				signatureAlgorithm.getUri());
 	}
 
+	/**
+	 * <p>hexToBytes.</p>
+	 *
+	 * @param s a {@link java.lang.String} object.
+	 * @return an array of byte.
+	 */
 	public static byte[] hexToBytes(String s) {
 		if (s == null)
 			return null;
@@ -597,7 +648,7 @@ public class CryptoUtil {
 	 * Define the preferred CryptoProvider. Usually this is determined
 	 * automatically, but you may define the provider that you wish to use
 	 * yourself.
-	 * 
+	 *
 	 * @param cryptoProvider
 	 *            the cryptoProvider to set
 	 */
@@ -609,7 +660,7 @@ public class CryptoUtil {
 	 * Define the preferred SecurityProvider. Usually this is determined
 	 * automatically, but you may define the provider name that you wish to use
 	 * yourself.
-	 * 
+	 *
 	 * @param securityProviderName
 	 *            the securityProviderName to set, e.g. "BC" for
 	 *            BouncyCastleProvider
@@ -619,6 +670,8 @@ public class CryptoUtil {
 	}
 
 	/**
+	 * <p>signAsymm.</p>
+	 *
 	 * @param signerKey
 	 *            the private key used to sign the data
 	 * @param algorithm
@@ -626,7 +679,7 @@ public class CryptoUtil {
 	 * @param dataToSign
 	 *            the data to sign
 	 * @return SignatureData
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             if the signing fails. Read the StatusCode and cause for more
 	 *             details
 	 */
@@ -642,9 +695,10 @@ public class CryptoUtil {
 	/**
 	 * Convenience method for "displaying" a hex-string of a given byte array.
 	 * Calls {@link #toHex(byte[], int)} with bytesPerRow=0 (no line breaks)
-	 * 
+	 *
 	 * @param bytes
 	 *            the byte array to "display"
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String toHex(byte[] bytes) {
 		return toHex(bytes, (bytes != null && bytes.length > 64) ? 64 : 0);
@@ -652,14 +706,17 @@ public class CryptoUtil {
 
 	/**
 	 * Convenience method for "displaying" a hex-string of a given byte array.
-	 * Breaks the string to lines, if bytesPerRow > 0.
-	 * 
+	 * Breaks the string to lines, if bytesPerRow &gt; 0.
+	 *
 	 * @param bytes
 	 *            the byte array to "display"
 	 * @param bytesPerRow
 	 *            number of bytes to include on a text row. If it is 0, no line
 	 *            breaks are added.
-	 * 
+	 * @param bytesPerRow
+	 *            number of bytes to include on a text row. If it is 0, no line
+	 *            breaks are added.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String toHex(byte[] bytes, int bytesPerRow) {
 		if (bytes == null)
@@ -679,7 +736,7 @@ public class CryptoUtil {
 
 	/**
 	 * Verify a signature.
-	 * 
+	 *
 	 * @param certificate
 	 *            the certificate used to verify the signature
 	 * @param algorithm
@@ -689,7 +746,7 @@ public class CryptoUtil {
 	 * @param signature
 	 *            the signature to verify
 	 * @return true if the signature is valid
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             if the verification fails
 	 */
 	public static boolean verifyAsymm(X509Certificate certificate,

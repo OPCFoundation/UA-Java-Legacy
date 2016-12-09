@@ -38,9 +38,10 @@ import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.core.RequestHeader;
 import org.opcfoundation.ua.core.SignatureData;
 import org.opcfoundation.ua.core.SignedSoftwareCertificate;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class ActivateSessionRequest extends Object implements ServiceRequest {
+public class ActivateSessionRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ActivateSessionRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ActivateSessionRequest_Encoding_DefaultBinary);
@@ -132,7 +133,7 @@ public class ActivateSessionRequest extends Object implements ServiceRequest {
       */
     public ActivateSessionRequest clone()
     {
-        ActivateSessionRequest result = new ActivateSessionRequest();
+        ActivateSessionRequest result = (ActivateSessionRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.ClientSignature = ClientSignature==null ? null : ClientSignature.clone();
         if (ClientSoftwareCertificates!=null) {

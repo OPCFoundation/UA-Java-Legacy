@@ -46,7 +46,7 @@ import org.opcfoundation.ua.core.ReferenceNode;
 
 
 
-public class VariableNode extends InstanceNode implements Structure, Cloneable {
+public class VariableNode extends InstanceNode {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.VariableNode);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.VariableNode_Encoding_DefaultBinary);
@@ -163,7 +163,7 @@ public class VariableNode extends InstanceNode implements Structure, Cloneable {
       */
     public VariableNode clone()
     {
-        VariableNode result = new VariableNode();
+        VariableNode result = (VariableNode) super.clone();
         result.NodeId = NodeId;
         result.NodeClass = NodeClass;
         result.BrowseName = BrowseName;

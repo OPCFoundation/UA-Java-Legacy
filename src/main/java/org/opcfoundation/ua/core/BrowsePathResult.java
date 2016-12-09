@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.core.BrowsePathTarget;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class BrowsePathResult extends Object implements Structure, Cloneable {
+public class BrowsePathResult extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.BrowsePathResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.BrowsePathResult_Encoding_DefaultBinary);
@@ -83,7 +84,7 @@ public class BrowsePathResult extends Object implements Structure, Cloneable {
       */
     public BrowsePathResult clone()
     {
-        BrowsePathResult result = new BrowsePathResult();
+        BrowsePathResult result = (BrowsePathResult) super.clone();
         result.StatusCode = StatusCode;
         if (Targets!=null) {
             result.Targets = new BrowsePathTarget[Targets.length];

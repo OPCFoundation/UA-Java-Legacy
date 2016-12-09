@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.MessageSecurityMode;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class SessionSecurityDiagnosticsDataType extends Object implements Structure, Cloneable {
+public class SessionSecurityDiagnosticsDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SessionSecurityDiagnosticsDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SessionSecurityDiagnosticsDataType_Encoding_DefaultBinary);
@@ -167,7 +168,7 @@ public class SessionSecurityDiagnosticsDataType extends Object implements Struct
       */
     public SessionSecurityDiagnosticsDataType clone()
     {
-        SessionSecurityDiagnosticsDataType result = new SessionSecurityDiagnosticsDataType();
+        SessionSecurityDiagnosticsDataType result = (SessionSecurityDiagnosticsDataType) super.clone();
         result.SessionId = SessionId;
         result.ClientUserIdOfSession = ClientUserIdOfSession;
         result.ClientUserIdHistory = ClientUserIdHistory==null ? null : ClientUserIdHistory.clone();

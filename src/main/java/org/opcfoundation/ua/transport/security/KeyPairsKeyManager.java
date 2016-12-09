@@ -29,40 +29,56 @@ public class KeyPairsKeyManager implements X509KeyManager {
 
 	Collection<KeyPair> keypairs;
 	
+	/**
+	 * <p>Constructor for KeyPairsKeyManager.</p>
+	 *
+	 * @param keypairs a {@link java.util.Collection} object.
+	 */
 	public KeyPairsKeyManager(Collection<KeyPair> keypairs) {
 		this.keypairs = keypairs;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String chooseClientAlias(String[] arg0, Principal[] arg1, Socket arg2) {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String chooseServerAlias(String arg0, Principal[] arg1, Socket arg2) {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public X509Certificate[] getCertificateChain(String arg0) {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String[] getClientAliases(String arg0, Principal[] arg1) {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public PrivateKey getPrivateKey(String arg0) {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String[] getServerAliases(String arg0, Principal[] arg1) {
 		return null;
 	}
 
+	/**
+	 * <p>getKeyPairs.</p>
+	 *
+	 * @return a {@link java.util.Collection} object.
+	 */
 	public Collection<KeyPair> getKeyPairs() {
 		return keypairs;
 	}

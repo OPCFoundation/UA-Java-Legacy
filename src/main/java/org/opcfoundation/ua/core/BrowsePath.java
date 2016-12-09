@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.RelativePath;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class BrowsePath extends Object implements Structure, Cloneable {
+public class BrowsePath extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.BrowsePath);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.BrowsePath_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class BrowsePath extends Object implements Structure, Cloneable {
       */
     public BrowsePath clone()
     {
-        BrowsePath result = new BrowsePath();
+        BrowsePath result = (BrowsePath) super.clone();
         result.StartingNode = StartingNode;
         result.RelativePath = RelativePath==null ? null : RelativePath.clone();
         return result;

@@ -37,9 +37,10 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class DeleteSubscriptionsResponse extends Object implements ServiceResponse {
+public class DeleteSubscriptionsResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DeleteSubscriptionsResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteSubscriptionsResponse_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class DeleteSubscriptionsResponse extends Object implements ServiceRespon
       */
     public DeleteSubscriptionsResponse clone()
     {
-        DeleteSubscriptionsResponse result = new DeleteSubscriptionsResponse();
+        DeleteSubscriptionsResponse result = (DeleteSubscriptionsResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.Results = Results==null ? null : Results.clone();
         result.DiagnosticInfos = DiagnosticInfos==null ? null : DiagnosticInfos.clone();

@@ -39,7 +39,7 @@ import org.opcfoundation.ua.core.NotificationData;
 
 
 
-public class StatusChangeNotification extends NotificationData implements Structure, Cloneable {
+public class StatusChangeNotification extends NotificationData {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.StatusChangeNotification);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.StatusChangeNotification_Encoding_DefaultBinary);
@@ -83,7 +83,7 @@ public class StatusChangeNotification extends NotificationData implements Struct
       */
     public StatusChangeNotification clone()
     {
-        StatusChangeNotification result = new StatusChangeNotification();
+        StatusChangeNotification result = (StatusChangeNotification) super.clone();
         result.Status = Status;
         result.DiagnosticInfo = DiagnosticInfo;
         return result;

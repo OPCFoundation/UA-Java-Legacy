@@ -38,10 +38,11 @@ import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.Argument;
 import org.opcfoundation.ua.core.StatusResult;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ProgramDiagnosticDataType extends Object implements Structure, Cloneable {
+public class ProgramDiagnosticDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ProgramDiagnosticDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ProgramDiagnosticDataType_Encoding_DefaultBinary);
@@ -181,7 +182,7 @@ public class ProgramDiagnosticDataType extends Object implements Structure, Clon
       */
     public ProgramDiagnosticDataType clone()
     {
-        ProgramDiagnosticDataType result = new ProgramDiagnosticDataType();
+        ProgramDiagnosticDataType result = (ProgramDiagnosticDataType) super.clone();
         result.CreateSessionId = CreateSessionId;
         result.CreateClientName = CreateClientName;
         result.InvocationCreationTime = InvocationCreationTime;

@@ -20,7 +20,7 @@ import java.nio.ByteOrder;
 
 /**
  * Output stream writer
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class OutputStreamWriteable implements IBinaryWriteable {
@@ -28,12 +28,22 @@ public class OutputStreamWriteable implements IBinaryWriteable {
 	ByteOrder order = ByteOrder.nativeOrder();
 	OutputStream out;
 		
+	/**
+	 * <p>Constructor for OutputStreamWriteable.</p>
+	 *
+	 * @param out a {@link java.io.OutputStream} object.
+	 */
 	public OutputStreamWriteable(OutputStream out)
 	{
 		if (out==null) throw new IllegalArgumentException("null arg");
 		this.out = out;
 	}
 	
+	/**
+	 * <p>getStream.</p>
+	 *
+	 * @return a {@link java.io.OutputStream} object.
+	 */
 	public OutputStream getStream()
 	{
 		return out;
@@ -45,11 +55,13 @@ public class OutputStreamWriteable implements IBinaryWriteable {
 		out.write(value);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte b) throws IOException {
 		_put(b);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(ByteBuffer src) throws IOException {
 		if (src.hasArray()) {
@@ -61,6 +73,7 @@ public class OutputStreamWriteable implements IBinaryWriteable {
 				_put(src.get());
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(ByteBuffer src, int length) throws IOException {		
 		if (src.hasArray()) {
@@ -73,26 +86,31 @@ public class OutputStreamWriteable implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte[] src, int offset, int length) throws IOException {
 		out.write(src, offset, length);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte[] src) throws IOException {
 		out.write(src);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putDouble(double value) throws IOException {
 		putLong(Double.doubleToLongBits(value));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putFloat(float value) throws IOException {
 		putInt(Float.floatToIntBits(value));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putInt(int value) throws IOException {
 		if (order == ByteOrder.BIG_ENDIAN) {
@@ -108,6 +126,7 @@ public class OutputStreamWriteable implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putLong(long value) throws IOException {
 		if (order == ByteOrder.BIG_ENDIAN) {
@@ -131,6 +150,7 @@ public class OutputStreamWriteable implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putShort(short value) throws IOException {
 		if (order == ByteOrder.BIG_ENDIAN) {
@@ -142,14 +162,21 @@ public class OutputStreamWriteable implements IBinaryWriteable {
 		}
 	}
 	
+	/**
+	 * <p>order.</p>
+	 *
+	 * @return a {@link java.nio.ByteOrder} object.
+	 */
 	public ByteOrder order() {
 		return order;
 	}
 
+	/** {@inheritDoc} */
 	public void order(ByteOrder order) {
 		this.order = order;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void flush() throws IOException {
 		out.flush();

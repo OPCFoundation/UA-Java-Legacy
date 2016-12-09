@@ -22,8 +22,7 @@ import org.opcfoundation.ua.core.StatusCodes;
 
 /**
  * Generic Exception
- * 
- * 
+ *
  * @see StatusCodes
  */
 public class ServiceResultException extends Exception {
@@ -33,31 +32,65 @@ public class ServiceResultException extends Exception {
     final protected StatusCode statusCode;
     final protected String text;
 
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param message a {@link java.lang.String} object.
+     */
     public ServiceResultException(String message)
     {
     	this(new StatusCode(StatusCodes.Bad_UnexpectedError),  message);
     }
     
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param statusCode a int.
+     */
     public ServiceResultException(int statusCode)
     {
         this(StatusCode.getFromBits(statusCode), StatusCodeDescriptions.getStatusCodeDescription(statusCode));
     }
 
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param statusCode a int.
+     * @param text a {@link java.lang.String} object.
+     */
     public ServiceResultException(int statusCode, String text)
     {
         this(StatusCode.getFromBits(statusCode), text);
     }
     
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+     */
     public ServiceResultException(UnsignedInteger statusCode)
     {
         this(new StatusCode(statusCode), StatusCodeDescriptions.getStatusCodeDescription(statusCode.intValue()));
     }
 
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+     * @param text a {@link java.lang.String} object.
+     */
     public ServiceResultException(UnsignedInteger statusCode, String text)
     {
         this(new StatusCode(statusCode), text);
     }    
 
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+     * @param reason a {@link java.lang.Throwable} object.
+     * @param text a {@link java.lang.String} object.
+     */
     public ServiceResultException(UnsignedInteger statusCode, Throwable reason, String text)
     {
     	super(text, reason);
@@ -67,11 +100,22 @@ public class ServiceResultException extends Exception {
         this.text = text;        
     }    
     
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     */
     public ServiceResultException(StatusCode statusCode)
     {
         this(statusCode, statusCode.getDescription()!=null ? statusCode.getDescription() : "");
     }
 
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     * @param text a {@link java.lang.String} object.
+     */
     public ServiceResultException(StatusCode statusCode, String text)
     {
         if (statusCode==null)
@@ -80,6 +124,13 @@ public class ServiceResultException extends Exception {
         this.text = text;
     }
 
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     * @param reason a {@link java.lang.Throwable} object.
+     * @param text a {@link java.lang.String} object.
+     */
     public ServiceResultException(StatusCode statusCode, Throwable reason, String text)
     {
     	super(text, reason);
@@ -89,6 +140,12 @@ public class ServiceResultException extends Exception {
         this.text = text;        
     }
 
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+     * @param reason a {@link java.lang.Throwable} object.
+     */
     public ServiceResultException(UnsignedInteger statusCode, Throwable reason)
     {
     	super(reason.getMessage(), reason);
@@ -98,6 +155,12 @@ public class ServiceResultException extends Exception {
         this.text = statusCode.toString() + ", " + reason.getMessage();        
     }
     
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     * @param reason a {@link java.lang.Throwable} object.
+     */
     public ServiceResultException(StatusCode statusCode, Throwable reason)
     {
     	super(reason.getMessage(), reason);
@@ -107,6 +170,11 @@ public class ServiceResultException extends Exception {
         this.text = statusCode.toString() + ", " + reason.getMessage();        
     }
 
+    /**
+     * <p>Constructor for ServiceResultException.</p>
+     *
+     * @param reason a {@link java.lang.Throwable} object.
+     */
     public ServiceResultException(Throwable reason)
     {
     	super(reason);
@@ -114,6 +182,7 @@ public class ServiceResultException extends Exception {
         this.text = reason.getMessage();        
     }
     
+    /** {@inheritDoc} */
     @Override
     public String getMessage() {
         if (text!=null)
@@ -121,10 +190,20 @@ public class ServiceResultException extends Exception {
         return statusCode.toString();
     }
     
+    /**
+     * <p>Getter for the field <code>statusCode</code>.</p>
+     *
+     * @return a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     */
     public StatusCode getStatusCode() {
         return statusCode;
     }
         
+    /**
+     * <p>getAdditionalTextField.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getAdditionalTextField()
     {
         return text;
@@ -132,7 +211,7 @@ public class ServiceResultException extends Exception {
     
     /**
      * Converts the error into a service result
-     * 
+     *
      * @return a new service result object
      */
     public ServiceResult toServiceResult()

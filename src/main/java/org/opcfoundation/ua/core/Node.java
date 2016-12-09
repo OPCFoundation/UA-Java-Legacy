@@ -40,10 +40,11 @@ import org.opcfoundation.ua.builtintypes.QualifiedName;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.NodeClass;
 import org.opcfoundation.ua.core.ReferenceNode;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class Node extends Object implements Structure, Cloneable {
+public class Node extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.Node);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.Node_Encoding_DefaultBinary);
@@ -159,7 +160,7 @@ public class Node extends Object implements Structure, Cloneable {
       */
     public Node clone()
     {
-        Node result = new Node();
+        Node result = (Node) super.clone();
         result.NodeId = NodeId;
         result.NodeClass = NodeClass;
         result.BrowseName = BrowseName;

@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedByte;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class AggregateConfiguration extends Object implements Structure, Cloneable {
+public class AggregateConfiguration extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.AggregateConfiguration);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.AggregateConfiguration_Encoding_DefaultBinary);
@@ -117,7 +118,7 @@ public class AggregateConfiguration extends Object implements Structure, Cloneab
       */
     public AggregateConfiguration clone()
     {
-        AggregateConfiguration result = new AggregateConfiguration();
+        AggregateConfiguration result = (AggregateConfiguration) super.clone();
         result.UseServerCapabilitiesDefaults = UseServerCapabilitiesDefaults;
         result.TreatUncertainAsBad = TreatUncertainAsBad;
         result.PercentDataBad = PercentDataBad;

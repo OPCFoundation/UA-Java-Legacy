@@ -61,33 +61,44 @@ import org.opcfoundation.ua.utils.bytebuffer.IBinaryWriteable;
 import org.opcfoundation.ua.utils.bytebuffer.OutputStreamWriteable;
 
 /**
- * Encodes builtintypes, enumerations, structures and messages to 
+ * Encodes builtintypes, enumerations, structures and messages to
  * a byte buffer.
- * 
+ *
  * <p>
  * Null valued arguments are encoded with default empty values
  * when encoder mode is NonStrict.
- * 
+ *
  * @see EncoderCalc Calculates lengths of messages
- * @see IEncoder encoder interface 
+ * @see IEncoder encoder interface
  * @see BinaryDecoder binary decoder
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class BinaryEncoder implements IEncoder {
 	private static Logger logger = LoggerFactory.getLogger(BinaryEncoder.class);
 
+	/** Constant <code>UTF8</code> */
 	public static final Charset UTF8 = Charset.forName("utf-8");
 
 	IBinaryWriteable out;
 	EncoderContext ctx; 
 	EncoderMode mode = EncoderMode.Strict;
 
+	/**
+	 * <p>Constructor for BinaryEncoder.</p>
+	 *
+	 * @param out a {@link org.opcfoundation.ua.utils.bytebuffer.IBinaryWriteable} object.
+	 */
 	public BinaryEncoder(IBinaryWriteable out)
 	{
 		setWriteable(out);
 		//ctx = EncoderContext.getDefault();
 	}
 	
+	/**
+	 * <p>Constructor for BinaryEncoder.</p>
+	 *
+	 * @param os a {@link java.io.OutputStream} object.
+	 */
 	public BinaryEncoder(OutputStream os)
 	{
 		OutputStreamWriteable osr = new OutputStreamWriteable(os);
@@ -96,6 +107,11 @@ public class BinaryEncoder implements IEncoder {
 		setWriteable(osr);
 	}
 	
+	/**
+	 * <p>Constructor for BinaryEncoder.</p>
+	 *
+	 * @param buf a {@link java.nio.ByteBuffer} object.
+	 */
 	public BinaryEncoder(ByteBuffer buf)
 	{
 		ByteBufferWriteable wbb = new ByteBufferWriteable(buf); 
@@ -103,6 +119,11 @@ public class BinaryEncoder implements IEncoder {
 		setWriteable(wbb);
 	}
 	
+	/**
+	 * <p>Constructor for BinaryEncoder.</p>
+	 *
+	 * @param buf an array of byte.
+	 */
 	public BinaryEncoder(byte[] buf)
 	{
 		ByteBuffer bb = ByteBuffer.wrap(buf);
@@ -111,6 +132,13 @@ public class BinaryEncoder implements IEncoder {
 		//ctx = EncoderContext.getDefault();
 	}
 	
+	/**
+	 * <p>Constructor for BinaryEncoder.</p>
+	 *
+	 * @param buf an array of byte.
+	 * @param off a int.
+	 * @param len a int.
+	 */
 	public BinaryEncoder(byte[] buf, int off, int len)
 	{
 		ByteBuffer bb = ByteBuffer.wrap(buf, off, len);
@@ -119,14 +147,29 @@ public class BinaryEncoder implements IEncoder {
 		//ctx = EncoderContext.getDefault();
 	}	
 
+	/**
+	 * <p>getEncoderContext.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public EncoderContext getEncoderContext() {
 		return ctx;
 	}
 
+	/**
+	 * <p>setEncoderContext.</p>
+	 *
+	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public void setEncoderContext(EncoderContext ctx) {
 		this.ctx = ctx;
 	}
 	
+	/**
+	 * <p>setWriteable.</p>
+	 *
+	 * @param out a {@link org.opcfoundation.ua.utils.bytebuffer.IBinaryWriteable} object.
+	 */
 	public void setWriteable(IBinaryWriteable out)
 	{
 		if (out.order() != ByteOrder.LITTLE_ENDIAN)
@@ -134,16 +177,31 @@ public class BinaryEncoder implements IEncoder {
 		this.out = out;
 	}
 
+	/**
+	 * <p>getWriteable.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.bytebuffer.IBinaryWriteable} object.
+	 */
 	public IBinaryWriteable getWriteable() 
 	{
 		return out;
 	}
 	
+	/**
+	 * <p>getOutput.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.bytebuffer.IBinaryWriteable} object.
+	 */
 	public IBinaryWriteable getOutput()
 	{
 		return this.out;
 	}
 
+	/**
+	 * <p>getEncoderType.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderMode} object.
+	 */
 	public EncoderMode getEncoderType()
 	{
 		return mode;
@@ -152,7 +210,7 @@ public class BinaryEncoder implements IEncoder {
 	/**
 	 * Set encoding mode. If Strict, null values cannot be encoded.
 	 * If Slack then nulls are encoded with empty default values.
-	 * 
+	 *
 	 * @param type encoder type
 	 */
 	public void setEncoderMode(EncoderMode type) {
@@ -227,6 +285,7 @@ public class BinaryEncoder implements IEncoder {
 		return new EncodingException(StatusCodes.Bad_UnexpectedError, e);		
 	}	
 	
+	/** {@inheritDoc} */
 	public void putBoolean(String fieldName, Boolean v)
     throws EncodingException	
 	{
@@ -242,6 +301,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 
+	/**
+	 * <p>putBooleanArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Boolean} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putBooleanArray(String fieldName, Boolean[] v)
     throws EncodingException	
 	{
@@ -260,6 +326,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/**
+	 * <p>putBooleanArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putBooleanArray(String fieldName, Collection<Boolean> v)
     throws EncodingException	
 	{
@@ -278,6 +351,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/**
+	 * <p>putSByte.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.lang.Byte} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putSByte(String fieldName, Byte v)
     throws EncodingException	
 	{
@@ -292,6 +372,7 @@ public class BinaryEncoder implements IEncoder {
 		}			
 	}
 	
+	/** {@inheritDoc} */
 	public void putSByte(String fieldName, byte v)
     throws EncodingException	
 	{
@@ -302,6 +383,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 
+	/**
+	 * <p>putSByte.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a int.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putSByte(String fieldName, int v)
     throws EncodingException	
 	{
@@ -312,6 +400,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 
+	/**
+	 * <p>putSByteArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Byte} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putSByteArray(String fieldName, Byte[] v)
     throws EncodingException	
 	{
@@ -330,6 +425,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	public void putSByteArray(String fieldName, Collection<Byte> v)
     throws EncodingException	
 	{
@@ -348,6 +444,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	public void putByte(String fieldName, UnsignedByte v)
     throws EncodingException	
 	{
@@ -363,6 +460,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putByteArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.UnsignedByte} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putByteArray(String fieldName, UnsignedByte[] v)
     throws EncodingException	
 	{
@@ -381,6 +485,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	public void putByteArray(String fieldName, Collection<UnsignedByte> v)
     throws EncodingException	
 	{
@@ -399,6 +504,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	public void putInt16(String fieldName, Short v)
     throws EncodingException	
 	{
@@ -414,6 +520,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 
+	/**
+	 * <p>putInt16.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a short.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putInt16(String fieldName, short v)
     throws EncodingException	
 	{
@@ -424,6 +537,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putInt16Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Short} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putInt16Array(String fieldName, Short[] v)
     throws EncodingException	
 	{
@@ -442,6 +562,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 
+	/** {@inheritDoc} */
 	public void putInt16Array(String fieldName, Collection<Short> v)
     throws EncodingException	
 	{
@@ -460,6 +581,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/** {@inheritDoc} */
 	public void putUInt16(String fieldName, UnsignedShort v)
     throws EncodingException	
 	{
@@ -475,6 +597,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putUInt16Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.UnsignedShort} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putUInt16Array(String fieldName, UnsignedShort[] v)
     throws EncodingException	
 	{
@@ -493,6 +622,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 
+	/**
+	 * <p>putUInt16Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putUInt16Array(String fieldName, Collection<UnsignedShort> v)
     throws EncodingException	
 	{
@@ -511,6 +647,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putInt32.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.lang.Integer} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putInt32(String fieldName, Integer v)
     throws EncodingException	
 	{
@@ -526,6 +669,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	public void putInt32(String fieldName, int v)
     throws EncodingException	
 	{
@@ -536,6 +680,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putInt32Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of int.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putInt32Array(String fieldName, int[] v)
     throws EncodingException	
 	{
@@ -554,6 +705,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/** {@inheritDoc} */
 	public void putInt32Array(String fieldName, Collection<Integer> v)
     throws EncodingException	
 	{
@@ -573,6 +725,13 @@ public class BinaryEncoder implements IEncoder {
 			
 	}	
 	
+	/**
+	 * <p>putInt32Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Integer} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putInt32Array(String fieldName, Integer[] v)
     throws EncodingException	
 	{
@@ -591,6 +750,7 @@ public class BinaryEncoder implements IEncoder {
 		}			
 	}
 		
+	/** {@inheritDoc} */
 	public void putUInt32(String fieldName, UnsignedInteger v)
     throws EncodingException	
 	{
@@ -606,6 +766,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putUInt32Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putUInt32Array(String fieldName, UnsignedInteger[] v)
     throws EncodingException	
 	{
@@ -625,6 +792,7 @@ public class BinaryEncoder implements IEncoder {
 			
 	}	
 	
+	/** {@inheritDoc} */
 	public void putUInt32Array(String fieldName, Collection<UnsignedInteger> v)
     throws EncodingException	
 	{
@@ -643,6 +811,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/**
+	 * <p>putInt64.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.lang.Long} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putInt64(String fieldName, Long v)
     throws EncodingException	
 	{
@@ -658,6 +833,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	public void putInt64(String fieldName, long v)
     throws EncodingException	
 	{
@@ -668,6 +844,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/**
+	 * <p>putInt64Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Long} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putInt64Array(String fieldName, Long[] v)
     throws EncodingException	
 	{
@@ -686,6 +869,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putInt64Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putInt64Array(String fieldName, Collection<Long> v)
     throws EncodingException	
 	{
@@ -704,6 +894,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	public void putUInt64(String fieldName, UnsignedLong v)
     throws EncodingException	
 	{
@@ -719,6 +910,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 		
+	/**
+	 * <p>putUInt64Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.UnsignedLong} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putUInt64Array(String fieldName, UnsignedLong[] v)
     throws EncodingException	
 	{
@@ -737,6 +935,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/**
+	 * <p>putUInt64Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putUInt64Array(String fieldName, Collection<UnsignedLong> v)
     throws EncodingException	
 	{
@@ -755,6 +960,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/**
+	 * <p>putFloat.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.lang.Float} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putFloat(String fieldName, Float v)
     throws EncodingException	
 	{
@@ -770,6 +982,7 @@ public class BinaryEncoder implements IEncoder {
 		}			
 	}
 	
+	/** {@inheritDoc} */
 	public void putFloat(String fieldName, float v)
     throws EncodingException	
 	{
@@ -780,6 +993,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putFloatArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Float} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putFloatArray(String fieldName, Float[] v)
     throws EncodingException	
 	{
@@ -798,6 +1018,13 @@ public class BinaryEncoder implements IEncoder {
 		}			
 	}		
 	
+	/**
+	 * <p>putFloatArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putFloatArray(String fieldName, Collection<Float> v)
     throws EncodingException	
 	{		
@@ -816,6 +1043,7 @@ public class BinaryEncoder implements IEncoder {
 		}			
 	}		
 	
+	/** {@inheritDoc} */
 	public void putDouble(String fieldName, Double v)
     throws EncodingException	
 	{
@@ -831,6 +1059,13 @@ public class BinaryEncoder implements IEncoder {
 		}			
 	}
 	
+	/**
+	 * <p>putDouble.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a double.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putDouble(String fieldName, double v)
     throws EncodingException	
 	{
@@ -841,6 +1076,13 @@ public class BinaryEncoder implements IEncoder {
 		}			
 	}
 	
+	/**
+	 * <p>putDoubleArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Double} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putDoubleArray(String fieldName, Double[] v)
     throws EncodingException	
 	{
@@ -859,6 +1101,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 
+	/**
+	 * <p>putDoubleArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putDoubleArray(String fieldName, Collection<Double> v)
     throws EncodingException	
 	{		
@@ -877,6 +1126,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/** {@inheritDoc} */
 	public void putString(String fieldName, String v)
     throws EncodingException	
     {
@@ -895,6 +1145,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 
+	/**
+	 * <p>putStringArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putStringArray(String fieldName, Collection<String> v)
 	throws EncodingException
 	{		
@@ -913,6 +1170,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putStringArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.String} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putStringArray(String fieldName, String[] v)
     throws EncodingException	
 	{		
@@ -931,6 +1195,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/** {@inheritDoc} */
 	public void putDateTime(String fieldName, DateTime v)
     throws EncodingException	
 	{
@@ -952,6 +1217,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 }
 
+	/**
+	 * <p>putDateTimeArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.DateTime} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putDateTimeArray(String fieldName, DateTime[] v)
     throws EncodingException	
 	{		
@@ -970,6 +1242,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}			
 	
+	/** {@inheritDoc} */
 	public void putDateTimeArray(String fieldName, Collection<DateTime> v)
     throws EncodingException	
 	{		
@@ -988,6 +1261,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}			
 	
+	/** {@inheritDoc} */
 	public void putGuid(String fieldName, UUID v)
     throws EncodingException	
 	{
@@ -1023,6 +1297,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putGuidArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.util.UUID} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putGuidArray(String fieldName, UUID[] v)
     throws EncodingException	
 	{		
@@ -1041,6 +1322,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}			
 
+	/** {@inheritDoc} */
 	public void putGuidArray(String fieldName, Collection<UUID> v)
     throws EncodingException	
 	{		
@@ -1059,6 +1341,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}			
 	
+	/**
+	 * <p>putByteString.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of byte.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putByteString(String fieldName, byte[] v)
     throws EncodingException	
 	{		
@@ -1074,6 +1363,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putByteStringArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of byte.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putByteStringArray(String fieldName, byte[][] v)
     throws EncodingException	
 	{
@@ -1092,6 +1388,7 @@ public class BinaryEncoder implements IEncoder {
 		}			
 	}				
 	
+	/** {@inheritDoc} */
 	public void putByteStringArray(String fieldName, Collection<byte[]> v)
     throws EncodingException	
 	{		
@@ -1110,6 +1407,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}				
 	
+	/** {@inheritDoc} */
 	public void putXmlElement(String fieldName, XmlElement v)
     throws EncodingException	
 	{
@@ -1129,6 +1427,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putXmlElementArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.XmlElement} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putXmlElementArray(String fieldName, XmlElement[] v)
     throws EncodingException	
 	{
@@ -1147,6 +1452,7 @@ public class BinaryEncoder implements IEncoder {
 		}			
 	}	
 	
+	/** {@inheritDoc} */
 	public void putXmlElementArray(String fieldName, Collection<XmlElement> v)
     throws EncodingException	
 	{
@@ -1166,6 +1472,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/** {@inheritDoc} */
 	public void putNodeId(String fieldName, NodeId v)
     throws EncodingException	
 	{
@@ -1224,6 +1531,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putNodeIdArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.NodeId} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putNodeIdArray(String fieldName, NodeId[] v)
     throws EncodingException	
 	{		
@@ -1242,6 +1556,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/**
+	 * <p>putNodeIdArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putNodeIdArray(String fieldName, Collection<NodeId> v)
     throws EncodingException	
 	{		
@@ -1260,6 +1581,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/** {@inheritDoc} */
 	public void putExpandedNodeId(String fieldName, ExpandedNodeId v)
     throws EncodingException	
 	{
@@ -1323,6 +1645,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putExpandedNodeIdArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putExpandedNodeIdArray(String fieldName, ExpandedNodeId[] v)
     throws EncodingException	
 	{		
@@ -1341,6 +1670,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/**
+	 * <p>putExpandedNodeIdArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putExpandedNodeIdArray(String fieldName, Collection<ExpandedNodeId> v)
     throws EncodingException	
 	{		
@@ -1360,6 +1696,7 @@ public class BinaryEncoder implements IEncoder {
 			
 	}		
 	
+	/** {@inheritDoc} */
 	public void putStatusCode(String fieldName, StatusCode v)
     throws EncodingException	
 	{
@@ -1375,6 +1712,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putStatusCodeArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.StatusCode} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putStatusCodeArray(String fieldName, StatusCode[] v)
     throws EncodingException	
 	{		
@@ -1393,6 +1737,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/**
+	 * <p>putStatusCodeArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putStatusCodeArray(String fieldName, Collection<StatusCode> v)
     throws EncodingException	
 	{		
@@ -1411,6 +1762,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/** {@inheritDoc} */
 	public void putQualifiedName(String fieldName, QualifiedName v)
     throws EncodingException	
 	{
@@ -1427,6 +1779,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putQualifiedNameArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.QualifiedName} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putQualifiedNameArray(String fieldName, QualifiedName[] v)
     throws EncodingException	
 	{		
@@ -1445,6 +1804,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/**
+	 * <p>putQualifiedNameArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putQualifiedNameArray(String fieldName, Collection<QualifiedName> v)
     throws EncodingException	
 	{		
@@ -1463,6 +1829,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/** {@inheritDoc} */
 	public void putLocalizedText(String fieldName, LocalizedText v)
     throws EncodingException	
 	{
@@ -1482,6 +1849,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putLocalizedTextArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.LocalizedText} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putLocalizedTextArray(String fieldName, LocalizedText[] v)
     throws EncodingException	
 	{
@@ -1500,6 +1874,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/** {@inheritDoc} */
 	public void putLocalizedTextArray(String fieldName, Collection<LocalizedText> v)
     throws EncodingException	
 	{
@@ -1518,6 +1893,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 
+	/** {@inheritDoc} */
 	public void putStructure(String fieldName, Structure v)
     throws EncodingException	
 	{
@@ -1545,6 +1921,13 @@ public class BinaryEncoder implements IEncoder {
 		putEncodeable(null, v);
 	}
 
+	/**
+	 * <p>putStructureArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.Structure} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putStructureArray(String fieldName, Structure[] v)
     throws EncodingException	
 	{
@@ -1563,6 +1946,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 
+	/**
+	 * <p>putStructureArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putStructureArray(String fieldName, Collection<Structure> v)
     throws EncodingException	
 	{
@@ -1581,6 +1971,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	public void putExtensionObject(String fieldName, ExtensionObject v)
     throws EncodingException	
 	{
@@ -1606,6 +1997,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putExtensionObjectArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.ExtensionObject} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putExtensionObjectArray(String fieldName, ExtensionObject[] v)
     throws EncodingException	
 	{
@@ -1624,6 +2022,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/** {@inheritDoc} */
 	public void putExtensionObjectArray(String fieldName, Collection<ExtensionObject> v)
     throws EncodingException	
 	{
@@ -1642,6 +2041,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/** {@inheritDoc} */
 	public void putDataValue(String fieldName, DataValue v)
     throws EncodingException	
 	{
@@ -1666,6 +2066,13 @@ public class BinaryEncoder implements IEncoder {
 		if ((mask & 0x20) == 0x20) putUInt16(null, v.getServerPicoseconds());
 	}
 	
+	/**
+	 * <p>putDataValueArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.DataValue} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putDataValueArray(String fieldName, DataValue[] v)
     throws EncodingException	
 	{
@@ -1684,6 +2091,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/** {@inheritDoc} */
 	public void putDataValueArray(String fieldName, Collection<DataValue> v)
     throws EncodingException	
 	{
@@ -1702,6 +2110,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
+	/** {@inheritDoc} */
 	public void putVariant(String fieldName, Variant v)
     throws EncodingException	
 	{
@@ -1756,6 +2165,13 @@ public class BinaryEncoder implements IEncoder {
 		}		
 	}	
 	
+	/**
+	 * <p>putVariantArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.Variant} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putVariantArray(String fieldName, Variant[] v)
     throws EncodingException	
 	{
@@ -1774,6 +2190,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 
+	/**
+	 * <p>putVariantArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putVariantArray(String fieldName, Collection<Variant> v)
     throws EncodingException	
 	{
@@ -1792,6 +2215,13 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 
+	/**
+	 * <p>putDiagnosticInfoArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.DiagnosticInfo} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putDiagnosticInfoArray(String fieldName, DiagnosticInfo[] v)
     throws EncodingException
     {
@@ -1810,6 +2240,7 @@ public class BinaryEncoder implements IEncoder {
 		}
     }
 	
+	/** {@inheritDoc} */
 	public void putDiagnosticInfoArray(String fieldName, Collection<DiagnosticInfo> v)
     throws EncodingException
     {
@@ -1828,6 +2259,7 @@ public class BinaryEncoder implements IEncoder {
 		}
     }
 	
+	/** {@inheritDoc} */
 	public void putDiagnosticInfo(String fieldName, DiagnosticInfo v)
     throws EncodingException	
 	{
@@ -1872,6 +2304,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/** {@inheritDoc} */
 	public void putEnumerationArray(String fieldName, Object array)
     throws EncodingException	
 	{
@@ -1890,6 +2323,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	public void putEnumeration(String fieldName, Enumeration v)
     throws EncodingException	
 	{
@@ -1905,6 +2339,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	public void putObject(String fieldName, Object o)
     throws EncodingException	
 	{
@@ -1913,6 +2348,7 @@ public class BinaryEncoder implements IEncoder {
 		putObject(null, c, o);
 	}
 	
+	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	public void putObject(String fieldName, Class<?> c, Object o)
     throws EncodingException	
@@ -1945,6 +2381,7 @@ public class BinaryEncoder implements IEncoder {
 		return;
 	}
 	
+	/** {@inheritDoc} */
 	public void putScalar(String fieldName, int builtinType, Object o)
     throws EncodingException	
 	{
@@ -1984,6 +2421,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	public void putArray(String fieldName, int builtinType, Object o)
     throws EncodingException	
 	{
@@ -2023,6 +2461,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}	
 	
+	/** {@inheritDoc} */
 	public void putEncodeableArray(String fieldName, Class<? extends IEncodeable> clazz, Object array)
     throws EncodingException	
 	{
@@ -2043,8 +2482,9 @@ public class BinaryEncoder implements IEncoder {
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Encodes stucture without header
-	 * @param s
 	 */
 	public void putEncodeable(String fieldName, IEncodeable s)
     throws EncodingException	
@@ -2054,8 +2494,9 @@ public class BinaryEncoder implements IEncoder {
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Encodes stucture without header
-	 * @param s
 	 */
 	public void putEncodeable(String fieldName, Class<? extends IEncodeable> clazz, IEncodeable s)
     throws EncodingException	
@@ -2085,6 +2526,7 @@ public class BinaryEncoder implements IEncoder {
 //		putEncodeable(s, si);
 //	}
 	
+	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	public void putMessage(IEncodeable s)
     throws EncodingException	
@@ -2098,11 +2540,13 @@ public class BinaryEncoder implements IEncoder {
 		ctx.getEncodeableSerializer().putEncodeable(clazz, s, this);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(String fieldName, Object o) throws EncodingException {
 		EncoderUtils.put(this, fieldName, o);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(String fieldName, Object o, Class<?> clazz) throws EncodingException {
 		EncoderUtils.put(this, fieldName, o, clazz);

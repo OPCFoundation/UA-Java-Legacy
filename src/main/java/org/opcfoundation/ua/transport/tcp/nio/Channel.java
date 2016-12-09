@@ -14,9 +14,23 @@ package org.opcfoundation.ua.transport.tcp.nio;
 
 import org.opcfoundation.ua.transport.tcp.nio.SecureInputMessageBuilder.MessageListener;
 
+/**
+ * <p>Channel interface.</p>
+ *
+ */
 public interface Channel {
 
+	/**
+	 * <p>addChannelListener.</p>
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.tcp.nio.SecureInputMessageBuilder.MessageListener} object.
+	 */
 	void addChannelListener(MessageListener listener);
+	/**
+	 * <p>removeChannelListener.</p>
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.tcp.nio.SecureInputMessageBuilder.MessageListener} object.
+	 */
 	void removeChannelListener(MessageListener listener);	
 	
 	public static interface ChannelListener {

@@ -37,9 +37,10 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class SetMonitoringModeResponse extends Object implements ServiceResponse {
+public class SetMonitoringModeResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SetMonitoringModeResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SetMonitoringModeResponse_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class SetMonitoringModeResponse extends Object implements ServiceResponse
       */
     public SetMonitoringModeResponse clone()
     {
-        SetMonitoringModeResponse result = new SetMonitoringModeResponse();
+        SetMonitoringModeResponse result = (SetMonitoringModeResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.Results = Results==null ? null : Results.clone();
         result.DiagnosticInfos = DiagnosticInfos==null ? null : DiagnosticInfos.clone();

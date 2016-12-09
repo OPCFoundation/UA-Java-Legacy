@@ -24,18 +24,24 @@ import org.slf4j.Logger;
 
 /**
  * Connect monitor prints to logger server's connect and secure channel events.
- * 
+ *
  * Example:
  * 		UABinding binding;
- *		binding.addConnectionListener(new ConnectMonitor()); 
- * 
+ *		binding.addConnectionListener(new ConnectMonitor());
+ *
  * @author Toni Kalajainen (toni.kalajainen@iki.fi)
  */
 public class DebugLogger implements ConnectListener, SecureChannelListener, StateListener<CloseableObjectState> {
 	Logger logger;
+	/**
+	 * <p>Constructor for DebugLogger.</p>
+	 *
+	 * @param logger a {@link org.slf4j.Logger} object.
+	 */
 	public DebugLogger(Logger logger) {
 		this.logger = logger;
 	}
+	/** {@inheritDoc} */
 	public void onConnect(Object sender, ServerConnection connection) {
 		logger.info("{}: {}", sender, connection);
 		if (connection instanceof CloseableObject) {
@@ -45,6 +51,7 @@ public class DebugLogger implements ConnectListener, SecureChannelListener, Stat
 		connection.addSecureChannelListener(this);		
 		
 	}
+	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	public void onSecureChannelAttached(Object sender, ServerSecureChannel channel) {
 		logger.info("{}: {}", sender, channel);
@@ -54,6 +61,13 @@ public class DebugLogger implements ConnectListener, SecureChannelListener, Stat
 			so.addStateListener(this);
 		}
 	}
+	/**
+	 * <p>onStateTransition.</p>
+	 *
+	 * @param sender a {@link org.opcfoundation.ua.utils.IStatefulObject} object.
+	 * @param oldState a {@link org.opcfoundation.ua.transport.CloseableObjectState} object.
+	 * @param newState a {@link org.opcfoundation.ua.transport.CloseableObjectState} object.
+	 */
 	public void onStateTransition(IStatefulObject<CloseableObjectState, ?> sender, CloseableObjectState oldState, CloseableObjectState newState) {
 		logger.info("{}: {}", sender, sender);
 		if (sender.getError()!=null) {
@@ -62,9 +76,11 @@ public class DebugLogger implements ConnectListener, SecureChannelListener, Stat
 		}			
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void onSecureChannelDetached(Object sender, ServerSecureChannel channel) {
 	}
+	/** {@inheritDoc} */
 	@Override
 	public void onClose(Object sender, ServerConnection connection) {
 		// TODO Auto-generated method stub

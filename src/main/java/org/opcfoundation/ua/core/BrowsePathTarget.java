@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class BrowsePathTarget extends Object implements Structure, Cloneable {
+public class BrowsePathTarget extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.BrowsePathTarget);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.BrowsePathTarget_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class BrowsePathTarget extends Object implements Structure, Cloneable {
       */
     public BrowsePathTarget clone()
     {
-        BrowsePathTarget result = new BrowsePathTarget();
+        BrowsePathTarget result = (BrowsePathTarget) super.clone();
         result.TargetId = TargetId;
         result.RemainingPathIndex = RemainingPathIndex;
         return result;

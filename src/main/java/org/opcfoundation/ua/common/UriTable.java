@@ -15,14 +15,26 @@ import java.util.Arrays;
 
 import org.opcfoundation.ua.utils.BijectionMap;
 
+/**
+ * <p>UriTable class.</p>
+ *
+ */
 public class UriTable {
 
 	BijectionMap<Integer, String> indexUriMap = new BijectionMap<Integer, String>();
 
+	/**
+	 * <p>Constructor for UriTable.</p>
+	 */
 	public UriTable() {
 		super();
 	}
 
+	/**
+	 * <p>toArray.</p>
+	 *
+	 * @return an array of {@link java.lang.String} objects.
+	 */
 	public synchronized String[] toArray() {
 		int len = 0;
 		for (Integer i : indexUriMap.getLeftSet())
@@ -37,7 +49,7 @@ public class UriTable {
 
 	/**
 	 * Finds the URI with index in the table
-	 * 
+	 *
 	 * @param index
 	 *            the index you are looking for
 	 * @return the URI with the index or null, if there is no such
@@ -49,7 +61,7 @@ public class UriTable {
 
 	/**
 	 * Finds the index of the namespace URI in the table
-	 * 
+	 *
 	 * @param namespaceUri
 	 *            the URI of the namespace you are looking for
 	 * @return the index of the URI or -1, if it is not in the table
@@ -63,9 +75,10 @@ public class UriTable {
 
 	/**
 	 * Add a new uri to the table. The uri will be added with a new index, unless it is in the table already, in which case the index is returned.
-	 * 
+	 *
 	 * @param uri
 	 *            The URI.
+	 * @return a int.
 	 */
 	public int add(String uri) {
 		return add(-1, uri);
@@ -81,8 +94,8 @@ public class UriTable {
 
 	/**
 	 * Remove the entry for the specified index
-	 * 
-	 * @param index
+	 *
+	 * @param index a int.
 	 */
 	public void remove(int index) {
 		indexUriMap.removeWithLeft(index);
@@ -90,8 +103,8 @@ public class UriTable {
 
 	/**
 	 * Remove the entry for the specified uri
-	 * 
-	 * @param uri
+	 *
+	 * @param uri a {@link java.lang.String} object.
 	 */
 	public void remove(String uri) {
 		indexUriMap.removeWithRight(uri);
@@ -99,14 +112,15 @@ public class UriTable {
 
 	/**
 	 * Add a new uri to the table.
-	 * 
+	 *
 	 * @param index
 	 *            The new index (use -1 to automatically use the next unused
 	 *            index)
 	 * @param uri
 	 *            The URI.
-	 * @throws IllegalArgumentException
+	 * @throws java.lang.IllegalArgumentException
 	 *             if the index is already in use
+	 * @return a int.
 	 */
 	public synchronized int add(int index, String uri) {
 		// check if namespaceIndex already exists
@@ -124,18 +138,29 @@ public class UriTable {
 	}
 
 	/**
-	 * @param namespaceArray
-	 * @param result
+	 * <p>addAll.</p>
+	 *
+	 * @param namespaceArray an array of {@link java.lang.String} objects.
 	 */
 	public void addAll(String[] namespaceArray) {
 		for (int i = 0; i < namespaceArray.length; i++)
 			add(i, namespaceArray[i]);
 	}
 
+	/**
+	 * <p>toString.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String toString() {
 		return Arrays.toString(toArray());
 	}
 
+	/**
+	 * <p>size.</p>
+	 *
+	 * @return a int.
+	 */
 	public int size() {
 		return indexUriMap.size();
 	}

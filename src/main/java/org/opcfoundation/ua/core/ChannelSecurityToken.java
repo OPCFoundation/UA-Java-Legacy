@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ChannelSecurityToken extends Object implements Structure, Cloneable {
+public class ChannelSecurityToken extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ChannelSecurityToken);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ChannelSecurityToken_Encoding_DefaultBinary);
@@ -106,7 +107,7 @@ public class ChannelSecurityToken extends Object implements Structure, Cloneable
       */
     public ChannelSecurityToken clone()
     {
-        ChannelSecurityToken result = new ChannelSecurityToken();
+        ChannelSecurityToken result = (ChannelSecurityToken) super.clone();
         result.ChannelId = ChannelId;
         result.TokenId = TokenId;
         result.CreatedAt = CreatedAt;

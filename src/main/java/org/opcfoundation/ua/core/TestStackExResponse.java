@@ -35,9 +35,10 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.core.CompositeTestType;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class TestStackExResponse extends Object implements ServiceResponse {
+public class TestStackExResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TestStackExResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TestStackExResponse_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class TestStackExResponse extends Object implements ServiceResponse {
       */
     public TestStackExResponse clone()
     {
-        TestStackExResponse result = new TestStackExResponse();
+        TestStackExResponse result = (TestStackExResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.Output = Output==null ? null : Output.clone();
         return result;

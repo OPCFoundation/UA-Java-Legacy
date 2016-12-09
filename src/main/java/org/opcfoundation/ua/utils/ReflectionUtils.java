@@ -23,16 +23,16 @@ import java.util.Set;
 import org.opcfoundation.ua.builtintypes.BuiltinsMap;
 
 /**
+ * <p>ReflectionUtils class.</p>
  *
- * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class ReflectionUtils {
 
 	/**
 	 * Returns all methods public, protected and private
-	 * 
-	 * @param clazz
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
 	 * @return all methods
 	 */
 	public static Method[] getAllMethods(Class<?> clazz)
@@ -48,6 +48,12 @@ public class ReflectionUtils {
 			result.add(m);
 	}
 
+	/**
+	 * <p>getAllFields.</p>
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
+	 * @return an array of {@link java.lang.reflect.Field} objects.
+	 */
 	public static Field[] getAllFields(Class<?> clazz)
 	{
 		List<Field> result = new ArrayList<Field>();				
@@ -63,11 +69,11 @@ public class ReflectionUtils {
 
 	/**
 	 * Get array version of a class.
-	 * 
-	 * E.g. Object -> Object[]
-	 *      Object[] -> Object[][]
-	 * 
-	 * @param clazz
+	 *
+	 * E.g. Object -&gt; Object[]
+	 *      Object[] -&gt; Object[][]
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
 	 * @return array class
 	 */
 	public static Class<?> getRespectiveArrayClass(Class<?> clazz)
@@ -84,6 +90,12 @@ public class ReflectionUtils {
 		}
 	}	
 	
+	/**
+	 * <p>getComponentClass.</p>
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
+	 * @return a {@link java.lang.Class} object.
+	 */
 	public static Class<?> getComponentClass(Class<?> clazz)
 	{
 		if (!clazz.isArray()) return clazz;

@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.LocalizedText;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class EUInformation extends Object implements Structure, Cloneable {
+public class EUInformation extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.EUInformation);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.EUInformation_Encoding_DefaultBinary);
@@ -105,7 +106,7 @@ public class EUInformation extends Object implements Structure, Cloneable {
       */
     public EUInformation clone()
     {
-        EUInformation result = new EUInformation();
+        EUInformation result = (EUInformation) super.clone();
         result.NamespaceUri = NamespaceUri;
         result.UnitId = UnitId;
         result.DisplayName = DisplayName;

@@ -83,6 +83,11 @@ public class BinaryDecoder implements IDecoder {
 
 	EncoderContext ctx;
 
+	/**
+	 * <p>Constructor for BinaryDecoder.</p>
+	 *
+	 * @param buf an array of byte.
+	 */
 	public BinaryDecoder(byte[] buf)
 	{
 		ByteBuffer bb = ByteBuffer.wrap(buf);
@@ -90,6 +95,13 @@ public class BinaryDecoder implements IDecoder {
 		setReadable( new ByteBufferReadable(bb) );
 	}
 
+	/**
+	 * <p>Constructor for BinaryDecoder.</p>
+	 *
+	 * @param buf an array of byte.
+	 * @param off a int.
+	 * @param len a int.
+	 */
 	public BinaryDecoder(byte[] buf, int off, int len)
 	{
 		ByteBuffer bb = ByteBuffer.wrap(buf, off, len);
@@ -99,18 +111,30 @@ public class BinaryDecoder implements IDecoder {
 
 	/**
 	 * Create byte buffer decoder. Byte buffer must be in little-endian order.
-	 * @param buf
+	 *
+	 * @param buf a {@link java.nio.ByteBuffer} object.
 	 */
 	public BinaryDecoder(ByteBuffer buf)
 	{
 		setReadable(new ByteBufferReadable(buf));
 	}
 
+	/**
+	 * <p>Constructor for BinaryDecoder.</p>
+	 *
+	 * @param in a {@link org.opcfoundation.ua.utils.bytebuffer.IBinaryReadable} object.
+	 */
 	public BinaryDecoder(IBinaryReadable in)
 	{
 		setReadable(in);
 	}
 
+	/**
+	 * <p>Constructor for BinaryDecoder.</p>
+	 *
+	 * @param is a {@link java.io.InputStream} object.
+	 * @param limit a int.
+	 */
 	public BinaryDecoder(InputStream is, int limit)
 	{
 		InputStreamReadable isr = new InputStreamReadable(is, limit);
@@ -118,6 +142,7 @@ public class BinaryDecoder implements IDecoder {
 		setReadable(isr);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T get(String fieldName, Class<T> clazz) throws DecodingException {
@@ -296,6 +321,7 @@ public class BinaryDecoder implements IDecoder {
 		throw new DecodingException("Cannot decode "+clazz);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getArrayObject(String fieldName, int builtinTypeId)
 			throws DecodingException
@@ -330,6 +356,7 @@ public class BinaryDecoder implements IDecoder {
 		throw new DecodingException("Cannot decode builtin type id "+builtinTypeId);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Boolean getBoolean(String fieldName)
 			throws DecodingException
@@ -342,6 +369,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Boolean[] getBooleanArray(String fieldName)
 			throws DecodingException
@@ -359,6 +387,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedByte getByte(String fieldName)
 			throws DecodingException
@@ -370,6 +399,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedByte[] getByteArray(String fieldName)
 			throws DecodingException
@@ -387,6 +417,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public byte[] getByteString(String fieldName)
 			throws DecodingException
@@ -403,6 +434,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public byte[][] getByteStringArray(String fieldName)
 			throws DecodingException
@@ -420,6 +452,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public DataValue getDataValue(String fieldName)
 			throws DecodingException
@@ -438,6 +471,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public DataValue[] getDataValueArray(String fieldName)
 			throws DecodingException
@@ -455,6 +489,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public DateTime getDateTime(String fieldName)
 			throws DecodingException
@@ -474,6 +509,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public DateTime[] getDateTimeArray(String fieldName)
 			throws DecodingException
@@ -491,6 +527,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public DiagnosticInfo getDiagnosticInfo(String fieldName)
 			throws DecodingException
@@ -511,6 +548,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public DiagnosticInfo[] getDiagnosticInfoArray(String fieldName)
 			throws DecodingException
@@ -528,6 +566,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Double getDouble(String fieldName)
 			throws DecodingException
@@ -539,6 +578,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Double[] getDoubleArray(String fieldName)
 			throws DecodingException
@@ -556,6 +596,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends IEncodeable> T getEncodeable(String fieldName, Class<? extends T> encodeableClass)
@@ -564,6 +605,7 @@ public class BinaryDecoder implements IDecoder {
 		return (T) ctx.getEncodeableSerializer().getEncodeable(encodeableClass, this);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends IEncodeable> T[] getEncodeableArray(String fieldName, Class<? extends T> encodeableClass)
@@ -585,10 +627,16 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/**
+	 * <p>getEncoderContext.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public EncoderContext getEncoderContext() {
 		return ctx;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends Enumeration> T getEnumeration(String fieldName, Class<T> enumerationClass)
@@ -613,6 +661,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends Enumeration> T[] getEnumerationArray(String fieldName, Class<T> enumerationClass)
@@ -634,6 +683,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ExpandedNodeId getExpandedNodeId(String fieldName)
 			throws DecodingException
@@ -700,6 +750,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ExpandedNodeId[] getExpandedNodeIdArray(String fieldName)
 			throws DecodingException
@@ -717,6 +768,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ExtensionObject getExtensionObject(String fieldName)
 			throws DecodingException
@@ -738,6 +790,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ExtensionObject[] getExtensionObjectArray(String fieldName)
 			throws DecodingException
@@ -755,6 +808,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Float getFloat(String fieldName)
 			throws DecodingException
@@ -766,6 +820,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Float[] getFloatArray(String fieldName)
 			throws DecodingException
@@ -783,6 +838,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UUID getGuid(String fieldName)
 			throws DecodingException
@@ -814,6 +870,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UUID[] getGuidArray(String fieldName)
 			throws DecodingException
@@ -831,6 +888,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Short getInt16(String fieldName)
 			throws DecodingException
@@ -842,6 +900,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Short[] getInt16Array(String fieldName)
 			throws DecodingException
@@ -859,6 +918,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Integer getInt32(String fieldName)
 			throws DecodingException
@@ -870,6 +930,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Integer[] getInt32Array(String fieldName)
 			throws DecodingException
@@ -887,6 +948,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int[] getInt32Array_(String fieldName)
 			throws DecodingException
@@ -904,6 +966,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Long getInt64(String fieldName)
 			throws DecodingException
@@ -915,6 +978,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Long[] getInt64Array(String fieldName)
 			throws DecodingException
@@ -932,6 +996,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public LocalizedText getLocalizedText(String fieldName)
 			throws DecodingException
@@ -948,6 +1013,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public LocalizedText[] getLocalizedTextArray(String fieldName)
 			throws DecodingException
@@ -965,6 +1031,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T extends IEncodeable> T getMessage()
@@ -977,6 +1044,7 @@ public class BinaryDecoder implements IDecoder {
 		return (T) ctx.getEncodeableSerializer().getEncodeable(clazz, this);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public NodeId getNodeId(String fieldName)
 			throws DecodingException
@@ -1039,6 +1107,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public NodeId[] getNodeIdArray(String fieldName)
 			throws DecodingException
@@ -1056,6 +1125,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public QualifiedName getQualifiedName(String fieldName)
 			throws DecodingException
@@ -1067,6 +1137,7 @@ public class BinaryDecoder implements IDecoder {
 		return new QualifiedName( namespaceIndex, name );
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public QualifiedName[] getQualifiedNameArray(String fieldName)
 			throws DecodingException
@@ -1084,11 +1155,17 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/**
+	 * <p>getReadable.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.bytebuffer.IBinaryReadable} object.
+	 */
 	public IBinaryReadable getReadable()
 	{
 		return in;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Byte getSByte(String fieldName)
 			throws DecodingException
@@ -1100,6 +1177,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Byte[] getSByteArray(String fieldName)
 			throws DecodingException
@@ -1117,6 +1195,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getScalarObject(String fieldName, int builtinTypeId)
 			throws DecodingException
@@ -1151,6 +1230,7 @@ public class BinaryDecoder implements IDecoder {
 		throw new DecodingException("Cannot decode builtin type id "+builtinTypeId);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StatusCode getStatusCode(String fieldName)
 			throws DecodingException
@@ -1158,6 +1238,7 @@ public class BinaryDecoder implements IDecoder {
 		return new StatusCode( getUInt32(null) );
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public StatusCode[] getStatusCodeArray(String fieldName)
 			throws DecodingException
@@ -1175,6 +1256,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getString(String fieldName)
 			throws DecodingException
@@ -1191,6 +1273,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String[] getStringArray(String fieldName)
 			throws DecodingException
@@ -1208,6 +1291,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Structure getStructure(String fieldName)
 			throws DecodingException
@@ -1230,6 +1314,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Structure[] getStructureArray(String fieldName)
 			throws DecodingException
@@ -1247,6 +1332,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedShort getUInt16(String fieldName)
 			throws DecodingException
@@ -1258,6 +1344,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedShort[] getUInt16Array(String fieldName)
 			throws DecodingException
@@ -1275,6 +1362,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedInteger getUInt32(String fieldName)
 			throws DecodingException
@@ -1286,6 +1374,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedInteger[] getUInt32Array(String fieldName)
 			throws DecodingException
@@ -1303,6 +1392,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedLong getUInt64(String fieldName)
 			throws DecodingException
@@ -1314,6 +1404,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public UnsignedLong[] getUInt64Array(String fieldName)
 			throws DecodingException
@@ -1331,6 +1422,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Variant getVariant(String fieldName)
 			throws DecodingException
@@ -1345,6 +1437,24 @@ public class BinaryDecoder implements IDecoder {
 			int[] dims						= hasDimensionLengths ? getInt32Array_(null) : null;
 			boolean multiDimension			= isArray && dims != null && dims.length>1;
 
+			/* 
+			 * GH#53, Spec 1.03 Part 6, section 5.2.2.16
+			 * "If ArrayDimensions are inconsistent with the ArrayLength then the decoder
+			 * shall stop and raise a Bad_DecodingError", therefore we must check it here.
+			 */
+			if(hasDimensionLengths){
+				long total = 0;
+				for(int i : dims){
+					total = total * i;
+				}
+				Object[] arrayValue = (Object[]) value;
+				long length = arrayValue==null ? -1 : arrayValue.length;
+				if(length != total){
+					throw new DecodingException("The ArrayDimensions do not match the ArrayLength in total size");
+				}
+			}
+
+			
 			if (value instanceof ExtensionObject) {
 				ExtensionObject extobj = (ExtensionObject) value;
 				try {
@@ -1377,6 +1487,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Variant[] getVariantArray(String fieldName)
 			throws DecodingException
@@ -1394,6 +1505,7 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public XmlElement getXmlElement(String fieldName)
 			throws DecodingException
@@ -1406,6 +1518,7 @@ public class BinaryDecoder implements IDecoder {
 		//		return new XmlElement(str);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public XmlElement[] getXmlElementArray(String fieldName)
 			throws DecodingException
@@ -1423,10 +1536,20 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/**
+	 * <p>setEncoderContext.</p>
+	 *
+	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public void setEncoderContext(EncoderContext ctx) {
 		this.ctx = ctx;
 	}
 
+	/**
+	 * <p>setReadable.</p>
+	 *
+	 * @param in a {@link org.opcfoundation.ua.utils.bytebuffer.IBinaryReadable} object.
+	 */
 	public void setReadable(IBinaryReadable in)
 	{
 		if (in.order() != ByteOrder.LITTLE_ENDIAN)
@@ -1518,6 +1641,12 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	/**
+	 * <p>remaining.</p>
+	 *
+	 * @return a long.
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	protected long remaining()
 			throws DecodingException
 	{

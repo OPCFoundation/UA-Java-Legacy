@@ -41,7 +41,7 @@ import org.opcfoundation.ua.core.FilterOperand;
 
 
 
-public class SimpleAttributeOperand extends FilterOperand implements Structure, Cloneable {
+public class SimpleAttributeOperand extends FilterOperand {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SimpleAttributeOperand);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SimpleAttributeOperand_Encoding_DefaultBinary);
@@ -109,7 +109,7 @@ public class SimpleAttributeOperand extends FilterOperand implements Structure, 
       */
     public SimpleAttributeOperand clone()
     {
-        SimpleAttributeOperand result = new SimpleAttributeOperand();
+        SimpleAttributeOperand result = (SimpleAttributeOperand) super.clone();
         result.TypeDefinitionId = TypeDefinitionId;
         result.BrowsePath = BrowsePath==null ? null : BrowsePath.clone();
         result.AttributeId = AttributeId;

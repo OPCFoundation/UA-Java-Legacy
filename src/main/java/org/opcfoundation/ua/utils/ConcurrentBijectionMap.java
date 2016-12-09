@@ -22,7 +22,7 @@ import java.util.Set;
 
 /**
  * Bijection map is a 1:1 binding of 2-tuples.
- * For each binding one value has role "left" and the other one the role "right". 
+ * For each binding one value has role "left" and the other one the role "right".
  *
  * @author Toni Kalajainen
  */
@@ -33,12 +33,23 @@ public class ConcurrentBijectionMap<L, R> {
 	/** The keys of this map are rights and values lefts */
 	private Map<R, L> tableRight = new HashMap<R, L>();
 	
+	/**
+	 * <p>addAll.</p>
+	 *
+	 * @param map a {@link org.opcfoundation.ua.utils.ConcurrentBijectionMap} object.
+	 */
 	public synchronized void addAll(ConcurrentBijectionMap<L, R> map)
 	{
 		for (Entry<L, R> e : map.tableLeft.entrySet())
 			map(e.getKey(), e.getValue());
 	}
 	
+    /**
+     * <p>retainAllLeft.</p>
+     *
+     * @param values a {@link java.util.Collection} object.
+     * @return a boolean.
+     */
     public synchronized boolean retainAllLeft(Collection<L> values)
     {
         boolean result = false;
@@ -50,6 +61,12 @@ public class ConcurrentBijectionMap<L, R> {
         return result;
     }
     
+    /**
+     * <p>retainAllRight.</p>
+     *
+     * @param values a {@link java.util.Collection} object.
+     * @return a boolean.
+     */
     public synchronized boolean retainAllRight(Collection<R> values)
     {
         boolean result = false;
@@ -61,16 +78,33 @@ public class ConcurrentBijectionMap<L, R> {
         return result;
     }
     
+	/**
+	 * <p>getEntries.</p>
+	 *
+	 * @return a {@link java.util.Set} object.
+	 */
 	public synchronized Set<Entry<L, R>> getEntries()
 	{
 		return new HashSet<Entry<L, R>>(tableLeft.entrySet());
 	}
 	
+	/**
+	 * <p>containsLeft.</p>
+	 *
+	 * @param leftValue a L object.
+	 * @return a boolean.
+	 */
 	public synchronized boolean containsLeft(L leftValue)
 	{
 		return tableLeft.containsKey(leftValue);
 	}
 	
+	/**
+	 * <p>containsRight.</p>
+	 *
+	 * @param rightValue a R object.
+	 * @return a boolean.
+	 */
 	public synchronized boolean containsRight(R rightValue)
 	{
 		return tableRight.containsKey(rightValue);
@@ -78,9 +112,9 @@ public class ConcurrentBijectionMap<L, R> {
 	
 	/**
 	 * Contains binding
-	 * 
-	 * @param leftValue
-	 * @param rightValue
+	 *
+	 * @param leftValue a L object.
+	 * @param rightValue a R object.
 	 * @return true if there is a mapping between left and right value
 	 */
 	public synchronized boolean contains(L leftValue, R rightValue)
@@ -94,9 +128,9 @@ public class ConcurrentBijectionMap<L, R> {
 	
 	/**
 	 * Add value to the map
-	 * 
-	 * @param leftValue
-	 * @param rightValue
+	 *
+	 * @param leftValue a L object.
+	 * @param rightValue a R object.
 	 */
 	public synchronized void map(L leftValue, R rightValue)
 	{
@@ -115,34 +149,39 @@ public class ConcurrentBijectionMap<L, R> {
 		tableRight.put(rightValue, leftValue);
 	}
 	
+	/**
+	 * <p>isEmpty.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public synchronized boolean isEmpty() {
 	    return tableLeft.isEmpty();
 	}
     
-	/**
-	 * Get the number of mappings
-	 * 
-	 * @return the number of mappings
-	 */
+    /**
+     * Get the number of mappings
+     *
+     * @return the number of mappings
+     */
     public synchronized int size() 
     {
         return tableLeft.size();
     }
 	
-    /**
-     * Get left value with right key
-     * 
-     * @param rightValue
-     * @return left value
-     */
+	/**
+	 * Get left value with right key
+	 *
+	 * @param rightValue a R object.
+	 * @return left value
+	 */
 	public synchronized L getLeft(R rightValue) {
 		return tableRight.get(rightValue);		
 	}
 
 	/**
 	 * Get right value with left key
-	 * 
-	 * @param leftValue
+	 *
+	 * @param leftValue a L object.
 	 * @return right vlaue
 	 */
 	public synchronized R getRight(L leftValue) {
@@ -151,8 +190,8 @@ public class ConcurrentBijectionMap<L, R> {
 	
 	/**
 	 * Remove a binding with left key
-	 * 
-	 * @param leftValue
+	 *
+	 * @param leftValue a L object.
 	 * @return old right value
 	 */
 	public synchronized R removeWithLeft(L leftValue) {
@@ -164,8 +203,8 @@ public class ConcurrentBijectionMap<L, R> {
 
 	/**
 	 * Remove a binding with right key
-	 * 
-	 * @param rightValue
+	 *
+	 * @param rightValue a R object.
 	 * @return old left value
 	 */
 	public synchronized L removeWithRight(R rightValue) {
@@ -175,18 +214,18 @@ public class ConcurrentBijectionMap<L, R> {
 		return leftValue;
 	}
     
-	/**
-	 * Get all left values
-	 * 
-	 * @return all left values
-	 */
+    /**
+     * Get all left values
+     *
+     * @return all left values
+     */
     public synchronized Set<L> getLeftSet() {
         return Collections.unmodifiableSet( tableLeft.keySet() ); 
     }
     
     /**
-     * Get all right values. 
-     * 
+     * Get all right values.
+     *
      * @return all right values
      */
     public synchronized Set<R> getRightSet() {
@@ -201,6 +240,7 @@ public class ConcurrentBijectionMap<L, R> {
         tableRight.clear();
     }
     
+    /** {@inheritDoc} */
     @Override
     public synchronized String toString() {
     	int count = 0;

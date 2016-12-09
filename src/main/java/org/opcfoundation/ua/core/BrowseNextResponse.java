@@ -37,9 +37,10 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.core.BrowseResult;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class BrowseNextResponse extends Object implements ServiceResponse {
+public class BrowseNextResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.BrowseNextResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.BrowseNextResponse_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class BrowseNextResponse extends Object implements ServiceResponse {
       */
     public BrowseNextResponse clone()
     {
-        BrowseNextResponse result = new BrowseNextResponse();
+        BrowseNextResponse result = (BrowseNextResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         if (Results!=null) {
             result.Results = new BrowseResult[Results.length];

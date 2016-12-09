@@ -14,14 +14,14 @@ package org.opcfoundation.ua.utils;
 
 /**
  * Listener for state changes
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public interface StateListener<StateType> {
 
 	/**
 	 * Call-back for state transition
-	 * 
+	 *
 	 * @param sender State monitor object
 	 * @param oldState new state
 	 * @param newState new state

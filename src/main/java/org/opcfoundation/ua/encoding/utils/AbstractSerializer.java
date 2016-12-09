@@ -25,7 +25,7 @@ import org.opcfoundation.ua.encoding.binary.IEncodeableSerializer;
 
 /**
  * Simple serializer that can serialize only one type of class.
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public abstract class AbstractSerializer implements IEncodeableSerializer {
@@ -33,10 +33,25 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 	Class<? extends IEncodeable> clazz;
 	ExpandedNodeId binaryId, xmlId, nodeId;
 	
+	/**
+	 * <p>Constructor for AbstractSerializer.</p>
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
+	 * @param binaryId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @param xmlId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 */
 	public AbstractSerializer(Class<? extends IEncodeable> clazz, ExpandedNodeId binaryId, ExpandedNodeId xmlId){
 		this(clazz, binaryId, xmlId, null);
 	}
 	
+	/**
+	 * <p>Constructor for AbstractSerializer.</p>
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
+	 * @param binaryId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @param xmlId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @param nodeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 */
 	public AbstractSerializer(Class<? extends IEncodeable> clazz, ExpandedNodeId binaryId, ExpandedNodeId xmlId, ExpandedNodeId nodeId){
 		if (clazz==null)
 			throw new IllegalArgumentException("null arg");
@@ -46,16 +61,38 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 		this.nodeId = nodeId;
 	}
 	
+	/**
+	 * <p>calcEncodeable.</p>
+	 *
+	 * @param encodeable a {@link org.opcfoundation.ua.encoding.IEncodeable} object.
+	 * @param calculator a {@link org.opcfoundation.ua.encoding.IEncoder} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public abstract void calcEncodeable(IEncodeable encodeable, IEncoder calculator)
 	throws EncodingException;
 
+	/**
+	 * <p>putEncodeable.</p>
+	 *
+	 * @param encodeable a {@link org.opcfoundation.ua.encoding.IEncodeable} object.
+	 * @param encoder a {@link org.opcfoundation.ua.encoding.IEncoder} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public abstract void putEncodeable(IEncodeable encodeable, IEncoder encoder) 
 	throws EncodingException;
 	
+	/**
+	 * <p>getEncodeable.</p>
+	 *
+	 * @param decoder a {@link org.opcfoundation.ua.encoding.IDecoder} object.
+	 * @return a {@link org.opcfoundation.ua.encoding.IEncodeable} object.
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	public abstract IEncodeable getEncodeable(IDecoder decoder) 
 	throws DecodingException;
 	
 	
+	/** {@inheritDoc} */
 	@Override
 	public void calcEncodeable(Class<? extends IEncodeable> clazz,
 			IEncodeable encodeable, IEncoder calculator)
@@ -66,6 +103,7 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
 	public void putEncodeable(Class<? extends IEncodeable> clazz,
 			IEncodeable encodeable, IEncoder encoder) throws EncodingException
@@ -74,11 +112,13 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 			throw new EncodingException("Cannot encode "+clazz);
 		putEncodeable(encodeable, encoder);
 	}	
+	/** {@inheritDoc} */
 	@Override
 	public Class<? extends IEncodeable> getClass(ExpandedNodeId id) {
 		return (id.equals(binaryId) || id.equals(xmlId) || (nodeId!= null && id.equals(nodeId))) ? clazz : null; 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ExpandedNodeId getNodeId(Class<? extends IEncodeable> clazz, EncodeType type) {
 		if (type==null) return nodeId; //XXX not pretty, but will do for the moment
@@ -87,6 +127,7 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 		return null; 
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public IEncodeable getEncodeable(Class<? extends IEncodeable> clazz,
 			IDecoder decoder) throws DecodingException {
@@ -95,11 +136,13 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 		return getEncodeable(decoder);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void getSupportedClasses(Collection<Class<? extends IEncodeable>> result) {
 		result.add(clazz);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void getSupportedNodeIds(Collection<ExpandedNodeId> result) {
 		if (binaryId!=null)

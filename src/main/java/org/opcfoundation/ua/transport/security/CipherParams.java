@@ -11,6 +11,10 @@
 */
 package org.opcfoundation.ua.transport.security;
 
+/**
+ * <p>CipherParams interface.</p>
+ *
+ */
 public interface CipherParams {
 
 }

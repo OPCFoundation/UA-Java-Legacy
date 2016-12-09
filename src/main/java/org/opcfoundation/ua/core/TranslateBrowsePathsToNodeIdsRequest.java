@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.BrowsePath;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class TranslateBrowsePathsToNodeIdsRequest extends Object implements ServiceRequest {
+public class TranslateBrowsePathsToNodeIdsRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TranslateBrowsePathsToNodeIdsRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TranslateBrowsePathsToNodeIdsRequest_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class TranslateBrowsePathsToNodeIdsRequest extends Object implements Serv
       */
     public TranslateBrowsePathsToNodeIdsRequest clone()
     {
-        TranslateBrowsePathsToNodeIdsRequest result = new TranslateBrowsePathsToNodeIdsRequest();
+        TranslateBrowsePathsToNodeIdsRequest result = (TranslateBrowsePathsToNodeIdsRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         if (BrowsePaths!=null) {
             result.BrowsePaths = new BrowsePath[BrowsePaths.length];

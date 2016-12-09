@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class SetTriggeringRequest extends Object implements ServiceRequest {
+public class SetTriggeringRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SetTriggeringRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SetTriggeringRequest_Encoding_DefaultBinary);
@@ -118,7 +119,7 @@ public class SetTriggeringRequest extends Object implements ServiceRequest {
       */
     public SetTriggeringRequest clone()
     {
-        SetTriggeringRequest result = new SetTriggeringRequest();
+        SetTriggeringRequest result = (SetTriggeringRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.SubscriptionId = SubscriptionId;
         result.TriggeringItemId = TriggeringItemId;

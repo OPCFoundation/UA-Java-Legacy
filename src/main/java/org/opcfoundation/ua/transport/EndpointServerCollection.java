@@ -16,23 +16,37 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * <p>EndpointServerCollection class.</p>
+ *
+ */
 public class EndpointServerCollection {
 
 	List<EndpointServer> servers = Collections.synchronizedList( new ArrayList<EndpointServer>() );
 
+	/**
+	 * <p>add.</p>
+	 *
+	 * @param endpointServer a {@link org.opcfoundation.ua.transport.EndpointServer} object.
+	 */
 	public void add(EndpointServer endpointServer)
 	{
 		servers.add( endpointServer );
 	}
 	
+	/**
+	 * <p>remove.</p>
+	 *
+	 * @param endpointServer a {@link org.opcfoundation.ua.transport.EndpointServer} object.
+	 */
 	public void remove(EndpointServer endpointServer)
 	{
 		servers.remove( endpointServer );
 	}
 	
 	/**
-	 * Get a snapshot of the endpoint server list 
-	 * 
+	 * Get a snapshot of the endpoint server list
+	 *
 	 * @return a copy of the endpoint server list
 	 */
 	public List<EndpointServer> getList() {
@@ -41,6 +55,7 @@ public class EndpointServerCollection {
 	
 	/**
 	 * Get all endpoint bindings
+	 *
 	 * @return all endpoint bindings of all endpoint servers in this list
 	 */
 	public List<EndpointBinding> getEndpointBindings() {
@@ -65,8 +80,8 @@ public class EndpointServerCollection {
 	
 	/**
 	 * Get the endpoint server that is bound at the given socket address.
-	 * 
-	 * @param socketAddress
+	 *
+	 * @param socketAddress a {@link java.net.SocketAddress} object.
 	 * @return EndpointServer or null
 	 */
 	public EndpointServer getEndpointServer( SocketAddress socketAddress ) {

@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedByte;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class ModifySubscriptionRequest extends Object implements ServiceRequest {
+public class ModifySubscriptionRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ModifySubscriptionRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ModifySubscriptionRequest_Encoding_DefaultBinary);
@@ -142,7 +143,7 @@ public class ModifySubscriptionRequest extends Object implements ServiceRequest 
       */
     public ModifySubscriptionRequest clone()
     {
-        ModifySubscriptionRequest result = new ModifySubscriptionRequest();
+        ModifySubscriptionRequest result = (ModifySubscriptionRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.SubscriptionId = SubscriptionId;
         result.RequestedPublishingInterval = RequestedPublishingInterval;

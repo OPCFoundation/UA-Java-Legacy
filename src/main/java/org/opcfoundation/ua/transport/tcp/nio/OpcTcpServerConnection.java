@@ -94,8 +94,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author jaro
+ * <p>OpcTcpServerConnection class.</p>
  *
+ * @author jaro
  */
 public class OpcTcpServerConnection extends AbstractServerConnection {
 
@@ -105,6 +106,8 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 	// Give client 10 minutes to handshake
 	private static long handshakeTimeout = 10 * 60 * 1000; // 10 minutes
 	/**
+	 * <p>Getter for the field <code>handshakeTimeout</code>.</p>
+	 *
 	 * @return the handshakeTimeout
 	 */
 	public static long getHandshakeTimeout() {
@@ -304,6 +307,7 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 						System.currentTimeMillis() + handshakeTimeout);
 			}
 
+			/** {@inheritDoc} */
 			@Override
 			public void addConnectionListener(IConnectionListener listener) {
 				logger.debug("addConnectionListener: listener={}", listener);
@@ -311,6 +315,7 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 
 			}
 
+			/** {@inheritDoc} */
 			@Override
 			public synchronized CloseableObject close() {
 				try {
@@ -325,6 +330,7 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				return this;
 			}
 
+			/** {@inheritDoc} */
 			@Override
 			public SocketAddress getLocalAddress() {
 				Socket socket = s.socket();
@@ -332,6 +338,7 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				return socket.getLocalSocketAddress();
 			}
 
+			/** {@inheritDoc} */
 			@Override
 			public SocketAddress getRemoteAddress() {
 				Socket socket = s.socket();
@@ -339,6 +346,7 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				return socket.getRemoteSocketAddress();
 			}
 
+			/** {@inheritDoc} */
 			@Override
 			public void removeConnectionListener(IConnectionListener listener) {
 				logger.debug("removeConnectionListener: listener={}", listener);
@@ -358,6 +366,9 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				return uri;
 			}
 
+			/**
+			 * <p>cancelTimeoutTimer.</p>
+			 */
 			protected void cancelTimeoutTimer() {
 				// Cancel hand-shake time-out
 				if (timeoutTimer!=null) {
@@ -371,7 +382,6 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 			 * Flushes queued chunks (see startChunkSend())
 			 *
 			 * @param chunk chunk to send
-			 * @return the stream position after this chunk is flushed
 			 */
 			protected void endChunkSend(ByteBuffer chunk)
 			{
@@ -385,21 +395,42 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				}
 			}
 
+			/**
+			 * <p>flush.</p>
+			 *
+			 * @param position a long.
+			 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.BufferMonitorState} object.
+			 * @throws java.lang.InterruptedException if any.
+			 * @throws java.io.IOException if any.
+			 */
 			protected BufferMonitorState flush(long position)
 					throws InterruptedException, IOException
 			{
 				return s.getOutputStream().createMonitor(position, null).waitForState(BufferMonitorState.FINAL_STATES);
 			}
 
+			/** {@inheritDoc} */
 			@Override
 			protected CertificateValidator getRemoteCertificateValidator() {
 				return binding==null ? null: binding.serviceServer.getApplication().getOpctcpSettings().getCertificateValidator();
 			}
 
+			/**
+			 * <p>handleAcknowledgeMessage.</p>
+			 *
+			 * @param a a {@link org.opcfoundation.ua.transport.tcp.impl.Acknowledge} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void handleAcknowledgeMessage(Acknowledge a) throws ServiceResultException {
 				throw new ServiceResultException(Bad_UnexpectedError);
 			}
 
+			/**
+			 * <p>handleAsymmChunk.</p>
+			 *
+			 * @param chunk a {@link java.nio.ByteBuffer} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void handleAsymmChunk(ByteBuffer chunk) throws ServiceResultException {
 				chunk.rewind();
 				if (secureMessageBuilder!=null && !secureMessageBuilder.moreChunksRequired()) secureMessageBuilder = null;
@@ -476,6 +507,12 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				secureMessageBuilder.addChunk(chunk);
 			}
 
+			/**
+			 * <p>handleChunk.</p>
+			 *
+			 * @param chunk a {@link java.nio.ByteBuffer} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void handleChunk(ByteBuffer chunk) throws ServiceResultException {
 				int type = ChunkUtils.getMessageType(chunk);
 				int messageType = type & TcpMessageType.MESSAGE_TYPE_MASK;
@@ -494,10 +531,22 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				}
 			}
 
+			/**
+			 * <p>handleCloseChunk.</p>
+			 *
+			 * @param chunk a {@link java.nio.ByteBuffer} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void handleCloseChunk(ByteBuffer chunk) throws ServiceResultException {
 				close();
 			}
 
+			/**
+			 * <p>handleCloseSecureChannelRequest.</p>
+			 *
+			 * @param mb a {@link org.opcfoundation.ua.transport.tcp.nio.InputMessage} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void handleCloseSecureChannelRequest(InputMessage mb) throws ServiceResultException {
 				logger.debug("onCloseChannel");
 				IEncodeable msg = mb.getMessage();
@@ -511,11 +560,22 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				chan.handleCloseSecureChannelRequest(mb, req);
 			}
 
+			/**
+			 * <p>handleErrorMessage.</p>
+			 *
+			 * @param e a {@link org.opcfoundation.ua.transport.tcp.impl.ErrorMessage} object.
+			 */
 			protected void handleErrorMessage(ErrorMessage e) {
 				logger.debug("onError: {}", e);
 				setError(e.getError());
 			}
 
+			/**
+			 * <p>handleHelloMessage.</p>
+			 *
+			 * @param h a {@link org.opcfoundation.ua.transport.tcp.impl.Hello} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void handleHelloMessage(Hello h) throws ServiceResultException {
 				cancelTimeoutTimer();
 
@@ -599,6 +659,12 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				setState(CloseableObjectState.Open);
 			}
 
+			/**
+			 * <p>handleOpenSecureChannelRequest.</p>
+			 *
+			 * @param mb a {@link org.opcfoundation.ua.transport.tcp.nio.InputMessage} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void handleOpenSecureChannelRequest(InputMessage mb) throws ServiceResultException {
 				IEncodeable msg = mb.getMessage();
 				if (msg == null)
@@ -635,6 +701,11 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 
 			}
 
+			/**
+			 * <p>handleRawChunk.</p>
+			 *
+			 * @param chunk a {@link java.nio.ByteBuffer} object.
+			 */
 			protected void handleRawChunk(ByteBuffer chunk) {
 				int type = ChunkUtils.getMessageType(chunk);
 				int messageType = type & TcpMessageType.MESSAGE_TYPE_MASK;
@@ -659,6 +730,12 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				}
 			}
 
+			/**
+			 * <p>handleSecureMessage.</p>
+			 *
+			 * @param mb a {@link org.opcfoundation.ua.transport.tcp.nio.InputMessage} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void handleSecureMessage(InputMessage mb) throws ServiceResultException {
 				IEncodeable msg = mb.getMessage();
 				int secureChannelId = mb.getSecureChannelId();
@@ -683,6 +760,12 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 			}
 
 
+			/**
+			 * <p>handleSymmChunk.</p>
+			 *
+			 * @param chunk a {@link java.nio.ByteBuffer} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void handleSymmChunk(ByteBuffer chunk) throws ServiceResultException {
 				int secureChannelId = ChunkUtils.getSecureChannelId(chunk);
 				int tokenId = ChunkUtils.getTokenId(chunk);
@@ -722,6 +805,7 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 			}
 
 			// Propagate connection closed/error to channels
+			/** {@inheritDoc} */
 			@Override
 			protected synchronized void onStateTransition(CloseableObjectState oldState,
 					CloseableObjectState newState) {
@@ -742,6 +826,12 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				}
 			}
 
+			/**
+			 * <p>sendAcknowledge.</p>
+			 *
+			 * @param a a {@link org.opcfoundation.ua.transport.tcp.impl.Acknowledge} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void sendAcknowledge(Acknowledge a)
 					throws ServiceResultException
 			{
@@ -758,15 +848,9 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 			}
 
 			/**
-			 * Send asymmetric secure message.
+			 * {@inheritDoc}
 			 *
-			 * @param msg
-			 * @param securityConfiguration
-			 * @param secureChannelId
-			 * @param requestNumber
-			 * @param sequenceNumber sequence number
-			 * @return number of chunks
-			 * @throws ServiceResultException
+			 * Send asymmetric secure message.
 			 */
 			@Override
 			protected int sendAsymmSecureMessage(
@@ -834,8 +918,7 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 			/**
 			 * Send chunks.
 			 *
-			 * @param chunks
-			 * @return stream position after these chunks
+			 * @param chunks a {@link java.nio.ByteBuffer} object.
 			 */
 			protected synchronized void sendChunks(ByteBuffer...chunks)
 			{
@@ -844,6 +927,12 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 					endChunkSend(chunk);
 			}
 
+			/**
+			 * <p>sendError.</p>
+			 *
+			 * @param e a {@link org.opcfoundation.ua.transport.tcp.impl.ErrorMessage} object.
+			 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+			 */
 			protected void sendError(ErrorMessage e)
 					throws ServiceResultException
 			{
@@ -859,6 +948,11 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				sendChunks(chunks);
 			}
 
+			/**
+			 * <p>sendHello.</p>
+			 *
+			 * @param h a {@link org.opcfoundation.ua.transport.tcp.impl.Hello} object.
+			 */
 			protected void sendHello(Hello h)
 			{
 				ctx.endpointUrl = h.getEndpointUrl();
@@ -876,13 +970,9 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 			}
 
 			/**
-			 * Send symmetric secure message
+			 * {@inheritDoc}
 			 *
-			 * @param msg
-			 * @param token
-			 * @param requestId
-			 * @param messageType message type, one of {@link TcpMessageType} MESSAGE, OPEN, or CLOSE
-			 * @throws ServiceResultException
+			 * Send symmetric secure message
 			 */
 			@Override
 			protected void sendSecureMessage(
@@ -1048,6 +1138,7 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 					StackUtils.getBlockingWorkExecutor().execute(encoder);
 			}
 
+			/** {@inheritDoc} */
 			@Override
 			protected synchronized void setError(ServiceResultException e) {
 				if(!hasError()){
@@ -1064,8 +1155,7 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 			 * Put chunks into send queue. Chunks will be given a sequence number
 			 * but will be flushed in endChunkSend().
 			 *
-			 * @param chunks
-			 * @return sequence number for the first chunk
+			 * @param chunks a {@link java.nio.ByteBuffer} object.
 			 */
 			protected void startChunkSend(ByteBuffer...chunks)
 			{

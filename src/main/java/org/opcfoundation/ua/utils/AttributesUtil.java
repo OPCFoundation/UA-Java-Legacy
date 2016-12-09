@@ -19,21 +19,31 @@ import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.Attributes;
 import org.opcfoundation.ua.core.NodeClass;
 
+/**
+ * <p>AttributesUtil class.</p>
+ *
+ */
 public class AttributesUtil {
 
     //Copied from earlier project
+    /**
+     * <p>isValid.</p>
+     *
+     * @param attributeId a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+     * @return a boolean.
+     */
     public static boolean isValid(UnsignedInteger attributeId) {
 		return (attributeId.compareTo(Attributes.NodeId) >= 0 && attributeId.compareTo(Attributes.UserExecutable) <= 0);
 	}
     
     //TODO Mikko added some attributeIds to this function..please check that those are correct..the information has been taken from spec part 3 v. 1.01.13 from chapter 5.9
     /**
-	 * Tests if the attribute is valid for at least one of the node classes specified in the mask.
-	 * 
-	 * @param nodeClass
-	 * @param attributeId
-	 * @return true if valid
-	 */
+     * Tests if the attribute is valid for at least one of the node classes specified in the mask.
+     *
+     * @param nodeClass a {@link org.opcfoundation.ua.core.NodeClass} object.
+     * @param attributeId a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+     * @return true if valid
+     */
     public static boolean isValid(NodeClass nodeClass, UnsignedInteger attributeId) {
     	
     	int ordinalNodeClass = nodeClass.ordinal();
@@ -83,6 +93,12 @@ public class AttributesUtil {
 	}
 
     
+	/**
+	 * <p>toString.</p>
+	 *
+	 * @param value a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String toString(UnsignedInteger value) {
 		try {
 		  return attributeNames.get(value);

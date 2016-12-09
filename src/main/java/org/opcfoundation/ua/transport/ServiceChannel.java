@@ -29,108 +29,133 @@ public class ServiceChannel extends ChannelService implements SecureChannel {
 
 	SecureChannel channel;
 	
+	/**
+	 * <p>Constructor for ServiceChannel.</p>
+	 *
+	 * @param channel a {@link org.opcfoundation.ua.transport.SecureChannel} object.
+	 */
 	public ServiceChannel(SecureChannel channel) {
 		super(channel);
 		this.channel = channel;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void close() {
 		channel.close();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public AsyncResult<SecureChannel> closeAsync() {
 		return channel.closeAsync();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void dispose() {
 		channel.dispose();		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getConnectURL() {
 		return channel.getConnectURL();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ServerConnection getConnection() {
 		return channel.getConnection();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EndpointConfiguration getEndpointConfiguration() {
 		return channel.getEndpointConfiguration();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EndpointDescription getEndpointDescription() {
 		return channel.getEndpointDescription();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EncoderContext getMessageContext() {
 		return channel.getMessageContext();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public MessageSecurityMode getMessageSecurityMode() {
 		return channel.getMessageSecurityMode();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int getOperationTimeout() {
 		return channel.getOperationTimeout();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int getSecureChannelId() {
 		return channel.getSecureChannelId();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public SecurityPolicy getSecurityPolicy() {
 		return channel.getSecurityPolicy();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void initialize(String url, TransportChannelSettings settings, EncoderContext ctx)
 			throws ServiceResultException {
 		channel.initialize(url, settings, ctx);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isOpen() {
 		return channel.isOpen();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void open() throws ServiceResultException {
 		channel.open();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public AsyncResult<SecureChannel> openAsync() {
 		return channel.openAsync();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ServiceResponse serviceRequest(ServiceRequest request)
 			throws ServiceResultException {
 		return channel.serviceRequest(request);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public AsyncResult<ServiceResponse> serviceRequestAsync(ServiceRequest request) {
 		return channel.serviceRequestAsync(request);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setOperationTimeout(int timeout) {
 		channel.setOperationTimeout(timeout);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void initialize(TransportChannelSettings settings, EncoderContext ctx)
 			throws ServiceResultException {

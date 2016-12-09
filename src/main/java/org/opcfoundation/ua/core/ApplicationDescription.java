@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.LocalizedText;
 import org.opcfoundation.ua.core.ApplicationType;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ApplicationDescription extends Object implements Structure, Cloneable {
+public class ApplicationDescription extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ApplicationDescription);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ApplicationDescription_Encoding_DefaultBinary);
@@ -143,7 +144,7 @@ public class ApplicationDescription extends Object implements Structure, Cloneab
       */
     public ApplicationDescription clone()
     {
-        ApplicationDescription result = new ApplicationDescription();
+        ApplicationDescription result = (ApplicationDescription) super.clone();
         result.ApplicationUri = ApplicationUri;
         result.ProductUri = ProductUri;
         result.ApplicationName = ApplicationName;

@@ -16,12 +16,22 @@ import org.opcfoundation.ua.core.ResponseHeader;
 
 /**
  * Super interface for all service response messages
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public interface ServiceResponse extends Structure {
 
+    /**
+     * <p>getResponseHeader.</p>
+     *
+     * @return a {@link org.opcfoundation.ua.core.ResponseHeader} object.
+     */
     ResponseHeader getResponseHeader();
+    /**
+     * <p>setResponseHeader.</p>
+     *
+     * @param ResponseHeader a {@link org.opcfoundation.ua.core.ResponseHeader} object.
+     */
     void setResponseHeader(ResponseHeader ResponseHeader);
 	
 }

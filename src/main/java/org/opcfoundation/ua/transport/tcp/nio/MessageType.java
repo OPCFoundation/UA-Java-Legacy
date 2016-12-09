@@ -13,8 +13,7 @@
 package org.opcfoundation.ua.transport.tcp.nio;
 
 /**
- *
- * 
+ * <p>MessageType class.</p>
  */
 public enum MessageType {
 

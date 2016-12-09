@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.core.SupportedProfile;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class SoftwareCertificate extends Object implements Structure, Cloneable {
+public class SoftwareCertificate extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SoftwareCertificate);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SoftwareCertificate_Encoding_DefaultBinary);
@@ -179,7 +180,7 @@ public class SoftwareCertificate extends Object implements Structure, Cloneable 
       */
     public SoftwareCertificate clone()
     {
-        SoftwareCertificate result = new SoftwareCertificate();
+        SoftwareCertificate result = (SoftwareCertificate) super.clone();
         result.ProductName = ProductName;
         result.ProductUri = ProductUri;
         result.VendorName = VendorName;

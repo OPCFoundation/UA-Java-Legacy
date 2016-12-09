@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class SemanticChangeStructureDataType extends Object implements Structure, Cloneable {
+public class SemanticChangeStructureDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SemanticChangeStructureDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SemanticChangeStructureDataType_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class SemanticChangeStructureDataType extends Object implements Structure
       */
     public SemanticChangeStructureDataType clone()
     {
-        SemanticChangeStructureDataType result = new SemanticChangeStructureDataType();
+        SemanticChangeStructureDataType result = (SemanticChangeStructureDataType) super.clone();
         result.Affected = Affected;
         result.AffectedType = AffectedType;
         return result;

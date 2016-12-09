@@ -29,11 +29,11 @@ import org.opcfoundation.ua.utils.bytebuffer.ByteBufferFactory;
 /**
  * Chunk factory constructs byte buffers to be used for writing.
  * The byte buffer will be backed by an array that can fit the chunk.
- * The writable portion of the byte buffer (position -> limit) reflects 
+ * The writable portion of the byte buffer (position -&gt; limit) reflects
  * to writable plaintext region.
  * <p>
- * Padding and the size of the message is pre-written to the chunk. 
- * 
+ * Padding and the size of the message is pre-written to the chunk.
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  * @author Mikko Salonen
  */
@@ -53,6 +53,18 @@ public class ChunkFactory extends ByteBufferFactory {
 	/** Logger */
 	static Logger logger = LoggerFactory.getLogger(ChunkFactory.class);
 	
+	/**
+	 * <p>Constructor for ChunkFactory.</p>
+	 *
+	 * @param maxChunkSize a int.
+	 * @param messageHeaderSize a int.
+	 * @param securityHeaderSize a int.
+	 * @param sequenceHeaderSize a int.
+	 * @param signatureSize a int.
+	 * @param cipherBlockSize a int.
+	 * @param securityMode a {@link org.opcfoundation.ua.core.MessageSecurityMode} object.
+	 * @param keySize a int.
+	 */
 	public ChunkFactory(
 		int maxChunkSize, 
 		int messageHeaderSize,
@@ -97,7 +109,9 @@ public class ChunkFactory extends ByteBufferFactory {
 
 
 	/**
-	 * 
+	 * <p>getMinimumPadding.</p>
+	 *
+	 * @return a int.
 	 */
 	protected int getMinimumPadding(){
 		return useExtraPaddingByte ? 2 : 1;
@@ -105,10 +119,9 @@ public class ChunkFactory extends ByteBufferFactory {
 	
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Allocate chunk for a message with a given body size.
-	 * 
-	 * @param bodySize 
-	 * @return plaintext writeable byte buffer backed by byte[] size of the chunk. 
 	 */
 	public ByteBuffer allocate(int bodySize) {
 		bodySize = Math.min(bodySize, maxPlaintextSize);
@@ -153,10 +166,12 @@ public class ChunkFactory extends ByteBufferFactory {
 	}
 
 	/**
-	 * 
+	 * <p>writePadding.</p>
+	 *
+	 * @param paddingPosition a int.
 	 * @param paddingPosition
 	 * @param padding the size of the whole padding; padding, padding fill, extra padding byte
-	 * @param result
+	 * @param result a {@link java.nio.ByteBuffer} object.
 	 */
 	protected void writePadding(int paddingPosition, int padding, ByteBuffer result) {
 		int minimumPadding = getMinimumPadding();
@@ -181,6 +196,13 @@ public class ChunkFactory extends ByteBufferFactory {
 		logger.trace("writePadding: result={}", CryptoUtil.toHex(result.array(), 64));
 	}
 
+	/**
+	 * <p>writePaddingSize.</p>
+	 *
+	 * @param paddingPosition a int.
+	 * @param paddingSize a int.
+	 * @param result a {@link java.nio.ByteBuffer} object.
+	 */
 	protected void writePaddingSize(int paddingPosition, int paddingSize, ByteBuffer result) {
 		int minimumPadding = getMinimumPadding();
 		
@@ -197,11 +219,21 @@ public class ChunkFactory extends ByteBufferFactory {
 		logger.trace("writePadding: result={}", CryptoUtil.toHex(result.array(), 64));
 	}
 	
+	/**
+	 * <p>signChunk.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 */
 	public void signChunk(ByteBuffer chunk)
 	{
 		
 	}
 	
+	/**
+	 * <p>encryptChunk.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 */
 	public void encryptChunk(ByteBuffer chunk)
 	{
 		
@@ -209,14 +241,14 @@ public class ChunkFactory extends ByteBufferFactory {
 	
 	/**
 	 * Expand allocated bytebuffer to complete chunk.
-	 * 
-	 * ByteBuffer allocated with allocate() returns a buffer that 
-	 * has only plaintext as writable portion. This method expands the 
+	 *
+	 * ByteBuffer allocated with allocate() returns a buffer that
+	 * has only plaintext as writable portion. This method expands the
 	 * ByteBuffer to include header and footer.
-	 * 
-	 * The result is rewound. 
-	 *  
-	 * @param plaintext
+	 *
+	 * The result is rewound.
+	 *
+	 * @param plaintext a {@link java.nio.ByteBuffer} object.
 	 * @return chunk
 	 */
 	public ByteBuffer expandToCompleteChunk(ByteBuffer plaintext)
@@ -224,6 +256,12 @@ public class ChunkFactory extends ByteBufferFactory {
 		return ByteBuffer.wrap(plaintext.array()).order(ByteOrder.LITTLE_ENDIAN);
 	}
 
+	/**
+	 * <p>expandToCompleteChunk.</p>
+	 *
+	 * @param plaintexts an array of {@link java.nio.ByteBuffer} objects.
+	 * @return an array of {@link java.nio.ByteBuffer} objects.
+	 */
 	public ByteBuffer[] expandToCompleteChunk(ByteBuffer[] plaintexts)
 	{ 
 		ByteBuffer[] chunks = new ByteBuffer[plaintexts.length];

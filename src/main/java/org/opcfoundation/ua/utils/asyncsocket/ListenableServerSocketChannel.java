@@ -24,8 +24,8 @@ import org.opcfoundation.ua.utils.asyncsocket.AsyncSelector.SelectListener;
 
 /**
  * ListenableServerSocketChannel adds convenient listening mechanism over
- * non-blocking ServerSocketChannel.  
- * 
+ * non-blocking ServerSocketChannel.
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class ListenableServerSocketChannel {
@@ -39,13 +39,13 @@ public class ListenableServerSocketChannel {
     boolean					        ownsSelector = false;
     Runnable acceptRun;
 
-    /**
-	 * Wrap AsyncServerSocket over given ServerSocketChannel using given event worker thread and selector thread.  
-	 *  
-	 * @param channel
+	/**
+	 * Wrap AsyncServerSocket over given ServerSocketChannel using given event worker thread and selector thread.
+	 *
+	 * @param channel a {@link java.nio.channels.ServerSocketChannel} object.
 	 * @param eventExecutor event executor or null for selector thread
 	 * @param t selector thread
-	 * @throws ClosedChannelException
+	 * @throws java.nio.channels.ClosedChannelException if any.
 	 */
 	public ListenableServerSocketChannel(ServerSocketChannel channel, Executor eventExecutor, AsyncSelector t) 
 	throws ClosedChannelException
@@ -63,9 +63,10 @@ public class ListenableServerSocketChannel {
     /**
      * Wrap AsyncServerSocket over given ServerSocketChannel using given event worker thread and a new selector thread.
      *
-     * @param channel
+     * @param channel a {@link java.nio.channels.ServerSocketChannel} object.
      * @param eventExecutor event executor or null for selector thread
-     * @throws ClosedChannelException
+     * @throws ClosedChannelException if any.
+     * @throws java.io.IOException if any.
      */
     public ListenableServerSocketChannel(ServerSocketChannel channel, Executor eventExecutor)
             throws IOException
@@ -97,6 +98,11 @@ public class ListenableServerSocketChannel {
 		}
 	};
 
+	/**
+	 * <p>Setter for the field <code>acceptableListener</code>.</p>
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.utils.asyncsocket.ListenableServerSocketChannel.ServerSocketAcceptable} object.
+	 */
 	public void setAcceptableListener(final ServerSocketAcceptable listener)
 	{
 		/*synchronized(this)*/ {
@@ -120,6 +126,11 @@ public class ListenableServerSocketChannel {
 		updateInterestOps();
 	}
 	
+	/**
+	 * <p>Getter for the field <code>acceptableListener</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.ListenableServerSocketChannel.ServerSocketAcceptable} object.
+	 */
 	public ServerSocketAcceptable getAcceptableListener()
 	{
 		return acceptableListener;
@@ -144,16 +155,31 @@ public class ListenableServerSocketChannel {
 		void onConnectionAcceptable(ListenableServerSocketChannel socket);
 	}	
 	
+	/**
+	 * <p>Getter for the field <code>channel</code>.</p>
+	 *
+	 * @return a {@link java.nio.channels.ServerSocketChannel} object.
+	 */
 	public ServerSocketChannel getChannel()
 	{
 		return channel.get();
 	}
 	
+	/**
+	 * <p>getSelectorThread.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncSelector} object.
+	 */
 	public AsyncSelector getSelectorThread()
 	{
 		return selector;
 	}	
 	
+	/**
+	 * <p>close.</p>
+	 *
+	 * @throws java.io.IOException if any.
+	 */
 	public /*synchronized*/ void close() throws IOException
 	{
 		ServerSocketChannel c = channel.getAndSet(null);
@@ -169,26 +195,24 @@ public class ListenableServerSocketChannel {
 		}
 	}
 	
-   /**
-    *
-    * Binds the <code>ServerSocket</code> to a specific address
-    * (IP address and port number).
-    * <p>
-    * If the address is <code>null</code>, then the system will pick up
-    * an ephemeral port and a valid local address to bind the socket.
-    * <P>
-    * The <code>backlog</code> argument must be a positive
-    * value greater than 0. If the value passed if equal or less
-    * than 0, then the default value will be assumed.
-    * @param	addr		The IP address & port number to bind to.
-    * @param	backlog		TCP/IP Server Socket (accept queue) backlog length.
-    * @throws	IOException if the bind operation fails, or if the socket
-    *			   is already bound.
-    * @throws	SecurityException	if a <code>SecurityManager</code> is present and
-    * its <code>checkListen</code> method doesn't allow the operation.
-    * @throws  IllegalArgumentException if endpoint is a
-    *          SocketAddress subclass not supported by this socket
-    */
+	/**
+	 *
+	 * Binds the <code>ServerSocket</code> to a specific address
+	 * (IP address and port number).
+	 * <p>
+	 * If the address is <code>null</code>, then the system will pick up
+	 * an ephemeral port and a valid local address to bind the socket.
+	 * <P>
+	 * The <code>backlog</code> argument must be a positive
+	 * value greater than 0. If the value passed if equal or less
+	 * than 0, then the default value will be assumed.
+	 *
+	 * @param addr address
+	 * @param backlog backlog
+	 * @throws  java.lang.IllegalArgumentException if endpoint is a
+	 *          SocketAddress subclass not supported by this socket
+	 * @throws IOException if error
+	 */
 	public /*synchronized*/ void bind(SocketAddress addr, int backlog) 
 	throws IOException
 	{				

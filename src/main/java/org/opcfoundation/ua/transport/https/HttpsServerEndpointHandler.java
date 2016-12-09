@@ -39,6 +39,10 @@ import org.opcfoundation.ua.transport.EndpointBinding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>HttpsServerEndpointHandler class.</p>
+ *
+ */
 public class HttpsServerEndpointHandler implements HttpAsyncRequestHandler<HttpRequest> {
 
 	/** Logger */
@@ -61,6 +65,11 @@ public class HttpsServerEndpointHandler implements HttpAsyncRequestHandler<HttpR
 	
 	HttpsServerSecureChannel singleSecureChannel;
 	
+	/**
+	 * <p>Constructor for HttpsServerEndpointHandler.</p>
+	 *
+	 * @param endpointBinding a {@link org.opcfoundation.ua.transport.EndpointBinding} object.
+	 */
 	public HttpsServerEndpointHandler( EndpointBinding endpointBinding ) {
 		this.endpointBinding = endpointBinding;
 		this.endpointServer = (HttpsServer) endpointBinding.endpointServer;
@@ -69,16 +78,23 @@ public class HttpsServerEndpointHandler implements HttpAsyncRequestHandler<HttpR
 		singleSecureChannel = new HttpsServerSecureChannel(this, 1);
 	}
 
+	/**
+	 * <p>getEncoderContext.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public EncoderContext getEncoderContext() {
 		return endpointServer.getEncoderContext();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public HttpAsyncRequestConsumer<HttpRequest> processRequest(HttpRequest request, HttpContext context) throws HttpException, IOException {
         // Buffer request content in memory for simplicity
         return new BasicAsyncRequestConsumer();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void handle(HttpRequest request, HttpAsyncExchange httpExchange, HttpContext context) throws HttpException, IOException {
 		

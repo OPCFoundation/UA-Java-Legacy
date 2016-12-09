@@ -76,14 +76,16 @@ public class CertificateUtils {
 
 	/**
 	 * Sign data
-	 * 
-	 * @param signerKey
+	 *
+	 * @param signerKey a {@link java.security.PrivateKey} object.
 	 * @param algorithm
 	 *            asymmetric signer algorithm, See {@link SecurityAlgorithm}
-	 * @param dataToSign
+	 * @param dataToSign an array of byte.
 	 * @return signature data
-	 * 
 	 * @deprecated Use {@link CryptoUtil#signAsymm(PrivateKey, SecurityAlgorithm, byte[])} instead.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.SignatureException if any.
+	 * @throws java.security.InvalidKeyException if any.
 	 */
 	public static SignatureData sign(PrivateKey signerKey,
 			SecurityAlgorithm algorithm, byte[] dataToSign)
@@ -97,16 +99,18 @@ public class CertificateUtils {
 	}
 
 	/**
-	 * Verify a signature. 
-	 * 
-	 * @param certificate
+	 * Verify a signature.
+	 *
+	 * @param certificate a {@link java.security.cert.X509Certificate} object.
 	 * @param algorithm
 	 *            asymmetric signer algorithm, See {@link SecurityAlgorithm}
-	 * @param data
-	 * @param signature
+	 * @param data an array of byte.
+	 * @param signature an array of byte.
 	 * @return true if verified
-	 *
 	 * @deprecated Use {@link CryptoUtil#verifyAsymm(X509Certificate, SecurityAlgorithm, byte[], byte[])} instead.
+	 * @throws java.security.SignatureException if any.
+	 * @throws java.security.InvalidKeyException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
 	 */
 	public static boolean verify(X509Certificate certificate,
 			SecurityAlgorithm algorithm, byte[] data, byte[] signature)
@@ -121,11 +125,11 @@ public class CertificateUtils {
 
 	/**
 	 * Load X.509 Certificate from an url
-	 * 
-	 * @param url
+	 *
+	 * @param url a {@link java.net.URL} object.
 	 * @return Certificate
-	 * @throws IOException
-	 * @throws CertificateException
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.cert.CertificateException
 	 *             In case the certificate is not valid
 	 */
 	public static X509Certificate readX509Certificate(URL url)
@@ -143,11 +147,11 @@ public class CertificateUtils {
 
 	/**
 	 * Load X.509 Certificate from a file
-	 * 
-	 * @param file
+	 *
+	 * @param file a {@link java.io.File} object.
 	 * @return Certificate
-	 * @throws IOException
-	 * @throws CertificateException
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.cert.CertificateException
 	 *             In case the certificate is not valid
 	 */
 	public static X509Certificate readX509Certificate(File file)
@@ -157,8 +161,8 @@ public class CertificateUtils {
 
 	/**
 	 * Create SHA-1 Thumbprint
-	 * 
-	 * @param data
+	 *
+	 * @param data an array of byte.
 	 * @return thumbprint
 	 */
 	public static byte[] createThumbprint(byte[] data) {
@@ -172,10 +176,10 @@ public class CertificateUtils {
 
 	/**
 	 * Decode X509 Certificate
-	 * 
-	 * @param encodedCertificate
+	 *
+	 * @param encodedCertificate an array of byte.
 	 * @return X509 certificate
-	 * @throws CertificateException
+	 * @throws java.security.cert.CertificateException if any.
 	 */
 	public static X509Certificate decodeX509Certificate(
 			byte[] encodedCertificate) throws CertificateException {
@@ -197,17 +201,17 @@ public class CertificateUtils {
 
 	/**
 	 * Load private key from a key store
-	 * 
+	 *
 	 * @param keystoreUrl
 	 *            url to key store
 	 * @param password
 	 *            password to key store
 	 * @return private key
-	 * @throws IOException
-	 * @throws CertificateException
-	 * @throws NoSuchAlgorithmException
-	 * @throws KeyStoreException
-	 * @throws UnrecoverableKeyException
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.cert.CertificateException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.KeyStoreException if any.
+	 * @throws java.security.UnrecoverableKeyException if any.
 	 */
 	public static RSAPrivateKey loadFromKeyStore(URL keystoreUrl,
 			String password) throws IOException, NoSuchAlgorithmException,
@@ -250,17 +254,17 @@ public class CertificateUtils {
 
 	/**
 	 * Save the KeyPair to a Java Key Store.
-	 * 
-	 * @param keyPairToSave
-	 * @param storeLocation
-	 * @param alias
-	 * @param storePW
-	 * @param privatePW
-	 * @return
-	 * @throws KeyStoreException
-	 * @throws IOException
-	 * @throws NoSuchAlgorithmException
-	 * @throws CertificateException
+	 *
+	 * @param keyPairToSave a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
+	 * @param storeLocation a {@link java.lang.String} object.
+	 * @param alias a {@link java.lang.String} object.
+	 * @param storePW a {@link java.lang.String} object.
+	 * @param privatePW a {@link java.lang.String} object.
+	 * @throws java.security.KeyStoreException if any.
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.cert.CertificateException if any.
+	 * @return a boolean.
 	 */
 	public static boolean saveKeyPairToProtectedStore(
 			org.opcfoundation.ua.transport.security.KeyPair keyPairToSave,
@@ -301,17 +305,17 @@ public class CertificateUtils {
 
 	/**
 	 * Load a KeyPair from a Java Key Store.
-	 * 
-	 * @param storeLocation
-	 * @param alias
-	 * @param storePW
-	 * @param privatePW
-	 * @return
-	 * @throws KeyStoreException
-	 * @throws IOException
-	 * @throws NoSuchAlgorithmException
-	 * @throws CertificateException
-	 * @throws UnrecoverableKeyException
+	 *
+	 * @param storeLocation a {@link java.lang.String} object.
+	 * @param alias a {@link java.lang.String} object.
+	 * @param storePW a {@link java.lang.String} object.
+	 * @param privatePW a {@link java.lang.String} object.
+	 * @throws java.security.KeyStoreException if any.
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.cert.CertificateException if any.
+	 * @throws java.security.UnrecoverableKeyException if any.
+	 * @return a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
 	 */
 	public static org.opcfoundation.ua.transport.security.KeyPair loadKeyPairFromProtectedStore(
 			String storeLocation, String alias, String storePW, String privatePW)
@@ -340,7 +344,7 @@ public class CertificateUtils {
 
 	/**
 	 * Renew a certificate KeyPair using the old keys.
-	 * 
+	 *
 	 * @param commonName
 	 *            - Common Name (CN) for generated certificate
 	 * @param organisation
@@ -355,11 +359,11 @@ public class CertificateUtils {
 	 * @param issuerKeys
 	 *            the optional issuer certificate and private key to use for
 	 *            signing the certificate
-	 * @param hostNames
-	 * @return
-	 * @throws IOException
-	 * @throws IllegalStateException
-	 * @throws GeneralSecurityException
+	 * @param hostNames a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 * @throws java.lang.IllegalStateException if any.
+	 * @throws java.security.GeneralSecurityException if any.
+	 * @return a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
 	 */
 	public static org.opcfoundation.ua.transport.security.KeyPair renewApplicationInstanceCertificate(
 			String commonName, String organisation, String applicationUri,
@@ -392,7 +396,7 @@ public class CertificateUtils {
 
 	/**
 	 * Renew a certificate KeyPair. Sign with the own key.
-	 * 
+	 *
 	 * @param commonName
 	 *            - Common Name (CN) for generated certificate
 	 * @param organisation
@@ -404,11 +408,11 @@ public class CertificateUtils {
 	 *            - the time that the certificate is valid (in days)
 	 * @param oldKeys
 	 *            the old keys to renew
-	 * @param hostNames
-	 * @return
-	 * @throws IOException
-	 * @throws IllegalStateException
-	 * @throws GeneralSecurityException
+	 * @param hostNames a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 * @throws java.lang.IllegalStateException if any.
+	 * @throws java.security.GeneralSecurityException if any.
+	 * @return a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
 	 */
 	public static org.opcfoundation.ua.transport.security.KeyPair renewApplicationInstanceCertificate(
 			String commonName, String organisation, String applicationUri,
@@ -431,7 +435,7 @@ public class CertificateUtils {
 	 * "SHA256WithRSA".
 	 * <p>
 	 * Default: "SHA256WithRSA"
-	 * 
+	 *
 	 * @param certificateSignatureAlgorithm
 	 *            the certificateSignatureAlgorithm to set
 	 */
@@ -441,6 +445,8 @@ public class CertificateUtils {
 	}
 
 	/**
+	 * <p>Getter for the field <code>keySize</code>.</p>
+	 *
 	 * @return the key size for new certificates
 	 */
 	public static int getKeySize() {
@@ -449,12 +455,12 @@ public class CertificateUtils {
 
 	/**
 	 * Define the key size for the certificates.
-	 * 
+	 *
 	 * Default: 2048
-	 * 
+	 *
 	 * @param keySize
 	 *            size of the certificates. Good values are multiples of 1024,2048(,3072) and 4096
-	 * @throws IllegalArgumentException
+	 * @throws java.lang.IllegalArgumentException
 	 *             if the value is not accepted
 	 */
 	public static void setKeySize(int keySize) {
@@ -531,6 +537,11 @@ public class CertificateUtils {
 
 	private static CertificateProvider certificateProvider;
 	
+	/**
+	 * <p>Getter for the field <code>certificateProvider</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.CertificateProvider} object.
+	 */
 	public static CertificateProvider getCertificateProvider() {
 		if (certificateProvider == null) {
 			if ("SC".equals(CryptoUtil.getSecurityProviderName())) {
@@ -550,7 +561,7 @@ public class CertificateUtils {
 	 * Define the preferred CertificateProvider. Usually this is determined
 	 * automatically, but you may define the provider that you wish to use
 	 * yourself.
-	 * 
+	 *
 	 * @param certificateProvider
 	 *            the certificateProvider to set
 	 */
@@ -570,7 +581,8 @@ public class CertificateUtils {
 
 
 	/**
-	 * 
+	 * <p>createApplicationInstanceCertificate.</p>
+	 *
 	 * @param commonName
 	 *            - Common Name (CN) for generated certificate
 	 * @param organisation
@@ -583,9 +595,9 @@ public class CertificateUtils {
 	 * @param hostNames
 	 *            - alternate host names or IP addresses to add to
 	 *            SubjectAlternativeNames
-	 * @return
-	 * @throws IOException
-	 * @throws GeneralSecurityException
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.GeneralSecurityException if any.
+	 * @return a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
 	 */
 	public static org.opcfoundation.ua.transport.security.KeyPair createApplicationInstanceCertificate(
 			String commonName, String organisation, String applicationUri,
@@ -596,7 +608,8 @@ public class CertificateUtils {
 	}
 	
 	/**
-	 * 
+	 * <p>createApplicationInstanceCertificate.</p>
+	 *
 	 * @param commonName
 	 *            - Common Name (CN) for the generated certificate
 	 * @param organisation
@@ -612,9 +625,9 @@ public class CertificateUtils {
 	 * @param hostNames
 	 *            - alternate host names or IP addresses to add to
 	 *            SubjectAlternativeNames
-	 * @return
-	 * @throws IOException
-	 * @throws GeneralSecurityException
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.GeneralSecurityException if any.
+	 * @return a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
 	 */
 	public static org.opcfoundation.ua.transport.security.KeyPair createApplicationInstanceCertificate(
 			String commonName, String organisation, String applicationUri,
@@ -645,6 +658,14 @@ public class CertificateUtils {
 		return toKeyPair(cert, keyPair.getPrivate());
 	}
 
+	/**
+	 * <p>toKeyPair.</p>
+	 *
+	 * @param cert a {@link java.security.cert.X509Certificate} object.
+	 * @param privateKey a {@link java.security.PrivateKey} object.
+	 * @return a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
+	 * @throws java.security.cert.CertificateEncodingException if any.
+	 */
 	public static org.opcfoundation.ua.transport.security.KeyPair toKeyPair(
 			X509Certificate cert, PrivateKey privateKey)
 			throws CertificateEncodingException {
@@ -672,7 +693,7 @@ public class CertificateUtils {
 	 * {@link #createApplicationInstanceCertificate(String, String, String, int, String...)}
 	 * or
 	 * {@link #createHttpsCertificate(String, String, int, org.opcfoundation.ua.transport.security.KeyPair)}
-	 * 
+	 *
 	 * @param commonName
 	 *            The common name to use for the Subject of the certificate (the
 	 *            name will be prepended with "CN=" if it does not start with it
@@ -683,8 +704,8 @@ public class CertificateUtils {
 	 *            - The certificate of the issuer that should sign the
 	 *            certificate. If null, a self-signed certificate is created
 	 * @return the new certificate and private key
-	 * @throws GeneralSecurityException
-	 * @throws IOException
+	 * @throws java.security.GeneralSecurityException if any.
+	 * @throws java.io.IOException if any.
 	 */
 	public static org.opcfoundation.ua.transport.security.KeyPair createIssuerCertificate(
 			String commonName, int days,
@@ -705,7 +726,7 @@ public class CertificateUtils {
 	 * certificate should be issued with a CA certificate, especially for the
 	 * server applications, to ensure interoperability with other client
 	 * applications.
-	 * 
+	 *
 	 * @param hostName
 	 *            - HostName of the computer in which the application is
 	 *            running: used to initialize the Subject field of the
@@ -722,8 +743,8 @@ public class CertificateUtils {
 	 *            - The certificate of the issuer that should sign the
 	 *            certificate. If null, a self-signed certificate is created
 	 * @return the new certificate and private key
-	 * @throws IOException
-	 * @throws GeneralSecurityException
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.GeneralSecurityException if any.
 	 */
 	public static org.opcfoundation.ua.transport.security.KeyPair createHttpsCertificate(
 			String hostName, String applicationUri,
@@ -745,6 +766,13 @@ public class CertificateUtils {
 		return toKeyPair(cert, keyPair.getPrivate());
 	}
 
+	/**
+	 * <p>writeToPem.</p>
+	 *
+	 * @param key a {@link java.security.cert.X509Certificate} object.
+	 * @param file a {@link java.io.File} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public static void writeToPem(X509Certificate key, File file)
 			throws IOException {
 		getCertificateProvider().writeToPem(key, file, null, null);
@@ -752,7 +780,7 @@ public class CertificateUtils {
 
 	/**
 	 * Save the private key to a jks or pfx (PKCS12)-keystore.
-	 * 
+	 *
 	 * @param storeLocation
 	 *            save location of the keystore
 	 * @param alias
@@ -764,20 +792,21 @@ public class CertificateUtils {
 	 *            password to secure the key store
 	 * @param keyStoreType
 	 *            type of the key store, "JKS" and "PKCS12" supported
-	 * @param privateKey
-	 * 
-	 * @return true on success
-	 * 
-	 * @throws IOException
+	 * @param privateKeyPassword
+	 *            password to secure the private key, cannot be null for
+	 *            keyStoreType "JKS"
+	 * @param privateKey a {@link java.security.PrivateKey} object.
+	 * @throws java.io.IOException
 	 *             if storeLocation is not available
-	 * @throws NoSuchProviderException
+	 * @throws java.security.NoSuchProviderException
 	 *             The required security Provider not found
-	 * @throws KeyStoreException
+	 * @throws java.security.KeyStoreException
 	 *             keystore failed
-	 * @throws CertificateException
+	 * @throws java.security.cert.CertificateException
 	 *             certificate problem
-	 * @throws NoSuchAlgorithmException
+	 * @throws java.security.NoSuchAlgorithmException
 	 *             cryptographic algorithm not found
+	 * @param certificate a {@link java.security.cert.Certificate} object.
 	 */
 	public static void saveToProtectedStore(PrivateKey privateKey,
 			Certificate certificate, File storeLocation, String alias,
@@ -815,6 +844,11 @@ public class CertificateUtils {
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>certificateSignatureAlgorithm</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getCertificateSignatureAlgorithm() {
 		return certificateSignatureAlgorithm;
 	}
@@ -824,6 +858,13 @@ public class CertificateUtils {
 	 * and raises exceptions. We try to enable reading the UriName field without
 	 * raising exceptions, even if the format is invalid.
 	 */
+	/**
+	 * <p>getSubjectAlternativeNames.</p>
+	 *
+	 * @param cert a {@link java.security.cert.X509Certificate} object.
+	 * @return a {@link java.util.Collection} object.
+	 * @throws java.security.cert.CertificateParsingException if any.
+	 */
 	protected static Collection<List<?>> getSubjectAlternativeNames(
 			X509Certificate cert) throws CertificateParsingException {
 		return getCertificateProvider().getSubjectAlternativeNames(cert);
@@ -831,10 +872,11 @@ public class CertificateUtils {
 
 	
 	/**
-	 * @param applicationDescription
-	 * @param certificate
-	 * @return
-	 * @throws CertificateParsingException
+	 * <p>getApplicationUriOfCertificate.</p>
+	 *
+	 * @param certificate a {@link java.security.cert.X509Certificate} object.
+	 * @throws java.security.cert.CertificateParsingException if any.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getApplicationUriOfCertificate(
 			final X509Certificate certificate)
@@ -843,18 +885,20 @@ public class CertificateUtils {
 		if (subjectAlternativeNames != null)
 			for (List<?> altNames : subjectAlternativeNames) {
 				int tagNo = (Integer) altNames.get(0);
-				String name = (String) altNames.get(1);
-				// System.out.println(tagNo + ": " + name);
-				if (tagNo == NAME_URI)
+				if (tagNo == NAME_URI) {
+					String name = (String) altNames.get(1);
 					return name;
+				}
 			}
 		return "";
 	}
 	
 	/**
-	 * @param certificate
-	 * @return
-	 * @throws CertificateParsingException
+	 * <p>getApplicationUriOfCertificate.</p>
+	 *
+	 * @param certificate a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 * @throws java.security.cert.CertificateParsingException if any.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getApplicationUriOfCertificate(Cert certificate)
 			throws CertificateParsingException {

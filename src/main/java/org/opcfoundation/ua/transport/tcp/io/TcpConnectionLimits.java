@@ -14,7 +14,7 @@ package org.opcfoundation.ua.transport.tcp.io;
 
 
 /**
- * Negotiated connection limits. 
+ * Negotiated connection limits.
  */
 public class TcpConnectionLimits implements Cloneable {
 		
@@ -26,6 +26,7 @@ public class TcpConnectionLimits implements Cloneable {
 	public int maxRecvBufferSize;
 	public int maxRecvChunkCount;
 
+	/** {@inheritDoc} */
 	@Override
 	public TcpConnectionLimits clone() {
 		try {

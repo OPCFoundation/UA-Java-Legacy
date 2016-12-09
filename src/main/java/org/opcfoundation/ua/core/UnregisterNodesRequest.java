@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class UnregisterNodesRequest extends Object implements ServiceRequest {
+public class UnregisterNodesRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.UnregisterNodesRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.UnregisterNodesRequest_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class UnregisterNodesRequest extends Object implements ServiceRequest {
       */
     public UnregisterNodesRequest clone()
     {
-        UnregisterNodesRequest result = new UnregisterNodesRequest();
+        UnregisterNodesRequest result = (UnregisterNodesRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.NodesToUnregister = NodesToUnregister==null ? null : NodesToUnregister.clone();
         return result;

@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class HistoryUpdateRequest extends Object implements ServiceRequest {
+public class HistoryUpdateRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryUpdateRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryUpdateRequest_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class HistoryUpdateRequest extends Object implements ServiceRequest {
       */
     public HistoryUpdateRequest clone()
     {
-        HistoryUpdateRequest result = new HistoryUpdateRequest();
+        HistoryUpdateRequest result = (HistoryUpdateRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.HistoryUpdateDetails = HistoryUpdateDetails==null ? null : HistoryUpdateDetails.clone();
         return result;

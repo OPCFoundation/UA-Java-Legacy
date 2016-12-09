@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.core.ArrayTestType;
 import org.opcfoundation.ua.core.ScalarTestType;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class CompositeTestType extends Object implements Structure, Cloneable {
+public class CompositeTestType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CompositeTestType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CompositeTestType_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class CompositeTestType extends Object implements Structure, Cloneable {
       */
     public CompositeTestType clone()
     {
-        CompositeTestType result = new CompositeTestType();
+        CompositeTestType result = (CompositeTestType) super.clone();
         result.Field1 = Field1==null ? null : Field1.clone();
         result.Field2 = Field2==null ? null : Field2.clone();
         return result;

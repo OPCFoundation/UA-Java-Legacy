@@ -24,25 +24,34 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 /**
  * Security Policy determines which algorithms to use during asymmetric and
  * symmetric encryption.
- * 
+ *
  * @see CryptoUtil for instantiating cryptographics objects
  */
 public final class SecurityPolicy {
 
 	private static final Charset UTF8 = Charset.forName("utf-8");
+	/** Constant <code>URI_BINARY_NONE="http://opcfoundation.org/UA/SecurityPol"{trunked}</code> */
 	public static final String URI_BINARY_NONE = "http://opcfoundation.org/UA/SecurityPolicy#None";
+	/** Constant <code>URI_BINARY_BASIC128RSA15="http://opcfoundation.org/UA/SecurityPol"{trunked}</code> */
 	public static final String URI_BINARY_BASIC128RSA15 = "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15";
+	/** Constant <code>URI_BINARY_BASIC256="http://opcfoundation.org/UA/SecurityPol"{trunked}</code> */
 	public static final String URI_BINARY_BASIC256 = "http://opcfoundation.org/UA/SecurityPolicy#Basic256";
+	/** Constant <code>URI_BINARY_BASIC256SHA256="http://opcfoundation.org/UA/SecurityPol"{trunked}</code> */
 	public static final String URI_BINARY_BASIC256SHA256 = "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256";
+	/** Constant <code>URI_XML_NONE="http://opcfoundation.org/UA-Profile/Sec"{trunked}</code> */
 	public static final String URI_XML_NONE = "http://opcfoundation.org/UA-Profile/Securitypolicy/None";
+	/** Constant <code>URI_XML_BASIC128RSA15="http://opcfoundation.org/UA-Profile/Sec"{trunked}</code> */
 	public static final String URI_XML_BASIC128RSA15 = "http://opcfoundation.org/UA-Profile/Securitypolicy/Basic128Rsa15";
+	/** Constant <code>URI_XML_BASIC256="http://opcfoundation.org/UA-Profile/Sec"{trunked}</code> */
 	public static final String URI_XML_BASIC256 = "http://opcfoundation.org/UA-Profile/Securitypolicy/Basic256";
 
 	// Global Well known Security policies //
+	/** Constant <code>NONE</code> */
 	public static final SecurityPolicy NONE = new SecurityPolicy(
 			SecurityPolicy.URI_BINARY_NONE,  null, null,
 			null, null, null, null, 0, 0, 0, 1, 1024, 2048);
 
+	/** Constant <code>BASIC128RSA15</code> */
 	public static final SecurityPolicy BASIC128RSA15 = new SecurityPolicy(
 			SecurityPolicy.URI_BINARY_BASIC128RSA15, 
 			SecurityAlgorithm.HmacSha1, // Symmetric signature
@@ -53,6 +62,7 @@ public final class SecurityPolicy {
 			SecurityAlgorithm.PSha1, // key derivation
 			20, 16, 16, 16, 1024, 2048);
 
+	/** Constant <code>BASIC256</code> */
 	public static final SecurityPolicy BASIC256 = new SecurityPolicy(
 			SecurityPolicy.URI_BINARY_BASIC256, 
 			SecurityAlgorithm.HmacSha1, // Symmetric signature
@@ -63,6 +73,7 @@ public final class SecurityPolicy {
 			SecurityAlgorithm.PSha1, // key derivation
 			20, 24, 32, 16, 1024, 2048);
 
+	/** Constant <code>BASIC256SHA256</code> */
 	public static final SecurityPolicy BASIC256SHA256 = new SecurityPolicy(
 			SecurityPolicy.URI_BINARY_BASIC256SHA256, 
 			SecurityAlgorithm.HmacSha256, // Symmetric signature
@@ -85,8 +96,8 @@ public final class SecurityPolicy {
 
 	/**
 	 * Add new security policy to stack
-	 * 
-	 * @param policy
+	 *
+	 * @param policy a {@link org.opcfoundation.ua.transport.security.SecurityPolicy} object.
 	 */
 	public static void addSecurityPolicy(SecurityPolicy policy) {
 		policies.put(policy.policyUri, policy);
@@ -94,7 +105,7 @@ public final class SecurityPolicy {
 
 	/**
 	 * Get all security policies supported by the stack
-	 * 
+	 *
 	 * @return security policies
 	 */
 	public static SecurityPolicy[] getAllSecurityPolicies() {
@@ -103,11 +114,11 @@ public final class SecurityPolicy {
 
 	/**
 	 * Get security policy by policy uri
-	 * 
+	 *
 	 * @param securityPolicyUri
 	 *            security policy uri
 	 * @return security policy
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             Bad_SecurityPolicyRejected if policy is unknown
 	 */
 	public static SecurityPolicy getSecurityPolicy(String securityPolicyUri)
@@ -173,6 +184,7 @@ public final class SecurityPolicy {
 		this.minAsymmetricKeyLength = minAsymmetricKeyLength;
 		this.maxAsymmetricKeyLength = maxAsymmetricKeyLength;
 	}
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof SecurityPolicy))
@@ -202,20 +214,42 @@ public final class SecurityPolicy {
 
 		return true;
 	}
+	/**
+	 * <p>Getter for the field <code>asymmetricEncryptionAlgorithm</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 */
 	public SecurityAlgorithm getAsymmetricEncryptionAlgorithm() {
 		return asymmetricEncryptionAlgorithm;
 	}
+	/**
+	 * <p>Getter for the field <code>asymmetricKeyWrapAlgorithm</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 */
 	public SecurityAlgorithm getAsymmetricKeyWrapAlgorithm() {
 		return asymmetricKeyWrapAlgorithm;
 	}
+	/**
+	 * <p>Getter for the field <code>asymmetricSignatureAlgorithm</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 */
 	public SecurityAlgorithm getAsymmetricSignatureAlgorithm() {
 		return asymmetricSignatureAlgorithm;
 	}
+	/**
+	 * <p>Getter for the field <code>encodedPolicyUri</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getEncodedPolicyUri() {
 		return encodedPolicyUri;
 	}
 
 	/**
+	 * <p>Getter for the field <code>encryptionBlockSize</code>.</p>
+	 *
 	 * @return the encryptionBlockSize
 	 */
 	public int getEncryptionBlockSize() {
@@ -223,17 +257,26 @@ public final class SecurityPolicy {
 	}
 
 	/**
+	 * <p>Getter for the field <code>encryptionKeySize</code>.</p>
+	 *
 	 * @return the encryptionKeySize
 	 */
 	public int getEncryptionKeySize() {
 		return encryptionKeySize;
 	}
 
+	/**
+	 * <p>Getter for the field <code>keyDerivationAlgorithm</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 */
 	public SecurityAlgorithm getKeyDerivationAlgorithm() {
 		return keyDerivationAlgorithm;
 	}
 
 	/**
+	 * <p>Getter for the field <code>maxAsymmetricKeyLength</code>.</p>
+	 *
 	 * @return the maxAsymmetricKeyLength
 	 */
 	public int getMaxAsymmetricKeyLength() {
@@ -241,38 +284,60 @@ public final class SecurityPolicy {
 	}
 
 	/**
+	 * <p>Getter for the field <code>minAsymmetricKeyLength</code>.</p>
+	 *
 	 * @return the minAsymmetricKeyLength
 	 */
 	public int getMinAsymmetricKeyLength() {
 		return minAsymmetricKeyLength;
 	}
 
+	/**
+	 * <p>Getter for the field <code>policyUri</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getPolicyUri() {
 		return policyUri;
 	}
 
 	/**
+	 * <p>Getter for the field <code>signatureKeySize</code>.</p>
+	 *
 	 * @return the signatureKeySize
 	 */
 	public int getSignatureKeySize() {
 		return signatureKeySize;
 	}
 
+	/**
+	 * <p>Getter for the field <code>symmetricEncryptionAlgorithm</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 */
 	public SecurityAlgorithm getSymmetricEncryptionAlgorithm() {
 		return symmetricEncryptionAlgorithm;
 	}
 
+	/**
+	 * <p>Getter for the field <code>symmetricSignatureAlgorithm</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
+	 */
 	public SecurityAlgorithm getSymmetricSignatureAlgorithm() {
 		return symmetricSignatureAlgorithm;
 	}
 
 	/**
+	 * <p>Getter for the field <code>symmetricSignatureSize</code>.</p>
+	 *
 	 * @return the hmacHashSize
 	 */
 	public int getSymmetricSignatureSize() {
 		return symmetricSignatureSize;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		return policyUri.hashCode();
@@ -280,8 +345,8 @@ public final class SecurityPolicy {
 
 	/**
 	 * Checks if a certificate is useable for this security policy.
-	 * 
-	 * @param cert
+	 *
+	 * @param cert a {@link org.opcfoundation.ua.transport.security.Cert} object.
 	 * @return true if certificate is usable
 	 */
 	public boolean isUsableWith(Cert cert) {
@@ -290,6 +355,7 @@ public final class SecurityPolicy {
 				&& keySize <= maxAsymmetricKeyLength;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return policyUri;

@@ -15,8 +15,7 @@ package org.opcfoundation.ua.transport;
 import java.util.EnumSet;
 
 /**
- *
- * 
+ * <p>ClientServiceRequestState class.</p>
  */
 public enum ClientServiceRequestState {
 
@@ -26,8 +25,14 @@ public enum ClientServiceRequestState {
 	Complete,		// response ready
 	Error;
 	
+	/** Constant <code>FINAL_STATES</code> */
 	public final static EnumSet<ClientServiceRequestState> FINAL_STATES = EnumSet.of(Canceled, Complete, Error); 
 
+	/**
+	 * <p>isFinal.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isFinal()
 	{
 		return FINAL_STATES.contains(this);

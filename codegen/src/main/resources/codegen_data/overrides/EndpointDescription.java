@@ -43,7 +43,7 @@ _imports_
 /**
  * Endpoint Description
  * 
- * @See {@link EndpointUtil} for utility methods
+ * @see EndpointUtil for utility methods
  */
 @Description("_description_")
 public class _ClassName_ extends _SuperType_ implements Structure, Cloneable {
@@ -71,7 +71,6 @@ _Content_
 	/**
 	 * Finds UserTokenPolicy of given type that this stack can encrypt
 	 * 
-	 * @param endpoint
 	 * @param type
 	 * @return user token policy or null 
 	 */
@@ -99,6 +98,7 @@ _Content_
     /**
      * Finds the user token policy with the specified id.
      * 
+     * @param policyId policy id
      * @return user token policy or null
      */
     public UserTokenPolicy findUserTokenPolicy(String policyId)

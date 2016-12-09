@@ -19,26 +19,25 @@ import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.IEncodeable;
 
 /**
- * RequestChannel is a channel to do service requests with. 
- * 
+ * RequestChannel is a channel to do service requests with.
  */
 public interface RequestChannel {
 
 	/**
 	 * Sends a request over the secure channel. <p>
-	 *  
-	 * If the operation timeouts or the thread is interrupted a 
+	 *
+	 * If the operation timeouts or the thread is interrupted a
 	 * ServiceResultException is thrown with {@link StatusCodes#Bad_Timeout}.<p>
-	 * 
-	 * @param request
-	 * @return
-	 * @throws ServiceResultException
+	 *
+	 * @param request the request
+	 * @return the response
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	IEncodeable serviceRequest(ServiceRequest request) throws ServiceResultException;
 	
 	/**
-	 * Asynchronous operation to send a request over the secure channel. 
-	 * 
+	 * Asynchronous operation to send a request over the secure channel.
+	 *
 	 * @param request the request
 	 * @return the result
 	 */

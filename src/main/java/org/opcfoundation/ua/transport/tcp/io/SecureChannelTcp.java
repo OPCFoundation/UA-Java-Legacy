@@ -78,21 +78,21 @@ import org.opcfoundation.ua.utils.TimerUtil;
 
 /**
  * Client's Secure Channel connection to an endpoint. <p>
- * 
- * Secure channel creates transport channel(s) as needed. 
- *   
- * 
- * If the connection fails, and the transport channel is stateful (TCP), and 
- * the secure channel has pending service requests, it attempts to reconnect the 
+ *
+ * Secure channel creates transport channel(s) as needed.
+ *
+ *
+ * If the connection fails, and the transport channel is stateful (TCP), and
+ * the secure channel has pending service requests, it attempts to reconnect the
  * transport channel. If the reconnect fails there is a timeout sequence
  * of the following wait periods { 0, 1, 2, 4, 8, 16, 32, 64, 120, 120, ... }.<p>
- * 
+ *
  * If error recovery state fails to re-establish new security token before the old
- * expires, the secure channel will be closed. 
- * 
+ * expires, the secure channel will be closed.
+ *
  * Despite the name SecureChannelTcp, the class is 99% implemented as transport
  * channel agnostic. The plan is to upgrade the class to support SOAP transport
- * and rename to SecureChannelImpl.  
+ * and rename to SecureChannelImpl.
  */
 public class SecureChannelTcp implements IMessageListener, IConnectionListener, ITransportChannel, org.opcfoundation.ua.transport.SecureChannel {
 
@@ -213,15 +213,17 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	 */
 	Timer timer;
 	
+	/**
+	 * <p>Constructor for SecureChannelTcp.</p>
+	 */
 	public SecureChannelTcp()
 	{		
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Configure the secure channel
-	 * 
-	 * @param settings channel settings
-	 * @throws ServiceResultException Bad_InternalError if channel has been open already
 	 */
 	public void initialize(TransportChannelSettings settings, EncoderContext ctx)
 	throws ServiceResultException 	
@@ -230,11 +232,9 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Configure the secure channel
-	 * 
-	 * @param url connect address "opc.tcp://<ip>[:port]" or "http://<ip>[:port]"
-	 * @param settings channel settings
-	 * @throws ServiceResultException Bad_InternalError if channel has been open already
 	 */
 	public void initialize(String url, TransportChannelSettings settings, EncoderContext ctx)
 	throws ServiceResultException
@@ -247,11 +247,9 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	}	
 	
 	/**
-	 * Configure the secure channel.  
-	 * 
-	 * @param addr connect address
-	 * @param settings channel settings
-	 * @throws ServiceResultException Bad_InternalError if channel has been open already
+	 * {@inheritDoc}
+	 *
+	 * Configure the secure channel.
 	 */
 	public void initialize(InetSocketAddress addr, TransportChannelSettings settings, EncoderContext ctx)
 	throws ServiceResultException 	
@@ -282,8 +280,10 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	}
 	
 	/**
-	 * @param request
-	 * @return
+	 * <p>getRequestTimeout.</p>
+	 *
+	 * @param request a {@link org.opcfoundation.ua.builtintypes.ServiceRequest} object.
+	 * @return a long.
 	 */
 	protected long getRequestTimeout(ServiceRequest request) {
 		UnsignedInteger timeoutHint = request.getRequestHeader() != null ? request.getRequestHeader().getTimeoutHint() : null;
@@ -292,24 +292,21 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	}	
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Send service request to the server.
-	 *  
+	 *
 	 * If the secure channel is in error recovery state, the request is put to a send queue.
 	 * Message is sent upon successful reconnection. <p>
-	 * 
-	 * If the transport channel fails and cannot be restablished within operation  
+	 *
+	 * If the transport channel fails and cannot be restablished within operation
 	 * timeout period, {@link StatusCodes#Bad_RequestTimeout} is set as error.
-	 * 
-	 * If the secure channel is not open, is expired or closed 
+	 *
+	 * If the secure channel is not open, is expired or closed
 	 * {@link StatusCodes#Bad_SecureChannelClosed} is thrown.
-	 * 
+	 *
 	 * If the thread is interrupted with {@link Thread#interrupt()}, the operation aborts
 	 * and ServiceResultException Bad_RequestCancelledByClient is thrown. <p>
-	 * 
-	 * @param request
-	 * @return result
-	 * @throws ServiceFaultException There was a service fault in processing of the operation in the server
-	 * @throws ServiceResultException There was an error while transferring the operation over network
 	 */
 	public ServiceResponse serviceRequest(ServiceRequest request)
 	throws ServiceFaultException, ServiceResultException {
@@ -317,6 +314,7 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 		return serviceRequest(request, clientTimeout);
 	}	
 	
+	/** {@inheritDoc} */
 	public ServiceResponse serviceRequest(ServiceRequest request, long operationTimeout)
 	throws ServiceFaultException, ServiceResultException {
 		// When the secure channel is renewed, it may be that the channel is temporarily closed.
@@ -407,23 +405,22 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Send service request to the server.
-	 *  
+	 *
 	 * If the secure channel is in error recovery state, the request is put to a send queue.
 	 * Message is sent upon successful reconnection. <p>
-	 * 
-	 * If the transport channel fails and cannot be re-established within operation  
+	 *
+	 * If the transport channel fails and cannot be re-established within operation
 	 * timeout period, {@link StatusCodes#Bad_RequestTimeout} is set as error.
-	 * 
-	 * If the secure channel is not open, is expired or closed 
+	 *
+	 * If the secure channel is not open, is expired or closed
 	 * {@link StatusCodes#Bad_SecureChannelClosed} is thrown.
-	 * 
+	 *
 	 * Errors are written to the result object.
 	 * ServiceFaultException There was a service fault in processing of the operation in the server.
 	 * ServiceResultException There was an error while transferring the operation over network. <p>
-	 * 
-	 * @param request
-	 * @return result asynchronous result object
 	 */
 	public AsyncResult<ServiceResponse> serviceRequestAsync(ServiceRequest request)
 	{
@@ -431,25 +428,23 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 		return serviceRequestAsync(request, clientTimeout);
 	}
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Send service request to the server.
-	 *  
+	 *
 	 * If the secure channel is in error recovery state, the request is put to a send queue.
 	 * Message is sent upon successful reconnection. <p>
-	 * 
-	 * If the transport channel fails and cannot be restablished within operation  
+	 *
+	 * If the transport channel fails and cannot be restablished within operation
 	 * timeout period, {@link StatusCodes#Bad_RequestTimeout} is set as error.
-	 * 
-	 * If the secure channel is not open, is expired or closed 
+	 *
+	 * If the secure channel is not open, is expired or closed
 	 * {@link StatusCodes#Bad_SecureChannelClosed} is thrown.
-	 * 
+	 *
 	 * Errors are written to the result object.
 	 * ServiceFaultException There was a service fault in processing of the operation in the server.
 	 * ServiceResultException There was an error while transferring the operation over network. <p>
-	 * 
-	 * @param request
-	 * @param operationTimeout New operation timeout period
-	 * @return result asynchronous result object
-	 */	
+	 */
 	public AsyncResult<ServiceResponse> serviceRequestAsync(ServiceRequest request, long operationTimeout)
 	{
  		final AsyncResultImpl<ServiceResponse> result = new AsyncResultImpl<ServiceResponse>();
@@ -543,24 +538,23 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 			if (next > req.timeoutTime) {
 				next = req.timeoutTime;
 				result = req;
-	//			break;
 			}
 		}
 		return result;
 	}
 
 	/**
-	 * Opens a secure channel. This method does nothing if the secure channel 
+	 * Opens a secure channel. This method does nothing if the secure channel
 	 * is already open.
-	 * 
-	 * Sets up a connection, opens it, creates a secure channel. If unable to 
-	 * open connection an exception is thrown and the secure channel remains 
+	 *
+	 * Sets up a connection, opens it, creates a secure channel. If unable to
+	 * open connection an exception is thrown and the secure channel remains
 	 * closed.
-	 * 
-	 * If the operation timeouts or user interrupts the thread with 
+	 *
+	 * If the operation timeouts or user interrupts the thread with
 	 * {@link Thread#interrupt()} a Bad_Timeout is thrown.
-	 * 
-	 * @throws ServiceResultException 
+	 *
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
 	public void open() throws ServiceResultException 
 	{
@@ -588,7 +582,7 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	
 	/**
 	 * Asynchronous open channel.
-	 * 
+	 *
 	 * @return async result object
 	 */
 	public AsyncResult<SecureChannel> openAsync() 
@@ -842,15 +836,15 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	}
 
 	/**
-	 * Close the secure channel. This method does nothing if the channel is 
+	 * Close the secure channel. This method does nothing if the channel is
 	 * already closed or has never been opened. <p>
-	 * 
-	 * This method sends CloseSecureChannelRequest to the server and 
+	 *
+	 * This method sends CloseSecureChannelRequest to the server and
 	 * closes the socket connection. If sending of the message fails and thus
 	 * the servers never receives notification about closed secure channel, then
 	 * there is no resend attempt, instead the secure channel will eventually
-	 * time out in the server. <p> 
-	 * 
+	 * time out in the server. <p>
+	 *
 	 * All pending requests will fault with Bad_SecureChannelClosed <p>
 	 */
 	public void close() {
@@ -929,12 +923,19 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	}
 
 	/**
+	 * <p>Setter for the field <code>transportChannel</code>.</p>
+	 *
 	 * @param transportChannel the transportChannel to set
 	 */
 	protected void setTransportChannel(IConnection transportChannel) {
 		this.transportChannel.set(transportChannel);
 	}
 
+	/**
+	 * <p>closeAsync.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.AsyncResult} object.
+	 */
 	public AsyncResult<SecureChannel> closeAsync() {
  		final AsyncResultImpl<SecureChannel> result = new AsyncResultImpl<SecureChannel>();
 		executor.execute(new Runnable() {
@@ -949,6 +950,9 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 		return result;
 	}
 
+	/**
+	 * <p>dispose.</p>
+	 */
 	public void dispose() {
 		close();
 		transportChannel = null;
@@ -959,24 +963,45 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 		timer = null;
 	}
 
+	/**
+	 * <p>getEndpointConfiguration.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.EndpointConfiguration} object.
+	 */
 	public EndpointConfiguration getEndpointConfiguration() {
 		if (settings==null) return null;
 		return settings.getConfiguration();
 	}
 
+	/**
+	 * <p>getEndpointDescription.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 */
 	public EndpointDescription getEndpointDescription() {
 		if (settings==null) return null;
 		return settings.getDescription();
 	}
 	
+	/**
+	 * <p>getMessageContext.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public EncoderContext getMessageContext() {
 		return ctx;
 	}
 
+	/** {@inheritDoc} */
 	public void setOperationTimeout(int timeout) {
 		settings.getConfiguration().setOperationTimeout(timeout);
 	}
 	
+	/**
+	 * <p>getOperationTimeout.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getOperationTimeout() {
 		Integer i = settings.getConfiguration().getOperationTimeout();		
 		return i == null ? 0 : i;
@@ -984,7 +1009,7 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 		
 	/**
 	 * Get secure channel id.
-	 *  
+	 *
 	 * @return secure channel id or -1 if channel is closed.
 	 */
 	public int getSecureChannelId()
@@ -993,6 +1018,8 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Implementation to IMessageListener.
 	 * Listens to messages incoming from TcpConnection.
 	 */
@@ -1038,11 +1065,11 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	/**
 	 * Return true if the secure channel has been opened and is not (hopefully) closed
 	 * on the server.
-	 * 
-	 * Secure channel is open as long as it as security token that is alive, 
+	 *
+	 * Secure channel is open as long as it as security token that is alive,
 	 * even if its transport layer connection is disconnected.
-	 * 
-	 * @return
+	 *
+	 * @return a boolean.
 	 */
 	public boolean isOpen() {
 		if (secureChannelId==-1) return false;
@@ -1052,8 +1079,10 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Transport channel has been closed.
-	 * 
+	 *
 	 * Implementation to IConnectionListener
 	 */
 	@Override
@@ -1091,6 +1120,9 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 		setErrorRecoveryState( renew );
 	}
 	
+	/**
+	 * <p>onOpen.</p>
+	 */
 	public void onOpen() {
 	};
 
@@ -1186,26 +1218,31 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 		};
 	};
 
+	/** {@inheritDoc} */
 	@Override
 	public EnumSet<TransportChannelFeature> getSupportedFeatures() {
 		return EnumSet.of(TransportChannelFeature.open, TransportChannelFeature.openAsync, TransportChannelFeature.close, TransportChannelFeature.closeAync, TransportChannelFeature.sendRequest, TransportChannelFeature.sendRequestAsync);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getConnectURL() {
 		return getEndpointDescription().getEndpointUrl();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ServerConnection getConnection() {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public MessageSecurityMode getMessageSecurityMode() {
 		return getEndpointDescription().getSecurityMode();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public SecurityPolicy getSecurityPolicy() {
 		try {
@@ -1215,6 +1252,7 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "SecureChannel "+secureChannelId+" "+ (isOpen()?"open":"closed");

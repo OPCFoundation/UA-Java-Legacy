@@ -39,9 +39,10 @@ import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.NotificationMessage;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class PublishResponse extends Object implements ServiceResponse {
+public class PublishResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.PublishResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.PublishResponse_Encoding_DefaultBinary);
@@ -145,7 +146,7 @@ public class PublishResponse extends Object implements ServiceResponse {
       */
     public PublishResponse clone()
     {
-        PublishResponse result = new PublishResponse();
+        PublishResponse result = (PublishResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.SubscriptionId = SubscriptionId;
         result.AvailableSequenceNumbers = AvailableSequenceNumbers==null ? null : AvailableSequenceNumbers.clone();

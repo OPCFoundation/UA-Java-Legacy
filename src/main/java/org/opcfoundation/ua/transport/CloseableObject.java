@@ -16,14 +16,15 @@ import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.utils.IStatefulObject;
 
 /**
- * 
- * 
+ * <p>CloseableObject interface.</p>
  */
 public interface CloseableObject extends IStatefulObject<CloseableObjectState, ServiceResultException> {
 
 	/**
-	 * Close the object. This method is async, invocation makes the object 
-	 * go into closing state.  
+	 * Close the object. This method is async, invocation makes the object
+	 * go into closing state.
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.CloseableObject} object.
 	 */
 	CloseableObject close();
 	

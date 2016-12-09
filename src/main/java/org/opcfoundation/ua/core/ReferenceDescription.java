@@ -37,10 +37,11 @@ import org.opcfoundation.ua.builtintypes.LocalizedText;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.QualifiedName;
 import org.opcfoundation.ua.core.NodeClass;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ReferenceDescription extends Object implements Structure, Cloneable {
+public class ReferenceDescription extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ReferenceDescription);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ReferenceDescription_Encoding_DefaultBinary);
@@ -144,7 +145,7 @@ public class ReferenceDescription extends Object implements Structure, Cloneable
       */
     public ReferenceDescription clone()
     {
-        ReferenceDescription result = new ReferenceDescription();
+        ReferenceDescription result = (ReferenceDescription) super.clone();
         result.ReferenceTypeId = ReferenceTypeId;
         result.IsForward = IsForward;
         result.NodeId = NodeId;

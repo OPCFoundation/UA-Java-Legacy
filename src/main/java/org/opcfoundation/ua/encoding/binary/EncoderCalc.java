@@ -47,8 +47,8 @@ import org.opcfoundation.ua.encoding.utils.EncodeableDesc;
 import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
 
 /**
- * Calculates length in bytes of an encodeable if it were encoded with binary encoder. 
- * 
+ * Calculates length in bytes of an encodeable if it were encoded with binary encoder.
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class EncoderCalc implements IEncoder {
@@ -56,20 +56,36 @@ public class EncoderCalc implements IEncoder {
 	EncoderContext ctx; 
 	int length;
 
+	/**
+	 * <p>Constructor for EncoderCalc.</p>
+	 */
 	public EncoderCalc() 
 	{		
 	}
 	
+	/**
+	 * <p>Getter for the field <code>length</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getLength()
 	{
 		return length;
 	}
 	
+	/**
+	 * <p>reset.</p>
+	 */
 	public void reset()
 	{
 		length = 0;
 	}
 	
+	/**
+	 * <p>getAndReset.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getAndReset()
 	{
 		int result = length;
@@ -77,19 +93,36 @@ public class EncoderCalc implements IEncoder {
 		return result;
 	}
 
+	/**
+	 * <p>getEncoderContext.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public EncoderContext getEncoderContext() {
 		return ctx;
 	}
 
+	/**
+	 * <p>setEncoderContext.</p>
+	 *
+	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public void setEncoderContext(EncoderContext ctx) {
 		this.ctx = ctx;
 	}
 	
+	/** {@inheritDoc} */
 	public void putBoolean(String fieldName, Boolean v)
 	{
 		length++;
 	}
 
+	/**
+	 * <p>putBooleanArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Boolean} objects.
+	 */
 	public void putBooleanArray(String fieldName, Boolean[] v)
 	{
 		if (v==null) {
@@ -100,6 +133,12 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + v.length;
 	}	
 	
+	/**
+	 * <p>putBooleanArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putBooleanArray(String fieldName, Collection<Boolean> v)
 	{
 		if (v==null) {
@@ -110,21 +149,40 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + v.size();
 	}	
 	
+	/**
+	 * <p>putSByte.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.lang.Byte} object.
+	 */
 	public void putSByte(String fieldName, Byte v)
 	{
 		length += 1;
 	}
 	
+	/** {@inheritDoc} */
 	public void putSByte(String fieldName, byte v)
 	{
 		length += 1;
 	}
 
+	/**
+	 * <p>putSByte.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a int.
+	 */
 	public void putSByte(String fieldName, int v)
 	{
 		length += 1;
 	}
 
+	/**
+	 * <p>putSByteArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Byte} objects.
+	 */
 	public void putSByteArray(String fieldName, Byte[] v)
 	{
 		if (v==null) {
@@ -135,6 +193,7 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + v.length;
 	}
 	
+	/** {@inheritDoc} */
 	public void putSByteArray(String fieldName, Collection<Byte> v)
 	{
 		if (v==null) {
@@ -145,11 +204,18 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + v.size();
 	}
 	
+	/** {@inheritDoc} */
 	public void putByte(String fieldName, UnsignedByte v)
 	{
 		length += 1;
 	}
 	
+	/**
+	 * <p>putByteArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.UnsignedByte} objects.
+	 */
 	public void putByteArray(String fieldName, UnsignedByte[] v)
 	{
 		if (v==null) {
@@ -160,6 +226,7 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + v.length;
 	}
 	
+	/** {@inheritDoc} */
 	public void putByteArray(String fieldName, Collection<UnsignedByte> v)
 	{
 		if (v==null) {
@@ -170,16 +237,29 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + v.size();
 	}
 	
+	/** {@inheritDoc} */
 	public void putInt16(String fieldName, Short v)
 	{
 		length += 2;
 	}
 
+	/**
+	 * <p>putInt16.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a short.
+	 */
 	public void putInt16(String fieldName, short v)
 	{
 		length += 2;
 	}
 	
+	/**
+	 * <p>putInt16Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Short} objects.
+	 */
 	public void putInt16Array(String fieldName, Short[] v)
 	{
 		if (v==null) {
@@ -190,6 +270,7 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 2*v.length;
 	}	
 	
+	/** {@inheritDoc} */
 	public void putInt16Array(String fieldName, Collection<Short> v)
 	{
 		if (v==null) {
@@ -200,11 +281,18 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 2*v.size();
 	}	
 	
+	/** {@inheritDoc} */
 	public void putUInt16(String fieldName, UnsignedShort v)
 	{
 		length += 2;
 	}
 	
+	/**
+	 * <p>putUInt16Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.UnsignedShort} objects.
+	 */
 	public void putUInt16Array(String fieldName, UnsignedShort[] v)
 	{
 		if (v==null) {
@@ -215,6 +303,12 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 2*v.length;
 	}
 	
+	/**
+	 * <p>putUInt16Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putUInt16Array(String fieldName, Collection<UnsignedShort> v)
 	{
 		if (v==null) {
@@ -225,16 +319,29 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 2*v.size();
 	}
 	
+	/**
+	 * <p>putInt32.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.lang.Integer} object.
+	 */
 	public void putInt32(String fieldName, Integer v)
 	{
 		length += 4;
 	}
 	
+	/** {@inheritDoc} */
 	public void putInt32(String fieldName, int v)
 	{
 		length += 4;
 	}
 	
+	/**
+	 * <p>putInt32Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of int.
+	 */
 	public void putInt32Array(String fieldName, int[] v)
 	{
 		if (v==null) {
@@ -244,6 +351,7 @@ public class EncoderCalc implements IEncoder {
 		
 		length += 4 + 4*v.length;
 	}
+	/** {@inheritDoc} */
 	public void putInt32Array(String fieldName, Collection<Integer> v)
 	{
 		if (v==null) {
@@ -254,6 +362,12 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 4*v.size();
 	}	
 	
+	/**
+	 * <p>putInt32Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Integer} objects.
+	 */
 	public void putInt32Array(String fieldName, Integer[] v)
 	{
 		if (v==null) {
@@ -264,11 +378,18 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 4*v.length;
 	}
 		
+	/** {@inheritDoc} */
 	public void putUInt32(String fieldName, UnsignedInteger v)
 	{
 		length += 4;
 	}
 	
+	/**
+	 * <p>putUInt32Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} objects.
+	 */
 	public void putUInt32Array(String fieldName, UnsignedInteger[] v)
 	{
 		if (v==null) {
@@ -279,6 +400,7 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 4*v.length;
 	}	
 	
+	/** {@inheritDoc} */
 	public void putUInt32Array(String fieldName, Collection<UnsignedInteger> v)
 	{
 		if (v==null) {
@@ -289,16 +411,29 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 4*v.size();
 	}	
 	
+	/**
+	 * <p>putInt64.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.lang.Long} object.
+	 */
 	public void putInt64(String fieldName, Long v)
 	{
 		length += 8;
 	}
 	
+	/** {@inheritDoc} */
 	public void putInt64(String fieldName, long v)
 	{
 		length += 8;
 	}	
 	
+	/**
+	 * <p>putInt64Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Long} objects.
+	 */
 	public void putInt64Array(String fieldName, Long[] v)
 	{
 		if (v==null) {
@@ -309,6 +444,12 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 8*v.length;
 	}
 	
+	/**
+	 * <p>putInt64Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putInt64Array(String fieldName, Collection<Long> v)
 	{
 		if (v==null) {
@@ -319,11 +460,18 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 8*v.size();
 	}
 	
+	/** {@inheritDoc} */
 	public void putUInt64(String fieldName, UnsignedLong v)
 	{
 		length += 8;
 	}
 		
+	/**
+	 * <p>putUInt64Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.UnsignedLong} objects.
+	 */
 	public void putUInt64Array(String fieldName, UnsignedLong[] v)
 	{
 		if (v==null) {
@@ -334,6 +482,12 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 8*v.length;
 	}	
 	
+	/**
+	 * <p>putUInt64Array.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putUInt64Array(String fieldName, Collection<UnsignedLong> v)
 	{
 		if (v==null) {
@@ -344,16 +498,29 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 8*v.size();
 	}	
 	
+	/**
+	 * <p>putFloat.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.lang.Float} object.
+	 */
 	public void putFloat(String fieldName, Float v)
 	{
 		length += 4;
 	}
 	
+	/** {@inheritDoc} */
 	public void putFloat(String fieldName, float v)
 	{
 		length += 4;
 	}
 	
+	/**
+	 * <p>putFloatArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Float} objects.
+	 */
 	public void putFloatArray(String fieldName, Float[] v)
 	{
 		if (v==null) {
@@ -364,6 +531,12 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 4*v.length;
 	}
 	
+	/**
+	 * <p>putFloatArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putFloatArray(String fieldName, Collection<Float> v)
 	{
 		if (v==null) {
@@ -374,16 +547,29 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 4*v.size();
 	}		
 		
+	/** {@inheritDoc} */
 	public void putDouble(String fieldName, Double v)
 	{
 		length += 8;
 	}
 	
+	/**
+	 * <p>putDouble.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a double.
+	 */
 	public void putDouble(String fieldName, double v)
 	{
 		length += 8;
 	}
 	
+	/**
+	 * <p>putDoubleArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.Double} objects.
+	 */
 	public void putDoubleArray(String fieldName, Double[] v)
 	{
 		if (v==null) {
@@ -394,6 +580,12 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 8*v.length;
 	}	
 	
+	/**
+	 * <p>putDoubleArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putDoubleArray(String fieldName, Collection<Double> v)
 	{
 		if (v==null) {
@@ -404,6 +596,7 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 8*v.size();
 	}	
 	
+	/** {@inheritDoc} */
 	public void putString(String fieldName, String v)
 	{
 		if (v==null) {
@@ -413,6 +606,12 @@ public class EncoderCalc implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putStringArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.lang.String} objects.
+	 */
 	public void putStringArray(String fieldName, String[] v)
 	{
 		if (v==null) {
@@ -425,6 +624,12 @@ public class EncoderCalc implements IEncoder {
 			putString(null, v[i]);
 	}		
 	
+	/**
+	 * <p>putStringArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putStringArray(String fieldName, Collection<String> v)
 	{
 		if (v==null) {
@@ -437,11 +642,18 @@ public class EncoderCalc implements IEncoder {
 			putString(null, o);
 	}		
 	
+	/** {@inheritDoc} */
 	public void putDateTime(String fieldName, DateTime v)
 	{
 		length += 8;
 	}
 
+	/**
+	 * <p>putDateTimeArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.DateTime} objects.
+	 */
 	public void putDateTimeArray(String fieldName, DateTime[] v)
 	{
 		if (v==null) {
@@ -452,6 +664,7 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 8*v.length;
 	}			
 	
+	/** {@inheritDoc} */
 	public void putDateTimeArray(String fieldName, Collection<DateTime> v)
 	{
 		if (v==null) {
@@ -462,11 +675,18 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 8*v.size();
 	}			
 	
+	/** {@inheritDoc} */
 	public void putGuid(String fieldName, UUID v)
 	{
 		length += 16;
 	}
 	
+	/**
+	 * <p>putGuidArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link java.util.UUID} objects.
+	 */
 	public void putGuidArray(String fieldName, UUID[] v)
 	{
 		if (v==null) {
@@ -477,6 +697,7 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 16*v.length;
 	}			
 	
+	/** {@inheritDoc} */
 	public void putGuidArray(String fieldName, Collection<UUID> v)
 	{
 		if (v==null) {
@@ -487,6 +708,12 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 16*v.size();
 	}			
 	
+	/**
+	 * <p>putByteString.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of byte.
+	 */
 	public void putByteString(String fieldName, byte[] v)
 	{
 		if (v==null) 
@@ -496,6 +723,12 @@ public class EncoderCalc implements IEncoder {
 		}		
 	}
 	
+	/**
+	 * <p>putByteStringArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of byte.
+	 */
 	public void putByteStringArray(String fieldName, byte[][] v)
 	{
 		if (v==null) {
@@ -508,6 +741,7 @@ public class EncoderCalc implements IEncoder {
 			putByteString(null, v[i]);
 	}				
 	
+	/** {@inheritDoc} */
 	public void putByteStringArray(String fieldName, Collection<byte[]> v)
 	{
 		if (v==null) {
@@ -520,6 +754,7 @@ public class EncoderCalc implements IEncoder {
 			putByteString(null, o);
 	}				
 	
+	/** {@inheritDoc} */
 	public void putXmlElement(String fieldName, XmlElement v)
 	{
 		if (v==null) 
@@ -528,6 +763,12 @@ public class EncoderCalc implements IEncoder {
 			putByteString(null, v.getData());
 	}
 	
+	/**
+	 * <p>putXmlElementArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.XmlElement} objects.
+	 */
 	public void putXmlElementArray(String fieldName, XmlElement[] v)
 	{
 		if (v==null) {
@@ -540,6 +781,7 @@ public class EncoderCalc implements IEncoder {
 			putXmlElement(null, v[i]);
 	}	
 	
+	/** {@inheritDoc} */
 	public void putXmlElementArray(String fieldName, Collection<XmlElement> v)
 	{
 		if (v==null) {
@@ -552,6 +794,7 @@ public class EncoderCalc implements IEncoder {
 			putXmlElement(null, o);
 	}	
 	
+	/** {@inheritDoc} */
 	public void putNodeId(String fieldName, NodeId v)
 	{
 		if (v==null) v = NodeId.NULL; 
@@ -586,6 +829,12 @@ public class EncoderCalc implements IEncoder {
 		}		
 	}
 	
+	/**
+	 * <p>putNodeIdArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.NodeId} objects.
+	 */
 	public void putNodeIdArray(String fieldName, NodeId[] v)
 	{
 		if (v==null) {
@@ -598,6 +847,12 @@ public class EncoderCalc implements IEncoder {
 			putNodeId(null, v[i]);
 	}		
 
+	/**
+	 * <p>putNodeIdArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putNodeIdArray(String fieldName, Collection<NodeId> v)
 	{
 		if (v==null) {
@@ -610,6 +865,7 @@ public class EncoderCalc implements IEncoder {
 			putNodeId(null, o);
 	}		
 	
+	/** {@inheritDoc} */
 	public void putExpandedNodeId(String fieldName, ExpandedNodeId v)
 	{
 		if (v==null) v = ExpandedNodeId.NULL;
@@ -656,6 +912,12 @@ public class EncoderCalc implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putExpandedNodeIdArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} objects.
+	 */
 	public void putExpandedNodeIdArray(String fieldName, ExpandedNodeId[] v)
 	{
 		if (v==null) {
@@ -668,6 +930,12 @@ public class EncoderCalc implements IEncoder {
 			putExpandedNodeId(null, v[i]);
 	}		
 
+	/**
+	 * <p>putExpandedNodeIdArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putExpandedNodeIdArray(String fieldName, Collection<ExpandedNodeId> v)
 	{
 		if (v==null) {
@@ -680,11 +948,18 @@ public class EncoderCalc implements IEncoder {
 			putExpandedNodeId(null, o);
 	}		
 	
+	/** {@inheritDoc} */
 	public void putStatusCode(String fieldName, StatusCode v)
 	{
 		length += 4;
 	}
 	
+	/**
+	 * <p>putStatusCodeArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.StatusCode} objects.
+	 */
 	public void putStatusCodeArray(String fieldName, StatusCode[] v)
 	{
 		if (v==null) {
@@ -695,6 +970,12 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 4*v.length;
 	}		
 	
+	/**
+	 * <p>putStatusCodeArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putStatusCodeArray(String fieldName, Collection<StatusCode> v)
 	{
 		if (v==null) {
@@ -705,6 +986,7 @@ public class EncoderCalc implements IEncoder {
 		length += 4 + 4*v.size();
 	}		
 	
+	/** {@inheritDoc} */
 	public void putQualifiedName(String fieldName, QualifiedName v)
 	{
 		if (v==null) {
@@ -716,6 +998,12 @@ public class EncoderCalc implements IEncoder {
 		putString(null, v.getName());
 	}
 	
+	/**
+	 * <p>putQualifiedNameArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.QualifiedName} objects.
+	 */
 	public void putQualifiedNameArray(String fieldName, QualifiedName[] v)
 	{
 		if (v==null) {
@@ -728,6 +1016,12 @@ public class EncoderCalc implements IEncoder {
 			putQualifiedName(null, v[i]);
 	}		
 	
+	/**
+	 * <p>putQualifiedNameArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 */
 	public void putQualifiedNameArray(String fieldName, Collection<QualifiedName> v)
 	{
 		if (v==null) {
@@ -740,6 +1034,7 @@ public class EncoderCalc implements IEncoder {
 			putQualifiedName(null, o);
 	}		
 	
+	/** {@inheritDoc} */
 	public void putLocalizedText(String fieldName, LocalizedText v)
 	{
 		if (v==null) {
@@ -753,6 +1048,12 @@ public class EncoderCalc implements IEncoder {
 		if (text!=null) putString(null, text);
 	}
 	
+	/**
+	 * <p>putLocalizedTextArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.LocalizedText} objects.
+	 */
 	public void putLocalizedTextArray(String fieldName, LocalizedText[] v)
 	{
 		if (v==null) {
@@ -765,6 +1066,7 @@ public class EncoderCalc implements IEncoder {
 			putLocalizedText(null, v[i]);
 	}	
 	
+	/** {@inheritDoc} */
 	public void putLocalizedTextArray(String fieldName, Collection<LocalizedText> v)
 	{
 		if (v==null) {
@@ -777,6 +1079,7 @@ public class EncoderCalc implements IEncoder {
 			putLocalizedText(null, o);
 	}	
 	
+	/** {@inheritDoc} */
 	public void putStructure(String fieldName, Structure v) throws EncodingException
 	{
 		if (v==null) {
@@ -795,6 +1098,13 @@ public class EncoderCalc implements IEncoder {
 		putEncodeable(fieldName, v);
 	}
 
+	/**
+	 * <p>putStructureArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.Structure} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putStructureArray(String fieldName, Structure[] v) throws EncodingException
 	{
 		if (v==null) {
@@ -807,6 +1117,13 @@ public class EncoderCalc implements IEncoder {
 			putStructure(null, o);
 	}
 
+	/**
+	 * <p>putStructureArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putStructureArray(String fieldName, Collection<Structure> v) throws EncodingException
 	{
 		if (v==null) {
@@ -819,6 +1136,7 @@ public class EncoderCalc implements IEncoder {
 			putStructure(null, o);
 	}
 	
+	/** {@inheritDoc} */
 	public void putExtensionObject(String fieldName, ExtensionObject v)
 	throws EncodingException
 	{
@@ -842,6 +1160,13 @@ public class EncoderCalc implements IEncoder {
 		}
 	}
 	
+	/**
+	 * <p>putExtensionObjectArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.ExtensionObject} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putExtensionObjectArray(String fieldName, ExtensionObject[] v) throws EncodingException
 	{
 		if (v==null) {
@@ -854,6 +1179,7 @@ public class EncoderCalc implements IEncoder {
 			putExtensionObject(null, v[i]);
 	}		
 
+	/** {@inheritDoc} */
 	public void putExtensionObjectArray(String fieldName, Collection<ExtensionObject> v) throws EncodingException
 	{
 		if (v==null) {
@@ -866,6 +1192,7 @@ public class EncoderCalc implements IEncoder {
 			putExtensionObject(null, o);
 	}		
 	
+	/** {@inheritDoc} */
 	public void putDataValue(String fieldName, DataValue v) throws EncodingException
 	{
 		if (v==null) {
@@ -889,6 +1216,13 @@ public class EncoderCalc implements IEncoder {
 		if ((mask & 0x20) == 0x20) putUInt16(null, v.getServerPicoseconds());
 	}
 	
+	/**
+	 * <p>putDataValueArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.DataValue} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putDataValueArray(String fieldName, DataValue[] v) throws EncodingException
 	{
 		if (v==null) {
@@ -901,6 +1235,7 @@ public class EncoderCalc implements IEncoder {
 			putDataValue(null, v[i]);
 	}		
 	
+	/** {@inheritDoc} */
 	public void putDataValueArray(String fieldName, Collection<DataValue> v) throws EncodingException
 	{
 		if (v==null) {
@@ -913,6 +1248,7 @@ public class EncoderCalc implements IEncoder {
 			putDataValue(null, o);
 	}		
 	
+	/** {@inheritDoc} */
 	public void putVariant(String fieldName, Variant v) throws EncodingException
 	{
 		if (v==null) {
@@ -970,6 +1306,13 @@ public class EncoderCalc implements IEncoder {
 		}
 	}	
 	
+	/**
+	 * <p>putVariantArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v an array of {@link org.opcfoundation.ua.builtintypes.Variant} objects.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putVariantArray(String fieldName, Variant[] v) throws EncodingException
 	{
 		if (v==null) {
@@ -982,6 +1325,13 @@ public class EncoderCalc implements IEncoder {
 			putVariant(null, v[i]);
 	}		
 	
+	/**
+	 * <p>putVariantArray.</p>
+	 *
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @param v a {@link java.util.Collection} object.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 */
 	public void putVariantArray(String fieldName, Collection<Variant> v) throws EncodingException
 	{
 		if (v==null) {
@@ -994,6 +1344,7 @@ public class EncoderCalc implements IEncoder {
 			putVariant(null, o);
 	}		
 	
+	/** {@inheritDoc} */
 	public void putDiagnosticInfo(String fieldName, DiagnosticInfo v)
 	{
 		if (v==null) {
@@ -1033,6 +1384,7 @@ public class EncoderCalc implements IEncoder {
 			putDiagnosticInfo(null, v.getInnerDiagnosticInfo());	
 	}	
 
+	/** {@inheritDoc} */
 	@Override
 	public void putDiagnosticInfoArray(String fieldName, DiagnosticInfo[] v) 
 	throws EncodingException 
@@ -1047,6 +1399,7 @@ public class EncoderCalc implements IEncoder {
 			putDiagnosticInfo(null, o);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putDiagnosticInfoArray(String fieldName, Collection<DiagnosticInfo> v)
 	throws EncodingException 
@@ -1062,6 +1415,7 @@ public class EncoderCalc implements IEncoder {
 	}
 	
 	
+	/** {@inheritDoc} */
 	public void putEnumerationArray(String fieldName, Object array)
 	{
 		if (array==null) {
@@ -1074,6 +1428,7 @@ public class EncoderCalc implements IEncoder {
 			putEnumeration(null, (Enumeration)Array.get(array, i));
 	}
 	
+	/** {@inheritDoc} */
 	public void putEnumeration(String fieldName, Enumeration v)
 	{
 		//if (v==null)
@@ -1081,6 +1436,7 @@ public class EncoderCalc implements IEncoder {
 		length += 4;
 	}
 
+	/** {@inheritDoc} */
 	public void putObject(String fieldName, Object o) throws EncodingException
 	{
 		if (o==null) throw new EncodingException("Cannot encode null value");
@@ -1088,6 +1444,7 @@ public class EncoderCalc implements IEncoder {
 		putObject(null, c, o);
 	}
 	
+	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	public void putObject(String fieldName, Class<?> c, Object o) throws EncodingException
 	{
@@ -1144,6 +1501,7 @@ public class EncoderCalc implements IEncoder {
 		}		
 	}
 	
+	/** {@inheritDoc} */
 	public void putScalar(String fieldName, int builtinType, Object o) throws EncodingException
 	{
 		switch (builtinType) {
@@ -1184,6 +1542,7 @@ public class EncoderCalc implements IEncoder {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	public void putArray(String fieldName, int builtinType, Object o) throws EncodingException
 	{
 		switch (builtinType) {
@@ -1222,6 +1581,7 @@ public class EncoderCalc implements IEncoder {
 		}
 	}	
 	
+	/** {@inheritDoc} */
 	public void putEncodeableArray(String fieldName, Class<? extends IEncodeable> clazz, Object array) throws ArrayIndexOutOfBoundsException, EncodingException, IllegalArgumentException
 	{
 		if (array==null) {
@@ -1235,9 +1595,9 @@ public class EncoderCalc implements IEncoder {
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Encodes stucture without header
-	 * @param s
-	 * @throws EncodingException 
 	 */
 	@SuppressWarnings("unchecked")
 	public void putEncodeable(String fieldName, IEncodeable s) throws EncodingException
@@ -1247,9 +1607,9 @@ public class EncoderCalc implements IEncoder {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Encodes stucture without header
-	 * @param s
-	 * @throws EncodingException 
 	 */
 	public void putEncodeable(String fieldName, Class<? extends IEncodeable> clazz, IEncodeable s) throws EncodingException
 	{		
@@ -1276,9 +1636,9 @@ public class EncoderCalc implements IEncoder {
 	}	
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Encodes structures including header (typeId, encoding type and length)
-	 * @param s
-	 * @throws EncodingException 
 	 */
 //	@SuppressWarnings("unchecked")
 //	public void putStructure(IEncodeable s)
@@ -1292,7 +1652,6 @@ public class EncoderCalc implements IEncoder {
 //		putNodeId(si.binaryId);
 //		putEncodeable(s, si);
 //	}
-	
 	@SuppressWarnings("unchecked")
 	public void putMessage(IEncodeable s) throws EncodingException
 	{
@@ -1305,16 +1664,19 @@ public class EncoderCalc implements IEncoder {
 		ctx.encodeableSerializer.calcEncodeable(clazz, s, this);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(String fieldName, Object o) throws EncodingException {
 		EncoderUtils.put(this, fieldName, o);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return length+"";
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(String fieldName, Object o, Class<?> clazz) throws EncodingException {
 		EncoderUtils.put(this, fieldName, o, clazz);

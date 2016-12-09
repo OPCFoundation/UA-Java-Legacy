@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.core.ReferenceDescription;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class BrowseResult extends Object implements Structure, Cloneable {
+public class BrowseResult extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.BrowseResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.BrowseResult_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class BrowseResult extends Object implements Structure, Cloneable {
       */
     public BrowseResult clone()
     {
-        BrowseResult result = new BrowseResult();
+        BrowseResult result = (BrowseResult) super.clone();
         result.StatusCode = StatusCode;
         result.ContinuationPoint = ContinuationPoint;
         if (References!=null) {

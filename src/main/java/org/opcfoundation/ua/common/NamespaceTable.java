@@ -19,30 +19,40 @@ import org.opcfoundation.ua.builtintypes.NodeId;
 /**
  * The table of name space URIs for a server. The table enables mapping between
  * name space indexes and URIs.
- * 
+ *
  * Use {@link #add} to add entries to the table. Use {@link #getIndex} to find the
  * index of an URI or {@link #getUri} to find the Uri of an index.
- * 
  */
 public class NamespaceTable extends UriTable {
 
+	/** Constant <code>OPCUA_NAMESPACE="http://opcfoundation.org/UA/"</code> */
 	public static String OPCUA_NAMESPACE = "http://opcfoundation.org/UA/";
 	private static NamespaceTable defaultInstance;
 
+	/**
+	 * <p>createFromArray.</p>
+	 *
+	 * @param namespaceArray an array of {@link java.lang.String} objects.
+	 * @return a {@link org.opcfoundation.ua.common.NamespaceTable} object.
+	 */
 	public static NamespaceTable createFromArray(String[] namespaceArray) {
 		NamespaceTable result = new NamespaceTable();
 		result.addAll(namespaceArray);
 		return result;
 	}
 
+	/**
+	 * <p>Constructor for NamespaceTable.</p>
+	 */
 	public NamespaceTable() {
 		add(0, OPCUA_NAMESPACE);
 	}
 
 	/**
-	 * Compare 2 ExpandedNodeId objects. This method is intended for cases 
-	 * where one ExpandedNodeId is defined with NamespaceUri and another 
+	 * Compare 2 ExpandedNodeId objects. This method is intended for cases
+	 * where one ExpandedNodeId is defined with NamespaceUri and another
 	 * is defined with NamespaceIndex.
+	 *
 	 * @param n1 first
 	 * @param n2 second
 	 * @return true if they are equal
@@ -62,9 +72,10 @@ public class NamespaceTable extends UriTable {
 	}
 	
 	/**
-	 * Compare 1 ExpandedNodeId and 1 NodeId. This method is intended for cases 
-	 * where the ExpandedNodeId is defined with NamespaceUri and a comparison 
+	 * Compare 1 ExpandedNodeId and 1 NodeId. This method is intended for cases
+	 * where the ExpandedNodeId is defined with NamespaceUri and a comparison
 	 * to NodeId which has NamespaceIndex is wanted.
+	 *
 	 * @param n1 first
 	 * @param n2 second
 	 * @return true if they are equal
@@ -86,11 +97,10 @@ public class NamespaceTable extends UriTable {
 	/**
 	 * Convert the nodeId to an ExpandedNodeId using the namespaceUris of the
 	 * table
-	 * 
+	 *
 	 * @param nodeId
 	 *            the node ID
 	 * @return The respective ExpandedNodeId
-	 * @return
 	 */
 	public ExpandedNodeId toExpandedNodeId(NodeId nodeId) {
 		return new ExpandedNodeId(null, getUri(nodeId.getNamespaceIndex()), nodeId.getValue());
@@ -99,11 +109,11 @@ public class NamespaceTable extends UriTable {
 	/**
 	 * Convert the expandedNodeId to a NodeId using the name space indexes of the
 	 * table
-	 * 
+	 *
 	 * @param expandedNodeId
 	 *            the expanded node ID
 	 * @return The respective NodeId
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             if there is no entry for the namespaceUri used in the
 	 *             expandedNodeId
 	 */
@@ -130,9 +140,9 @@ public class NamespaceTable extends UriTable {
 
 	/**
 	 * Check if the node IDs refer to the same name space. Compares the NamespaceIndex of the IDs.
-	 * 
-	 * @param nodeId1
-	 * @param nodeId2
+	 *
+	 * @param nodeId1 a {@link org.opcfoundation.ua.builtintypes.NodeId} object.
+	 * @param nodeId2 a {@link org.opcfoundation.ua.builtintypes.NodeId} object.
 	 * @return true if the nodes are in the same name space
 	 */
 	public boolean namespaceEquals(NodeId nodeId1, NodeId nodeId2) {
@@ -142,9 +152,9 @@ public class NamespaceTable extends UriTable {
 	/**
 	 * Check if the node IDs refer to the same name space. The expandedNodeId is
 	 * checked for the NamespaceUri or Index depending on which is used.
-	 * 
-	 * @param nodeId
-	 * @param expandedNodeId
+	 *
+	 * @param nodeId a {@link org.opcfoundation.ua.builtintypes.NodeId} object.
+	 * @param expandedNodeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
 	 * @return true if the nodes are in the same name space
 	 */
 	public boolean namespaceEquals(NodeId nodeId, ExpandedNodeId expandedNodeId) {
@@ -156,9 +166,9 @@ public class NamespaceTable extends UriTable {
 	/**
 	 * Check if the node IDs refer to the same name space. The expandedNodeIds are
 	 * checked for the NamespaceUri or Index depending on which is used.
-	 * 
-	 * @param expandedNodeId1
-	 * @param expandedNodeId2
+	 *
+	 * @param expandedNodeId1 a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @param expandedNodeId2 a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
 	 * @return true if the nodes are in the same name space
 	 */
 	public boolean namespaceEquals(ExpandedNodeId expandedNodeId1, ExpandedNodeId expandedNodeId2) {
@@ -170,6 +180,8 @@ public class NamespaceTable extends UriTable {
 	}
 
 	/**
+	 * <p>Getter for the field <code>defaultInstance</code>.</p>
+	 *
 	 * @return a default instance which can be used when no other namespace
 	 *         table is available. DO NOT use, if you have a valid application
 	 *         context with an initialized namespace table available.

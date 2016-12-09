@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class DeleteMonitoredItemsRequest extends Object implements ServiceRequest {
+public class DeleteMonitoredItemsRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DeleteMonitoredItemsRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteMonitoredItemsRequest_Encoding_DefaultBinary);
@@ -94,7 +95,7 @@ public class DeleteMonitoredItemsRequest extends Object implements ServiceReques
       */
     public DeleteMonitoredItemsRequest clone()
     {
-        DeleteMonitoredItemsRequest result = new DeleteMonitoredItemsRequest();
+        DeleteMonitoredItemsRequest result = (DeleteMonitoredItemsRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.SubscriptionId = SubscriptionId;
         result.MonitoredItemIds = MonitoredItemIds==null ? null : MonitoredItemIds.clone();

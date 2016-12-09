@@ -33,9 +33,9 @@ import org.opcfoundation.ua.utils.bytebuffer.ByteQueue;
  * Encodes messages to chunks.
  * Returns an array of plaintexts whose content is partially filled.
  * Chunk size, padding and plaintext is written, but footer and header is missing.
- * ByteOrder is Little Endian.  
+ * ByteOrder is Little Endian.
  * <p>
- * Encoder also asserts that message size and chunk count is with-in limits.  
+ * Encoder also asserts that message size and chunk count is with-in limits.
  */
 public class MessageToChunks implements Callable<ByteBuffer[]> 
 {
@@ -45,6 +45,15 @@ public class MessageToChunks implements Callable<ByteBuffer[]>
 	EncoderContext encoderCtx;
 	ChunkFactory chunkFactory;
 
+	/**
+	 * <p>Constructor for MessageToChunks.</p>
+	 *
+	 * @param msg a {@link org.opcfoundation.ua.encoding.IEncodeable} object.
+	 * @param ctx a {@link org.opcfoundation.ua.transport.tcp.impl.TcpConnectionParameters} object.
+	 * @param encoderCtx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 * @param chunkFactory a {@link org.opcfoundation.ua.transport.tcp.impl.ChunkFactory} object.
+	 * @param type a {@link org.opcfoundation.ua.transport.tcp.nio.MessageType} object.
+	 */
 	public MessageToChunks(IEncodeable msg, TcpConnectionParameters ctx, EncoderContext encoderCtx, ChunkFactory chunkFactory, MessageType type)
 	{
 		if (msg==null || ctx==null || chunkFactory==null)
@@ -56,6 +65,7 @@ public class MessageToChunks implements Callable<ByteBuffer[]>
 		this.type = type;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public ByteBuffer[] call() 
 	throws RuntimeServiceResultException

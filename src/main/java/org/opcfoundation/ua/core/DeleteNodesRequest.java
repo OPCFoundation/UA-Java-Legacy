@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.DeleteNodesItem;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class DeleteNodesRequest extends Object implements ServiceRequest {
+public class DeleteNodesRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DeleteNodesRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteNodesRequest_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class DeleteNodesRequest extends Object implements ServiceRequest {
       */
     public DeleteNodesRequest clone()
     {
-        DeleteNodesRequest result = new DeleteNodesRequest();
+        DeleteNodesRequest result = (DeleteNodesRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         if (NodesToDelete!=null) {
             result.NodesToDelete = new DeleteNodesItem[NodesToDelete.length];

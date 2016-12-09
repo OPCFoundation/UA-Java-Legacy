@@ -21,23 +21,40 @@ import java.util.regex.Pattern;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
 
+/**
+ * <p>UriUtil class.</p>
+ *
+ */
 public class UriUtil {
 		
+	/** Constant <code>OPC_TCP_PORT=6000</code> */
 	public static final int OPC_TCP_PORT = 6000;
+	/** Constant <code>HTTP_PORT=80</code> */
 	public static final int HTTP_PORT = 80;
+	/** Constant <code>HTTPS_PORT=443</code> */
 	public static final int HTTPS_PORT = 443;
 	
+	/** Constant <code>OPC_TCP_DISCOVERY_PORT=4840</code> */
 	public static final int OPC_TCP_DISCOVERY_PORT = 4840;
+	/** Constant <code>HTTPS_DISCOVERY_PORT=4843</code> */
 	public static final int HTTPS_DISCOVERY_PORT = 4843;
+	/** Constant <code>HTTP_DISCOVERY_PORT=56201</code> */
 	public static final int HTTP_DISCOVERY_PORT = 56201;  // Alternate to 80
 
+	/** Constant <code>SCHEME_OPCTCP="opc.tcp"</code> */
 	public final static String SCHEME_OPCTCP = "opc.tcp";
+	/** Constant <code>SCHEME_HTTP="http"</code> */
 	public final static String SCHEME_HTTP = "http";
+	/** Constant <code>SCHEME_HTTPS="https"</code> */
 	public final static String SCHEME_HTTPS = "https";
 	
+	/** Constant <code>PATTERN_HTTPS</code> */
 	public static final Pattern PATTERN_HTTPS = Pattern.compile( "^https://([^/]+)(/.*)?$", Pattern.CASE_INSENSITIVE );
+	/** Constant <code>PATTERN_HTTP</code> */
 	public static final Pattern PATTERN_HTTP = Pattern.compile( "^http://([^/]+)(/.*)?$", Pattern.CASE_INSENSITIVE );
+	/** Constant <code>PATTERN_OPCTCP</code> */
 	public static final Pattern PATTERN_OPCTCP = Pattern.compile( "^opc.tcp://([^/]+)(/.*)?$", Pattern.CASE_INSENSITIVE );
+	/** Constant <code>PATTERN_URI</code> */
 	public static final Pattern PATTERN_URI = Pattern.compile( "^(\\S+)://([^/]+)(/.*)?$", Pattern.CASE_INSENSITIVE );
 
 	public static enum MessageFormat {
@@ -47,10 +64,10 @@ public class UriUtil {
 	
 	/**
 	 * Get message format associated with an endpoint
-	 * 
-	 * @param endpointUri
+	 *
+	 * @param endpointUri a {@link java.lang.String} object.
 	 * @return transport protocol
-	 * @throws ServiceResultException Bad_ServerUriInvalid if the protocol is unknown
+	 * @throws org.opcfoundation.ua.common.ServiceResultException Bad_ServerUriInvalid if the protocol is unknown
 	 */
 	public static MessageFormat getMessageFormat(String endpointUri)
 	throws ServiceResultException
@@ -63,8 +80,8 @@ public class UriUtil {
 	
 	/**
 	 * Get the transport protocol of an endpoint
-	 * 
-	 * @param endpointUri
+	 *
+	 * @param endpointUri a {@link java.lang.String} object.
 	 * @return transport protocol
 	 */
 	public static String getTransportProtocol(String endpointUri)
@@ -75,11 +92,11 @@ public class UriUtil {
 	}
 	
 	/**
-	 * Convert uri to socket address 
-	 * 
-	 * @param endpointUri
-	 * @return
-	 * @throws ServiceResultException
+	 * Convert uri to socket address
+	 *
+	 * @param endpointUri a {@link java.lang.String} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 * @return a {@link java.net.InetSocketAddress} object.
 	 */
 	public static InetSocketAddress getSocketAddress(String endpointUri)
 	throws ServiceResultException
@@ -118,6 +135,12 @@ public class UriUtil {
 
 	}
 	
+	/**
+	 * <p>getSocketAddress.</p>
+	 *
+	 * @param endpointUri a {@link java.net.URI} object.
+	 * @return a {@link java.net.InetSocketAddress} object.
+	 */
 	public static InetSocketAddress getSocketAddress(URI endpointUri)
 	{
 		String scheme = endpointUri.getScheme().toLowerCase(); 
@@ -129,9 +152,9 @@ public class UriUtil {
 	
 	/**
 	 * Get the resource part of an URI
-	 * 
-	 * @param uri
-	 * @return
+	 *
+	 * @param uri a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getEndpointName(String uri) {
 		Matcher m = PATTERN_URI.matcher( uri );
@@ -139,6 +162,12 @@ public class UriUtil {
 		return null;
 	}
     
+    /**
+     * <p>getPort.</p>
+     *
+     * @param endpointUrl a {@link java.lang.String} object.
+     * @return a int.
+     */
     public static int getPort(String endpointUrl) {
     	try {
 			InetSocketAddress addr = UriUtil.getSocketAddress( endpointUrl );
@@ -153,6 +182,12 @@ public class UriUtil {
 		}
     }	
     
+	/**
+	 * <p>defaultPort.</p>
+	 *
+	 * @param scheme a {@link java.lang.String} object.
+	 * @return a int.
+	 */
 	public static int defaultPort(String scheme) {
 		if (SCHEME_OPCTCP.equals(scheme))
 			return OPC_TCP_PORT;

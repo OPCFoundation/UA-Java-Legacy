@@ -40,7 +40,7 @@ import org.opcfoundation.ua.core.NodeAttributes;
 
 
 
-public class ObjectAttributes extends NodeAttributes implements Structure, Cloneable {
+public class ObjectAttributes extends NodeAttributes {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ObjectAttributes);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ObjectAttributes_Encoding_DefaultBinary);
@@ -73,7 +73,7 @@ public class ObjectAttributes extends NodeAttributes implements Structure, Clone
       */
     public ObjectAttributes clone()
     {
-        ObjectAttributes result = new ObjectAttributes();
+        ObjectAttributes result = (ObjectAttributes) super.clone();
         result.SpecifiedAttributes = SpecifiedAttributes;
         result.DisplayName = DisplayName;
         result.Description = Description;

@@ -19,6 +19,10 @@ import org.opcfoundation.ua.transport.security.Cert;
 import org.opcfoundation.ua.transport.security.CertificateValidator;
 import org.opcfoundation.ua.transport.security.PrivKey;
 
+/**
+ * <p>OpcTcpSettings class.</p>
+ *
+ */
 public class OpcTcpSettings {
 
 	PrivKey privKey;
@@ -28,7 +32,7 @@ public class OpcTcpSettings {
 	public enum Flag {
 		/**
 		 * In multithread mode, depending on implementation, channels 
-		 * encrypt & decrypt messages simultaneously in multiple threads.
+		 * encrypt and decrypt messages simultaneously in multiple threads.
 		 * 
 		 * This allows higher throughput in secured data intensive applications with 
 		 * large messages.
@@ -38,41 +42,92 @@ public class OpcTcpSettings {
 
 	
 	
+	/**
+	 * <p>Getter for the field <code>clientCertificate</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public Cert getClientCertificate() {
 		return clientCertificate;
 	}
+	/**
+	 * <p>Setter for the field <code>clientCertificate</code>.</p>
+	 *
+	 * @param clientCertificate a {@link java.security.cert.X509Certificate} object.
+	 * @throws java.security.cert.CertificateEncodingException if any.
+	 */
 	public void setClientCertificate(X509Certificate clientCertificate) throws CertificateEncodingException {
 		this.clientCertificate = new Cert(clientCertificate);
 	}
 
+	/**
+	 * <p>Getter for the field <code>certificateValidator</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.CertificateValidator} object.
+	 */
 	public CertificateValidator getCertificateValidator() {
 		return certificateValidator;
 	}
+	/**
+	 * <p>Setter for the field <code>certificateValidator</code>.</p>
+	 *
+	 * @param certificateValidator a {@link org.opcfoundation.ua.transport.security.CertificateValidator} object.
+	 */
 	public void setCertificateValidator(CertificateValidator certificateValidator) {
 		this.certificateValidator = certificateValidator;
 	}
 
+	/**
+	 * <p>Getter for the field <code>privKey</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
+	 */
 	public PrivKey getPrivKey() {
 		return privKey;
 	}
 
+	/**
+	 * <p>Setter for the field <code>privKey</code>.</p>
+	 *
+	 * @param privKey a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
+	 */
 	public void setPrivKey(PrivKey privKey) {
 		this.privKey = privKey;
 	}
 
+	/**
+	 * <p>Setter for the field <code>clientCertificate</code>.</p>
+	 *
+	 * @param clientCertificate a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public void setClientCertificate(Cert clientCertificate) {
 		this.clientCertificate = clientCertificate;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>flags</code>.</p>
+	 *
+	 * @return a {@link java.util.EnumSet} object.
+	 */
 	public EnumSet<Flag> getFlags() {
 		return flags;
 	}
 
+	/**
+	 * <p>Setter for the field <code>flags</code>.</p>
+	 *
+	 * @param flags a {@link java.util.EnumSet} object.
+	 */
 	public void setFlags(EnumSet<Flag> flags) {
 		this.flags = flags;
 	}	
 	
 	
+	/**
+	 * <p>readFrom.</p>
+	 *
+	 * @param tcs a {@link org.opcfoundation.ua.transport.tcp.io.OpcTcpSettings} object.
+	 */
 	public void readFrom(OpcTcpSettings tcs) {
 		if (tcs.clientCertificate!=null) clientCertificate = tcs.clientCertificate;
 		if (tcs.certificateValidator!=null) certificateValidator = tcs.certificateValidator;
@@ -80,6 +135,7 @@ public class OpcTcpSettings {
 		flags = tcs.flags;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public OpcTcpSettings clone() {
 		OpcTcpSettings result = new OpcTcpSettings();

@@ -74,6 +74,12 @@ class HttpsClientPendingRequest implements Runnable {
 
 	String securityPolicy;
 	
+	/**
+	 * <p>Constructor for HttpsClientPendingRequest.</p>
+	 *
+	 * @param httpsClient a {@link org.opcfoundation.ua.transport.https.HttpsClient} object.
+	 * @param requestMessage a {@link org.opcfoundation.ua.builtintypes.ServiceRequest} object.
+	 */
 	public HttpsClientPendingRequest(HttpsClient httpsClient, ServiceRequest requestMessage) {
 		this.httpsClient = httpsClient;
 		this.requestMessage = requestMessage;
@@ -89,6 +95,7 @@ class HttpsClientPendingRequest implements Runnable {
 		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void run() {
 		try {
@@ -216,6 +223,9 @@ class HttpsClientPendingRequest implements Runnable {
 		}
 	}
 
+	/**
+	 * <p>cancel.</p>
+	 */
 	public void cancel() {
 		if ( httpsClient.requests.remove(this) == null ) return;
 		abortCode = StatusCodes.Bad_RequestCancelledByRequest;
@@ -223,6 +233,9 @@ class HttpsClientPendingRequest implements Runnable {
 		if ( post != null ) post.abort();
 	}
 	
+	/**
+	 * <p>timeout.</p>
+	 */
 	public void timeout() {
 		if ( httpsClient.requests.remove( requestId ) == null ) return;
 		abortCode = StatusCodes.Bad_Timeout;

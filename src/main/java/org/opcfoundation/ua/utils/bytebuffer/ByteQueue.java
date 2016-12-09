@@ -24,9 +24,9 @@ import java.util.LinkedList;
  * as back-end for data. There are two incremental memory pointers, read
  * and write position. Write position returns the number of bytes written
  * to the queue, and read bytes read.
- * 
- * ByteQueue allocates new memory as required in chunks. 
- * 
+ *
+ * ByteQueue allocates new memory as required in chunks.
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class ByteQueue {
@@ -60,8 +60,8 @@ public class ByteQueue {
 	}
 	
 	/**
-	 * Construct new byte queue.  
-	 * 
+	 * Construct new byte queue.
+	 *
 	 * @param chunkSize allocation size for new memory chunks
 	 */
 	public ByteQueue(int chunkSize) {
@@ -70,9 +70,9 @@ public class ByteQueue {
 	
 	/**
 	 * Write bytes
-	 * 
+	 *
 	 * @param buf bytes to write
-	 * @throws BufferOverflowException write limit exeeded
+	 * @throws java.nio.BufferOverflowException write limit exeeded
 	 */
 	public void put(byte[] buf)
 	throws BufferOverflowException 
@@ -81,12 +81,12 @@ public class ByteQueue {
 	}
 	
 	/**
-	 * Write bytes 
-	 * 
+	 * Write bytes
+	 *
 	 * @param buf bytes
 	 * @param off offset
 	 * @param len length
-	 * @throws BufferOverflowException
+	 * @throws java.nio.BufferOverflowException if any.
 	 */
 	public void put(byte[] buf, int off, int len)
 	throws BufferOverflowException
@@ -110,6 +110,11 @@ public class ByteQueue {
 		}
 	}
 	
+	/**
+	 * <p>put.</p>
+	 *
+	 * @param value a byte.
+	 */
 	public void put(byte value)
 	{
 		getWriteChunk().put(value);
@@ -117,8 +122,8 @@ public class ByteQueue {
 	
 	/**
 	 * Write remaining bytes of src
-	 * 
-	 * @param src
+	 *
+	 * @param src a {@link java.nio.ByteBuffer} object.
 	 * @throws BufferOverflowException write limit exeeded
 	 */
 	public void put(ByteBuffer src)
@@ -128,9 +133,9 @@ public class ByteQueue {
 	
 	/**
 	 * Write remaining bytes of src
-	 * 
-	 * @param src
-	 * @param length
+	 *
+	 * @param src a {@link java.nio.ByteBuffer} object.
+	 * @param length a int.
 	 * @throws BufferOverflowException write limit exeeded
 	 */
 	public void put(ByteBuffer src, int length)
@@ -146,10 +151,10 @@ public class ByteQueue {
 	/**
 	 * Offers a byte buffer object for the queue.
 	 * The remaining bytes of buf are added to
-	 * the queue. ByteQueue takes the ownership of buf.  
-	 * 
-	 * @param buf buffer to write 
-	 * @throws BufferOverflowException write limit exeeded
+	 * the queue. ByteQueue takes the ownership of buf.
+	 *
+	 * @param buf buffer to write
+	 * @throws java.nio.BufferOverflowException write limit exeeded
 	 */
 	public void offer(ByteBuffer buf)
 			throws BufferOverflowException
@@ -166,9 +171,9 @@ public class ByteQueue {
 	
 	/**
 	 * Read from buf
-	 * 
+	 *
 	 * @param buf buf to be filled
-	 * @throws BufferUnderflowException
+	 * @throws java.nio.BufferUnderflowException if any.
 	 */
 	public void get(byte[] buf)
 			throws BufferUnderflowException
@@ -178,11 +183,11 @@ public class ByteQueue {
 	
 	/**
 	 * Read from buf
-	 * 
-	 * @param buf
-	 * @param off
-	 * @param len
-	 * @throws BufferUnderflowException
+	 *
+	 * @param buf an array of byte.
+	 * @param off a int.
+	 * @param len a int.
+	 * @throws BufferUnderflowException if any.
 	 */
 	public void get(byte[] buf, int off, int len)
 	{		
@@ -208,9 +213,9 @@ public class ByteQueue {
 	
 	/**
 	 * Reads to dst remaining bytes
-	 * 
-	 * @param dst
-	 * @throws BufferUnderflowException
+	 *
+	 * @param dst a {@link java.nio.ByteBuffer} object.
+	 * @throws java.nio.BufferUnderflowException if any.
 	 */
 	public void get(ByteBuffer dst)
 	throws BufferUnderflowException
@@ -222,9 +227,10 @@ public class ByteQueue {
 	
 	/**
 	 * Reads to dst
-	 * 
-	 * @param dst
-	 * @throws BufferUnderflowException
+	 *
+	 * @param dst a {@link java.nio.ByteBuffer} object.
+	 * @throws java.nio.BufferUnderflowException if any.
+	 * @param length a int.
 	 */
 	public void get(ByteBuffer dst, int length)
 	throws BufferUnderflowException
@@ -247,10 +253,10 @@ public class ByteQueue {
 	 * This implementation copies memory only if the
 	 * requested data is span over several ByteBuffers in the
 	 * back-end.
-	 * 
-	 * @param len
+	 *
+	 * @param len a int.
 	 * @return ByteBuffer containing read data
-	 * @throws BufferUnderflowException
+	 * @throws java.nio.BufferUnderflowException if any.
 	 */
 	public ByteBuffer get(int len)
 	throws BufferUnderflowException
@@ -277,8 +283,8 @@ public class ByteQueue {
 	/**
 	 * Reads as much as there is available and dst has
 	 * remaining allocation
-	 * 
-	 * @param dst
+	 *
+	 * @param dst a {@link java.nio.ByteBuffer} object.
 	 */
 	public void getAvailable(ByteBuffer dst)
 	{
@@ -286,13 +292,13 @@ public class ByteQueue {
 	}
 	
 	/**
-	 * Reads bytes. 
-	 * 
+	 * Reads bytes.
+	 *
 	 * This implementation does not copy memory.
-	 * 
+	 *
 	 * @param len number of bytes to read
 	 * @return byte buffer array
-	 * @throws BufferUnderflowException 
+	 * @throws java.nio.BufferUnderflowException if any.
 	 */
 	public ByteBuffer[] getChunks(int len)
 	throws BufferUnderflowException
@@ -328,9 +334,9 @@ public class ByteQueue {
 	
 	/**
 	 * Peek data, read without moving read pointer.
-	 * 
-	 * @param buf
-	 * @throws BufferUnderflowException
+	 *
+	 * @param buf an array of byte.
+	 * @throws java.nio.BufferUnderflowException if any.
 	 */
 	public void peek(byte[] buf)
 	throws BufferUnderflowException
@@ -340,11 +346,11 @@ public class ByteQueue {
 
 	/**
 	 * Peek data, read without moving read pointer
-	 * 
-	 * @param buf
-	 * @param off
-	 * @param len
-	 * @throws BufferUnderflowException
+	 *
+	 * @param buf an array of byte.
+	 * @param off a int.
+	 * @param len a int.
+	 * @throws java.nio.BufferUnderflowException if any.
 	 */
 	public void peek(byte[] buf, int off, int len)
 	throws BufferUnderflowException
@@ -398,9 +404,9 @@ public class ByteQueue {
 
 	/**
 	 * Peeks to dst.
-	 * 
-	 * @param dst
-	 * @throws BufferUnderflowException
+	 *
+	 * @param dst a {@link java.nio.ByteBuffer} object.
+	 * @throws java.nio.BufferUnderflowException if any.
 	 */
 	public void peek(ByteBuffer dst)
 	throws BufferUnderflowException
@@ -412,10 +418,10 @@ public class ByteQueue {
 	
 	/**
 	 * Peek, read without moving read pointer.
-	 * 
-	 * @param len
+	 *
+	 * @param len a int.
 	 * @return a byte buffer containing the peeked bytes
-	 * @throws BufferUnderflowException
+	 * @throws java.nio.BufferUnderflowException if any.
 	 */
 	public ByteBuffer peek(int len)
 	throws BufferUnderflowException
@@ -436,9 +442,9 @@ public class ByteQueue {
 	}
 	
 	/**
-	 * Peek available data. 
-	 * 
-	 * @param dst
+	 * Peek available data.
+	 *
+	 * @param dst a {@link java.nio.ByteBuffer} object.
 	 */
 	public void peekAvailable(ByteBuffer dst)
 	{
@@ -472,12 +478,12 @@ public class ByteQueue {
 	
 	/**
 	 * Peeks given number of bytes.
-	 * 
+	 *
 	 * This method does not copy memory.
-	 * 
-	 * @param len
-	 * @return array of buffers. 
-	 * @throws BufferUnderflowException
+	 *
+	 * @param len a int.
+	 * @return array of buffers.
+	 * @throws java.nio.BufferUnderflowException if any.
 	 */
 	public ByteBuffer[] peekChunks(int len)
 	throws BufferUnderflowException
@@ -572,8 +578,8 @@ public class ByteQueue {
 	}
 	
 	/**
-	 * Get the number of readable bytes. 
-	 * 
+	 * Get the number of readable bytes.
+	 *
 	 * @return number of readable bytes.
 	 */
 	public long remaining()
@@ -583,7 +589,7 @@ public class ByteQueue {
 	
 	/**
 	 * Is buffer empty
-	 * 
+	 *
 	 * @return true if buffer is empty
 	 */
 	public boolean isEmpty()
@@ -591,6 +597,11 @@ public class ByteQueue {
 		return remaining() == 0L;
 	}
 	
+	/**
+	 * <p>hasRemaining.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean hasRemaining()
 	{
 		return remaining() > 0L;
@@ -598,7 +609,7 @@ public class ByteQueue {
 	
 	/**
 	 * Get the total number of bytes read from the queue.
-	 * 
+	 *
 	 * @return the total number of bytes read from the queue
 	 */
 	public long getBytesRead()
@@ -608,6 +619,7 @@ public class ByteQueue {
 	
 	/**
 	 * Get the total number of bytes written to the queue.
+	 *
 	 * @return the total number of bytes written to the queue
 	 */
 	public long getBytesWritten()
@@ -641,10 +653,10 @@ public class ByteQueue {
 	}
 	
 	/**
-	 * Omit data by moving read pointer forward. 
-	 * 
+	 * Omit data by moving read pointer forward.
+	 *
 	 * @param bytes to omit
-	 * @throws BufferOverflowException
+	 * @throws java.nio.BufferOverflowException if any.
 	 */
 	public void skip(int bytes)
 	throws BufferOverflowException
@@ -662,7 +674,7 @@ public class ByteQueue {
 	/**
 	 * Expose the a byte buffer of backend.
 	 * Moving the position of this byte buffer, moves the byte queue aswell.
-	 * 
+	 *
 	 * @return active read byte buffer or null
 	 */
 	public ByteBuffer getReadChunk()
@@ -691,9 +703,9 @@ public class ByteQueue {
 	
 	/**
 	 * Exposes internal bytebuffer of this object. Writing to this bytebuffer
-	 * moves the pointer in this bytequeue aswell. 
-	 * 
-	 * @return returns a chunk with atleast 1 writeable byte 
+	 * moves the pointer in this bytequeue aswell.
+	 *
+	 * @return returns a chunk with atleast 1 writeable byte
 	 */
 	public ByteBuffer getWriteChunk()
 	{
@@ -742,7 +754,7 @@ public class ByteQueue {
 	
 	/**
 	 * Get the number of bytes remaining for write
-	 * 
+	 *
 	 * @return bytes remaining
 	 */
 	public int getWriteableBytesRemaining()
@@ -752,7 +764,7 @@ public class ByteQueue {
 	
 	/**
 	 * Get byte order
-	 * 
+	 *
 	 * @return the byte order
 	 */
 	public ByteOrder order() {
@@ -761,7 +773,8 @@ public class ByteQueue {
 
 	/**
 	 * Set byte order
-	 * @param order
+	 *
+	 * @param order a {@link java.nio.ByteOrder} object.
 	 */
 	public void order(ByteOrder order) {
 		this.order = order;
@@ -796,8 +809,8 @@ public class ByteQueue {
 	 * Set byte buffer constructor. The constructed buffers
 	 * may be larger than requested but remaining bytes must
 	 * be the requested amount.
-	 * 
-	 * @param factory
+	 *
+	 * @param factory a {@link org.opcfoundation.ua.utils.bytebuffer.ByteBufferFactory} object.
 	 */
 	public void setByteBufferFactory(ByteBufferFactory factory)
 	{
@@ -806,7 +819,7 @@ public class ByteQueue {
 	
 	/**
 	 * Get byte buffer factory
-	 * 
+	 *
 	 * @return byte buffer factory.
 	 */
 	public ByteBufferFactory getByteBufferFactory() 
@@ -816,7 +829,7 @@ public class ByteQueue {
 	
 	/**
 	 * Get the block size of back-end chunks
-	 * 
+	 *
 	 * @return chunk size
 	 */
 	public int getChunkSize() {
@@ -825,8 +838,8 @@ public class ByteQueue {
 
 	/**
 	 * Set the block size of back-end chunks
-	 * 
-	 * @param chunkSize
+	 *
+	 * @param chunkSize a int.
 	 */
 	public void setChunkSize(int chunkSize) {
 		if (chunkSize<1)
@@ -835,8 +848,8 @@ public class ByteQueue {
 	}
 	
 	/**
-	 * Get writable bytes limit  
-	 * 
+	 * Get writable bytes limit
+	 *
 	 * @return writeable bytes constraint or Long.MAX_VALUE
 	 */
 	public long getWriteLimit() {
@@ -845,13 +858,14 @@ public class ByteQueue {
 
 	/**
 	 * Set writable bytes limit.
-	 *  
+	 *
 	 * @param writeLimit new writeable bytes constraint
 	 */
 	public void setWriteLimit(long writeLimit) {
 		this.writeLimit = writeLimit;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "ByteQueue (read="+getBytesRead()+", written="+getBytesWritten()+")";

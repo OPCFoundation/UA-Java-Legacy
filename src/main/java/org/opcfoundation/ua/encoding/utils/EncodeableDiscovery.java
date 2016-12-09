@@ -22,17 +22,16 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.encoding.IEncodeable;
 
 /**
- * This class discovers builtin encodeable nodeIds and 
+ * This class discovers builtin encodeable nodeIds and
  * corresponding classes.
- * 
  */
 public class EncodeableDiscovery {
 
 	private static Map<NodeId, Class<IEncodeable>> DEFAULT;
 	
 	/**
-	 * Return default NodeId -> Class mapping.
-	 * 
+	 * Return default NodeId -&gt; Class mapping.
+	 *
 	 * @return default encodeable table
 	 */
 	public static synchronized Map<NodeId, Class<IEncodeable>> getDefault() 
@@ -53,7 +52,7 @@ public class EncodeableDiscovery {
 	/**
 	 * Discover default encodeables. Encodeables are discovered by inspecting
 	 * all fields from Identifiers class using reflection.
-	 * 
+	 *
 	 * @param map encodeable table to fill with builtin encodeables
 	 */
 	@SuppressWarnings("unchecked")

@@ -22,28 +22,26 @@ import java.util.EnumSet;
  * 
  * State transition paths: 
  *   Closed
- *   Closed-> Opening -> Open -> Closing -> Closed 
- *   Opening -> Open -> Closing -> Closed
+ *   Closed -&gt; Opening -&gt; Open -&gt; Closing -&gt; Closed 
+ *   Opening -&gt; Open -&gt; Closing -&gt; Closed
  * 
  */
 public enum CloseableObjectState {
 
-	Closed,			// Closed
-	Opening,		// Opening 
-	Open,			// Open
-	Closing;		// Closing
+	Closed,	
+	Opening,
+	Open,
+	Closing;
 	
 	public final static EnumSet<CloseableObjectState> CLOSED_STATES = EnumSet.of(Closed, Opening); 
 	public final static EnumSet<CloseableObjectState> OPEN_STATES = EnumSet.of(Open, Closing); 
 	public final static EnumSet<CloseableObjectState> POST_OPENING_STATES = EnumSet.of(Open, Closing, Closed); 
 	
-	public boolean isOpen()
-	{
+	public boolean isOpen(){
 		return this == Open || this == Closing;
 	}
 	
-	public boolean isClosed()
-	{
+	public boolean isClosed(){
 		return this == Closed || this == Opening;
 	}
 	

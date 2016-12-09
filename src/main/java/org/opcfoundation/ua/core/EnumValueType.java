@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.LocalizedText;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class EnumValueType extends Object implements Structure, Cloneable {
+public class EnumValueType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.EnumValueType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.EnumValueType_Encoding_DefaultBinary);
@@ -93,7 +94,7 @@ public class EnumValueType extends Object implements Structure, Cloneable {
       */
     public EnumValueType clone()
     {
-        EnumValueType result = new EnumValueType();
+        EnumValueType result = (EnumValueType) super.clone();
         result.Value = Value;
         result.DisplayName = DisplayName;
         result.Description = Description;

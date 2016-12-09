@@ -16,14 +16,14 @@ import java.util.EnumSet;
 
 /**
  * Message write states.
- * 
+ *
  * Initial states: Queued
  * Final states: Flushed, Error
- * 
- * The only allowed state transition paths: 
- *   Queued -> Writing -> Flushed 
- *   Queued -> Writing -> Error
- *    
+ *
+ * The only allowed state transition paths:
+ *   Queued -&gt; Writing -&gt; Flushed
+ *   Queued -&gt; Writing -&gt; Error
+ *
  * @see AsyncWrite
  */
 public enum WriteState {
@@ -34,11 +34,12 @@ public enum WriteState {
 	Canceled,		// Message was canceled
 	Error;			// Error by stack or abortion. (e.g. connection closed, aborted). See getException().
 	
+
 	public static final EnumSet<WriteState> FINAL_STATES = EnumSet.of(Written, Error, Canceled); 
+
 	public static final EnumSet<WriteState> CANCELABLE_STATES = EnumSet.of(Ready, Queued); 
 	
-	public boolean isFinal()
-	{
+	public boolean isFinal(){
 		return this==Error || this==Written || this==Canceled;
 	}
 }

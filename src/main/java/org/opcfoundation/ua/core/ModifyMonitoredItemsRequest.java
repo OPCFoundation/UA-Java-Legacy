@@ -38,9 +38,10 @@ import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.MonitoredItemModifyRequest;
 import org.opcfoundation.ua.core.RequestHeader;
 import org.opcfoundation.ua.core.TimestampsToReturn;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class ModifyMonitoredItemsRequest extends Object implements ServiceRequest {
+public class ModifyMonitoredItemsRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ModifyMonitoredItemsRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ModifyMonitoredItemsRequest_Encoding_DefaultBinary);
@@ -108,7 +109,7 @@ public class ModifyMonitoredItemsRequest extends Object implements ServiceReques
       */
     public ModifyMonitoredItemsRequest clone()
     {
-        ModifyMonitoredItemsRequest result = new ModifyMonitoredItemsRequest();
+        ModifyMonitoredItemsRequest result = (ModifyMonitoredItemsRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.SubscriptionId = SubscriptionId;
         result.TimestampsToReturn = TimestampsToReturn;

@@ -38,7 +38,7 @@ import org.opcfoundation.ua.core.FilterOperand;
 
 
 
-public class ElementOperand extends FilterOperand implements Structure, Cloneable {
+public class ElementOperand extends FilterOperand {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ElementOperand);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ElementOperand_Encoding_DefaultBinary);
@@ -70,7 +70,7 @@ public class ElementOperand extends FilterOperand implements Structure, Cloneabl
       */
     public ElementOperand clone()
     {
-        ElementOperand result = new ElementOperand();
+        ElementOperand result = (ElementOperand) super.clone();
         result.Index = Index;
         return result;
     }

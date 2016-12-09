@@ -40,16 +40,17 @@ import org.xml.sax.SAXException;
 
 /**
  * An XML element is a container for XML DOM documents.
- *
  */
 public final class XmlElement {
 
+	/** Constant <code>ID</code> */
 	public static final NodeId ID = Identifiers.XmlElement;
 
 	private static final Charset UTF8 = Charset.forName("utf-8");
 
 	// FEFF because this is the Unicode char represented by the UTF-8 byte order
 	// mark (EF BB BF).
+	/** Constant <code>UTF8_BOM="\uFEFF"</code> */
 	public static final String UTF8_BOM = "\uFEFF";
 	static boolean areNodesEqual(Node n1, Node n2)
 	{
@@ -145,7 +146,7 @@ public final class XmlElement {
 	/**
 	 * Create XML Element with UTF8 encoded XML document.
 	 *
-	 * @param encodedDocument
+	 * @param encodedDocument an array of byte.
 	 */
 	public XmlElement(byte[] encodedDocument) {
 		if (encodedDocument==null)
@@ -169,7 +170,7 @@ public final class XmlElement {
 	/**
 	 * Create new XML Element from XML document
 	 *
-	 * @param document
+	 * @param document a {@link java.lang.String} object.
 	 */
 	public XmlElement(String document) {
 		if (document==null)
@@ -177,6 +178,7 @@ public final class XmlElement {
 		this.document = document;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) return true;
@@ -223,6 +225,11 @@ public final class XmlElement {
 		return encoded;
 	}
 
+	/**
+	 * <p>Getter for the field <code>node</code>.</p>
+	 *
+	 * @return a {@link org.w3c.dom.Node} object.
+	 */
 	public synchronized Node getNode() {
 		if (node==null) {
 			if (encoded!=null) {
@@ -272,6 +279,11 @@ public final class XmlElement {
 		return node;
 	}
 
+	/**
+	 * <p>getValue.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public synchronized String getValue() {
 		if ( document != null ) return document;
 
@@ -291,6 +303,7 @@ public final class XmlElement {
 		return document;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		if (node==null) {
@@ -299,6 +312,7 @@ public final class XmlElement {
 		return hash;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		try {

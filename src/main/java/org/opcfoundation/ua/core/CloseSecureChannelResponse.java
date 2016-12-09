@@ -34,9 +34,10 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class CloseSecureChannelResponse extends Object implements ServiceResponse {
+public class CloseSecureChannelResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CloseSecureChannelResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CloseSecureChannelResponse_Encoding_DefaultBinary);
@@ -68,7 +69,7 @@ public class CloseSecureChannelResponse extends Object implements ServiceRespons
       */
     public CloseSecureChannelResponse clone()
     {
-        CloseSecureChannelResponse result = new CloseSecureChannelResponse();
+        CloseSecureChannelResponse result = (CloseSecureChannelResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         return result;
     }

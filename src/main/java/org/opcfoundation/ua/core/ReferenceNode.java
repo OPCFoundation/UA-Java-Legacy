@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ReferenceNode extends Object implements Structure, Cloneable {
+public class ReferenceNode extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ReferenceNode);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ReferenceNode_Encoding_DefaultBinary);
@@ -93,7 +94,7 @@ public class ReferenceNode extends Object implements Structure, Cloneable {
       */
     public ReferenceNode clone()
     {
-        ReferenceNode result = new ReferenceNode();
+        ReferenceNode result = (ReferenceNode) super.clone();
         result.ReferenceTypeId = ReferenceTypeId;
         result.IsInverse = IsInverse;
         result.TargetId = TargetId;

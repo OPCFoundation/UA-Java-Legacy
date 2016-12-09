@@ -34,15 +34,31 @@ public enum NodeIdEncoding {
 	    this.identifierType = identifierType;
 	  }
 
+	  /**
+	   * <p>Getter for the field <code>bits</code>.</p>
+	   *
+	   * @return a byte.
+	   */
 	  public byte getBits() {
 	    return bits;
 	  }
 	  
+	  /**
+	   * <p>toIdentifierType.</p>
+	   *
+	   * @return a {@link org.opcfoundation.ua.core.IdType} object.
+	   */
 	  public IdType toIdentifierType()
 	  {
 	      return identifierType; 
 	  }
 
+	  /**
+	   * <p>getNodeIdEncoding.</p>
+	   *
+	   * @param bits a int.
+	   * @return a {@link org.opcfoundation.ua.encoding.binary.NodeIdEncoding} object.
+	   */
 	  public static NodeIdEncoding getNodeIdEncoding(int bits) {
 	    if (bits == TwoByte.getBits()) {
 	      return TwoByte;

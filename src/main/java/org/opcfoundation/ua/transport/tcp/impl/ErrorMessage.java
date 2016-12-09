@@ -20,8 +20,6 @@ import org.opcfoundation.ua.encoding.IEncodeable;
 
 /**
  * ErrorMessage is a message used in TCP Handshake.
- *
- * 
  */
 public class ErrorMessage implements IEncodeable {
 
@@ -46,33 +44,70 @@ public class ErrorMessage implements IEncodeable {
 	private static Field[] fields;
 	
 	/**
+	 * <p>Getter for the field <code>fields</code>.</p>
+	 *
 	 * @return the fields
 	 */
 	public static Field[] getFields() {
 		return fields;
 	}
 	
+	/**
+	 * <p>Constructor for ErrorMessage.</p>
+	 */
 	public ErrorMessage() {}
 	
+	/**
+	 * <p>Constructor for ErrorMessage.</p>
+	 *
+	 * @param error a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 * @param reason a {@link java.lang.String} object.
+	 */
 	public ErrorMessage(UnsignedInteger error, String reason) {
 		this.Error = error;
 		this.Reason = reason;
 	}
 	
+	/**
+	 * <p>Constructor for ErrorMessage.</p>
+	 *
+	 * @param code a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+	 * @param reason a {@link java.lang.String} object.
+	 */
 	public ErrorMessage(StatusCode code, String reason) {
 		this.Error = code.getValue();
 		this.Reason = reason;
 	}
 	
+	/**
+	 * <p>getError.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public UnsignedInteger getError() {
 		return Error;
 	}
+	/**
+	 * <p>setError.</p>
+	 *
+	 * @param error a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public void setError(UnsignedInteger error) {
 		Error = error;
 	}
+	/**
+	 * <p>getReason.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getReason() {
 		return Reason;
 	}
+	/**
+	 * <p>setReason.</p>
+	 *
+	 * @param reason a {@link java.lang.String} object.
+	 */
 	public void setReason(String reason) {
 		Reason = reason;
 	}		

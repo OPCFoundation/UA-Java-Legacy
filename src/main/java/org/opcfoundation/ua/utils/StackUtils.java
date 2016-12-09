@@ -54,7 +54,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Utility methods for the OPC UA Java Stack.
- *
  */
 public class StackUtils {
 	/**
@@ -112,12 +111,14 @@ public class StackUtils {
 	 */
 	private static AsyncSelector SELECTOR;
 
+	/** Constant <code>RANDOM</code> */
 	public static Random RANDOM = new Random();
 
 	/** Requested token lifetime */
 	public static final UnsignedInteger CLIENT_TOKEN_LIFETIME_REQUEST = new UnsignedInteger(600000);
 	/** Maximum lifetime server is willing to offer */
 	public static final UnsignedInteger SERVER_GIVEN_TOKEN_LIFETIME = UnsignedInteger.getFromBits(600*1000);
+	/** Constant <code>TCP_PROTOCOL_VERSION=0</code> */
 	public static final int TCP_PROTOCOL_VERSION = 0;
 
 	private static IEncodeableSerializer DEFAULT_SERIALIZER;
@@ -137,7 +138,7 @@ public class StackUtils {
 	 * @param requests a group of requests
 	 * @param timeout timeout in seconds
 	 * @return true if completed ok
-	 * @throws InterruptedException
+	 * @throws java.lang.InterruptedException if any.
 	 */
 	public static boolean barrierWait(AsyncResult<?>[] requests, long timeout)
 			throws InterruptedException
@@ -167,6 +168,11 @@ public class StackUtils {
 			return sem.tryAcquire(requests.length, timeout, TimeUnit.SECONDS);
 	}
 
+	/**
+	 * <p>cores.</p>
+	 *
+	 * @return a int.
+	 */
 	public static int cores() {
 		return CORES;
 	}
@@ -174,8 +180,8 @@ public class StackUtils {
 	 * Get Executor for long term and potentially blocking operations.
 	 *
 	 * @param maxThreadPoolSize max number of threads to create in the thread pool
-	 *
 	 * @return executor for blocking operations
+	 * @param name a {@link java.lang.String} object.
 	 */
 	public static synchronized Executor createBlockingWorkExecutor(String name, int maxThreadPoolSize) {
 		if (BLOCKING_EXECUTOR == null) {
@@ -213,6 +219,8 @@ public class StackUtils {
 	}
 
 	/**
+	 * <p>Getter for the field <code>blockingWorkerThreadPoolCoreSize</code>.</p>
+	 *
 	 * @return the core size of the thread pool for BlockingWorkerExecutor.
 	 */
 	public static int getBlockingWorkerThreadPoolCoreSize() {
@@ -220,6 +228,8 @@ public class StackUtils {
 	}
 
 	/**
+	 * <p>Getter for the field <code>blockingWorkerThreadPoolTimeout</code>.</p>
+	 *
 	 * @return the timeout in seconds of the thread pool for BlockingWorkerExecutor.
 	 */
 	public static long getBlockingWorkerThreadPoolTimeout() {
@@ -300,6 +310,7 @@ public class StackUtils {
 
 	/**
 	 * Get Executor that handles tasks that are rejected by blocking work executor
+	 *
 	 * @return the executor
 	 */
 	public static synchronized Executor getRejectionExecutor(){
@@ -318,6 +329,11 @@ public class StackUtils {
 		return rejectionExecutor;
 	}
 
+	/**
+	 * <p>getSelector.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncSelector} object.
+	 */
 	public static AsyncSelector getSelector() {
 		if (SELECTOR == null)
 			try {
@@ -330,21 +346,36 @@ public class StackUtils {
 
 	/**
 	 * The handler that is called, if any of the worker threads encounter an exception that is not handled.
+	 *
 	 * @return the uncaughtexceptionhandler
 	 */
 	public static UncaughtExceptionHandler getUncaughtExceptionHandler() {
 		return uncaughtExceptionHandler;
 	}
 
+	/**
+	 * <p>logStatus.</p>
+	 */
 	public static void logStatus() {
 		logExecutor("BLOCKING_EXECUTOR", (ThreadPoolExecutor)BLOCKING_EXECUTOR);
 		logExecutor("NON_BLOCKING_EXECUTOR", (ThreadPoolExecutor)NON_BLOCKING_EXECUTOR);
 	}
+	/**
+	 * <p>newNamedThreadFactory.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @return a {@link java.util.concurrent.ThreadFactory} object.
+	 */
 	public static ThreadFactory newNamedThreadFactory(String name) {
 		return new NamedThreadFactory(name);
 	}
 
 
+	/**
+	 * <p>Setter for the field <code>blockingWorkerThreadPoolCoreSize</code>.</p>
+	 *
+	 * @param blockingWorkerThreadPoolCoreSize a int.
+	 */
 	public static void setBlockingWorkerThreadPoolCoreSize(int blockingWorkerThreadPoolCoreSize) {
 		StackUtils.blockingWorkerThreadPoolCoreSize = blockingWorkerThreadPoolCoreSize;
 	}
@@ -354,7 +385,7 @@ public class StackUtils {
 	 * <p>
 	 * Default: 3
 	 *
-	 * @param defaultMaxBlockingWorkerPoolSize
+	 * @param blockingWorkerThreadPoolTimeout a long.
 	 */
 	public static void setBlockingWorkerThreadPoolTimeout(
 			long blockingWorkerThreadPoolTimeout) {
@@ -413,6 +444,12 @@ public class StackUtils {
 	}
 
 
+	/**
+	 * <p>toServiceResultException.</p>
+	 *
+	 * @param e a {@link java.lang.Exception} object.
+	 * @return a {@link org.opcfoundation.ua.common.ServiceResultException} object.
+	 */
 	public static ServiceResultException toServiceResultException(Exception e)
 	{
 		if (e instanceof ServiceResultException)

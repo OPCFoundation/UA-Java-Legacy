@@ -37,9 +37,10 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.core.HistoryReadResult;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class HistoryReadResponse extends Object implements ServiceResponse {
+public class HistoryReadResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryReadResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryReadResponse_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class HistoryReadResponse extends Object implements ServiceResponse {
       */
     public HistoryReadResponse clone()
     {
-        HistoryReadResponse result = new HistoryReadResponse();
+        HistoryReadResponse result = (HistoryReadResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         if (Results!=null) {
             result.Results = new HistoryReadResult[Results.length];

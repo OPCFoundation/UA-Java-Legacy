@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class DeleteNodesItem extends Object implements Structure, Cloneable {
+public class DeleteNodesItem extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DeleteNodesItem);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteNodesItem_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class DeleteNodesItem extends Object implements Structure, Cloneable {
       */
     public DeleteNodesItem clone()
     {
-        DeleteNodesItem result = new DeleteNodesItem();
+        DeleteNodesItem result = (DeleteNodesItem) super.clone();
         result.NodeId = NodeId;
         result.DeleteTargetReferences = DeleteTargetReferences;
         return result;

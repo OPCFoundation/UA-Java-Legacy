@@ -20,56 +20,61 @@ import org.opcfoundation.ua.transport.tcp.impl.ErrorMessage;
 import org.opcfoundation.ua.transport.tcp.impl.SecurityToken;
 import org.opcfoundation.ua.transport.tcp.impl.TcpMessageType;
 
+/**
+ * <p>InputMessage interface.</p>
+ *
+ */
 public interface InputMessage {
 
 	/**
 	 * Get message if available. If message is not available, then error is.
-	 * 
+	 *
 	 * @return message or null
 	 */
 	IEncodeable getMessage();
 	
 	/**
-	 * Get error if avaiable.  
-	 * 
+	 * Get error if avaiable.
+	 *
 	 * @return error or null
 	 */
 	Exception getError();
 		
 	/**
-	 * Get message type. One of the following: 
+	 * Get message type. One of the following:
 	 *  {@link TcpMessageType#OPEN} Open Channel async message
 	 *  {@link TcpMessageType#CLOSE} Close Channel async message
 	 *  {@link TcpMessageType#MESSAGE} Service Request, or {@link ErrorMessage}
-	 *  
+	 *
 	 * @return message type
 	 */
 	int getMessageType();
 	
 	/**
-	 * Get secure channel Id. Secure channel is 0 when opening a new secure channel. 
-	 * 
-	 * @return.
+	 * Get secure channel Id. Secure channel is 0 when opening a new secure channel.
+	 *
+	 * @return a int.
 	 */
 	int getSecureChannelId();	
 	
 	/**
-	 * Get request id. Identifier is secure channel specific.  
-	 * 
-	 * @return
+	 * Get request id. Identifier is secure channel specific.
+	 *
+	 * @return a int.
 	 */
 	int getRequestId();	
 	
 	
 	/**
 	 * Return sequence number of each chunk
+	 *
 	 * @return list of sequence numbers
 	 */
 	List<Integer> getSequenceNumbers();
 	
 	/**
 	 * Get security token
-	 * 
+	 *
 	 * @return {@link SecurityConfiguration} if async message, {@link SecurityToken} is sync message
 	 */
 	Object getToken();

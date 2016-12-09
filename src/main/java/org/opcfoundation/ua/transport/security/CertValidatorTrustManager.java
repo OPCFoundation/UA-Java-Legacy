@@ -25,9 +25,8 @@ import org.opcfoundation.ua.builtintypes.StatusCode;
 
 /**
  * This class adapts cert validator to trust manager.
- * 
- * Validation is evaluated every time, validator must cache results if needed.
  *
+ * Validation is evaluated every time, validator must cache results if needed.
  */
 public class CertValidatorTrustManager implements X509TrustManager {
 	
@@ -40,6 +39,11 @@ public class CertValidatorTrustManager implements X509TrustManager {
 	List<Cert> acceptedIssuers = new ArrayList<Cert>();
 	X509Certificate[] acceptedIssuersArray;
 
+	/**
+	 * <p>Constructor for CertValidatorTrustManager.</p>
+	 *
+	 * @param validator a {@link org.opcfoundation.ua.transport.security.CertificateValidator} object.
+	 */
 	public CertValidatorTrustManager(CertificateValidator validator) {
 		this.validator = validator;
 	}
@@ -75,6 +79,7 @@ public class CertValidatorTrustManager implements X509TrustManager {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public synchronized void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
 		for ( X509Certificate c : certs ) {
@@ -82,6 +87,7 @@ public class CertValidatorTrustManager implements X509TrustManager {
 		}		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public synchronized void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException 
 	{	
@@ -90,6 +96,7 @@ public class CertValidatorTrustManager implements X509TrustManager {
 		}		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public synchronized X509Certificate[] getAcceptedIssuers() {
 		if ( acceptedIssuersArray == null ) {

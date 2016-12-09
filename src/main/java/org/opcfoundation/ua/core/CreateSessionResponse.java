@@ -40,9 +40,10 @@ import org.opcfoundation.ua.core.EndpointDescription;
 import org.opcfoundation.ua.core.ResponseHeader;
 import org.opcfoundation.ua.core.SignatureData;
 import org.opcfoundation.ua.core.SignedSoftwareCertificate;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class CreateSessionResponse extends Object implements ServiceResponse {
+public class CreateSessionResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CreateSessionResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CreateSessionResponse_Encoding_DefaultBinary);
@@ -182,7 +183,7 @@ public class CreateSessionResponse extends Object implements ServiceResponse {
       */
     public CreateSessionResponse clone()
     {
-        CreateSessionResponse result = new CreateSessionResponse();
+        CreateSessionResponse result = (CreateSessionResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.SessionId = SessionId;
         result.AuthenticationToken = AuthenticationToken;

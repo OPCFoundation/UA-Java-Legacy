@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class Range extends Object implements Structure, Cloneable {
+public class Range extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.Range);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.Range_Encoding_DefaultBinary);
@@ -80,7 +81,7 @@ public class Range extends Object implements Structure, Cloneable {
       */
     public Range clone()
     {
-        Range result = new Range();
+        Range result = (Range) super.clone();
         result.Low = Low;
         result.High = High;
         return result;

@@ -22,19 +22,19 @@ import org.opcfoundation.ua.core.IdType;
 /**
  * A reference to a node. The difference to NodeId and ExpandedNodeId is that
  * this class is reference by it-self with out lookup from namespace table and server table.
- * 
+ *
  * (Untested)
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class NodeReference {
 
 	/**
 	 * Bind node id, namespace and server url
-	 * 
-	 * @param nodeId
-	 * @param namespaceTable
-	 * @param serverTable
+	 *
+	 * @param nodeId a {@link org.opcfoundation.ua.builtintypes.NodeId} object.
+	 * @param namespaceTable a {@link org.opcfoundation.ua.common.NamespaceTable} object.
+	 * @param serverTable a {@link org.opcfoundation.ua.common.ServerTable} object.
 	 * @return a new node reference
 	 */
 	public static NodeReference createFromNodeId(NodeId nodeId, NamespaceTable namespaceTable, ServerTable serverTable)
@@ -44,10 +44,10 @@ public class NodeReference {
 
 	/**
 	 * Bind node id, namespace and server url
-	 * 
-	 * @param nodeId
-	 * @param namespaceTable
-	 * @param serverTable
+	 *
+	 * @param nodeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @param namespaceTable a {@link org.opcfoundation.ua.common.NamespaceTable} object.
+	 * @param serverTable a {@link org.opcfoundation.ua.common.ServerTable} object.
 	 * @return a new node reference
 	 */
 	public static NodeReference createFromNodeId(ExpandedNodeId nodeId, NamespaceTable namespaceTable, ServerTable serverTable)
@@ -58,6 +58,7 @@ public class NodeReference {
 	}
 
 
+	/** Constant <code>OPCUA_NAMESPACE="http://opcfoundation.org/UA/"</code> */
 	public static String OPCUA_NAMESPACE = "http://opcfoundation.org/UA/";
 	
 	IdType type;
@@ -67,9 +68,9 @@ public class NodeReference {
 	
 	/**
 	 * Construct ExpandedNodeId using NamespaceIndex.
-	 * 
+	 *
 	 * @param serverUri server uri
-	 * @param namespaceUri namespace uri 
+	 * @param namespaceUri namespace uri
 	 * @param value value (must be UnsignedInteger, String, UUID or byte[])
 	 */
 	public NodeReference(String serverUri, String namespaceUri, Object value)
@@ -91,26 +92,47 @@ public class NodeReference {
 		if (serverUri!=null) hashCode += 17*serverUri.hashCode();		
 	}
 	
+	/**
+	 * <p>getIdType.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.IdType} object.
+	 */
 	public IdType getIdType()
 	{
 		return type;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>value</code>.</p>
+	 *
+	 * @return a {@link java.lang.Object} object.
+	 */
 	public Object getValue()
 	{
 		return value;
 	}
 
+	/**
+	 * <p>Getter for the field <code>namespaceUri</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getNamespaceUri()
 	{
 		return namespaceUri;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>serverUri</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getServerUri()
 	{
 		return serverUri;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		if (type==IdType.Opaque) 		
@@ -118,6 +140,7 @@ public class NodeReference {
 		return hashCode;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof NodeReference)) return false;

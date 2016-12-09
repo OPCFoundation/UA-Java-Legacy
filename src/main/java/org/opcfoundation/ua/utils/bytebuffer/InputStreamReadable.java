@@ -21,7 +21,7 @@ import java.nio.ByteOrder;
 
 /**
  * Input stream reader
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class InputStreamReadable implements IBinaryReadable {
@@ -30,6 +30,12 @@ public class InputStreamReadable implements IBinaryReadable {
 	InputStream is;
 	long limit, position;
 	
+	/**
+	 * <p>Constructor for InputStreamReadable.</p>
+	 *
+	 * @param is a {@link java.io.InputStream} object.
+	 * @param limit a long.
+	 */
 	public InputStreamReadable(InputStream is, long limit)
 	{
 		this.is = is;
@@ -51,6 +57,7 @@ public class InputStreamReadable implements IBinaryReadable {
 		return value & 0xff;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public byte get() 
     throws IOException	
@@ -58,6 +65,7 @@ public class InputStreamReadable implements IBinaryReadable {
 		return (byte) _get();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void get(byte[] dst, int offset, int length) 
     throws IOException	
@@ -71,6 +79,7 @@ public class InputStreamReadable implements IBinaryReadable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void get(byte[] dst) 
     throws IOException	
@@ -78,6 +87,7 @@ public class InputStreamReadable implements IBinaryReadable {
 		get(dst, 0, dst.length);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void get(ByteBuffer buf) 
     throws IOException	
@@ -86,6 +96,7 @@ public class InputStreamReadable implements IBinaryReadable {
 			buf.put((byte)_get());		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void get(ByteBuffer buf, int length) 
     throws IOException	
@@ -100,6 +111,7 @@ public class InputStreamReadable implements IBinaryReadable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public double getDouble() 
     throws IOException	
@@ -107,6 +119,7 @@ public class InputStreamReadable implements IBinaryReadable {
 		return Double.longBitsToDouble(getLong());
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public float getFloat() 
     throws IOException	
@@ -114,6 +127,7 @@ public class InputStreamReadable implements IBinaryReadable {
 		return Float.intBitsToFloat(getInt());
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int getInt() 
     throws IOException	
@@ -134,6 +148,7 @@ public class InputStreamReadable implements IBinaryReadable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public long getLong() 
     throws IOException	
@@ -162,6 +177,7 @@ public class InputStreamReadable implements IBinaryReadable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public short getShort() 
     throws IOException	
@@ -174,25 +190,39 @@ public class InputStreamReadable implements IBinaryReadable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public long limit() 
 	{
 		return limit;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public long position() {
 		return position;
 	}
 	
+	/**
+	 * <p>order.</p>
+	 *
+	 * @return a {@link java.nio.ByteOrder} object.
+	 */
 	public ByteOrder order() {
 		return order;
 	}
 
+	/** {@inheritDoc} */
 	public void order(ByteOrder order) {
 		this.order = order;
 	}
 
+	/**
+	 * <p>skip.</p>
+	 *
+	 * @param bytes a long.
+	 * @throws java.io.IOException if any.
+	 */
 	public void skip(long bytes) throws IOException {
 		is.skip(bytes);	
 	}

@@ -60,8 +60,9 @@ public class Session {
 	/**
 	 * Create new unactivated session channel.
 	 * Session Channel will be wrapped over secure channel.
-	 * 
+	 *
 	 * @param channel securechannel secure channel to wrap session channel over
+	 * @param client the client
 	 * @return session channel
 	 */
 	public SessionChannel createSessionChannel(SecureChannel channel, Client client)
@@ -69,62 +70,137 @@ public class Session {
 		return new SessionChannel(client, this, channel);
 	}
 
+	/**
+	 * <p>Getter for the field <code>endpoint</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 */
 	public EndpointDescription getEndpoint() {
 		return endpoint;
 	}
 
+	/**
+	 * <p>Getter for the field <code>serverNonce</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getServerNonce() {
 		return serverNonce;
 	}
 
+	/**
+	 * <p>Getter for the field <code>diagnosticsInfo</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.NodeId} object.
+	 */
 	public NodeId getDiagnosticsInfo() {
 		return diagnosticsInfo;
 	}
 
+	/**
+	 * <p>Getter for the field <code>authenticationToken</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.NodeId} object.
+	 */
 	public NodeId getAuthenticationToken() {
 		return authenticationToken;
 	}
 
+	/**
+	 * <p>Getter for the field <code>sessionTimeout</code>.</p>
+	 *
+	 * @return a double.
+	 */
 	public double getSessionTimeout() {
 		return sessionTimeout;
 	}
 
+	/**
+	 * <p>Getter for the field <code>maxRequestMessageSize</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public UnsignedInteger getMaxRequestMessageSize() {
 		return maxRequestMessageSize;
 	}
 
+	/**
+	 * <p>Getter for the field <code>serverSoftwareCertificates</code>.</p>
+	 *
+	 * @return an array of {@link org.opcfoundation.ua.core.SignedSoftwareCertificate} objects.
+	 */
 	public SignedSoftwareCertificate[] getServerSoftwareCertificates() {
 		return serverSoftwareCertificates;
 	}
 
+	/**
+	 * <p>Getter for the field <code>serverCertificate</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public Cert getServerCertificate() {
 		return serverCertificate;
 	}
 
+	/**
+	 * <p>Getter for the field <code>name</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * <p>Getter for the field <code>sessionId</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.NodeId} object.
+	 */
 	public NodeId getSessionId() {
 		return sessionId;
 	}
 
+	/**
+	 * <p>Setter for the field <code>name</code>.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 * <p>Getter for the field <code>clientNonce</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getClientNonce() {
 		return clientNonce;
 	}
 
+	/**
+	 * <p>Getter for the field <code>clientCertificate</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public Cert getClientCertificate() {
 		return clientCertificate;
 	}
 
+	/**
+	 * <p>Getter for the field <code>clientPrivateKey</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
+	 */
 	public PrivKey getClientPrivateKey() {
 		return clientPrivateKey;
 	}
 
+	/**
+	 * <p>Getter for the field <code>serverPrivateKey</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
+	 */
 	public PrivKey getServerPrivateKey() {
 		return serverPrivateKey;
 	}

@@ -38,10 +38,11 @@ import org.opcfoundation.ua.builtintypes.LocalizedText;
 import org.opcfoundation.ua.core.AxisScaleEnumeration;
 import org.opcfoundation.ua.core.EUInformation;
 import org.opcfoundation.ua.core.Range;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class AxisInformation extends Object implements Structure, Cloneable {
+public class AxisInformation extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.AxisInformation);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.AxisInformation_Encoding_DefaultBinary);
@@ -121,7 +122,7 @@ public class AxisInformation extends Object implements Structure, Cloneable {
       */
     public AxisInformation clone()
     {
-        AxisInformation result = new AxisInformation();
+        AxisInformation result = (AxisInformation) super.clone();
         result.EngineeringUnits = EngineeringUnits==null ? null : EngineeringUnits.clone();
         result.EURange = EURange==null ? null : EURange.clone();
         result.Title = Title;

@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.AddReferencesItem;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class AddReferencesRequest extends Object implements ServiceRequest {
+public class AddReferencesRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.AddReferencesRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.AddReferencesRequest_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class AddReferencesRequest extends Object implements ServiceRequest {
       */
     public AddReferencesRequest clone()
     {
-        AddReferencesRequest result = new AddReferencesRequest();
+        AddReferencesRequest result = (AddReferencesRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         if (ReferencesToAdd!=null) {
             result.ReferencesToAdd = new AddReferencesItem[ReferencesToAdd.length];

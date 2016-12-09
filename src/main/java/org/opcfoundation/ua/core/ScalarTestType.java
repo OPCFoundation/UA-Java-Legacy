@@ -48,10 +48,11 @@ import org.opcfoundation.ua.builtintypes.UnsignedLong;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.XmlElement;
 import org.opcfoundation.ua.core.EnumeratedTestType;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ScalarTestType extends Object implements Structure, Cloneable {
+public class ScalarTestType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ScalarTestType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ScalarTestType_Encoding_DefaultBinary);
@@ -371,7 +372,7 @@ public class ScalarTestType extends Object implements Structure, Cloneable {
       */
     public ScalarTestType clone()
     {
-        ScalarTestType result = new ScalarTestType();
+        ScalarTestType result = (ScalarTestType) super.clone();
         result.Boolean = Boolean;
         result.SByte = SByte;
         result.Byte = Byte;

@@ -40,7 +40,7 @@ import org.opcfoundation.ua.core.RegisteredServer;
 
 
 
-public class RegisteredServer2 extends RegisteredServer implements Structure, Cloneable {
+public class RegisteredServer2 extends RegisteredServer {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RegisteredServer2);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RegisteredServer2_Encoding_DefaultBinary);
@@ -85,7 +85,7 @@ public class RegisteredServer2 extends RegisteredServer implements Structure, Cl
       */
     public RegisteredServer2 clone()
     {
-        RegisteredServer2 result = new RegisteredServer2();
+        RegisteredServer2 result = (RegisteredServer2) super.clone();
         result.ServerUri = ServerUri;
         result.ProductUri = ProductUri;
         result.ServerNames = ServerNames==null ? null : ServerNames.clone();

@@ -40,7 +40,7 @@ import org.opcfoundation.ua.core.NotificationData;
 
 
 
-public class DataChangeNotification extends NotificationData implements Structure, Cloneable {
+public class DataChangeNotification extends NotificationData {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DataChangeNotification);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DataChangeNotification_Encoding_DefaultBinary);
@@ -84,7 +84,7 @@ public class DataChangeNotification extends NotificationData implements Structur
       */
     public DataChangeNotification clone()
     {
-        DataChangeNotification result = new DataChangeNotification();
+        DataChangeNotification result = (DataChangeNotification) super.clone();
         if (MonitoredItems!=null) {
             result.MonitoredItems = new MonitoredItemNotification[MonitoredItems.length];
             for (int i=0; i<MonitoredItems.length; i++)

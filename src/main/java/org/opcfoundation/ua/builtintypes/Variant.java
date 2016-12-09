@@ -24,24 +24,25 @@ import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
  * a multi-dimension array of builtin variable. Variant is equals-comparable.
  * <p>
  * An example: Variant v = new Variant( new UnsignedInteger[4][5][6] );
- * <p> 
- * The value may be builtin primitive or a {@link Structure}. 
+ * <p>
+ * The value may be builtin primitive or a {@link Structure}.
  *  e.g. new Variant( new NotificationData() );
- * 
- * Encoders write a structure as an {@link ExtensionObject}. 
- * 
+ *
+ * Encoders write a structure as an {@link ExtensionObject}.
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class Variant {
 	private static Logger logger = LoggerFactory.getLogger(Variant.class);
 
+	/** Constant <code>NULL</code> */
 	public static final Variant NULL = new Variant(null);
 	Object value;
 	Class<?> compositeClass;
 
 	/**
 	 * Create variant.
-	 * 
+	 *
 	 * @param value
 	 *            scalar, array or multi-dimension array
 	 */
@@ -124,10 +125,20 @@ public class Variant {
 				+ clazz.getCanonicalName());
 	}
 
+	/**
+	 * <p>isEmpty.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isEmpty() {
 		return value == null;
 	}
 
+	/**
+	 * <p>isArray.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isArray() {
 		if (value == null)
 			return false;
@@ -135,10 +146,16 @@ public class Variant {
 		return c.isArray() && !c.equals(byte[].class);
 	}
 
+	/**
+	 * <p>Getter for the field <code>value</code>.</p>
+	 *
+	 * @return a {@link java.lang.Object} object.
+	 */
 	public Object getValue() {
 		return value;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return toString(false);
@@ -146,7 +163,8 @@ public class Variant {
 
 	/**
 	 * Convert the value to string, including the compositeClass.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	public String toStringWithType() {
 		return toString(true);
@@ -154,7 +172,7 @@ public class Variant {
 	
 	/**
 	 * Convert the value to string, optionally including the compositeClass.
-	 * 
+	 *
 	 * @param includeCompositeClass whether to also add the name of the compositeClass
 	 * @return the value as string
 	 */
@@ -183,7 +201,9 @@ public class Variant {
 	}
 
 	/**
-	 * @return
+	 * <p>compositeClassToString.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String compositeClassToString() {
 		String className = compositeClass.getSimpleName();
@@ -193,13 +213,18 @@ public class Variant {
 	 * The class type of the variant value. If the value is an array, the type
 	 * may be an ExtensionObject, in which case the array elements must be
 	 * decoded to find out the actual type of each.
-	 * 
+	 *
 	 * @return the class of Value
 	 */
 	public Class<?> getCompositeClass() {
 		return compositeClass;
 	}
 
+	/**
+	 * <p>getArrayDimensions.</p>
+	 *
+	 * @return an array of int.
+	 */
 	public int[] getArrayDimensions() {
 		int dim = getDimension();
 		int result[] = new int[dim];
@@ -218,6 +243,11 @@ public class Variant {
 		return result;
 	}
 
+	/**
+	 * <p>getDimension.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getDimension() {
 		int dim = MultiDimensionArrayUtils.getDimension(value);
 		if (compositeClass.isArray())
@@ -225,6 +255,7 @@ public class Variant {
 		return dim;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		if (value == null)
@@ -236,6 +267,7 @@ public class Variant {
 		return Arrays.deepHashCode((Object[]) value);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null)
@@ -263,10 +295,12 @@ public class Variant {
 	}
 
 	/**
-	 * Convert the variant value to any class. If it cannot be converted returns defaultValue. 
+	 * Convert the variant value to any class. If it cannot be converted returns defaultValue.
+	 *
 	 * @param clazz The class type to convert to.
 	 * @param defaultValue A default value to return, if the conversion cannot be done
 	 * @return Value as the requested class or defaultValue, if it cannot be converted.
+	 * @param <T> a T object.
 	 */
 	public <T> T asClass(Class<T> clazz, T defaultValue) {
 		if (value == null)
@@ -280,9 +314,9 @@ public class Variant {
 
 	/**
 	 * Returns the value of the specified Variant as a <code>boolean</code>
-	 * 
+	 *
 	 * @return the Variant value as boolean, if it can be cast to such
-	 * @throws ClassCastException if the value cannot be cast to boolean
+	 * @throws java.lang.ClassCastException if the value cannot be cast to boolean
 	 */
 	public boolean booleanValue() {
 		if (value instanceof Boolean)
@@ -306,9 +340,9 @@ public class Variant {
 
 	/**
 	 * Returns the value of the specified Variant as a <code>Number</code>
-	 * 
+	 *
 	 * @return the Variant value as Number, if it can be cast to such
-	 * @throws ClassCastException if the value cannot be cast to Number
+	 * @throws java.lang.ClassCastException if the value cannot be cast to Number
 	 */
 	public Number toNumber() {
 		if (value instanceof Boolean)
@@ -321,6 +355,8 @@ public class Variant {
 
 
 	/**
+	 * <p>isNumber.</p>
+	 *
 	 * @return true if the current value is an instance of Number or Boolean (which can be used as Integer)
 	 */
 	public boolean isNumber() {
@@ -328,7 +364,9 @@ public class Variant {
 	}
 
 	/**
-	 * @return
+	 * <p>isComparable.</p>
+	 *
+	 * @return a boolean.
 	 */
 	public boolean isComparable() {
 		return value instanceof Comparable<?>;
@@ -340,7 +378,7 @@ public class Variant {
      *
      * @return  the numeric value represented by this object after conversion
      *          to type <code>int</code>.
-	 * @throws ClassCastException if the value cannot be cast to Number
+     * @throws java.lang.ClassCastException if the value cannot be cast to Number
      */
     public int intValue() {
 		return toNumber().intValue();
@@ -352,7 +390,7 @@ public class Variant {
      *
      * @return  the numeric value represented by this object after conversion
      *          to type <code>long</code>.
-	 * @throws ClassCastException if the value cannot be cast to Number
+     * @throws java.lang.ClassCastException if the value cannot be cast to Number
      */
     public long longValue() {
 		return toNumber().longValue();
@@ -364,7 +402,7 @@ public class Variant {
      *
      * @return  the numeric value represented by this object after conversion
      *          to type <code>float</code>.
-	 * @throws ClassCastException if the value cannot be cast to Number
+     * @throws java.lang.ClassCastException if the value cannot be cast to Number
      */
     public float floatValue() {
 		return toNumber().floatValue();
@@ -376,32 +414,32 @@ public class Variant {
      *
      * @return  the numeric value represented by this object after conversion
      *          to type <code>double</code>.
- 	 * @throws ClassCastException if the value cannot be cast to Number
-    */
+     * @throws java.lang.ClassCastException if the value cannot be cast to Number
+     */
     public double doubleValue() {
 		return toNumber().doubleValue();
 	}
 
-    /**
-     * Returns the value of the specified Variant as a <code>byte</code>.
-     * This may involve rounding or truncation.
-     *
-     * @return  the numeric value represented by this object after conversion
-     *          to type <code>byte</code>.
- 	 * @throws ClassCastException if the value cannot be cast to Number
-    */
+	/**
+	 * Returns the value of the specified Variant as a <code>byte</code>.
+	 * This may involve rounding or truncation.
+	 *
+	 * @return  the numeric value represented by this object after conversion
+	 *          to type <code>byte</code>.
+	 * @throws java.lang.ClassCastException if the value cannot be cast to Number
+	 */
 	public byte byteValue() {
 		return toNumber().byteValue();
 	}
 
-    /**
-     * Returns the value of the specified Variant as a <code>short</code>.
-     * This may involve rounding or truncation.
-     *
-     * @return  the numeric value represented by this object after conversion
-     *          to type <code>short</code>.
- 	 * @throws ClassCastException if the value cannot be cast to Number
-     */
+	/**
+	 * Returns the value of the specified Variant as a <code>short</code>.
+	 * This may involve rounding or truncation.
+	 *
+	 * @return  the numeric value represented by this object after conversion
+	 *          to type <code>short</code>.
+	 * @throws java.lang.ClassCastException if the value cannot be cast to Number
+	 */
 	public short shortValue() {
 		return toNumber().shortValue();
 	}
@@ -413,11 +451,11 @@ public class Variant {
 	 * Otherwise, it will check if {@link #isComparable()}, in which case it
 	 * will compare the values as {@link Comparable}s. If the values are of
 	 * different class, it will try to cast the values to the same type.
-	 * 
+	 *
 	 * @param value2
 	 *            the value to compare to
 	 * @return true if the values of the variants are equal
-	 * @throws ClassCastException
+	 * @throws java.lang.ClassCastException
 	 *             if the values cannot be compared
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -468,9 +506,9 @@ public class Variant {
 	 * Compares the value of a variant with another variant. If the values are
 	 * of the same class, {@link #equals(Object)} is called. If both variants
 	 * {@link #isNumber()}, compares the {@link #floatValue()} of each.
-	 * 
+	 *
 	 * @param value2 the value to compare to
-	 * @return true if the values of the variants are equal 
+	 * @return true if the values of the variants are equal
 	 */
 	public boolean valueEquals(Variant value2) {
 		if (value2 == null)

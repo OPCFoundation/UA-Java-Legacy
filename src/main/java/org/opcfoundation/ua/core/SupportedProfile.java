@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.core.ComplianceLevel;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class SupportedProfile extends Object implements Structure, Cloneable {
+public class SupportedProfile extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SupportedProfile);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SupportedProfile_Encoding_DefaultBinary);
@@ -131,7 +132,7 @@ public class SupportedProfile extends Object implements Structure, Cloneable {
       */
     public SupportedProfile clone()
     {
-        SupportedProfile result = new SupportedProfile();
+        SupportedProfile result = (SupportedProfile) super.clone();
         result.OrganizationUri = OrganizationUri;
         result.ProfileId = ProfileId;
         result.ComplianceTool = ComplianceTool;

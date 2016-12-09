@@ -23,34 +23,45 @@ import org.opcfoundation.ua.transport.tcp.nio.OpcTcpServer;
 
 /**
  * EndpointServer is an object that binds to a network socket and offers
- * hosting for endpoints.  
- * 
- * @see BindingFactory Instantiates UABindings
- * @see OpcTcpServer tcp.opc implementation 
+ * hosting for endpoints.
+ *
+ * @see OpcTcpServer tcp.opc implementation
  */
 public interface EndpointServer extends CloseableObject, ConnectionMonitor {
 
+	/** Constant <code>discoveryEndpoint</code> */
 	public static final Endpoint discoveryEndpoint = new Endpoint("", SecurityMode.ALL);
 	
 	
 	/**
 	 * Get a collection that contains related endpoints bindings.
-	 * 
+	 *
 	 * @return endpoint collection
 	 */
 	EndpointBindingCollection getEndpointBindings();
 	
 	/**
-	 * Bind an endpoint to a handle. 
-	 * 
-	 * @param socketAddress
-	 * @param endpointBinding
-	 * @throws ServiceResultException
+	 * Bind an endpoint to a handle.
+	 *
+	 * @param socketAddress a {@link java.net.SocketAddress} object.
+	 * @param endpointBinding a {@link org.opcfoundation.ua.transport.EndpointBinding} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 * @return a {@link org.opcfoundation.ua.transport.EndpointServer.EndpointHandle} object.
 	 */
 	EndpointHandle bind(SocketAddress socketAddress, EndpointBinding endpointBinding) throws ServiceResultException;
 	
+	/**
+	 * <p>getBoundSocketAddresses.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	List<SocketAddress> getBoundSocketAddresses();
 
+	/**
+	 * <p>getEncoderContext.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	EncoderContext getEncoderContext();
 
 	interface EndpointHandle {

@@ -34,9 +34,10 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class RegisterServer2Response extends Object implements ServiceResponse {
+public class RegisterServer2Response extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RegisterServer2Response);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RegisterServer2Response_Encoding_DefaultBinary);
@@ -68,7 +69,7 @@ public class RegisterServer2Response extends Object implements ServiceResponse {
       */
     public RegisterServer2Response clone()
     {
-        RegisterServer2Response result = new RegisterServer2Response();
+        RegisterServer2Response result = (RegisterServer2Response) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         return result;
     }

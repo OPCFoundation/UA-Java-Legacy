@@ -63,6 +63,15 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 	int secureChannelId = -1;
 
 	
+	/**
+	 * <p>Constructor for HttpsServerPendingRequest.</p>
+	 *
+	 * @param endpoint a {@link org.opcfoundation.ua.transport.https.HttpsServerEndpointHandler} object.
+	 * @param httpExchange a {@link org.apache.http.nio.protocol.HttpAsyncExchange} object.
+	 * @param httpRequest a {@link org.apache.http.HttpRequest} object.
+	 * @param channel a {@link org.opcfoundation.ua.transport.https.HttpsServerSecureChannel} object.
+	 * @param requestId a int.
+	 */
 	public HttpsServerPendingRequest(
 			HttpsServerEndpointHandler endpoint,
 			HttpAsyncExchange httpExchange,
@@ -86,11 +95,13 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 		}
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public ServerSecureChannel getChannel() {
 		return channel;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void sendResponse(final AsyncWrite write) {
 		this.write = write;
@@ -112,6 +123,7 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 		}
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public AsyncWrite sendResponse(ServiceResponse response) {
 		write = new AsyncWrite(response);
@@ -119,6 +131,7 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 		return write;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void run() {
 		// This code is ran in a worker thread.

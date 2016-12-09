@@ -38,10 +38,11 @@ import org.opcfoundation.ua.builtintypes.LocalizedText;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.BuildInfo;
 import org.opcfoundation.ua.core.ServerState;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ServerStatusDataType extends Object implements Structure, Cloneable {
+public class ServerStatusDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ServerStatusDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ServerStatusDataType_Encoding_DefaultBinary);
@@ -133,7 +134,7 @@ public class ServerStatusDataType extends Object implements Structure, Cloneable
       */
     public ServerStatusDataType clone()
     {
-        ServerStatusDataType result = new ServerStatusDataType();
+        ServerStatusDataType result = (ServerStatusDataType) super.clone();
         result.StartTime = StartTime;
         result.CurrentTime = CurrentTime;
         result.State = State;

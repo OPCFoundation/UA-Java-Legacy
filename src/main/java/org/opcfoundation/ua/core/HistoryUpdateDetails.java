@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class HistoryUpdateDetails extends Object implements Structure, Cloneable {
+public class HistoryUpdateDetails extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryUpdateDetails);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryUpdateDetails_Encoding_DefaultBinary);
@@ -69,7 +70,7 @@ public class HistoryUpdateDetails extends Object implements Structure, Cloneable
       */
     public HistoryUpdateDetails clone()
     {
-        HistoryUpdateDetails result = new HistoryUpdateDetails();
+        HistoryUpdateDetails result = (HistoryUpdateDetails) super.clone();
         result.NodeId = NodeId;
         return result;
     }

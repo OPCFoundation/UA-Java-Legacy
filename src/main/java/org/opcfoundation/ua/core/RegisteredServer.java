@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.LocalizedText;
 import org.opcfoundation.ua.core.ApplicationType;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class RegisteredServer extends Object implements Structure, Cloneable {
+public class RegisteredServer extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RegisteredServer);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RegisteredServer_Encoding_DefaultBinary);
@@ -155,7 +156,7 @@ public class RegisteredServer extends Object implements Structure, Cloneable {
       */
     public RegisteredServer clone()
     {
-        RegisteredServer result = new RegisteredServer();
+        RegisteredServer result = (RegisteredServer) super.clone();
         result.ServerUri = ServerUri;
         result.ProductUri = ProductUri;
         result.ServerNames = ServerNames==null ? null : ServerNames.clone();

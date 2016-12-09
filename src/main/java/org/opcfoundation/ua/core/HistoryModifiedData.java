@@ -40,7 +40,7 @@ import org.opcfoundation.ua.core.ModificationInfo;
 
 
 
-public class HistoryModifiedData extends HistoryData implements Structure, Cloneable {
+public class HistoryModifiedData extends HistoryData {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryModifiedData);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryModifiedData_Encoding_DefaultBinary);
@@ -73,7 +73,7 @@ public class HistoryModifiedData extends HistoryData implements Structure, Clone
       */
     public HistoryModifiedData clone()
     {
-        HistoryModifiedData result = new HistoryModifiedData();
+        HistoryModifiedData result = (HistoryModifiedData) super.clone();
         result.DataValues = DataValues==null ? null : DataValues.clone();
         if (ModificationInfos!=null) {
             result.ModificationInfos = new ModificationInfo[ModificationInfos.length];

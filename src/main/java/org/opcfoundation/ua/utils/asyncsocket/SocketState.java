@@ -21,10 +21,10 @@ import java.util.EnumSet;
  * Final states: Error, Closed
  * 
  * State transitions: 
- *   Ready -> Connecting -> Connected -> Closed
- *   Ready -> Connecting -> Connected -> Error
- *   Ready -> Connecting -> Error
- *   Ready -> Closed
+ *   Ready -&gt; Connecting -&gt; Connected -&gt; Closed
+ *   Ready -&gt; Connecting -&gt; Connected -&gt; Error
+ *   Ready -&gt; Connecting -&gt; Error
+ *   Ready -&gt; Closed
  * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */

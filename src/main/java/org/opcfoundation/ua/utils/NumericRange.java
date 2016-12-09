@@ -22,7 +22,6 @@ import org.opcfoundation.ua.core.StatusCodes;
  * A helper class for defining index ranges according to the OPC UA
  * specification. The index ranges are transferred as string values, but are
  * easier to use with the NumericRange.
- * 
  */
 public class NumericRange {
 
@@ -30,6 +29,9 @@ public class NumericRange {
 	private int[] end;
 
 	// constructors
+	/**
+	 * <p>Constructor for NumericRange.</p>
+	 */
 	public NumericRange() {
 		//initialize with default values
 		init(1);
@@ -48,13 +50,17 @@ public class NumericRange {
 
 	/**
 	 * Initializes the object with a begin index.
-	 * @param begin
+	 *
+	 * @param begin a int.
 	 */
 	public NumericRange(int begin) {
 		init(new int[]{begin, -1});
 	}
 	/**
 	 * Initializes the object with a begin and end index.
+	 *
+	 * @param begin a int.
+	 * @param end a int.
 	 */
 	public NumericRange(int begin, int end) {
 		init(new int[]{begin, end});
@@ -64,7 +70,7 @@ public class NumericRange {
 	/**
 	 * Initializes the range with the default indexes. The dimensions will be
 	 * initialized to the length of indexes.
-	 * 
+	 *
 	 * @param indexes
 	 *            the indexes to use for initializing the range. Each element is
 	 *            expected to define an array of [begin, end] indexes or just
@@ -77,6 +83,9 @@ public class NumericRange {
 	/**
 	 * Ensures the bounds are valid values for the object passed in.<p>
 	 * Returns false if the object is not indexable or if the numeric range is out of bounds.
+	 *
+	 * @param value a {@link java.lang.Object} object.
+	 * @return a boolean.
 	 */
 	public boolean ensureValid(Object value) {
 		int count = -1;
@@ -103,9 +112,9 @@ public class NumericRange {
 	/**
 	 * Tests the bounds are valid values for a collection with the specified length.<p>
 	 * Returns false if the numeric range is out of bounds.
-	 * 
-	 * @param count
-	 * @return true if valid  
+	 *
+	 * @param count a int.
+	 * @return true if valid
 	 */
 	public boolean ensureValid(int count) {
 		
@@ -133,6 +142,8 @@ public class NumericRange {
 	}
 	
 	/**
+	 * <p>Getter for the field <code>begin</code>.</p>
+	 *
 	 * @return the begin index of the range for the first dimension.
 	 */
 	public int getBegin() {
@@ -141,6 +152,8 @@ public class NumericRange {
 
 
 	/**
+	 * <p>Getter for the field <code>end</code>.</p>
+	 *
 	 * @return the end index of the range for the first dimension.
 	 */
 	public int getEnd() {
@@ -149,6 +162,7 @@ public class NumericRange {
 
 	/**
 	 * Get the beginning of the range for the specified dimension.
+	 *
 	 * @param dim the dimension, minimum 0
 	 * @return the begin index of the range for the specified dimension.
 	 */
@@ -163,6 +177,7 @@ public class NumericRange {
 
 	/**
 	 * Get the end of the range for the specified dimension.
+	 *
 	 * @param dim the dimension, minimum 0
 	 * @return the end index of the range for the specified dimension.
 	 */
@@ -176,6 +191,7 @@ public class NumericRange {
 
 	/**
 	 * Define the begin index of the range for the first dimension.
+	 *
 	 * @param value the begin index
 	 */
 	public void setBegin(int value) {
@@ -184,6 +200,7 @@ public class NumericRange {
 
 	/**
 	 * Define the end index of the range for the first dimension.
+	 *
 	 * @param value the end index
 	 */
 	public void setEnd(int value) {
@@ -194,7 +211,7 @@ public class NumericRange {
 	 * Define the begin index of the range for the specified dimension. Note
 	 * that {@link #setDimensions(int)} must be called first to define the
 	 * number of dimensions in the range.
-	 * 
+	 *
 	 * @param dim
 	 *            the dimension, minimum 0
 	 * @param value
@@ -221,7 +238,7 @@ public class NumericRange {
 	 * Define the end index of the range for the specified dimension. Note that
 	 * {@link #setDimensions(int)} must be called first to define the number of
 	 * dimensions in the range.
-	 * 
+	 *
 	 * @param dim
 	 *            the dimension, minimum 0
 	 * @param value
@@ -244,16 +261,21 @@ public class NumericRange {
 	}
 
 
+	/**
+	 * <p>getEmpty.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.NumericRange} object.
+	 */
 	public static NumericRange getEmpty() {
 		return new NumericRange();
 	}
 
 	/**
 	 * Parses a string representing a numeric range.
-	 * 
-	 * @param textToParse
+	 *
+	 * @param textToParse a {@link java.lang.String} object.
 	 * @return numeric range
-	 * @throws ServiceResultException in case the range is not in proper format
+	 * @throws org.opcfoundation.ua.common.ServiceResultException in case the range is not in proper format
 	 */
 	public static NumericRange parse(String textToParse) 
 	throws ServiceResultException {
@@ -294,6 +316,7 @@ public class NumericRange {
 		return range;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -310,6 +333,7 @@ public class NumericRange {
 		return sb.toString();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null || !(obj instanceof NumericRange))
@@ -332,7 +356,7 @@ public class NumericRange {
 	 * Define the number of dimensions for the NumericRange. By default the
 	 * range is 1-dimensional, but you can define a multidimensional range as
 	 * well.
-	 * 
+	 *
 	 * @param dimensions
 	 *            the number of dimensions for the range; must be greater than 0
 	 */
@@ -359,6 +383,7 @@ public class NumericRange {
 
 	/**
 	 * The number of dimensions in the range.
+	 *
 	 * @return the dimensions
 	 */
 	public int getDimensions() {
@@ -367,7 +392,8 @@ public class NumericRange {
 
 	/**
 	 * Checks if the defined range is empty.
-	 * @return true, if no indexes have been defined and Dimensions==1.
+	 *
+	 * @return a boolean.
 	 */
 	public boolean isEmpty() {
 		return getDimensions() == 1 && getBegin() == -1;
@@ -375,15 +401,17 @@ public class NumericRange {
 	
 	/**
 	 * Checks if the defined range for the specified dimension is empty.
+	 *
 	 * @param dim the dimension to check
-	 * @return true, if no range is defined for the dimension.
+	 * @return a boolean.
 	 */
 	public boolean isEmpty(int dim) {
 		return getBegin(dim) == -1;
 	}
 
 	/**
-	 * Check if the range is an empty range. Adds a null check, in addition to the standard {@link #isEmpty()} check. 
+	 * Check if the range is an empty range. Adds a null check, in addition to the standard {@link #isEmpty()} check.
+	 *
 	 * @param indexRange the range to check.
 	 * @return true if indexRange is null or it is an empty range definition
 	 * @see #isEmpty()
@@ -392,6 +420,12 @@ public class NumericRange {
 		return indexRange == null || indexRange.isEmpty();
 	}
 
+	/**
+	 * <p>toString.</p>
+	 *
+	 * @param indexRange a {@link org.opcfoundation.ua.utils.NumericRange} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String toString(NumericRange indexRange) {
 		return indexRange == null ? null : indexRange.toString();
 	}

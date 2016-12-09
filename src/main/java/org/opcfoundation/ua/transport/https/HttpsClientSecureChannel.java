@@ -34,6 +34,10 @@ import org.opcfoundation.ua.transport.impl.AsyncResultImpl;
 import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.opcfoundation.ua.utils.StackUtils;
 
+/**
+ * <p>HttpsClientSecureChannel class.</p>
+ *
+ */
 public class HttpsClientSecureChannel implements SecureChannel {
 
 	static Logger logger = LoggerFactory.getLogger(HttpsClientSecureChannel.class);
@@ -46,22 +50,30 @@ public class HttpsClientSecureChannel implements SecureChannel {
 	
 	Executor executor = StackUtils.getBlockingWorkExecutor();
 	
+	/**
+	 * <p>Constructor for HttpsClientSecureChannel.</p>
+	 *
+	 * @param client a {@link org.opcfoundation.ua.transport.https.HttpsClient} object.
+	 */
 	public HttpsClientSecureChannel(HttpsClient client) {
 		this.client = client;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void initialize(String url, TransportChannelSettings tcs, EncoderContext ctx) throws ServiceResultException {
 		this.ctx = ctx;
 		client.initialize(url, tcs, ctx);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void initialize(TransportChannelSettings tcs, EncoderContext ctx) throws ServiceResultException {
 		this.ctx = ctx;
 		client.initialize(tcs.getDescription().getEndpointUrl(), tcs, ctx);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void open() throws ServiceResultException {
 		logger.debug("open");
@@ -86,6 +98,7 @@ public class HttpsClientSecureChannel implements SecureChannel {
 		}					
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public AsyncResult<SecureChannel> openAsync() {
  		final AsyncResultImpl<SecureChannel> result = new AsyncResultImpl<SecureChannel>();
@@ -102,6 +115,7 @@ public class HttpsClientSecureChannel implements SecureChannel {
 		return result;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public ServiceResponse serviceRequest(ServiceRequest request) throws ServiceResultException {
 		AsyncResult<ServiceResponse> asyncResult = client.serviceRequestAsync(request, client.getTimeout(request), secureChannelId);
@@ -126,26 +140,31 @@ public class HttpsClientSecureChannel implements SecureChannel {
 		return response;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public AsyncResult<ServiceResponse> serviceRequestAsync(ServiceRequest request) {
 		return client.serviceRequestAsync(request, client.getTimeout(request), secureChannelId);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int getSecureChannelId() {
 		return secureChannelId;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ServerConnection getConnection() {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public MessageSecurityMode getMessageSecurityMode() {
 		return client.transportChannelSettings.getDescription().getSecurityMode();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public SecurityPolicy getSecurityPolicy() {
 		try {
@@ -155,16 +174,19 @@ public class HttpsClientSecureChannel implements SecureChannel {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getConnectURL() {
 		return client.connectUrl;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean isOpen() {
 		return false;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void close()
 	{
@@ -181,6 +203,7 @@ public class HttpsClientSecureChannel implements SecureChannel {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public AsyncResult<SecureChannel> closeAsync() {
  		final AsyncResultImpl<SecureChannel> result = new AsyncResultImpl<SecureChannel>();
@@ -193,6 +216,7 @@ public class HttpsClientSecureChannel implements SecureChannel {
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void dispose() {
 		close();
@@ -200,21 +224,25 @@ public class HttpsClientSecureChannel implements SecureChannel {
 		client = null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EndpointDescription getEndpointDescription() {
 		return client.transportChannelSettings.getDescription();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EndpointConfiguration getEndpointConfiguration() {
 		return client.transportChannelSettings.getConfiguration();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EncoderContext getMessageContext() {
 		return ctx;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setOperationTimeout(int timeout) {
 		EndpointConfiguration ec = client.transportChannelSettings.getConfiguration();
@@ -225,6 +253,7 @@ public class HttpsClientSecureChannel implements SecureChannel {
 		ec.setOperationTimeout(timeout);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int getOperationTimeout() {
 		Integer i = client.transportChannelSettings.getConfiguration().getOperationTimeout();		

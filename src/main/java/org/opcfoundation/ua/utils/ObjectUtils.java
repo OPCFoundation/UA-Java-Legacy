@@ -23,7 +23,6 @@ import java.util.Set;
 
 /**
  * Object utils
- * 
  */
 public class ObjectUtils {
 
@@ -33,6 +32,8 @@ public class ObjectUtils {
 	private static boolean showDataType = false;
 
 	/**
+	 * <p>isShowDataType.</p>
+	 *
 	 * @return the showDataType
 	 */
 	public static boolean isShowDataType() {
@@ -40,6 +41,8 @@ public class ObjectUtils {
 	}
 
 	/**
+	 * <p>Setter for the field <code>showDataType</code>.</p>
+	 *
 	 * @param showDataType the showDataType to set
 	 */
 	public static void setShowDataType(boolean showDataType) {
@@ -48,6 +51,8 @@ public class ObjectUtils {
 
 
 	/**
+	 * <p>isShowFullClassName.</p>
+	 *
 	 * @return the showFullClassName
 	 */
 	public static boolean isShowFullClassName() {
@@ -56,6 +61,7 @@ public class ObjectUtils {
 
 	/**
 	 * Define whether to show the full class name (with path) or just the SimpleName.
+	 *
 	 * @param showFullClassName the showFullClassName to set
 	 */
 	public static void setShowFullClassName(boolean showFullClassName) {
@@ -63,6 +69,8 @@ public class ObjectUtils {
 	}
 
 	/**
+	 * <p>isShowByteDataAsHex.</p>
+	 *
 	 * @return the showByteDataAsHex
 	 */
 	public static boolean isShowByteDataAsHex() {
@@ -71,9 +79,9 @@ public class ObjectUtils {
 
 	/**
 	 * Define that {@link #printFieldsDeep(Object)} will use
-	 * {@link CryptoUtil#toHex()} to print the byte arrays, instead of
+	 * {@link CryptoUtil#toHex(byte[])} to print the byte arrays, instead of
 	 * {@link Arrays#toString()}.
-	 * 
+	 *
 	 * @param showByteDataAsHex
 	 *            the showByteDataAsHex to set
 	 */
@@ -82,6 +90,8 @@ public class ObjectUtils {
 	}
 
 	/**
+	 * <p>isPrintObjectIds.</p>
+	 *
 	 * @return the printObjectIds
 	 */
 	public static boolean isPrintObjectIds() {
@@ -92,7 +102,7 @@ public class ObjectUtils {
 	 * Define whether the {@link #printFieldsDeep(Object)} method should show
 	 * the object IDs. If it does, it will not necessarily show all the field
 	 * values.
-	 * 
+	 *
 	 * @param printObjectIds
 	 *            the printObjectIds to set
 	 */
@@ -100,13 +110,13 @@ public class ObjectUtils {
 		ObjectUtils.printObjectIds = printObjectIds;
 	}
 
-	/**
-	 * Null-safe object value comparison.
-	 * 
-	 * @param o1 an object or null
-	 * @param o2 an object or null
-	 * @return true of objects are the same or both are null, otherwise false
-	 */
+    /**
+     * Null-safe object value comparison.
+     *
+     * @param o1 an object or null
+     * @param o2 an object or null
+     * @return true of objects are the same or both are null, otherwise false
+     */
     public static boolean objectEquals(Object o1, Object o2) {
         if (o1==o2) return true;
         if (o1==null && o2==null) return true;
@@ -114,10 +124,23 @@ public class ObjectUtils {
         return o1.equals(o2);
     }
     
+    /**
+     * <p>hashCode.</p>
+     *
+     * @param obj a {@link java.lang.Object} object.
+     * @return a int.
+     */
     public static int hashCode(Object obj) {
         return (obj==null?0:obj.hashCode());
     }
 
+	/**
+	 * <p>equals.</p>
+	 *
+	 * @param c1 a {@link java.util.Collection} object.
+	 * @param c2 a {@link java.util.Collection} object.
+	 * @return a boolean.
+	 */
 	public static boolean equals(Collection<?> c1, Collection<?> c2)
 	{
 		if (c1.size()!=c2.size()) return false;
@@ -129,6 +152,13 @@ public class ObjectUtils {
 		return true;
 	}
 	
+	/**
+	 * <p>equals.</p>
+	 *
+	 * @param left a {@link java.lang.Object} object.
+	 * @param right a {@link java.lang.Object} object.
+	 * @return a boolean.
+	 */
 	public static boolean equals(Object left, Object right){
 		if(left == null){
 			return right == null;
@@ -137,6 +167,12 @@ public class ObjectUtils {
 		}
 	}
 	
+    /**
+     * <p>toString.</p>
+     *
+     * @param obj a {@link java.lang.Object} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String toString(Object obj) {
         if (obj instanceof Object[]) {            
             return Arrays.toString((Object[])obj); 
@@ -154,6 +190,12 @@ public class ObjectUtils {
     
 
 
+	/**
+	 * <p>printFieldsDeep.</p>
+	 *
+	 * @param o a {@link java.lang.Object} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String printFieldsDeep(Object o)
 	{
 		Set<Object> visitedObjects = new HashSet<Object>();
@@ -279,6 +321,12 @@ public class ObjectUtils {
 				subDada.getClass().getCanonicalName().startsWith("org.opcfoundation.ua.builtintypes");
 	}
 	
+	/**
+	 * <p>printFields.</p>
+	 *
+	 * @param o a {@link java.lang.Object} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String printFields(Object o)
 	{
 		Class<?> c = o.getClass();

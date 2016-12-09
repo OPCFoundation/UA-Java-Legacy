@@ -38,9 +38,10 @@ import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.core.HistoryReadValueId;
 import org.opcfoundation.ua.core.RequestHeader;
 import org.opcfoundation.ua.core.TimestampsToReturn;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class HistoryReadRequest extends Object implements ServiceRequest {
+public class HistoryReadRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryReadRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryReadRequest_Encoding_DefaultBinary);
@@ -120,7 +121,7 @@ public class HistoryReadRequest extends Object implements ServiceRequest {
       */
     public HistoryReadRequest clone()
     {
-        HistoryReadRequest result = new HistoryReadRequest();
+        HistoryReadRequest result = (HistoryReadRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.HistoryReadDetails = HistoryReadDetails;
         result.TimestampsToReturn = TimestampsToReturn;

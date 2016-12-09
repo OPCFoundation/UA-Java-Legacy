@@ -43,6 +43,10 @@ import org.opcfoundation.ua.utils.StackUtils;
 import org.opcfoundation.ua.utils.StateListener;
 import org.opcfoundation.ua.utils.asyncsocket.SocketState;
 
+/**
+ * <p>Abstract AbstractServerConnection class.</p>
+ *
+ */
 public abstract class AbstractServerConnection extends AbstractState<CloseableObjectState, ServiceResultException> implements ServerConnection, CloseableObject {
 	
 	/** Logger */
@@ -68,14 +72,32 @@ public abstract class AbstractServerConnection extends AbstractState<CloseableOb
 	
 	CopyOnWriteArrayList<IConnectionListener> connectionListeners = new CopyOnWriteArrayList<IConnectionListener>();
 	
+	/**
+	 * <p>Constructor for AbstractServerConnection.</p>
+	 */
 	protected AbstractServerConnection()
 	{
 		super(CloseableObjectState.Closed);
 	}
 			
-	/** Remote Certificate Validator, invoked upon connect */
+	/**
+	 * Remote Certificate Validator, invoked upon connect
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.CertificateValidator} object.
+	 */
 	protected abstract CertificateValidator getRemoteCertificateValidator();	
 	
+	/**
+	 * <p>sendAsymmSecureMessage.</p>
+	 *
+	 * @param msg a {@link org.opcfoundation.ua.transport.AsyncWrite} object.
+	 * @param securityConfiguration a {@link org.opcfoundation.ua.transport.security.SecurityConfiguration} object.
+	 * @param secureChannelId a int.
+	 * @param requestNumber a int.
+	 * @param sendSequenceNumber a {@link java.util.concurrent.atomic.AtomicInteger} object.
+	 * @return a int.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	protected abstract int sendAsymmSecureMessage(
 			final AsyncWrite msg, 
 			final SecurityConfiguration securityConfiguration,
@@ -84,6 +106,15 @@ public abstract class AbstractServerConnection extends AbstractState<CloseableOb
 			AtomicInteger sendSequenceNumber)
 	throws ServiceResultException;
 	
+	/**
+	 * <p>sendSecureMessage.</p>
+	 *
+	 * @param msg a {@link org.opcfoundation.ua.transport.AsyncWrite} object.
+	 * @param token a {@link org.opcfoundation.ua.transport.tcp.impl.SecurityToken} object.
+	 * @param requestId a int.
+	 * @param messageType a int.
+	 * @param sendSequenceNumber a {@link java.util.concurrent.atomic.AtomicInteger} object.
+	 */
 	protected abstract void sendSecureMessage(
 			final AsyncWrite msg, 
 			final SecurityToken token, 
@@ -92,16 +123,31 @@ public abstract class AbstractServerConnection extends AbstractState<CloseableOb
 			final AtomicInteger sendSequenceNumber
 			);
 	
+	/**
+	 * <p>setError.</p>
+	 *
+	 * @param errorCode a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	protected void setError(UnsignedInteger errorCode)
 	{
 		setError(new StatusCode(errorCode));
 	}
 	
+	/**
+	 * <p>setError.</p>
+	 *
+	 * @param sc a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+	 */
 	protected void setError(StatusCode sc) 
 	{
 		setError(new ServiceResultException(sc));
 	}
 	
+	/**
+	 * <p>setError.</p>
+	 *
+	 * @param e a {@link org.opcfoundation.ua.common.ServiceResultException} object.
+	 */
 	protected synchronized void setError(ServiceResultException e) 
 	{
 		if (hasError()) return;
@@ -109,6 +155,7 @@ public abstract class AbstractServerConnection extends AbstractState<CloseableOb
 		close();
 	}
 		
+	/** {@inheritDoc} */
 	@Override
 	protected void onStateTransition(CloseableObjectState oldState,
 			CloseableObjectState newState) {
@@ -132,30 +179,34 @@ public abstract class AbstractServerConnection extends AbstractState<CloseableOb
 	}
 	
 	// Handle runtime exceptions that are thrown by state listeners  
+	/** {@inheritDoc} */
 	@Override
 	protected void onListenerException(RuntimeException rte) {
 		setError( StackUtils.toServiceResultException(rte) );
 	}
 
+	/** {@inheritDoc} */
 	public void getSecureChannels(Collection<ServerSecureChannel> list) {
 		list.addAll( secureChannels.values() );
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addSecureChannelListener(SecureChannelListener l) {
 		secureChannelListeners.add(l);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void removeSecureChannelListener(SecureChannelListener l) {
 		secureChannelListeners.remove(l);
 	}
 	
 	/**
-	 * Send a notification to listeners that a secure channel has been 
-	 * attached to (opened in) the connection. 
-	 *  
-	 * @param c
+	 * Send a notification to listeners that a secure channel has been
+	 * attached to (opened in) the connection.
+	 *
+	 * @param c a {@link org.opcfoundation.ua.transport.ServerSecureChannel} object.
 	 */
 	protected void fireSecureChannelAttached(ServerSecureChannel c) {
 		for (SecureChannelListener l : secureChannelListeners)
@@ -165,46 +216,74 @@ public abstract class AbstractServerConnection extends AbstractState<CloseableOb
 	/**
 	 * Send a notification the listeners that a secure channel has been
 	 * detached from the connection.
-	 * 
-	 * @param c
+	 *
+	 * @param c a {@link org.opcfoundation.ua.transport.ServerSecureChannel} object.
 	 */
 	protected void fireSecureChannelDetached(ServerSecureChannel c) {
 		for (SecureChannelListener l : secureChannelListeners)
 			l.onSecureChannelDetached(this, c);
 	}
 	
+	/**
+	 * <p>getConnectURL.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getConnectURL() {
 		return ctx.endpointUrl;
 	}
 	
+	/**
+	 * <p>getRemoteCertificate.</p>
+	 *
+	 * @return a {@link java.security.cert.Certificate} object.
+	 */
 	public Certificate getRemoteCertificate() {
 		return securityConfiguration.getReceiverCertificate();
 	}
 	
+	/**
+	 * <p>addChannelListener.</p>
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.tcp.nio.Channel.ChannelListener} object.
+	 */
 	public void addChannelListener(ChannelListener listener) {
 		channelListeners.add(listener);
 	}
 	
+	/**
+	 * <p>removeChannelListener.</p>
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.tcp.nio.Channel.ChannelListener} object.
+	 */
 	public void removeChannelListener(ChannelListener listener) {
 		channelListeners.remove(listener);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void addConnectionListener(IConnectionListener listener) {
 		connectionListeners.add(listener);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void removeConnectionListener(IConnectionListener listener) {
 		connectionListeners.remove(listener);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		CloseableObjectState s = getState();
 		return "Connection (state="+s+", addr="+getRemoteAddress()+")";
 	}	
 
+	/**
+	 * <p>close.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.CloseableObject} object.
+	 */
 	public synchronized CloseableObject close() {
 		try {
 			setState(CloseableObjectState.Closing);

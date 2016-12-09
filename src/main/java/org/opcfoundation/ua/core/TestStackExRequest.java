@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.CompositeTestType;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class TestStackExRequest extends Object implements ServiceRequest {
+public class TestStackExRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TestStackExRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TestStackExRequest_Encoding_DefaultBinary);
@@ -106,7 +107,7 @@ public class TestStackExRequest extends Object implements ServiceRequest {
       */
     public TestStackExRequest clone()
     {
-        TestStackExRequest result = new TestStackExRequest();
+        TestStackExRequest result = (TestStackExRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.TestId = TestId;
         result.Iteration = Iteration;

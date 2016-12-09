@@ -22,14 +22,19 @@ import java.net.URL;
 import org.opcfoundation.ua.utils.bytebuffer.ByteQueue;
 
 
+/**
+ * <p>FileUtil class.</p>
+ *
+ */
 public class FileUtil {
 
     /**
-     * Creates and writes a binary file 
+     * Creates and writes a binary file
+     *
      * @param file file
      * @param data data
-     * @throws IOException on i/o problems
-     */    
+     * @throws java.io.IOException on i/o problems
+     */
     public static void writeFile(File file, byte[] data)
     throws IOException
     {        
@@ -46,11 +51,12 @@ public class FileUtil {
     }
 
     /**
-     * Reads entire binary file 
+     * Reads entire binary file
+     *
      * @param file file
      * @return contents of binary file
-     * @throws IOException on i/o problems
-     */    
+     * @throws java.io.IOException on i/o problems
+     */
     public static byte[] readFile(File file)
     throws IOException
     {
@@ -75,11 +81,11 @@ public class FileUtil {
     
     /**
      * Reads entire binary file to a byte array
-     *  
-     * @param url 
+     *
+     * @param url a {@link java.net.URL} object.
      * @return contents of binary file
-     * @throws IOException on i/o problems
-     */    
+     * @throws java.io.IOException on i/o problems
+     */
     public static byte[] readFile(URL url)
     throws IOException
     {    	
@@ -103,11 +109,11 @@ public class FileUtil {
     /**
      * Reads entire binary file to a byte array.
      * Note the stream is not closed.
-     *  
+     *
      * @param is input stream
-     * @return contents of the stream 
-     * @throws IOException on i/o problems
-     */    
+     * @return contents of the stream
+     * @throws java.io.IOException on i/o problems
+     */
     public static byte[] readStream(InputStream is)
     throws IOException
     {    	

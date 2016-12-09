@@ -16,13 +16,15 @@ import java.util.concurrent.Executor;
 
 /**
  * Executor that executes commands immediately in invokers thread.
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class CurrentThreadExecutor implements Executor {
 	
+	/** Constant <code>INSTANCE</code> */
 	public static final Executor INSTANCE = new CurrentThreadExecutor();
 	
+	/** {@inheritDoc} */
 	public void execute(Runnable command) {
 		command.run();
 	}

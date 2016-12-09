@@ -41,7 +41,7 @@ import org.opcfoundation.ua.core.MonitoringFilterResult;
 
 
 
-public class EventFilterResult extends MonitoringFilterResult implements Structure, Cloneable {
+public class EventFilterResult extends MonitoringFilterResult {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.EventFilterResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.EventFilterResult_Encoding_DefaultBinary);
@@ -97,7 +97,7 @@ public class EventFilterResult extends MonitoringFilterResult implements Structu
       */
     public EventFilterResult clone()
     {
-        EventFilterResult result = new EventFilterResult();
+        EventFilterResult result = (EventFilterResult) super.clone();
         result.SelectClauseResults = SelectClauseResults==null ? null : SelectClauseResults.clone();
         result.SelectClauseDiagnosticInfos = SelectClauseDiagnosticInfos==null ? null : SelectClauseDiagnosticInfos.clone();
         result.WhereClauseResult = WhereClauseResult==null ? null : WhereClauseResult.clone();

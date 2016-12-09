@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.builtintypes.StatusCode;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ContentFilterElementResult extends Object implements Structure, Cloneable {
+public class ContentFilterElementResult extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ContentFilterElementResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ContentFilterElementResult_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class ContentFilterElementResult extends Object implements Structure, Clo
       */
     public ContentFilterElementResult clone()
     {
-        ContentFilterElementResult result = new ContentFilterElementResult();
+        ContentFilterElementResult result = (ContentFilterElementResult) super.clone();
         result.StatusCode = StatusCode;
         result.OperandStatusCodes = OperandStatusCodes==null ? null : OperandStatusCodes.clone();
         result.OperandDiagnosticInfos = OperandDiagnosticInfos==null ? null : OperandDiagnosticInfos.clone();

@@ -32,16 +32,16 @@ import org.opcfoundation.ua.utils.AbstractState;
 
 /**
  * This class implements HTTP TSL/SSL conversation.
- * 
- * The messages are serialized using binary scheme, the same as with tcp 
+ *
+ * The messages are serialized using binary scheme, the same as with tcp
  * conversation.
- * 
+ *
  * Because HTTPS channel is already secure, a OPC secure channel is not opened.
- * All HTTPS communications via a URL shall be treated as a single 
- * SecureChannel that is shared by multiple Clients. Stack shall provide a 
- * unique identifier for the SecureChannel which allows Applications correlate 
- * a request with a SecureChannel.This means that Sessions can only be 
- * considered secure if the AuthenticationToken (see Part 4) is long (>20 bytes)
+ * All HTTPS communications via a URL shall be treated as a single
+ * SecureChannel that is shared by multiple Clients. Stack shall provide a
+ * unique identifier for the SecureChannel which allows Applications correlate
+ * a request with a SecureChannel.This means that Sessions can only be
+ * considered secure if the AuthenticationToken (see Part 4) is long (&gt;20 bytes)
  * and HTTPS encryption is enabled.
  */
 public class HttpsServerConnection extends AbstractState<CloseableObjectState, ServiceResultException> implements ServerConnection {
@@ -58,6 +58,12 @@ public class HttpsServerConnection extends AbstractState<CloseableObjectState, S
 	/** Listeners that follow this connection */ 
 	CopyOnWriteArrayList<IConnectionListener> connectionListeners = new CopyOnWriteArrayList<IConnectionListener>();
 	
+	/**
+	 * <p>Constructor for HttpsServerConnection.</p>
+	 *
+	 * @param server a {@link org.opcfoundation.ua.transport.https.HttpsServer} object.
+	 * @param conn a {@link org.apache.http.nio.NHttpServerConnection} object.
+	 */
 	public HttpsServerConnection(HttpsServer server, NHttpServerConnection conn) {
 		super(CloseableObjectState.Closed);
 		this.server = server;
@@ -66,45 +72,58 @@ public class HttpsServerConnection extends AbstractState<CloseableObjectState, S
 		this.conn.setSocketTimeout(60000);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public SocketAddress getLocalAddress() {
 		return socket.getLocalSocketAddress();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public SocketAddress getRemoteAddress() {
 		return socket.getRemoteSocketAddress();
 	}
 	
+	/**
+	 * <p>getNHttpServerConnection.</p>
+	 *
+	 * @return a {@link org.apache.http.nio.NHttpServerConnection} object.
+	 */
 	public NHttpServerConnection getNHttpServerConnection() {
 		return conn;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void getSecureChannels(Collection<ServerSecureChannel> list) {
 		list.addAll( secureChannels.values() );
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addSecureChannelListener(SecureChannelListener l) {
 		secureChannelListeners.add(l);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void removeSecureChannelListener(SecureChannelListener l) {
 		secureChannelListeners.remove(l);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addConnectionListener(IConnectionListener listener) {
 		connectionListeners.add(listener);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void removeConnectionListener(IConnectionListener listener) {
 		connectionListeners.remove(listener);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	protected void onStateTransition(CloseableObjectState oldState,
 			CloseableObjectState newState) {

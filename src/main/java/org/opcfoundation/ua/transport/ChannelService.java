@@ -179,10 +179,10 @@ public class ChannelService {
     /**
      * Synchronous FindServers service request. 
      * 
-     * @param RequestHeader
-     * @param EndpointUrl
-     * @param LocaleIds
-     * @param ServerUris
+     * @param RequestHeader the request header
+     * @param EndpointUrl the endpoint url
+     * @param LocaleIds locale ids
+     * @param ServerUris server uris
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -209,13 +209,11 @@ public class ChannelService {
     /**
      * Asynchronous FindServers service request. 
      * 
-     * @param RequestHeader
-     * @param EndpointUrl
-     * @param LocaleIds
-     * @param ServerUris
+     * @param RequestHeader the request header
+     * @param EndpointUrl the endpoint url
+     * @param LocaleIds locale ids
+     * @param ServerUris server uris
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult FindServersAsync(RequestHeader RequestHeader, String EndpointUrl, String[] LocaleIds, String... ServerUris)
     {
@@ -227,9 +225,7 @@ public class ChannelService {
      * Asynchronous FindServers service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult FindServersAsync(FindServersRequest req)
     {
@@ -239,10 +235,10 @@ public class ChannelService {
     /**
      * Synchronous FindServersOnNetwork service request. 
      * 
-     * @param RequestHeader
-     * @param StartingRecordId
-     * @param MaxRecordsToReturn
-     * @param ServerCapabilityFilter
+     * @param RequestHeader the request header
+     * @param StartingRecordId the StartingRecordId
+     * @param MaxRecordsToReturn max records to return
+     * @param ServerCapabilityFilter capability filter
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -269,13 +265,11 @@ public class ChannelService {
     /**
      * Asynchronous FindServersOnNetwork service request. 
      * 
-     * @param RequestHeader
-     * @param StartingRecordId
-     * @param MaxRecordsToReturn
-     * @param ServerCapabilityFilter
+     * @param RequestHeader the request header
+     * @param StartingRecordId the StartingRecordId
+     * @param MaxRecordsToReturn max records to return
+     * @param ServerCapabilityFilter capability filter
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult FindServersOnNetworkAsync(RequestHeader RequestHeader, UnsignedInteger StartingRecordId, UnsignedInteger MaxRecordsToReturn, String... ServerCapabilityFilter)
     {
@@ -287,9 +281,7 @@ public class ChannelService {
      * Asynchronous FindServersOnNetwork service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult FindServersOnNetworkAsync(FindServersOnNetworkRequest req)
     {
@@ -299,10 +291,10 @@ public class ChannelService {
     /**
      * Synchronous GetEndpoints service request. 
      * 
-     * @param RequestHeader
-     * @param EndpointUrl
-     * @param LocaleIds
-     * @param ProfileUris
+     * @param RequestHeader the request header
+     * @param EndpointUrl the endpoint url
+     * @param LocaleIds locale ids
+     * @param ProfileUris profile uris
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -329,13 +321,11 @@ public class ChannelService {
     /**
      * Asynchronous GetEndpoints service request. 
      * 
-     * @param RequestHeader
-     * @param EndpointUrl
-     * @param LocaleIds
-     * @param ProfileUris
+     * @param RequestHeader the request header
+     * @param EndpointUrl endpoint url
+     * @param LocaleIds locale ids
+     * @param ProfileUris profile uris
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult GetEndpointsAsync(RequestHeader RequestHeader, String EndpointUrl, String[] LocaleIds, String... ProfileUris)
     {
@@ -347,9 +337,7 @@ public class ChannelService {
      * Asynchronous GetEndpoints service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult GetEndpointsAsync(GetEndpointsRequest req)
     {
@@ -359,8 +347,8 @@ public class ChannelService {
     /**
      * Synchronous RegisterServer service request. 
      * 
-     * @param RequestHeader
-     * @param Server
+     * @param RequestHeader the request header
+     * @param Server the server
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -387,11 +375,9 @@ public class ChannelService {
     /**
      * Asynchronous RegisterServer service request. 
      * 
-     * @param RequestHeader
-     * @param Server
+     * @param RequestHeader the request header
+     * @param Server the server
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult RegisterServerAsync(RequestHeader RequestHeader, RegisteredServer Server)
     {
@@ -403,9 +389,7 @@ public class ChannelService {
      * Asynchronous RegisterServer service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult RegisterServerAsync(RegisterServerRequest req)
     {
@@ -415,8 +399,8 @@ public class ChannelService {
     /**
      * Synchronous RegisterServer2 service request. 
      * 
-     * @param RequestHeader
-     * @param Server
+     * @param RequestHeader the request header
+     * @param Server the server
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -443,11 +427,9 @@ public class ChannelService {
     /**
      * Asynchronous RegisterServer2 service request. 
      * 
-     * @param RequestHeader
-     * @param Server
+     * @param RequestHeader request header
+     * @param Server the server
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult RegisterServer2Async(RequestHeader RequestHeader, RegisteredServer2 Server)
     {
@@ -459,9 +441,7 @@ public class ChannelService {
      * Asynchronous RegisterServer2 service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult RegisterServer2Async(RegisterServer2Request req)
     {
@@ -471,12 +451,12 @@ public class ChannelService {
     /**
      * Synchronous OpenSecureChannel service request. 
      * 
-     * @param RequestHeader
-     * @param ClientProtocolVersion
-     * @param RequestType
-     * @param SecurityMode
-     * @param ClientNonce
-     * @param RequestedLifetime
+     * @param RequestHeader param
+     * @param ClientProtocolVersion param
+     * @param RequestType param
+     * @param SecurityMode param
+     * @param ClientNonce param
+     * @param RequestedLifetime param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -503,15 +483,13 @@ public class ChannelService {
     /**
      * Asynchronous OpenSecureChannel service request. 
      * 
-     * @param RequestHeader
-     * @param ClientProtocolVersion
-     * @param RequestType
-     * @param SecurityMode
-     * @param ClientNonce
-     * @param RequestedLifetime
+     * @param RequestHeader param
+     * @param ClientProtocolVersion param
+     * @param RequestType param
+     * @param SecurityMode param
+     * @param ClientNonce param
+     * @param RequestedLifetime param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult OpenSecureChannelAsync(RequestHeader RequestHeader, UnsignedInteger ClientProtocolVersion, SecurityTokenRequestType RequestType, MessageSecurityMode SecurityMode, byte[] ClientNonce, UnsignedInteger RequestedLifetime)
     {
@@ -523,9 +501,7 @@ public class ChannelService {
      * Asynchronous OpenSecureChannel service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult OpenSecureChannelAsync(OpenSecureChannelRequest req)
     {
@@ -535,7 +511,7 @@ public class ChannelService {
     /**
      * Synchronous CloseSecureChannel service request. 
      * 
-     * @param RequestHeader
+     * @param RequestHeader the header
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -562,10 +538,8 @@ public class ChannelService {
     /**
      * Asynchronous CloseSecureChannel service request. 
      * 
-     * @param RequestHeader
+     * @param RequestHeader the header
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CloseSecureChannelAsync(RequestHeader RequestHeader)
     {
@@ -577,9 +551,7 @@ public class ChannelService {
      * Asynchronous CloseSecureChannel service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CloseSecureChannelAsync(CloseSecureChannelRequest req)
     {
@@ -589,15 +561,15 @@ public class ChannelService {
     /**
      * Synchronous CreateSession service request. 
      * 
-     * @param RequestHeader
-     * @param ClientDescription
-     * @param ServerUri
-     * @param EndpointUrl
-     * @param SessionName
-     * @param ClientNonce
-     * @param ClientCertificate
-     * @param RequestedSessionTimeout
-     * @param MaxResponseMessageSize
+     * @param RequestHeader param
+     * @param ClientDescription param
+     * @param ServerUri param
+     * @param EndpointUrl param
+     * @param SessionName param
+     * @param ClientNonce param
+     * @param ClientCertificate param
+     * @param RequestedSessionTimeout param
+     * @param MaxResponseMessageSize param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -624,18 +596,16 @@ public class ChannelService {
     /**
      * Asynchronous CreateSession service request. 
      * 
-     * @param RequestHeader
-     * @param ClientDescription
-     * @param ServerUri
-     * @param EndpointUrl
-     * @param SessionName
-     * @param ClientNonce
-     * @param ClientCertificate
-     * @param RequestedSessionTimeout
-     * @param MaxResponseMessageSize
+     * @param RequestHeader param
+     * @param ClientDescription param
+     * @param ServerUri param
+     * @param EndpointUrl param
+     * @param SessionName param
+     * @param ClientNonce param
+     * @param ClientCertificate param
+     * @param RequestedSessionTimeout param
+     * @param MaxResponseMessageSize param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CreateSessionAsync(RequestHeader RequestHeader, ApplicationDescription ClientDescription, String ServerUri, String EndpointUrl, String SessionName, byte[] ClientNonce, byte[] ClientCertificate, Double RequestedSessionTimeout, UnsignedInteger MaxResponseMessageSize)
     {
@@ -647,9 +617,7 @@ public class ChannelService {
      * Asynchronous CreateSession service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CreateSessionAsync(CreateSessionRequest req)
     {
@@ -659,12 +627,12 @@ public class ChannelService {
     /**
      * Synchronous ActivateSession service request. 
      * 
-     * @param RequestHeader
-     * @param ClientSignature
-     * @param ClientSoftwareCertificates
-     * @param LocaleIds
-     * @param UserIdentityToken
-     * @param UserTokenSignature
+     * @param RequestHeader param
+     * @param ClientSignature param
+     * @param ClientSoftwareCertificates param
+     * @param LocaleIds param
+     * @param UserIdentityToken param
+     * @param UserTokenSignature param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -691,15 +659,13 @@ public class ChannelService {
     /**
      * Asynchronous ActivateSession service request. 
      * 
-     * @param RequestHeader
-     * @param ClientSignature
-     * @param ClientSoftwareCertificates
-     * @param LocaleIds
-     * @param UserIdentityToken
-     * @param UserTokenSignature
+     * @param RequestHeader param
+     * @param ClientSignature param
+     * @param ClientSoftwareCertificates param
+     * @param LocaleIds param
+     * @param UserIdentityToken param
+     * @param UserTokenSignature param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult ActivateSessionAsync(RequestHeader RequestHeader, SignatureData ClientSignature, SignedSoftwareCertificate[] ClientSoftwareCertificates, String[] LocaleIds, ExtensionObject UserIdentityToken, SignatureData UserTokenSignature)
     {
@@ -711,9 +677,7 @@ public class ChannelService {
      * Asynchronous ActivateSession service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult ActivateSessionAsync(ActivateSessionRequest req)
     {
@@ -723,9 +687,9 @@ public class ChannelService {
     /**
      * Synchronous CloseSession service request. 
      * 
-     * @param RequestHeader
-     * @param DeleteSubscriptions
-     * @return the response
+     * @param RequestHeader param
+     * @param DeleteSubscriptions param
+     * @return the response param
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
      */
@@ -751,11 +715,9 @@ public class ChannelService {
     /**
      * Asynchronous CloseSession service request. 
      * 
-     * @param RequestHeader
-     * @param DeleteSubscriptions
+     * @param RequestHeader param
+     * @param DeleteSubscriptions param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CloseSessionAsync(RequestHeader RequestHeader, Boolean DeleteSubscriptions)
     {
@@ -767,9 +729,7 @@ public class ChannelService {
      * Asynchronous CloseSession service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CloseSessionAsync(CloseSessionRequest req)
     {
@@ -779,8 +739,8 @@ public class ChannelService {
     /**
      * Synchronous Cancel service request. 
      * 
-     * @param RequestHeader
-     * @param RequestHandle
+     * @param RequestHeader param
+     * @param RequestHandle param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -807,11 +767,9 @@ public class ChannelService {
     /**
      * Asynchronous Cancel service request. 
      * 
-     * @param RequestHeader
-     * @param RequestHandle
+     * @param RequestHeader param
+     * @param RequestHandle param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CancelAsync(RequestHeader RequestHeader, UnsignedInteger RequestHandle)
     {
@@ -823,9 +781,7 @@ public class ChannelService {
      * Asynchronous Cancel service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CancelAsync(CancelRequest req)
     {
@@ -835,8 +791,8 @@ public class ChannelService {
     /**
      * Synchronous AddNodes service request. 
      * 
-     * @param RequestHeader
-     * @param NodesToAdd
+     * @param RequestHeader param
+     * @param NodesToAdd param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -863,11 +819,9 @@ public class ChannelService {
     /**
      * Asynchronous AddNodes service request. 
      * 
-     * @param RequestHeader
-     * @param NodesToAdd
+     * @param RequestHeader param
+     * @param NodesToAdd param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult AddNodesAsync(RequestHeader RequestHeader, AddNodesItem... NodesToAdd)
     {
@@ -879,9 +833,7 @@ public class ChannelService {
      * Asynchronous AddNodes service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult AddNodesAsync(AddNodesRequest req)
     {
@@ -891,8 +843,8 @@ public class ChannelService {
     /**
      * Synchronous AddReferences service request. 
      * 
-     * @param RequestHeader
-     * @param ReferencesToAdd
+     * @param RequestHeader param
+     * @param ReferencesToAdd param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -919,11 +871,9 @@ public class ChannelService {
     /**
      * Asynchronous AddReferences service request. 
      * 
-     * @param RequestHeader
-     * @param ReferencesToAdd
+     * @param RequestHeader param
+     * @param ReferencesToAdd param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult AddReferencesAsync(RequestHeader RequestHeader, AddReferencesItem... ReferencesToAdd)
     {
@@ -935,9 +885,7 @@ public class ChannelService {
      * Asynchronous AddReferences service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult AddReferencesAsync(AddReferencesRequest req)
     {
@@ -947,8 +895,8 @@ public class ChannelService {
     /**
      * Synchronous DeleteNodes service request. 
      * 
-     * @param RequestHeader
-     * @param NodesToDelete
+     * @param RequestHeader param
+     * @param NodesToDelete param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -975,11 +923,9 @@ public class ChannelService {
     /**
      * Asynchronous DeleteNodes service request. 
      * 
-     * @param RequestHeader
-     * @param NodesToDelete
+     * @param RequestHeader param
+     * @param NodesToDelete param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult DeleteNodesAsync(RequestHeader RequestHeader, DeleteNodesItem... NodesToDelete)
     {
@@ -991,20 +937,19 @@ public class ChannelService {
      * Asynchronous DeleteNodes service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult DeleteNodesAsync(DeleteNodesRequest req)
     {
     	return channel.serviceRequestAsync( req );
     }
     
+    
     /**
      * Synchronous DeleteReferences service request. 
      * 
-     * @param RequestHeader
-     * @param ReferencesToDelete
+     * @param RequestHeader param
+     * @param ReferencesToDelete param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1031,11 +976,9 @@ public class ChannelService {
     /**
      * Asynchronous DeleteReferences service request. 
      * 
-     * @param RequestHeader
-     * @param ReferencesToDelete
+     * @param RequestHeader param
+     * @param ReferencesToDelete param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult DeleteReferencesAsync(RequestHeader RequestHeader, DeleteReferencesItem... ReferencesToDelete)
     {
@@ -1047,9 +990,7 @@ public class ChannelService {
      * Asynchronous DeleteReferences service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult DeleteReferencesAsync(DeleteReferencesRequest req)
     {
@@ -1059,10 +1000,10 @@ public class ChannelService {
     /**
      * Synchronous Browse service request. 
      * 
-     * @param RequestHeader
-     * @param View
-     * @param RequestedMaxReferencesPerNode
-     * @param NodesToBrowse
+     * @param RequestHeader param
+     * @param View param
+     * @param RequestedMaxReferencesPerNode param
+     * @param NodesToBrowse param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1089,13 +1030,11 @@ public class ChannelService {
     /**
      * Asynchronous Browse service request. 
      * 
-     * @param RequestHeader
-     * @param View
-     * @param RequestedMaxReferencesPerNode
-     * @param NodesToBrowse
+     * @param RequestHeader param
+     * @param View param
+     * @param RequestedMaxReferencesPerNode param
+     * @param NodesToBrowse param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult BrowseAsync(RequestHeader RequestHeader, ViewDescription View, UnsignedInteger RequestedMaxReferencesPerNode, BrowseDescription... NodesToBrowse)
     {
@@ -1107,9 +1046,7 @@ public class ChannelService {
      * Asynchronous Browse service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult BrowseAsync(BrowseRequest req)
     {
@@ -1119,9 +1056,9 @@ public class ChannelService {
     /**
      * Synchronous BrowseNext service request. 
      * 
-     * @param RequestHeader
-     * @param ReleaseContinuationPoints
-     * @param ContinuationPoints
+     * @param RequestHeader param
+     * @param ReleaseContinuationPoints param
+     * @param ContinuationPoints param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1148,12 +1085,10 @@ public class ChannelService {
     /**
      * Asynchronous BrowseNext service request. 
      * 
-     * @param RequestHeader
-     * @param ReleaseContinuationPoints
-     * @param ContinuationPoints
+     * @param RequestHeader param
+     * @param ReleaseContinuationPoints param
+     * @param ContinuationPoints param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult BrowseNextAsync(RequestHeader RequestHeader, Boolean ReleaseContinuationPoints, byte[]... ContinuationPoints)
     {
@@ -1165,9 +1100,7 @@ public class ChannelService {
      * Asynchronous BrowseNext service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult BrowseNextAsync(BrowseNextRequest req)
     {
@@ -1177,8 +1110,8 @@ public class ChannelService {
     /**
      * Synchronous TranslateBrowsePathsToNodeIds service request. 
      * 
-     * @param RequestHeader
-     * @param BrowsePaths
+     * @param RequestHeader param
+     * @param BrowsePaths param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1205,11 +1138,9 @@ public class ChannelService {
     /**
      * Asynchronous TranslateBrowsePathsToNodeIds service request. 
      * 
-     * @param RequestHeader
-     * @param BrowsePaths
+     * @param RequestHeader param
+     * @param BrowsePaths param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult TranslateBrowsePathsToNodeIdsAsync(RequestHeader RequestHeader, BrowsePath... BrowsePaths)
     {
@@ -1221,9 +1152,7 @@ public class ChannelService {
      * Asynchronous TranslateBrowsePathsToNodeIds service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult TranslateBrowsePathsToNodeIdsAsync(TranslateBrowsePathsToNodeIdsRequest req)
     {
@@ -1233,8 +1162,8 @@ public class ChannelService {
     /**
      * Synchronous RegisterNodes service request. 
      * 
-     * @param RequestHeader
-     * @param NodesToRegister
+     * @param RequestHeader param
+     * @param NodesToRegister param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1261,11 +1190,9 @@ public class ChannelService {
     /**
      * Asynchronous RegisterNodes service request. 
      * 
-     * @param RequestHeader
-     * @param NodesToRegister
+     * @param RequestHeader param
+     * @param NodesToRegister param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult RegisterNodesAsync(RequestHeader RequestHeader, NodeId... NodesToRegister)
     {
@@ -1277,9 +1204,7 @@ public class ChannelService {
      * Asynchronous RegisterNodes service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult RegisterNodesAsync(RegisterNodesRequest req)
     {
@@ -1289,8 +1214,8 @@ public class ChannelService {
     /**
      * Synchronous UnregisterNodes service request. 
      * 
-     * @param RequestHeader
-     * @param NodesToUnregister
+     * @param RequestHeader param
+     * @param NodesToUnregister param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1317,11 +1242,9 @@ public class ChannelService {
     /**
      * Asynchronous UnregisterNodes service request. 
      * 
-     * @param RequestHeader
-     * @param NodesToUnregister
+     * @param RequestHeader param
+     * @param NodesToUnregister param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult UnregisterNodesAsync(RequestHeader RequestHeader, NodeId... NodesToUnregister)
     {
@@ -1333,9 +1256,7 @@ public class ChannelService {
      * Asynchronous UnregisterNodes service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult UnregisterNodesAsync(UnregisterNodesRequest req)
     {
@@ -1345,12 +1266,12 @@ public class ChannelService {
     /**
      * Synchronous QueryFirst service request. 
      * 
-     * @param RequestHeader
-     * @param View
-     * @param NodeTypes
-     * @param Filter
-     * @param MaxDataSetsToReturn
-     * @param MaxReferencesToReturn
+     * @param RequestHeader param
+     * @param View param
+     * @param NodeTypes param
+     * @param Filter param
+     * @param MaxDataSetsToReturn param
+     * @param MaxReferencesToReturn param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1377,15 +1298,13 @@ public class ChannelService {
     /**
      * Asynchronous QueryFirst service request. 
      * 
-     * @param RequestHeader
-     * @param View
-     * @param NodeTypes
-     * @param Filter
-     * @param MaxDataSetsToReturn
-     * @param MaxReferencesToReturn
+     * @param RequestHeader param
+     * @param View param
+     * @param NodeTypes param
+     * @param Filter param
+     * @param MaxDataSetsToReturn param
+     * @param MaxReferencesToReturn param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult QueryFirstAsync(RequestHeader RequestHeader, ViewDescription View, NodeTypeDescription[] NodeTypes, ContentFilter Filter, UnsignedInteger MaxDataSetsToReturn, UnsignedInteger MaxReferencesToReturn)
     {
@@ -1397,9 +1316,7 @@ public class ChannelService {
      * Asynchronous QueryFirst service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult QueryFirstAsync(QueryFirstRequest req)
     {
@@ -1409,9 +1326,9 @@ public class ChannelService {
     /**
      * Synchronous QueryNext service request. 
      * 
-     * @param RequestHeader
-     * @param ReleaseContinuationPoint
-     * @param ContinuationPoint
+     * @param RequestHeader param
+     * @param ReleaseContinuationPoint param
+     * @param ContinuationPoint param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1438,12 +1355,10 @@ public class ChannelService {
     /**
      * Asynchronous QueryNext service request. 
      * 
-     * @param RequestHeader
-     * @param ReleaseContinuationPoint
-     * @param ContinuationPoint
+     * @param RequestHeader param
+     * @param ReleaseContinuationPoint param
+     * @param ContinuationPoint param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult QueryNextAsync(RequestHeader RequestHeader, Boolean ReleaseContinuationPoint, byte[] ContinuationPoint)
     {
@@ -1455,9 +1370,7 @@ public class ChannelService {
      * Asynchronous QueryNext service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult QueryNextAsync(QueryNextRequest req)
     {
@@ -1467,10 +1380,10 @@ public class ChannelService {
     /**
      * Synchronous Read service request. 
      * 
-     * @param RequestHeader
-     * @param MaxAge
-     * @param TimestampsToReturn
-     * @param NodesToRead
+     * @param RequestHeader param
+     * @param MaxAge param
+     * @param TimestampsToReturn param
+     * @param NodesToRead param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1497,13 +1410,11 @@ public class ChannelService {
     /**
      * Asynchronous Read service request. 
      * 
-     * @param RequestHeader
-     * @param MaxAge
-     * @param TimestampsToReturn
-     * @param NodesToRead
+     * @param RequestHeader param
+     * @param MaxAge param
+     * @param TimestampsToReturn param
+     * @param NodesToRead param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult ReadAsync(RequestHeader RequestHeader, Double MaxAge, TimestampsToReturn TimestampsToReturn, ReadValueId... NodesToRead)
     {
@@ -1515,9 +1426,7 @@ public class ChannelService {
      * Asynchronous Read service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult ReadAsync(ReadRequest req)
     {
@@ -1527,11 +1436,11 @@ public class ChannelService {
     /**
      * Synchronous HistoryRead service request. 
      * 
-     * @param RequestHeader
-     * @param HistoryReadDetails
-     * @param TimestampsToReturn
-     * @param ReleaseContinuationPoints
-     * @param NodesToRead
+     * @param RequestHeader param
+     * @param HistoryReadDetails param
+     * @param TimestampsToReturn param
+     * @param ReleaseContinuationPoints param
+     * @param NodesToRead param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1558,14 +1467,12 @@ public class ChannelService {
     /**
      * Asynchronous HistoryRead service request. 
      * 
-     * @param RequestHeader
-     * @param HistoryReadDetails
-     * @param TimestampsToReturn
-     * @param ReleaseContinuationPoints
-     * @param NodesToRead
+     * @param RequestHeader param
+     * @param HistoryReadDetails param
+     * @param TimestampsToReturn param
+     * @param ReleaseContinuationPoints param
+     * @param NodesToRead param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult HistoryReadAsync(RequestHeader RequestHeader, ExtensionObject HistoryReadDetails, TimestampsToReturn TimestampsToReturn, Boolean ReleaseContinuationPoints, HistoryReadValueId... NodesToRead)
     {
@@ -1577,9 +1484,7 @@ public class ChannelService {
      * Asynchronous HistoryRead service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult HistoryReadAsync(HistoryReadRequest req)
     {
@@ -1589,8 +1494,8 @@ public class ChannelService {
     /**
      * Synchronous Write service request. 
      * 
-     * @param RequestHeader
-     * @param NodesToWrite
+     * @param RequestHeader param
+     * @param NodesToWrite param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1617,11 +1522,9 @@ public class ChannelService {
     /**
      * Asynchronous Write service request. 
      * 
-     * @param RequestHeader
-     * @param NodesToWrite
+     * @param RequestHeader param
+     * @param NodesToWrite param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult WriteAsync(RequestHeader RequestHeader, WriteValue... NodesToWrite)
     {
@@ -1633,9 +1536,7 @@ public class ChannelService {
      * Asynchronous Write service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult WriteAsync(WriteRequest req)
     {
@@ -1645,9 +1546,9 @@ public class ChannelService {
     /**
      * Synchronous HistoryUpdate service request. 
      * 
-     * @param RequestHeader
-     * @param HistoryUpdateDetails
-     * @return the response
+     * @param RequestHeader param
+     * @param HistoryUpdateDetails param
+     * @return the response param
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
      */
@@ -1673,11 +1574,9 @@ public class ChannelService {
     /**
      * Asynchronous HistoryUpdate service request. 
      * 
-     * @param RequestHeader
-     * @param HistoryUpdateDetails
+     * @param RequestHeader param
+     * @param HistoryUpdateDetails param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult HistoryUpdateAsync(RequestHeader RequestHeader, ExtensionObject... HistoryUpdateDetails)
     {
@@ -1689,9 +1588,7 @@ public class ChannelService {
      * Asynchronous HistoryUpdate service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult HistoryUpdateAsync(HistoryUpdateRequest req)
     {
@@ -1701,8 +1598,8 @@ public class ChannelService {
     /**
      * Synchronous Call service request. 
      * 
-     * @param RequestHeader
-     * @param MethodsToCall
+     * @param RequestHeader param
+     * @param MethodsToCall param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1729,11 +1626,9 @@ public class ChannelService {
     /**
      * Asynchronous Call service request. 
      * 
-     * @param RequestHeader
-     * @param MethodsToCall
+     * @param RequestHeader param
+     * @param MethodsToCall param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CallAsync(RequestHeader RequestHeader, CallMethodRequest... MethodsToCall)
     {
@@ -1745,9 +1640,7 @@ public class ChannelService {
      * Asynchronous Call service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CallAsync(CallRequest req)
     {
@@ -1757,10 +1650,10 @@ public class ChannelService {
     /**
      * Synchronous CreateMonitoredItems service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param TimestampsToReturn
-     * @param ItemsToCreate
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param TimestampsToReturn param
+     * @param ItemsToCreate param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1787,13 +1680,11 @@ public class ChannelService {
     /**
      * Asynchronous CreateMonitoredItems service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param TimestampsToReturn
-     * @param ItemsToCreate
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param TimestampsToReturn param
+     * @param ItemsToCreate param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CreateMonitoredItemsAsync(RequestHeader RequestHeader, UnsignedInteger SubscriptionId, TimestampsToReturn TimestampsToReturn, MonitoredItemCreateRequest... ItemsToCreate)
     {
@@ -1805,9 +1696,7 @@ public class ChannelService {
      * Asynchronous CreateMonitoredItems service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CreateMonitoredItemsAsync(CreateMonitoredItemsRequest req)
     {
@@ -1817,10 +1706,10 @@ public class ChannelService {
     /**
      * Synchronous ModifyMonitoredItems service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param TimestampsToReturn
-     * @param ItemsToModify
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param TimestampsToReturn param
+     * @param ItemsToModify param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1847,13 +1736,11 @@ public class ChannelService {
     /**
      * Asynchronous ModifyMonitoredItems service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param TimestampsToReturn
-     * @param ItemsToModify
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param TimestampsToReturn param
+     * @param ItemsToModify param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult ModifyMonitoredItemsAsync(RequestHeader RequestHeader, UnsignedInteger SubscriptionId, TimestampsToReturn TimestampsToReturn, MonitoredItemModifyRequest... ItemsToModify)
     {
@@ -1865,9 +1752,7 @@ public class ChannelService {
      * Asynchronous ModifyMonitoredItems service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult ModifyMonitoredItemsAsync(ModifyMonitoredItemsRequest req)
     {
@@ -1877,10 +1762,10 @@ public class ChannelService {
     /**
      * Synchronous SetMonitoringMode service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param MonitoringMode
-     * @param MonitoredItemIds
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param MonitoringMode param
+     * @param MonitoredItemIds param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1907,13 +1792,11 @@ public class ChannelService {
     /**
      * Asynchronous SetMonitoringMode service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param MonitoringMode
-     * @param MonitoredItemIds
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param MonitoringMode param
+     * @param MonitoredItemIds param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult SetMonitoringModeAsync(RequestHeader RequestHeader, UnsignedInteger SubscriptionId, MonitoringMode MonitoringMode, UnsignedInteger... MonitoredItemIds)
     {
@@ -1925,9 +1808,7 @@ public class ChannelService {
      * Asynchronous SetMonitoringMode service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult SetMonitoringModeAsync(SetMonitoringModeRequest req)
     {
@@ -1937,11 +1818,11 @@ public class ChannelService {
     /**
      * Synchronous SetTriggering service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param TriggeringItemId
-     * @param LinksToAdd
-     * @param LinksToRemove
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param TriggeringItemId param
+     * @param LinksToAdd param
+     * @param LinksToRemove param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -1968,14 +1849,12 @@ public class ChannelService {
     /**
      * Asynchronous SetTriggering service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param TriggeringItemId
-     * @param LinksToAdd
-     * @param LinksToRemove
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param TriggeringItemId param
+     * @param LinksToAdd param
+     * @param LinksToRemove param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult SetTriggeringAsync(RequestHeader RequestHeader, UnsignedInteger SubscriptionId, UnsignedInteger TriggeringItemId, UnsignedInteger[] LinksToAdd, UnsignedInteger... LinksToRemove)
     {
@@ -1987,9 +1866,7 @@ public class ChannelService {
      * Asynchronous SetTriggering service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult SetTriggeringAsync(SetTriggeringRequest req)
     {
@@ -1999,9 +1876,9 @@ public class ChannelService {
     /**
      * Synchronous DeleteMonitoredItems service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param MonitoredItemIds
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param MonitoredItemIds param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -2028,12 +1905,10 @@ public class ChannelService {
     /**
      * Asynchronous DeleteMonitoredItems service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param MonitoredItemIds
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param MonitoredItemIds param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult DeleteMonitoredItemsAsync(RequestHeader RequestHeader, UnsignedInteger SubscriptionId, UnsignedInteger... MonitoredItemIds)
     {
@@ -2045,9 +1920,7 @@ public class ChannelService {
      * Asynchronous DeleteMonitoredItems service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult DeleteMonitoredItemsAsync(DeleteMonitoredItemsRequest req)
     {
@@ -2057,13 +1930,13 @@ public class ChannelService {
     /**
      * Synchronous CreateSubscription service request. 
      * 
-     * @param RequestHeader
-     * @param RequestedPublishingInterval
-     * @param RequestedLifetimeCount
-     * @param RequestedMaxKeepAliveCount
-     * @param MaxNotificationsPerPublish
-     * @param PublishingEnabled
-     * @param Priority
+     * @param RequestHeader param
+     * @param RequestedPublishingInterval param
+     * @param RequestedLifetimeCount param
+     * @param RequestedMaxKeepAliveCount param
+     * @param MaxNotificationsPerPublish param
+     * @param PublishingEnabled param
+     * @param Priority param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -2090,16 +1963,14 @@ public class ChannelService {
     /**
      * Asynchronous CreateSubscription service request. 
      * 
-     * @param RequestHeader
-     * @param RequestedPublishingInterval
-     * @param RequestedLifetimeCount
-     * @param RequestedMaxKeepAliveCount
-     * @param MaxNotificationsPerPublish
-     * @param PublishingEnabled
-     * @param Priority
+     * @param RequestHeader param
+     * @param RequestedPublishingInterval param
+     * @param RequestedLifetimeCount param
+     * @param RequestedMaxKeepAliveCount param
+     * @param MaxNotificationsPerPublish param
+     * @param PublishingEnabled param
+     * @param Priority param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CreateSubscriptionAsync(RequestHeader RequestHeader, Double RequestedPublishingInterval, UnsignedInteger RequestedLifetimeCount, UnsignedInteger RequestedMaxKeepAliveCount, UnsignedInteger MaxNotificationsPerPublish, Boolean PublishingEnabled, UnsignedByte Priority)
     {
@@ -2111,9 +1982,7 @@ public class ChannelService {
      * Asynchronous CreateSubscription service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult CreateSubscriptionAsync(CreateSubscriptionRequest req)
     {
@@ -2123,13 +1992,13 @@ public class ChannelService {
     /**
      * Synchronous ModifySubscription service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param RequestedPublishingInterval
-     * @param RequestedLifetimeCount
-     * @param RequestedMaxKeepAliveCount
-     * @param MaxNotificationsPerPublish
-     * @param Priority
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param RequestedPublishingInterval param
+     * @param RequestedLifetimeCount param
+     * @param RequestedMaxKeepAliveCount param
+     * @param MaxNotificationsPerPublish param
+     * @param Priority param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -2156,16 +2025,14 @@ public class ChannelService {
     /**
      * Asynchronous ModifySubscription service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param RequestedPublishingInterval
-     * @param RequestedLifetimeCount
-     * @param RequestedMaxKeepAliveCount
-     * @param MaxNotificationsPerPublish
-     * @param Priority
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param RequestedPublishingInterval param
+     * @param RequestedLifetimeCount param
+     * @param RequestedMaxKeepAliveCount param
+     * @param MaxNotificationsPerPublish param
+     * @param Priority param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult ModifySubscriptionAsync(RequestHeader RequestHeader, UnsignedInteger SubscriptionId, Double RequestedPublishingInterval, UnsignedInteger RequestedLifetimeCount, UnsignedInteger RequestedMaxKeepAliveCount, UnsignedInteger MaxNotificationsPerPublish, UnsignedByte Priority)
     {
@@ -2177,9 +2044,7 @@ public class ChannelService {
      * Asynchronous ModifySubscription service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult ModifySubscriptionAsync(ModifySubscriptionRequest req)
     {
@@ -2189,9 +2054,9 @@ public class ChannelService {
     /**
      * Synchronous SetPublishingMode service request. 
      * 
-     * @param RequestHeader
-     * @param PublishingEnabled
-     * @param SubscriptionIds
+     * @param RequestHeader param
+     * @param PublishingEnabled param
+     * @param SubscriptionIds param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -2218,12 +2083,10 @@ public class ChannelService {
     /**
      * Asynchronous SetPublishingMode service request. 
      * 
-     * @param RequestHeader
-     * @param PublishingEnabled
-     * @param SubscriptionIds
+     * @param RequestHeader param
+     * @param PublishingEnabled param
+     * @param SubscriptionIds param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult SetPublishingModeAsync(RequestHeader RequestHeader, Boolean PublishingEnabled, UnsignedInteger... SubscriptionIds)
     {
@@ -2235,9 +2098,7 @@ public class ChannelService {
      * Asynchronous SetPublishingMode service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult SetPublishingModeAsync(SetPublishingModeRequest req)
     {
@@ -2247,8 +2108,8 @@ public class ChannelService {
     /**
      * Synchronous Publish service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionAcknowledgements
+     * @param RequestHeader param
+     * @param SubscriptionAcknowledgements param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -2275,11 +2136,9 @@ public class ChannelService {
     /**
      * Asynchronous Publish service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionAcknowledgements
+     * @param RequestHeader param
+     * @param SubscriptionAcknowledgements param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult PublishAsync(RequestHeader RequestHeader, SubscriptionAcknowledgement... SubscriptionAcknowledgements)
     {
@@ -2291,9 +2150,7 @@ public class ChannelService {
      * Asynchronous Publish service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult PublishAsync(PublishRequest req)
     {
@@ -2303,9 +2160,9 @@ public class ChannelService {
     /**
      * Synchronous Republish service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param RetransmitSequenceNumber
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param RetransmitSequenceNumber param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -2332,12 +2189,10 @@ public class ChannelService {
     /**
      * Asynchronous Republish service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionId
-     * @param RetransmitSequenceNumber
+     * @param RequestHeader param
+     * @param SubscriptionId param
+     * @param RetransmitSequenceNumber param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult RepublishAsync(RequestHeader RequestHeader, UnsignedInteger SubscriptionId, UnsignedInteger RetransmitSequenceNumber)
     {
@@ -2349,9 +2204,7 @@ public class ChannelService {
      * Asynchronous Republish service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult RepublishAsync(RepublishRequest req)
     {
@@ -2361,9 +2214,9 @@ public class ChannelService {
     /**
      * Synchronous TransferSubscriptions service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionIds
-     * @param SendInitialValues
+     * @param RequestHeader param
+     * @param SubscriptionIds param
+     * @param SendInitialValues param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -2390,12 +2243,10 @@ public class ChannelService {
     /**
      * Asynchronous TransferSubscriptions service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionIds
-     * @param SendInitialValues
+     * @param RequestHeader param
+     * @param SubscriptionIds param
+     * @param SendInitialValues param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult TransferSubscriptionsAsync(RequestHeader RequestHeader, UnsignedInteger[] SubscriptionIds, Boolean SendInitialValues)
     {
@@ -2407,9 +2258,7 @@ public class ChannelService {
      * Asynchronous TransferSubscriptions service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult TransferSubscriptionsAsync(TransferSubscriptionsRequest req)
     {
@@ -2419,8 +2268,8 @@ public class ChannelService {
     /**
      * Synchronous DeleteSubscriptions service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionIds
+     * @param RequestHeader param
+     * @param SubscriptionIds param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -2447,11 +2296,9 @@ public class ChannelService {
     /**
      * Asynchronous DeleteSubscriptions service request. 
      * 
-     * @param RequestHeader
-     * @param SubscriptionIds
+     * @param RequestHeader param
+     * @param SubscriptionIds param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult DeleteSubscriptionsAsync(RequestHeader RequestHeader, UnsignedInteger... SubscriptionIds)
     {
@@ -2463,9 +2310,7 @@ public class ChannelService {
      * Asynchronous DeleteSubscriptions service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult DeleteSubscriptionsAsync(DeleteSubscriptionsRequest req)
     {
@@ -2475,10 +2320,10 @@ public class ChannelService {
     /**
      * Synchronous TestStack service request. 
      * 
-     * @param RequestHeader
-     * @param TestId
-     * @param Iteration
-     * @param Input
+     * @param RequestHeader param
+     * @param TestId param
+     * @param Iteration param
+     * @param Input param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -2505,13 +2350,11 @@ public class ChannelService {
     /**
      * Asynchronous TestStack service request. 
      * 
-     * @param RequestHeader
-     * @param TestId
-     * @param Iteration
-     * @param Input
+     * @param RequestHeader param
+     * @param TestId param
+     * @param Iteration param
+     * @param Input param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult TestStackAsync(RequestHeader RequestHeader, UnsignedInteger TestId, Integer Iteration, Variant Input)
     {
@@ -2523,9 +2366,7 @@ public class ChannelService {
      * Asynchronous TestStack service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult TestStackAsync(TestStackRequest req)
     {
@@ -2535,10 +2376,10 @@ public class ChannelService {
     /**
      * Synchronous TestStackEx service request. 
      * 
-     * @param RequestHeader
-     * @param TestId
-     * @param Iteration
-     * @param Input
+     * @param RequestHeader param
+     * @param TestId param
+     * @param Iteration param
+     * @param Input param
      * @return the response
      * @throws ServiceFaultException on error while executing the operation
      * @throws ServiceResultException on communication error
@@ -2565,13 +2406,11 @@ public class ChannelService {
     /**
      * Asynchronous TestStackEx service request. 
      * 
-     * @param RequestHeader
-     * @param TestId
-     * @param Iteration
-     * @param Input
+     * @param RequestHeader param
+     * @param TestId param
+     * @param Iteration param
+     * @param Input param
      * @return monitorable asyncronous result object
-     * @throws ServiceFaultException on error while executing the operation
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult TestStackExAsync(RequestHeader RequestHeader, UnsignedInteger TestId, Integer Iteration, CompositeTestType Input)
     {
@@ -2583,9 +2422,7 @@ public class ChannelService {
      * Asynchronous TestStackEx service request. 
      * 
      * @param req the request
-     * @param listener listener that receives either an error or the result
      * @return monitorable asyncronous result object
-     * @throws ServiceResultException on communication error
      */
     public AsyncResult TestStackExAsync(TestStackExRequest req)
     {

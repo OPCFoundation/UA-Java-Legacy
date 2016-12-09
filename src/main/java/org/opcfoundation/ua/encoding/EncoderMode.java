@@ -13,8 +13,7 @@
 package org.opcfoundation.ua.encoding;
 
 /**
- *
- * 
+ * <p>EncoderMode class.</p>
  */
 public enum EncoderMode {
 

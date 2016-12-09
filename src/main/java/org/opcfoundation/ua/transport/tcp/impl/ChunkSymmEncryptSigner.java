@@ -23,8 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
- * 
+ * <p>ChunkSymmEncryptSigner class.</p>
  */
 public class ChunkSymmEncryptSigner implements Runnable {
 
@@ -39,6 +38,13 @@ public class ChunkSymmEncryptSigner implements Runnable {
 	ByteBuffer chunk, body;
 	SecurityToken token;
 	
+	/**
+	 * <p>Constructor for ChunkSymmEncryptSigner.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @param body a {@link java.nio.ByteBuffer} object.
+	 * @param token a {@link org.opcfoundation.ua.transport.tcp.impl.SecurityToken} object.
+	 */
 	public ChunkSymmEncryptSigner(ByteBuffer chunk, ByteBuffer body, SecurityToken token)
 	{
 		this.chunk = chunk;
@@ -46,6 +52,7 @@ public class ChunkSymmEncryptSigner implements Runnable {
 		this.token = token;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void run() throws RuntimeServiceResultException 
 	{

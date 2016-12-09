@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.DeleteReferencesItem;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class DeleteReferencesRequest extends Object implements ServiceRequest {
+public class DeleteReferencesRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DeleteReferencesRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteReferencesRequest_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class DeleteReferencesRequest extends Object implements ServiceRequest {
       */
     public DeleteReferencesRequest clone()
     {
-        DeleteReferencesRequest result = new DeleteReferencesRequest();
+        DeleteReferencesRequest result = (DeleteReferencesRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         if (ReferencesToDelete!=null) {
             result.ReferencesToDelete = new DeleteReferencesItem[ReferencesToDelete.length];

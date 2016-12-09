@@ -36,7 +36,7 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 _imports_
 
 @Description("_description_")
-public class _ClassName_ extends _SuperType_ implements Structure, Cloneable {
+public class _ClassName_ extends _SuperType_ {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers._ClassName_);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers._ClassName__Encoding_DefaultBinary);

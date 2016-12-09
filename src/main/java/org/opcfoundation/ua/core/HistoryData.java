@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DataValue;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class HistoryData extends Object implements Structure, Cloneable {
+public class HistoryData extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryData);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryData_Encoding_DefaultBinary);
@@ -70,7 +71,7 @@ public class HistoryData extends Object implements Structure, Cloneable {
       */
     public HistoryData clone()
     {
-        HistoryData result = new HistoryData();
+        HistoryData result = (HistoryData) super.clone();
         result.DataValues = DataValues==null ? null : DataValues.clone();
         return result;
     }

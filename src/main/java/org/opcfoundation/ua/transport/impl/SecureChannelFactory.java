@@ -16,6 +16,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.opcfoundation.ua.application.Server;
 import org.opcfoundation.ua.transport.EndpointServer;
 
+/**
+ * <p>SecureChannelFactory class.</p>
+ *
+ */
 public class SecureChannelFactory {
 
 	/** Secure channel counter */
@@ -25,6 +29,12 @@ public class SecureChannelFactory {
 	
 	Server serviceServer;
 	
+	/**
+	 * <p>Constructor for SecureChannelFactory.</p>
+	 *
+	 * @param endpointServer a {@link org.opcfoundation.ua.transport.EndpointServer} object.
+	 * @param serviceServer a {@link org.opcfoundation.ua.application.Server} object.
+	 */
 	public SecureChannelFactory(EndpointServer endpointServer, Server serviceServer)
 	{
 		this.endpointServer = endpointServer;

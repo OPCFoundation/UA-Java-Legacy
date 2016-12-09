@@ -42,9 +42,13 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 	/** Considered null node id */
 	/** Considered null node id */
 	public static final ExpandedNodeId NULL_NUMERIC = new ExpandedNodeId(NodeId.NULL_NUMERIC);
+	/** Constant <code>NULL_STRING</code> */
 	public static final ExpandedNodeId NULL_STRING = new ExpandedNodeId(NodeId.NULL_STRING);
+	/** Constant <code>NULL_GUID</code> */
 	public static final ExpandedNodeId NULL_GUID = new ExpandedNodeId(NodeId.NULL_GUID);
+	/** Constant <code>NULL_OPAQUE</code> */
 	public static final ExpandedNodeId NULL_OPAQUE = new ExpandedNodeId(NodeId.NULL_OPAQUE);
+	/** Constant <code>NULL</code> */
 	public static final ExpandedNodeId NULL = NULL_NUMERIC;
 
 	/** Identifier of "NodeId" in UA AddressSpace */
@@ -52,16 +56,18 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 
 	/**
 	 * Check if nodeId is null or a NullNodeId.
-	 * @param nodeId
+	 *
+	 * @param nodeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
 	 * @return true if (nodeId == null) || nodeId.isNullNodeId()
 	 */
 	public static boolean isNull(ExpandedNodeId nodeId) {
 		return (nodeId == null) || nodeId.isNullNodeId();
 	}
 	/**
-	 * @param s
-	 * @param value
-	 * @return
+	 * <p>parseExpandedNodeId.</p>
+	 *
+	 * @param s a {@link java.lang.String} object.
+	 * @return a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
 	 */
 	public static ExpandedNodeId parseExpandedNodeId(String s) {
 		String[] parts = s.split(";");
@@ -134,8 +140,9 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 
 	/**
 	 * Convenience constructor that creates ExpandedNodeId from namespaceUri and value. Server index is 0
-	 * @param namespaceUri
-	 * @param value
+	 *
+	 * @param namespaceUri a {@link java.lang.String} object.
+	 * @param value a {@link java.lang.Object} object.
 	 */
 	public ExpandedNodeId(String namespaceUri, Object value){
 		this(UnsignedInteger.ZERO, namespaceUri, value);
@@ -191,7 +198,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 	 * Construct ExpandedNodeId using NamespaceUri.
 	 *
 	 * @param serverIndex Server Index (optional)
-	 * @param namespaceUri
+	 * @param namespaceUri a {@link java.lang.String} object.
 	 * @param value value (must be UnsignedInteger, String, UUID or byte[])
 	 */
 	public ExpandedNodeId(UnsignedInteger serverIndex, String namespaceUri, Object value)
@@ -214,6 +221,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 		else throw new IllegalArgumentException("value cannot be "+value.getClass().getName());
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int compareTo(ExpandedNodeId other) {
 		int value;
@@ -244,6 +252,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 		return value;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == null) return this.equals(ExpandedNodeId.NULL);
@@ -284,6 +293,11 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 				return false;
 	}
 
+	/**
+	 * <p>getIdType.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.IdType} object.
+	 */
 	public IdType getIdType()
 	{
 		return type;
@@ -309,16 +323,27 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 		return namespaceUri;
 	}
 
+	/**
+	 * <p>Getter for the field <code>serverIndex</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public UnsignedInteger getServerIndex()
 	{
 		return serverIndex;
 	}
 
+	/**
+	 * <p>Getter for the field <code>value</code>.</p>
+	 *
+	 * @return a {@link java.lang.Object} object.
+	 */
 	public Object getValue()
 	{
 		return value;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		int hashCode = 0;
@@ -334,13 +359,19 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 	 * returns true if the nodeId is absolute, i.e. it refers to an external server (with namespaceUri or serverIndex).
 	 *
 	 */
+	/**
+	 * <p>isAbsolute.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isAbsolute(){
 		return ((namespaceUri != null && !namespaceUri.isEmpty()) || !isLocal());
 	}
 
 	/**
 	 * Check if the nodeId refers to a local node, i.e. a node that is in the server's own namespace.
-	 * @return true, if serverIndex == 0 (or null)
+	 *
+	 * @return a boolean.
 	 */
 	public boolean isLocal() {
 		return (serverIndex == null) || (serverIndex.getValue() == 0);
@@ -379,6 +410,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 		return NodeId.get(type, nsIdx, value).isNullNodeId();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		try {

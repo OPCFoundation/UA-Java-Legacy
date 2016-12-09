@@ -165,7 +165,7 @@ public final class NodeId implements Comparable<NodeId> {
 	
 	/**
 	 * Check if nodeId is null or a NullNodeId.
-	 * @param nodeId
+	 * @param nodeId the nodeId
 	 * @return true if (nodeId == null) || nodeId.isNullNodeId()
 	 */
 	public static boolean isNull(NodeId nodeId) {
@@ -272,9 +272,7 @@ public final class NodeId implements Comparable<NodeId> {
 	}
 	
 	/**
-	 * Convert String representation to NodeId.
-	 * If the namespace is expressed with URI, then the
-	 * <t>namespaceTable</t> field is required.
+	 * Convert String representation to NodeId. 
 	 * 
 	 * The String representation is in the following notations:
 	 *  ns=[id];i=[number]
@@ -289,10 +287,9 @@ public final class NodeId implements Comparable<NodeId> {
 	 *  ns=[id];b=[base64]
 	 *  b=[base64]
 	 * 
-	 * @param nodeIdRef
+	 * @param nodeIdRef string
 	 * @return nodeid
-	 * @throws IllegalArgumentException
-	 * @throws NamespaceNotFoundException
+	 * @throws IllegalArgumentException on error
 	 * @deprecated Use parseNodeId() instead (renamed for method name consistency with other similar classes)
 	 */
 	@Deprecated
@@ -305,8 +302,6 @@ public final class NodeId implements Comparable<NodeId> {
 	
 	/**
 	 * Convert String representation to NodeId.
-	 * If the namespace is expressed with URI, then the
-	 * <t>namespaceTable</t> field is required.
 	 * 
 	 * The String representation is in the following notations:
 	 *  ns=[id];i=[number]
@@ -321,10 +316,9 @@ public final class NodeId implements Comparable<NodeId> {
 	 *  ns=[id];b=[base64]
 	 *  b=[base64]
 	 * 
-	 * @param nodeIdRef
+	 * @param nodeIdRef string format of node id
 	 * @return nodeid
-	 * @throws IllegalArgumentException
-	 * @throws NamespaceNotFoundException
+	 * @throws IllegalArgumentException if string notation is not correct
 	 */
 	public static NodeId parseNodeId(String nodeIdRef)
 	throws IllegalArgumentException
@@ -403,11 +397,10 @@ public final class NodeId implements Comparable<NodeId> {
 
 	/**
 	 * Create a new random NodeId. Because GUID values are always unique, this method also always returns a unique NodeId. 
-	 * @param namespaceIndex
+	 * @param namespaceIndex namespace index
 	 * @return a new NodeId initialized with a random GUID.
 	 */
 	public static NodeId randomGUID(int namespaceIndex) {
-		// TODO Auto-generated method stub
 		return new NodeId(namespaceIndex,UUID.randomUUID());
 	}	
 	

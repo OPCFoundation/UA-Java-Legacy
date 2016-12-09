@@ -15,11 +15,16 @@ package org.opcfoundation.ua.builtintypes;
 /**
  * Super interface for all UA encodeable enumerations.
  * getValue is needed to complete binary serialization.
- *  
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public interface Enumeration {
 
+	/**
+	 * <p>getValue.</p>
+	 *
+	 * @return a int.
+	 */
 	int getValue();
 	
 }

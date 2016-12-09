@@ -28,7 +28,7 @@ import org.opcfoundation.ua.utils.BijectionMap;
  */
 public class BuiltinsMap {
 
-	/** Builtins URL -> ClassName map */
+	/** Builtins URL -&gt; ClassName map */
 	public final static Map<String, Class<?>> MAP;	
 	public final static Map<Class<?>, Integer> ID_MAP;
 	public final static BijectionMap<NodeId, Class<?>> ID_CLASS_MAP;

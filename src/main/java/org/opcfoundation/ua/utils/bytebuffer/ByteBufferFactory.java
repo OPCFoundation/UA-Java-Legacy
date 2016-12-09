@@ -16,12 +16,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
+ * <p>Abstract ByteBufferFactory class.</p>
  *
- * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public abstract class ByteBufferFactory {
 
+	/** Constant <code>DEFAULT_ENDIAN_HEAP_BYTEBUFFER_FACTORY</code> */
 	public static final ByteBufferFactory DEFAULT_ENDIAN_HEAP_BYTEBUFFER_FACTORY = 
 		new ByteBufferFactory() {
 			@Override
@@ -31,6 +32,7 @@ public abstract class ByteBufferFactory {
 				return null;
 			}};	
 	
+	/** Constant <code>LITTLE_ENDIAN_HEAP_BYTEBUFFER_FACTORY</code> */
 	public static final ByteBufferFactory LITTLE_ENDIAN_HEAP_BYTEBUFFER_FACTORY = 
 		new ByteBufferFactory() {
 			@Override
@@ -39,6 +41,7 @@ public abstract class ByteBufferFactory {
 				result.order(ByteOrder.LITTLE_ENDIAN);
 				return result;
 			}};  
+	/** Constant <code>BIG_ENDIAN_HEAP_BYTEBUFFER_FACTORY</code> */
 	public static final ByteBufferFactory BIG_ENDIAN_HEAP_BYTEBUFFER_FACTORY = 
 		new ByteBufferFactory() {
 			@Override
@@ -48,6 +51,12 @@ public abstract class ByteBufferFactory {
 				return result;
 			}};  
 	
+	/**
+	 * <p>allocate.</p>
+	 *
+	 * @param capacity a int.
+	 * @return a {@link java.nio.ByteBuffer} object.
+	 */
 	public abstract ByteBuffer allocate(int capacity);
 	
 }

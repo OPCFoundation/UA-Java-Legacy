@@ -54,11 +54,18 @@ import org.opcfoundation.ua.utils.CryptoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>BcCertificateProvider class.</p>
+ *
+ */
 public class BcCertificateProvider implements CertificateProvider {
 
 	private static Logger logger = LoggerFactory
 			.getLogger(BcCertificateProvider.class);
 
+	/**
+	 * <p>Constructor for BcCertificateProvider.</p>
+	 */
 	public BcCertificateProvider() {
 
 		if (!CryptoUtil.getSecurityProviderName().equals("BC")) {
@@ -67,37 +74,14 @@ public class BcCertificateProvider implements CertificateProvider {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Generates a new certificate using the Bouncy Castle implementation.
 	 * <p>
 	 * The method is used from
 	 * {@link CertificateUtils#createApplicationInstanceCertificate(String, String, String, int, String...)}
 	 * and
 	 * {@link CertificateUtils#renewApplicationInstanceCertificate(String, String, String, int, org.opcfoundation.ua.transport.security.KeyPair, String...)}
-	 * 
-	 * @param domainName
-	 *            the X500 domain name for the certificate
-	 * @param publicKey
-	 *            the public key of the cert
-	 * @param privateKey
-	 *            the private key of the cert
-	 * @param issuerKeys
-	 *            the certificate and private key of the issuer
-	 * @param from
-	 *            validity start time
-	 * @param to
-	 *            validity end time
-	 * @param serialNumber
-	 *            a unique serial number for the certificate
-	 * @param applicationUri
-	 *            the OPC UA ApplicationUri of the application - added to
-	 *            SubjectAlternativeName
-	 * @param hostNames
-	 *            the additional host names to add to SubjectAlternativeName
-	 * @return the generated certificate
-	 * @throws GeneralSecurityException
-	 *             if the generation fails
-	 * @throws IOException
-	 *             if the generation fails due to an IO exception
 	 */
 	@Override
 	public X509Certificate generateCertificate(String domainName,
@@ -215,23 +199,11 @@ public class BcCertificateProvider implements CertificateProvider {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Build a X509 V3 certificate to use as an issuer (CA) certificate. The
 	 * certificate does not define OPC UA specific fields, so it cannot be used
 	 * for an application instance certificate.
-	 * 
-	 * @param publicKey
-	 *            the public key to use for the certificate
-	 * @param privateKey
-	 *            the private key corresponding to the publicKey
-	 * @param issuerKeys
-	 *            the certificate and private key of the certificate issuer: if
-	 *            null a self-signed certificate is created.
-	 * @param commonName
-	 *            the CommonName to use for the subject of the certificate.
-	 * @param serialNr
-	 * @param startDate
-	 * @param expiryDate
-	 * @throws OperatorCreationException
 	 */
 	@Override
 	public X509Certificate generateIssuerCert(PublicKey publicKey,
@@ -281,6 +253,7 @@ public class BcCertificateProvider implements CertificateProvider {
 				.getCertificate(certBldr.build(signer));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	@SuppressWarnings("unchecked")
 	public Collection<List<?>> getSubjectAlternativeNames(X509Certificate cert)
@@ -288,15 +261,7 @@ public class BcCertificateProvider implements CertificateProvider {
 		return X509ExtensionUtil.getSubjectAlternativeNames(cert);
 	}
 
-	/**
-	 * @param key
-	 *            certificate of private key
-	 * @param savePath
-	 * @param password
-	 * @param algorithm
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
+	/** {@inheritDoc} */
 	public void writeToPem(X509Certificate key, File savePath, String password,
 			String algorithm) throws IOException {
 		JcaPEMWriter pemWrt = new JcaPEMWriter(new OutputStreamWriter(

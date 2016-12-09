@@ -1,7 +1,7 @@
 /**
 OPC UA Part 6 defines 25 builtin types. Those 25 types are represented with the following java classes.
 Most builtin classes are immutable. byte[] is not immutable but modifications are forbidden.
-<table>
+<table summary="builtin types table">
 <tr><th>ID</th><th>Name</th><th>Java Class</th><th>Notes</th></tr>
 <tr><td>1</td><td>Boolean</td><td>java.lang.Boolean</td></tr>
 <tr><td>2</td><td>SByte</td><td>java.lang.Byte</td></tr>
@@ -30,7 +30,7 @@ Most builtin classes are immutable. byte[] is not immutable but modifications ar
 <tr><td>25</td><td>DiagnosticInfo</td><td>org.opcfoundation.ua.builtintypes.DiagnosticInfo</td></tr>
 </table>
 
-<br /><br />Also, see class org.opcfoundation.ua.encoding.utils.BuiltinsMap for builtins id, uri and java class mappings.
+<br>Also, see class org.opcfoundation.ua.encoding.utils.BuiltinsMap for builtins id, uri and java class mappings.
  */
 package org.opcfoundation.ua.builtintypes;
 

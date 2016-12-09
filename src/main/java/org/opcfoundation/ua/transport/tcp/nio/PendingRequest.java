@@ -21,6 +21,10 @@ import org.opcfoundation.ua.transport.ServerSecureChannel;
 import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
 import org.opcfoundation.ua.transport.tcp.impl.TcpMessageType;
 
+/**
+ * <p>PendingRequest class.</p>
+ *
+ */
 public class PendingRequest extends EndpointServiceRequest<ServiceRequest, ServiceResponse> {
 	
 	OpcTcpServerSecureChannel channel;
@@ -28,6 +32,15 @@ public class PendingRequest extends EndpointServiceRequest<ServiceRequest, Servi
 	int requestId;
 	AsyncWrite write;
 	
+	/**
+	 * <p>Constructor for PendingRequest.</p>
+	 *
+	 * @param channel a {@link org.opcfoundation.ua.transport.tcp.nio.OpcTcpServerSecureChannel} object.
+	 * @param endpoint a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 * @param server a {@link org.opcfoundation.ua.application.Server} object.
+	 * @param requestId a int.
+	 * @param requestMessage a {@link org.opcfoundation.ua.builtintypes.ServiceRequest} object.
+	 */
 	public PendingRequest(OpcTcpServerSecureChannel channel, Endpoint endpoint, Server server, int requestId, ServiceRequest requestMessage) {
 		super(requestMessage, server, endpoint);
 		this.channel = channel;
@@ -35,17 +48,20 @@ public class PendingRequest extends EndpointServiceRequest<ServiceRequest, Servi
 		this.requestMessage = requestMessage;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public ServerSecureChannel getChannel() {
 		return channel;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void sendResponse(AsyncWrite response) {
 		channel.connection.pendingRequests.remove(requestId);
 		channel.connection.sendSecureMessage(response, channel.getActiveSecurityToken(), requestId, TcpMessageType.MESSAGE, channel.sendSequenceNumber);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public AsyncWrite sendResponse(ServiceResponse response) {
 		write = new AsyncWrite(response);

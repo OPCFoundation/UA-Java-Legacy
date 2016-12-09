@@ -37,10 +37,11 @@ import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class RequestHeader extends Object implements Structure, Cloneable {
+public class RequestHeader extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RequestHeader);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RequestHeader_Encoding_DefaultBinary);
@@ -144,7 +145,7 @@ public class RequestHeader extends Object implements Structure, Cloneable {
       */
     public RequestHeader clone()
     {
-        RequestHeader result = new RequestHeader();
+        RequestHeader result = (RequestHeader) super.clone();
         result.AuthenticationToken = AuthenticationToken;
         result.Timestamp = Timestamp;
         result.RequestHandle = RequestHandle;

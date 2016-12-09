@@ -32,8 +32,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- *
- * 
+ * <p>ChunkAsymmEncryptSigner class.</p>
  */
 public class ChunkAsymmEncryptSigner implements Runnable {
 
@@ -50,6 +49,13 @@ public class ChunkAsymmEncryptSigner implements Runnable {
 
 	private int signatureSize;
 	
+	/**
+	 * <p>Constructor for ChunkAsymmEncryptSigner.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @param body a {@link java.nio.ByteBuffer} object.
+	 * @param profile a {@link org.opcfoundation.ua.transport.security.SecurityConfiguration} object.
+	 */
 	public ChunkAsymmEncryptSigner(ByteBuffer chunk, ByteBuffer body, SecurityConfiguration profile)
 	{
 		this.chunk = chunk;
@@ -57,6 +63,7 @@ public class ChunkAsymmEncryptSigner implements Runnable {
 		this.profile = profile;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void run() 
 	throws RuntimeServiceResultException

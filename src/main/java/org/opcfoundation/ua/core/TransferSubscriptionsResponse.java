@@ -37,9 +37,10 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.core.ResponseHeader;
 import org.opcfoundation.ua.core.TransferResult;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class TransferSubscriptionsResponse extends Object implements ServiceResponse {
+public class TransferSubscriptionsResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TransferSubscriptionsResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TransferSubscriptionsResponse_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class TransferSubscriptionsResponse extends Object implements ServiceResp
       */
     public TransferSubscriptionsResponse clone()
     {
-        TransferSubscriptionsResponse result = new TransferSubscriptionsResponse();
+        TransferSubscriptionsResponse result = (TransferSubscriptionsResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         if (Results!=null) {
             result.Results = new TransferResult[Results.length];

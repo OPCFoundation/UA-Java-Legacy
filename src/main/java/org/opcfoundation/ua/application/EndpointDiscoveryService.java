@@ -33,22 +33,37 @@ import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
 
 /**
  * Service handler that serves onGetEndpoints request.
- * 
  */
 public class EndpointDiscoveryService {
 
 	EndpointBindingCollection endpointBindings;
 	private static Logger logger = LoggerFactory.getLogger(EndpointDiscoveryService.class);
 	
+	/**
+	 * <p>Constructor for EndpointDiscoveryService.</p>
+	 *
+	 * @param endpointBindings a {@link org.opcfoundation.ua.transport.endpoint.EndpointBindingCollection} object.
+	 */
 	public EndpointDiscoveryService(EndpointBindingCollection endpointBindings) {
 		this.endpointBindings = endpointBindings;
 	}
 	
+	/**
+	 * <p>setEndpointBindingCollection.</p>
+	 *
+	 * @param endpointBindings a {@link org.opcfoundation.ua.transport.endpoint.EndpointBindingCollection} object.
+	 */
 	public void setEndpointBindingCollection(EndpointBindingCollection endpointBindings)
 	{
 		this.endpointBindings = endpointBindings;
 	}
 	
+	/**
+	 * <p>onGetEndpoints.</p>
+	 *
+	 * @param messageExchange a {@link org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest} object.
+	 * @throws org.opcfoundation.ua.common.ServiceFaultException if any.
+	 */
 	public void onGetEndpoints(EndpointServiceRequest<GetEndpointsRequest, GetEndpointsResponse> messageExchange) throws ServiceFaultException {
 		//local address where the request came from
 		SocketAddress requestAddress = messageExchange.getChannel().getConnection().getLocalAddress();
@@ -135,6 +150,11 @@ public class EndpointDiscoveryService {
 		messageExchange.sendResponse(res);
 	}
 
+	/**
+	 * <p>getEndpointCollection.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.endpoint.EndpointBindingCollection} object.
+	 */
 	public EndpointBindingCollection getEndpointCollection()
 	{
 		return endpointBindings;

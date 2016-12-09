@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class TimeZoneDataType extends Object implements Structure, Cloneable {
+public class TimeZoneDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TimeZoneDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TimeZoneDataType_Encoding_DefaultBinary);
@@ -80,7 +81,7 @@ public class TimeZoneDataType extends Object implements Structure, Cloneable {
       */
     public TimeZoneDataType clone()
     {
-        TimeZoneDataType result = new TimeZoneDataType();
+        TimeZoneDataType result = (TimeZoneDataType) super.clone();
         result.Offset = Offset;
         result.DaylightSavingInOffset = DaylightSavingInOffset;
         return result;

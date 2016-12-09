@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class SamplingIntervalDiagnosticsDataType extends Object implements Structure, Cloneable {
+public class SamplingIntervalDiagnosticsDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SamplingIntervalDiagnosticsDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SamplingIntervalDiagnosticsDataType_Encoding_DefaultBinary);
@@ -105,7 +106,7 @@ public class SamplingIntervalDiagnosticsDataType extends Object implements Struc
       */
     public SamplingIntervalDiagnosticsDataType clone()
     {
-        SamplingIntervalDiagnosticsDataType result = new SamplingIntervalDiagnosticsDataType();
+        SamplingIntervalDiagnosticsDataType result = (SamplingIntervalDiagnosticsDataType) super.clone();
         result.SamplingInterval = SamplingInterval;
         result.MonitoredItemCount = MonitoredItemCount;
         result.MaxMonitoredItemCount = MaxMonitoredItemCount;

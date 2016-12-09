@@ -19,26 +19,27 @@ import java.util.Collection;
 /**
  * UAConnection is a stateful object with four possible states {Closed,
  * Opening, Open, Closing}. A connection is transfers to open state
- * after handshake (Hello/Acknowledge). Closed state is final. 
+ * after handshake (Hello/Acknowledge). Closed state is final.
  */
 public interface ServerConnection {
 
 	/**
-	 * Get local socket address 
-	 * 
-	 * @return socket address 
+	 * Get local socket address
+	 *
+	 * @return socket address
 	 */
 	SocketAddress getLocalAddress();
 	
 	/**
 	 * Get remote socket address
+	 *
 	 * @return remote socket address
 	 */
 	SocketAddress getRemoteAddress();
 	
 	/**
 	 * Get all open and opening secure channels of this connection.
-	 * 
+	 *
 	 * @param list list to be filled
 	 */
 	void getSecureChannels(Collection<ServerSecureChannel> list);
@@ -48,20 +49,30 @@ public interface ServerConnection {
 		void onSecureChannelDetached(Object sender, ServerSecureChannel channel);
 	}
 
+	/**
+	 * <p>addSecureChannelListener.</p>
+	 *
+	 * @param l a {@link org.opcfoundation.ua.transport.ServerConnection.SecureChannelListener} object.
+	 */
 	void addSecureChannelListener(SecureChannelListener l);
+	/**
+	 * <p>removeSecureChannelListener.</p>
+	 *
+	 * @param l a {@link org.opcfoundation.ua.transport.ServerConnection.SecureChannelListener} object.
+	 */
 	void removeSecureChannelListener(SecureChannelListener l);
 
 	/**
-	 * Add response listener 
-	 * 
-	 * @param listener
+	 * Add response listener
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.IConnectionListener} object.
 	 */
 	public void addConnectionListener(IConnectionListener listener);
 	
 	/**
 	 * Add response listener
-	 * 
-	 * @param listener
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.IConnectionListener} object.
 	 */
 	public void removeConnectionListener(IConnectionListener listener);	
 	

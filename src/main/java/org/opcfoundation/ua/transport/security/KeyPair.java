@@ -23,9 +23,9 @@ import java.security.cert.CertificateException;
 /**
  * Valid and encodeable certificate, including signed public key and private key
  * This class aggregates private and public keys.
- * 
+ *
  * TODO Use {@link KeyPair} Instead?
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@iki.fi)
  * @author Mikko Salonen
  */
@@ -34,18 +34,18 @@ public final class KeyPair {
 	public final Cert certificate;
 	public final PrivKey privateKey;
 
-	/** 
-	 * Load Certificate & Private key pair from X.509 and keystore file
-	 * 
-	 * @param certificateFile
-	 * @param privateKeyFile
-	 * @param privateKeyPassword
+	/**
+	 * Load Certificate and Private key pair from X.509 and keystore file
+	 *
+	 * @param certificateFile a {@link java.net.URL} object.
+	 * @param privateKeyFile a {@link java.net.URL} object.
+	 * @param privateKeyPassword a {@link java.lang.String} object.
 	 * @return a new keypair instance
-	 * @throws IOException 
-	 * @throws KeyStoreException 
-	 * @throws CertificateException 
-	 * @throws NoSuchAlgorithmException 
-	 * @throws UnrecoverableKeyException 
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.KeyStoreException if any.
+	 * @throws java.security.cert.CertificateException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.UnrecoverableKeyException if any.
 	 */
 	public static KeyPair load(URL certificateFile, URL privateKeyFile, String privateKeyPassword) 
 	throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
@@ -55,18 +55,18 @@ public final class KeyPair {
 		return new KeyPair(cert, privKey);
 	}
 	
-	/** 
-	 * Load Certificate & Private key pair from X.509 and keystore file
-	 * 
-	 * @param certificateFile
-	 * @param privateKeyFile
-	 * @param privateKeyPassword
+	/**
+	 * Load Certificate and Private key pair from X.509 and keystore file
+	 *
+	 * @param certificateFile a {@link java.io.File} object.
+	 * @param privateKeyFile a {@link java.io.File} object.
+	 * @param privateKeyPassword a {@link java.lang.String} object.
 	 * @return a new keypair instance
-	 * @throws IOException 
-	 * @throws KeyStoreException 
-	 * @throws CertificateException 
-	 * @throws NoSuchAlgorithmException 
-	 * @throws UnrecoverableKeyException 
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.KeyStoreException if any.
+	 * @throws java.security.cert.CertificateException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.UnrecoverableKeyException if any.
 	 */
 	public static KeyPair load(File certificateFile, File privateKeyFile, String privateKeyPassword) 
 	throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
@@ -76,6 +76,13 @@ public final class KeyPair {
 		return new KeyPair(cert, privKey);
 	}
 	
+	/**
+	 * <p>save.</p>
+	 *
+	 * @param certificateFile a {@link java.io.File} object.
+	 * @param privateKeyFile a {@link java.io.File} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public void save(File certificateFile, File privateKeyFile) 
 	throws IOException
 	{
@@ -83,6 +90,14 @@ public final class KeyPair {
 		privateKey.save(privateKeyFile);
 	}
 	
+	/**
+	 * <p>save.</p>
+	 *
+	 * @param certificateFile a {@link java.io.File} object.
+	 * @param privateKeyFile a {@link java.io.File} object.
+	 * @param privateKeyPassword a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public void save(File certificateFile, File privateKeyFile, String privateKeyPassword) 
 	throws IOException
 	{
@@ -90,6 +105,12 @@ public final class KeyPair {
 		privateKey.save(privateKeyFile, privateKeyPassword);
 	}
 
+	/**
+	 * <p>Constructor for KeyPair.</p>
+	 *
+	 * @param certificate a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 * @param privateKey a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
+	 */
 	public KeyPair(Cert certificate, PrivKey privateKey)
 	{
 		if (certificate==null || privateKey==null)
@@ -98,14 +119,25 @@ public final class KeyPair {
 		this.privateKey = privateKey;
 	}
 
+	/**
+	 * <p>Getter for the field <code>certificate</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public Cert getCertificate() {
 		return certificate;
 	}
 
+	/**
+	 * <p>Getter for the field <code>privateKey</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
+	 */
 	public PrivKey getPrivateKey() {
 		return privateKey;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return certificate.toString();

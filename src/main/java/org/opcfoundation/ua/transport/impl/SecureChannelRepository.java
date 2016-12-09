@@ -11,6 +11,10 @@
 */
 package org.opcfoundation.ua.transport.impl;
 
+/**
+ * <p>SecureChannelRepository class.</p>
+ *
+ */
 public class SecureChannelRepository {
 
 }

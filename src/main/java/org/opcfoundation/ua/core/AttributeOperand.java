@@ -40,7 +40,7 @@ import org.opcfoundation.ua.core.RelativePath;
 
 
 
-public class AttributeOperand extends FilterOperand implements Structure, Cloneable {
+public class AttributeOperand extends FilterOperand {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.AttributeOperand);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.AttributeOperand_Encoding_DefaultBinary);
@@ -120,7 +120,7 @@ public class AttributeOperand extends FilterOperand implements Structure, Clonea
       */
     public AttributeOperand clone()
     {
-        AttributeOperand result = new AttributeOperand();
+        AttributeOperand result = (AttributeOperand) super.clone();
         result.NodeId = NodeId;
         result.Alias = Alias;
         result.BrowsePath = BrowsePath==null ? null : BrowsePath.clone();

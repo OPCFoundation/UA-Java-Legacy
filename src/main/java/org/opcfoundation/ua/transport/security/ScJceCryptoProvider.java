@@ -17,19 +17,28 @@ import java.security.Security;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.spongycastle.util.encoders.Base64;
 
+/**
+ * <p>ScJceCryptoProvider class.</p>
+ *
+ */
 public class ScJceCryptoProvider extends JceCryptoProvider implements CryptoProvider {
 
+	/**
+	 * <p>Constructor for ScJceCryptoProvider.</p>
+	 */
 	public ScJceCryptoProvider() {
 		super();
 		CryptoUtil.setSecurityProviderName("SC");
 		this.provider = Security.getProvider("SC");
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public byte[] base64Decode(String string) {
 		return Base64.decode(string);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String base64Encode(byte[] bytes) {
 		try {

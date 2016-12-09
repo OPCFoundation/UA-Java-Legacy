@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class TransferResult extends Object implements Structure, Cloneable {
+public class TransferResult extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TransferResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TransferResult_Encoding_DefaultBinary);
@@ -83,7 +84,7 @@ public class TransferResult extends Object implements Structure, Cloneable {
       */
     public TransferResult clone()
     {
-        TransferResult result = new TransferResult();
+        TransferResult result = (TransferResult) super.clone();
         result.StatusCode = StatusCode;
         result.AvailableSequenceNumbers = AvailableSequenceNumbers==null ? null : AvailableSequenceNumbers.clone();
         return result;

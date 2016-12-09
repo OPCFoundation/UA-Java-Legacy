@@ -39,7 +39,7 @@ import org.opcfoundation.ua.core.HistoryUpdateDetails;
 
 
 
-public class DeleteEventDetails extends HistoryUpdateDetails implements Structure, Cloneable {
+public class DeleteEventDetails extends HistoryUpdateDetails {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DeleteEventDetails);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteEventDetails_Encoding_DefaultBinary);
@@ -72,7 +72,7 @@ public class DeleteEventDetails extends HistoryUpdateDetails implements Structur
       */
     public DeleteEventDetails clone()
     {
-        DeleteEventDetails result = new DeleteEventDetails();
+        DeleteEventDetails result = (DeleteEventDetails) super.clone();
         result.NodeId = NodeId;
         result.EventIds = EventIds==null ? null : EventIds.clone();
         return result;

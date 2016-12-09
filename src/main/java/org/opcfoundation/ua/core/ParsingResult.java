@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.builtintypes.StatusCode;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ParsingResult extends Object implements Structure, Cloneable {
+public class ParsingResult extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ParsingResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ParsingResult_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class ParsingResult extends Object implements Structure, Cloneable {
       */
     public ParsingResult clone()
     {
-        ParsingResult result = new ParsingResult();
+        ParsingResult result = (ParsingResult) super.clone();
         result.StatusCode = StatusCode;
         result.DataStatusCodes = DataStatusCodes==null ? null : DataStatusCodes.clone();
         result.DataDiagnosticInfos = DataDiagnosticInfos==null ? null : DataDiagnosticInfos.clone();

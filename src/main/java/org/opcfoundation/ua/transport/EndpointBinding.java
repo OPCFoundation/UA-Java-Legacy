@@ -14,11 +14,10 @@ package org.opcfoundation.ua.transport;
 import org.opcfoundation.ua.application.Server;
 
 /**
- * Endpoint binding is a 3-way binding between 
- *   the endpoint address (Endpoint), 
- *   the listening socket (EndpointServer),  
+ * Endpoint binding is a 3-way binding between
+ *   the endpoint address (Endpoint),
+ *   the listening socket (EndpointServer),
  *   and the service server (Server).
- *
  */
 public class EndpointBinding {
 
@@ -31,6 +30,13 @@ public class EndpointBinding {
 	/** Service server */
 	public final Server serviceServer;
 
+	/**
+	 * <p>Constructor for EndpointBinding.</p>
+	 *
+	 * @param endpointServer a {@link org.opcfoundation.ua.transport.EndpointServer} object.
+	 * @param endpointAddress a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 * @param serviceServer a {@link org.opcfoundation.ua.application.Server} object.
+	 */
 	public EndpointBinding(EndpointServer endpointServer, Endpoint endpointAddress, Server serviceServer) {
 		if ( endpointServer==null || endpointAddress==null || serviceServer==null ) throw new IllegalArgumentException("null arg");
 		this.endpointServer = endpointServer;
@@ -38,11 +44,13 @@ public class EndpointBinding {
 		this.serviceServer = serviceServer;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		return endpointServer.hashCode() + 13*serviceServer.hashCode() + 7*endpointAddress.hashCode();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof EndpointBinding)) return false;
@@ -53,6 +61,7 @@ public class EndpointBinding {
 		return true;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "(EndpointServer="+endpointServer+", EndpointAddress="+endpointAddress+", ServiceServer="+serviceServer+")";

@@ -19,12 +19,16 @@ import org.opcfoundation.ua.encoding.IEncodeable;
 /**
  * Abstract implementation for a service handler that can server only
  * one type of service request;
- * 
  */
 public abstract class AbstractServiceHandler implements ServiceHandler {
 
 	Class<? extends IEncodeable> clazz;
 	
+	/**
+	 * <p>Constructor for AbstractServiceHandler.</p>
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
+	 */
 	public AbstractServiceHandler(Class<? extends IEncodeable> clazz)
 	{
 		if (clazz==null)
@@ -32,11 +36,13 @@ public abstract class AbstractServiceHandler implements ServiceHandler {
 		this.clazz = clazz;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public boolean supportsService(Class<? extends IEncodeable> clazz) {
 		return clazz.equals(this.clazz);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void getSupportedServices(Collection<Class<? extends IEncodeable>> result) {
 		result.add(clazz);

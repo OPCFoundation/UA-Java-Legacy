@@ -12,13 +12,15 @@
 
 package org.opcfoundation.ua.transport.tcp.io;
 
-/** 
- * Tcp connection quotas. Quota values are negotiated between client and server. 
+/**
+ * Tcp connection quotas. Quota values are negotiated between client and server.
  * The negotiated values are stored in {@link TcpConnectionLimits}.
  */
 public class TcpQuotas {
 
+	/** Constant <code>DEFAULT_CLIENT_QUOTA</code> */
 	public static final TcpQuotas DEFAULT_CLIENT_QUOTA = new TcpQuotas(Integer.MAX_VALUE, TcpMessageLimits.MaxBufferSize, TcpMessageLimits.DefaultChannelLifetime, TcpMessageLimits.DefaultSecurityTokenLifeTime); 
+	/** Constant <code>DEFAULT_SERVER_QUOTA</code> */
 	public static final TcpQuotas DEFAULT_SERVER_QUOTA = new TcpQuotas(Integer.MAX_VALUE, TcpMessageLimits.MaxBufferSize, TcpMessageLimits.DefaultChannelLifetime, TcpMessageLimits.DefaultSecurityTokenLifeTime); 
 	
 	public final int maxMessageSize;
@@ -26,6 +28,14 @@ public class TcpQuotas {
 	public final int channelLifetime;
 	public final int securityTokenLifetime;
 	
+	/**
+	 * <p>Constructor for TcpQuotas.</p>
+	 *
+	 * @param maxMessageSize a int.
+	 * @param maxBufferSize a int.
+	 * @param channelLifetime a int.
+	 * @param securityTokenLifetime a int.
+	 */
 	public TcpQuotas(int maxMessageSize, int maxBufferSize,
 			int channelLifetime, int securityTokenLifetime) {
 		

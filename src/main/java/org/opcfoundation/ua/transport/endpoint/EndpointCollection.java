@@ -28,18 +28,27 @@ import org.opcfoundation.ua.transport.security.SecurityMode;
 import org.opcfoundation.ua.utils.EndpointUtil;
 
 /**
- * 
+ * <p>EndpointCollection class.</p>
  *
  * @deprecated Use EndpointBindingCollection
  */
 public class EndpointCollection  {
 
-	/** Endpoints  (Uri -> Endpoint) */
+	/** Endpoints  (Uri -&gt; Endpoint) */
 	protected Map<Endpoint, Server> endpoints = new HashMap<Endpoint, Server>();
 	
+	/**
+	 * <p>Constructor for EndpointCollection.</p>
+	 */
 	public EndpointCollection() {
 	}
 	
+	/**
+	 * <p>add.</p>
+	 *
+	 * @param endpoint a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 * @param server a {@link org.opcfoundation.ua.application.Server} object.
+	 */
 	public synchronized void add(Endpoint endpoint, Server server) {
 		if (endpoint==null || server==null) throw new IllegalArgumentException("null arg");
 		for (Endpoint ep : endpoints.keySet())
@@ -48,25 +57,49 @@ public class EndpointCollection  {
 		endpoints.put(endpoint, server);
 	}
 	
+	/**
+	 * <p>remove.</p>
+	 *
+	 * @param endpoint a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 * @return a {@link org.opcfoundation.ua.application.Server} object.
+	 */
 	public synchronized Server remove(Endpoint endpoint) {
 		return endpoints.remove(endpoint);
 	}
 	
+	/**
+	 * <p>contains.</p>
+	 *
+	 * @param endpoint a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 * @return a boolean.
+	 */
 	public synchronized boolean contains(Endpoint endpoint) {
 		return endpoints.containsKey(endpoint);
 	}
 	
+	/**
+	 * <p>contains.</p>
+	 *
+	 * @param server a {@link org.opcfoundation.ua.application.Server} object.
+	 * @return a boolean.
+	 */
 	public synchronized boolean contains(Server server) {
 		return endpoints.containsValue(server);
 	}
 	
+	/**
+	 * <p>getServer.</p>
+	 *
+	 * @param endpoint a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 * @return a {@link org.opcfoundation.ua.application.Server} object.
+	 */
 	public synchronized Server getServer(Endpoint endpoint) {
 		return endpoints.get(endpoint);
 	}
 	
 	/**
 	 * Get all endpoints
-	 * 
+	 *
 	 * @return endpoints
 	 */
 	public synchronized Endpoint[] getEndpoints() {
@@ -75,8 +108,9 @@ public class EndpointCollection  {
 	
 	/**
 	 * Get endpoints by server
-	 *  
+	 *
 	 * @return endpoints
+	 * @param server a {@link org.opcfoundation.ua.application.Server} object.
 	 */
 	public synchronized Endpoint[] getEndpoints(Server server) {
 		List<Endpoint> result = new ArrayList<Endpoint>();
@@ -86,6 +120,11 @@ public class EndpointCollection  {
 		return result.toArray(new Endpoint[result.size()]);
 	}
 	
+	/**
+	 * <p>getServers.</p>
+	 *
+	 * @return an array of {@link org.opcfoundation.ua.application.Server} objects.
+	 */
 	public synchronized Server[] getServers() {
 		Set<Server> l = new HashSet<Server>();
 		for (Server s: endpoints.values())
@@ -93,6 +132,13 @@ public class EndpointCollection  {
 		return l.toArray(new Server[0]);
 	}
 	
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param url a {@link java.lang.String} object.
+	 * @param mode a {@link org.opcfoundation.ua.transport.security.SecurityMode} object.
+	 * @return a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 */
 	public synchronized Endpoint get(String url, SecurityMode mode)
 	{
 		for (Endpoint ep : endpoints.keySet())
@@ -101,6 +147,12 @@ public class EndpointCollection  {
 		return null;
 	}
 
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param url a {@link java.lang.String} object.
+	 * @return a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 */
 	public synchronized Endpoint get(String url)
 	{
 		// It seems that the casing of the host name part of the URL can vary,
@@ -111,11 +163,22 @@ public class EndpointCollection  {
 		return null;
 	}
 
+	/**
+	 * <p>size.</p>
+	 *
+	 * @return a int.
+	 */
 	public synchronized int size() 
 	{
 		return endpoints.size();
 	}
 
+	/**
+	 * <p>getDefault.</p>
+	 *
+	 * @param url a {@link java.lang.String} object.
+	 * @return a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 */
 	public Endpoint getDefault(String url) {
 		if (url == null)
 			throw new NullPointerException("url must be defined");

@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.core.HistoryUpdateType;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ModificationInfo extends Object implements Structure, Cloneable {
+public class ModificationInfo extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ModificationInfo);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ModificationInfo_Encoding_DefaultBinary);
@@ -94,7 +95,7 @@ public class ModificationInfo extends Object implements Structure, Cloneable {
       */
     public ModificationInfo clone()
     {
-        ModificationInfo result = new ModificationInfo();
+        ModificationInfo result = (ModificationInfo) super.clone();
         result.ModificationTime = ModificationTime;
         result.UpdateType = UpdateType;
         result.UserName = UserName;

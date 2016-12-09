@@ -39,10 +39,11 @@ import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ResponseHeader extends Object implements Structure, Cloneable {
+public class ResponseHeader extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ResponseHeader);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ResponseHeader_Encoding_DefaultBinary);
@@ -134,7 +135,7 @@ public class ResponseHeader extends Object implements Structure, Cloneable {
       */
     public ResponseHeader clone()
     {
-        ResponseHeader result = new ResponseHeader();
+        ResponseHeader result = (ResponseHeader) super.clone();
         result.Timestamp = Timestamp;
         result.RequestHandle = RequestHandle;
         result.ServiceResult = ServiceResult;

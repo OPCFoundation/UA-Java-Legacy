@@ -73,7 +73,6 @@ import org.opcfoundation.ua.utils.TimerUtil;
 
 /**
  * Https Opc-Ua Client connection to an endpoint.
- *
  */
 public class HttpsClient implements ITransportChannel {
 
@@ -143,6 +142,11 @@ public class HttpsClient implements ITransportChannel {
 	/** Selection of cipher suites, an intersecion of available and the suites in the algorithm */ 
 	String[] cipherSuites;
 	
+	/**
+	 * <p>Constructor for HttpsClient.</p>
+	 *
+	 * @param protocol a {@link java.lang.String} object.
+	 */
 	public HttpsClient(String protocol) {
 		if ( !protocol.equals( UriUtil.SCHEME_HTTP ) && !protocol.equals( UriUtil.SCHEME_HTTPS ) ) throw new IllegalArgumentException();
 		this.protocol = protocol;
@@ -151,8 +155,8 @@ public class HttpsClient implements ITransportChannel {
 	/**
 	 * Set client connection manager. Call before #initialize.
 	 * If ClientConnectionManager is not set, a default implementation is used
-	 *  
-	 * @param ccm
+	 *
+	 * @param ccm a {@link org.apache.http.conn.ClientConnectionManager} object.
 	 */
 	public void setClientConnectionManager(ClientConnectionManager ccm)
 	{
@@ -162,18 +166,17 @@ public class HttpsClient implements ITransportChannel {
 	/**
 	 * Set the number of concurrent maximum connections. Call this before calling #initialize.
 	 * This value applies only if ClientConnectionManager has not been overridden.
-	 * 
-	 * @param connections
+	 *
+	 * @param maxConnections a int.
 	 */
 	public void setMaxConnections(int maxConnections) {
 		this.maxConnections = maxConnections;
 	}
 	
 	/**
-	 * Initialize HttpsClient. 
-	 * 
-	 * @param connectUrl
-	 * @param tcs
+	 * {@inheritDoc}
+	 *
+	 * Initialize HttpsClient.
 	 */
 	public void initialize(String connectUrl, TransportChannelSettings tcs, EncoderContext ctx) throws ServiceResultException {
 		
@@ -189,7 +192,8 @@ public class HttpsClient implements ITransportChannel {
 		// securityPolicy = SecurityPolicy.getSecurityPolicy( this.securityPolicyUri );
 		if ( securityPolicy != HttpsSecurityPolicy.TLS_1_0 &&
 				securityPolicy != HttpsSecurityPolicy.TLS_1_1 &&
-				securityPolicy != HttpsSecurityPolicy.TLS_1_2 )
+				securityPolicy != HttpsSecurityPolicy.TLS_1_2  &&
+				securityPolicy != HttpsSecurityPolicy.TLS_1_2_PFS)
 				throw new ServiceResultException( StatusCodes.Bad_SecurityChecksFailed, "Https Client doesn't support securityPolicy "+securityPolicy );
 		if (logger.isDebugEnabled()) {
 			logger.debug("initialize: url={}; settings={}", tcs.getDescription().getEndpointUrl(), ObjectUtils.printFields(tcs));
@@ -207,7 +211,23 @@ public class HttpsClient implements ITransportChannel {
 		try {
 			SchemeRegistry sr = new SchemeRegistry();
 			if ( protocol.equals( UriUtil.SCHEME_HTTPS ) ) {
-		        SSLContext sslcontext = SSLContext.getInstance("TLS");
+		        
+			  SSLContext sslcontext;
+			  
+			  /*
+			   * Try first create tls 1.2 supporting context.
+			   * This should work at least on java 8 out of the box.
+			   * Might work on java 7 if tls 1.2 is enabled.
+			   */
+			  try{
+			    sslcontext = SSLContext.getInstance("TLSv1.2");
+			  }catch(NoSuchAlgorithmException noSuchAlgorithmException){
+			    //fallback option
+			    logger.debug("No TLSv1.2 implementation found, trying TLS");
+			    sslcontext = SSLContext.getInstance("TLS");
+			  }
+		       
+		        
 		        sslcontext.init( httpsSettings.getKeyManagers(), httpsSettings.getTrustManagers(), null );
 				X509HostnameVerifier hostnameVerifier = httpsSettings.getHostnameVerifier() != null ? 
 						httpsSettings.getHostnameVerifier() : SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
@@ -269,27 +289,39 @@ public class HttpsClient implements ITransportChannel {
 		return clientTimeout;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public ServiceResponse serviceRequest(ServiceRequest request) throws ServiceResultException {
 		return serviceRequest(request, getTimeout(request));
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public ServiceResponse serviceRequest(ServiceRequest request, long operationTimeout) throws ServiceResultException {
 		AsyncResult<ServiceResponse> result = serviceRequestAsync( request );
 		return (ServiceResponse) result.waitForResult(operationTimeout, TimeUnit.MILLISECONDS);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public AsyncResult<ServiceResponse> serviceRequestAsync(ServiceRequest serviceRequest) {
 		return serviceRequestAsync(serviceRequest, getTimeout(serviceRequest));
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public AsyncResult<ServiceResponse> serviceRequestAsync(ServiceRequest serviceRequest, long operationTimeout) {
 		return serviceRequestAsync( serviceRequest, operationTimeout, -1);
 	}
 
+	/**
+	 * <p>serviceRequestAsync.</p>
+	 *
+	 * @param serviceRequest a {@link org.opcfoundation.ua.builtintypes.ServiceRequest} object.
+	 * @param operationTimeout a long.
+	 * @param secureChannelId a int.
+	 * @return a {@link org.opcfoundation.ua.transport.AsyncResult} object.
+	 */
 	public AsyncResult<ServiceResponse> serviceRequestAsync(ServiceRequest serviceRequest, long operationTimeout, int secureChannelId) {
 		HttpsClientPendingRequest pendingRequest = new HttpsClientPendingRequest(this, serviceRequest);
 		pendingRequest.secureChannelId = secureChannelId;
@@ -306,6 +338,9 @@ public class HttpsClient implements ITransportChannel {
 		return pendingRequest.result;
 	}
 	
+	/**
+	 * <p>close.</p>
+	 */
 	public void close() {
 		ccm.shutdown();
 				
@@ -335,6 +370,7 @@ public class HttpsClient implements ITransportChannel {
 		}		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void dispose() {
 		close();
@@ -345,6 +381,7 @@ public class HttpsClient implements ITransportChannel {
 		transportChannelSettings = null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EnumSet<TransportChannelFeature> getSupportedFeatures() {
 		return EnumSet.of(
@@ -356,26 +393,31 @@ public class HttpsClient implements ITransportChannel {
 				TransportChannelFeature.sendRequestAsync);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EndpointDescription getEndpointDescription() {
 		return transportChannelSettings.getDescription();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EndpointConfiguration getEndpointConfiguration() {
 		return transportChannelSettings.getConfiguration();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public EncoderContext getMessageContext() {
 		return encoderCtx;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setOperationTimeout(int timeout) {
 		transportChannelSettings.getConfiguration().setOperationTimeout(timeout);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int getOperationTimeout() {
 		Integer i = transportChannelSettings.getConfiguration().getOperationTimeout();		
@@ -465,6 +507,7 @@ public class HttpsClient implements ITransportChannel {
 		return result;
 	}
 	
+	/** Constant <code>ALLOW_ALL_HOSTNAME_VERIFIER</code> */
 	public final static X509HostnameVerifier ALLOW_ALL_HOSTNAME_VERIFIER = 
 			new X509HostnameVerifier() {
 		        public boolean verify(String arg0, SSLSession arg1) { return true; }

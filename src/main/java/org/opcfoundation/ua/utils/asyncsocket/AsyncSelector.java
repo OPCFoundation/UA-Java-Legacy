@@ -32,10 +32,10 @@ import org.opcfoundation.ua.utils.State;
  * core in the system. SelectionKeys are listened with register method.
  * <p>
  * To close async selector, close its selector (getSelector().close()).
- * <p> 
+ * <p>
  * AsyncSelector guarantees that selection event of a key is handled in one
  * thread at a time, and it the event handled accordingly, new selection events do not occur.
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class AsyncSelector implements Runnable {
@@ -55,19 +55,19 @@ public class AsyncSelector implements Runnable {
 	Thread								thread;
 
 	/**
-	 * Construct AsyncSelector with brand new selector 
-	 * 
-	 * @throws IOException
+	 * Construct AsyncSelector with brand new selector
+	 *
+	 * @throws java.io.IOException if any.
 	 */
 	public AsyncSelector() throws IOException {
 		this(Selector.open());
 	}
 	
 	/**
-	 * Construct new AsyncSelector 
-	 * 
-	 * @param sel
-	 * @throws IOException
+	 * Construct new AsyncSelector
+	 *
+	 * @param sel a {@link java.nio.channels.Selector} object.
+	 * @throws java.io.IOException if any.
 	 */
 	public AsyncSelector(Selector sel) throws IOException {
 		this.sel = sel;		
@@ -76,15 +76,21 @@ public class AsyncSelector implements Runnable {
 		thread.start();
 	}
 
+	/**
+	 * <p>getSelector.</p>
+	 *
+	 * @return a {@link java.nio.channels.Selector} object.
+	 */
 	public Selector getSelector() {
 		return sel;
 	}
 
 	/**
-	 * Modify interest ops of a key. 
-	 * 
+	 * Modify interest ops of a key.
+	 *
 	 * @param channel registered key
 	 * @param interestOps new interest op set
+	 * @throws java.nio.channels.CancelledKeyException if any.
 	 */
 	public void interestOps(SelectableChannel channel, int interestOps) 
 			throws CancelledKeyException {
@@ -123,18 +129,17 @@ public class AsyncSelector implements Runnable {
 
 	/**
 	 * Register a selection event handler to a selectable channel.
-	 * <p> 
-	 * selectEventListener is invoked by one thread at a time. 
+	 * <p>
+	 * selectEventListener is invoked by one thread at a time.
 	 * The rule of thumb is that the listener must not block.
-	 * 
+	 *
 	 * Note! If channel is registered and closed, select event is invoked
-	 * until the channel is unregistered. 
-	 *  
-	 * 
-	 * @param channel
+	 * until the channel is unregistered.
+	 *
+	 * @param channel a {@link java.nio.channels.SelectableChannel} object.
 	 * @param ops initial interest ops See {@link SelectionKey}
-	 * @param selectEventListener
-	 * @throws ClosedChannelException
+	 * @param selectEventListener a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncSelector.SelectListener} object.
+	 * @throws java.nio.channels.ClosedChannelException if any.
 	 */
 	public void register(SelectableChannel channel,
 			int ops, SelectListener selectEventListener) throws ClosedChannelException {
@@ -151,6 +156,11 @@ public class AsyncSelector implements Runnable {
 		}		
 	}
 
+	/**
+	 * <p>unregister.</p>
+	 *
+	 * @param channel a {@link java.nio.channels.SelectableChannel} object.
+	 */
 	public void unregister(SelectableChannel channel) {
 		SelectionKey key = channel.keyFor(sel);		
 		if (key == null || !map.containsKey(key)) return;
@@ -167,6 +177,11 @@ public class AsyncSelector implements Runnable {
 			
 	}
 	
+	/**
+	 * <p>close.</p>
+	 *
+	 * @throws java.io.IOException if any.
+	 */
 	public void close() 
 	throws IOException {
 		sel.close();
@@ -185,7 +200,7 @@ public class AsyncSelector implements Runnable {
 		 * 
 		 * Selection of a key is handled in one thread.
 		 * 
-		 * @param sender
+		 * @param sender sender
 		 * @param channel channel that selected
 		 * @param selectOps selected event operations (See {@link SelectionKey}) 
 		 * @param interestOps previous interest ops
@@ -203,6 +218,7 @@ public class AsyncSelector implements Runnable {
 		return res+"]";
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void run() {
 		try {

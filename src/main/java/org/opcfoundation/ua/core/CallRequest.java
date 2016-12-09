@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.CallMethodRequest;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class CallRequest extends Object implements ServiceRequest {
+public class CallRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CallRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CallRequest_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class CallRequest extends Object implements ServiceRequest {
       */
     public CallRequest clone()
     {
-        CallRequest result = new CallRequest();
+        CallRequest result = (CallRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         if (MethodsToCall!=null) {
             result.MethodsToCall = new CallMethodRequest[MethodsToCall.length];

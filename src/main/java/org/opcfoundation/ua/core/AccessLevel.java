@@ -44,28 +44,46 @@ import org.opcfoundation.ua.core.AccessLevel;
 
 
 
+/**
+ * <p>AccessLevel class.</p>
+ *
+ */
 public enum AccessLevel implements Enumeration {
 
     CurrentRead(1),
     CurrentWrite(2),
     HistoryRead(4),
     HistoryWrite(8),
-    SemanticChange(16);
+    SemanticChange(16),
+    StatusWrite(32),
+    TimestampWrite(64);
 	
 	
-	public static EnumSet<AccessLevel> NONE = EnumSet.noneOf( AccessLevel.class );
-	public static EnumSet<AccessLevel> READONLY = EnumSet.of( CurrentRead );
-	public static EnumSet<AccessLevel> READWRITE = EnumSet.of( CurrentRead, CurrentWrite );
-	public static EnumSet<AccessLevel> WRITEONLY = EnumSet.of( CurrentWrite );
-	public static EnumSet<AccessLevel> HISTORYREAD = EnumSet.of( HistoryRead );
-	public static EnumSet<AccessLevel> HISTORYREADWRITE = EnumSet.of( HistoryRead, HistoryWrite );
-	public static EnumSet<AccessLevel> ALL = EnumSet.allOf( AccessLevel.class );
+	/** Constant <code>NONE</code> */
+	public static final EnumSet<AccessLevel> NONE = EnumSet.noneOf( AccessLevel.class );
+	/** Constant <code>READONLY</code> */
+	public static final EnumSet<AccessLevel> READONLY = EnumSet.of( CurrentRead );
+	/** Constant <code>READWRITE</code> */
+	public static final EnumSet<AccessLevel> READWRITE = EnumSet.of( CurrentRead, CurrentWrite );
+	/** Constant <code>READWRITE_STATUS</code> */
+	public static final EnumSet<AccessLevel> READWRITE_STATUS = EnumSet.of( CurrentRead, CurrentWrite, StatusWrite );
+	/** Constant <code>READWRITE_STATUS_TIMESTAMP</code> */
+	public static final EnumSet<AccessLevel> READWRITE_STATUS_TIMESTAMP = EnumSet.of( CurrentRead, CurrentWrite, StatusWrite, TimestampWrite );
+	/** Constant <code>WRITEONLY</code> */
+	public static final EnumSet<AccessLevel> WRITEONLY = EnumSet.of( CurrentWrite );
+	/** Constant <code>HISTORYREAD</code> */
+	public static final EnumSet<AccessLevel> HISTORYREAD = EnumSet.of( HistoryRead );
+	/** Constant <code>HISTORYREADWRITE</code> */
+	public static final EnumSet<AccessLevel> HISTORYREADWRITE = EnumSet.of( HistoryRead, HistoryWrite );
+	/** Constant <code>ALL</code> */
+	public static final EnumSet<AccessLevel> ALL = EnumSet.allOf( AccessLevel.class );
 
 	private final int value;
 	AccessLevel(int value) {
 		this.value = value;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public int getValue() {
 		return value;
@@ -78,16 +96,34 @@ public enum AccessLevel implements Enumeration {
 			map.put(i.value, i);        
 	}
 
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value a int.
+	 * @return a {@link org.opcfoundation.ua.core.AccessLevel} object.
+	 */
 	public static AccessLevel valueOf(int value)
 	{
 		return map.get(value);
 	}
 	
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 * @return a {@link org.opcfoundation.ua.core.AccessLevel} object.
+	 */
 	public static AccessLevel valueOf(UnsignedInteger value)
 	{
 		return value == null ? null : valueOf(value.intValue());
 	}
 
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value an array of int.
+	 * @return an array of {@link org.opcfoundation.ua.core.AccessLevel} objects.
+	 */
 	public static AccessLevel[] valueOf(int[] value)
 	{
 		AccessLevel[] result = new AccessLevel[value.length];
@@ -96,6 +132,12 @@ public enum AccessLevel implements Enumeration {
 		return result;
 	}
 
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value an array of {@link java.lang.Integer} objects.
+	 * @return an array of {@link org.opcfoundation.ua.core.AccessLevel} objects.
+	 */
 	public static AccessLevel[] valueOf(Integer[] value)
 	{
 		AccessLevel[] result = new AccessLevel[value.length];
@@ -104,6 +146,12 @@ public enum AccessLevel implements Enumeration {
 		return result;
 	}
 	
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value an array of {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} objects.
+	 * @return an array of {@link org.opcfoundation.ua.core.AccessLevel} objects.
+	 */
 	public static AccessLevel[] valueOf(UnsignedInteger[] value)
 	{
 		AccessLevel[] result = new AccessLevel[value.length];
@@ -112,6 +160,12 @@ public enum AccessLevel implements Enumeration {
 		return result;
 	}
 	
+	/**
+	 * <p>getMask.</p>
+	 *
+	 * @param list a {@link org.opcfoundation.ua.core.AccessLevel} object.
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedByte} object.
+	 */
 	public static UnsignedByte getMask(AccessLevel...list) 
 	{
 		byte result = 0;
@@ -120,6 +174,12 @@ public enum AccessLevel implements Enumeration {
 		return UnsignedByte.getFromBits(result);
 	}	
 
+	/**
+	 * <p>getMask.</p>
+	 *
+	 * @param list a {@link java.util.Collection} object.
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedByte} object.
+	 */
 	public static UnsignedByte getMask(Collection<AccessLevel> list) 
 	{
 		byte result = 0;
@@ -128,6 +188,12 @@ public enum AccessLevel implements Enumeration {
 		return UnsignedByte.getFromBits(result);
 	}	
 	
+	/**
+	 * <p>getSet.</p>
+	 *
+	 * @param mask a int.
+	 * @return a {@link java.util.EnumSet} object.
+	 */
 	public static EnumSet<AccessLevel> getSet(int mask)
 	{
 		List<AccessLevel> res = new ArrayList<AccessLevel>();
@@ -139,6 +205,12 @@ public enum AccessLevel implements Enumeration {
 		return EnumSet.copyOf(res);
 	}	
 
+	/**
+	 * <p>getSet.</p>
+	 *
+	 * @param mask a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 * @return a {@link java.util.EnumSet} object.
+	 */
 	public static EnumSet<AccessLevel> getSet(UnsignedInteger mask)
 	{
 		if (mask == null)
@@ -146,6 +218,12 @@ public enum AccessLevel implements Enumeration {
 		return getSet(mask.intValue());
 	}
 	
+	/**
+	 * <p>getSet.</p>
+	 *
+	 * @param mask a {@link org.opcfoundation.ua.builtintypes.UnsignedShort} object.
+	 * @return a {@link java.util.EnumSet} object.
+	 */
 	public static EnumSet<AccessLevel> getSet(UnsignedShort mask)
 	{
 		if (mask == null)
@@ -153,6 +231,12 @@ public enum AccessLevel implements Enumeration {
 		return getSet(mask.intValue());
 	}
 
+	/**
+	 * <p>getSet.</p>
+	 *
+	 * @param mask a {@link org.opcfoundation.ua.builtintypes.UnsignedByte} object.
+	 * @return a {@link java.util.EnumSet} object.
+	 */
 	public static EnumSet<AccessLevel> getSet(UnsignedByte mask)
 	{
 		if (mask == null)

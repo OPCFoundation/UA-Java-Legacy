@@ -39,10 +39,11 @@ import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.ApplicationDescription;
 import org.opcfoundation.ua.core.ServiceCounterDataType;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class SessionDiagnosticsDataType extends Object implements Structure, Cloneable {
+public class SessionDiagnosticsDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SessionDiagnosticsDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SessionDiagnosticsDataType_Encoding_DefaultBinary);
@@ -578,7 +579,7 @@ public class SessionDiagnosticsDataType extends Object implements Structure, Clo
       */
     public SessionDiagnosticsDataType clone()
     {
-        SessionDiagnosticsDataType result = new SessionDiagnosticsDataType();
+        SessionDiagnosticsDataType result = (SessionDiagnosticsDataType) super.clone();
         result.SessionId = SessionId;
         result.SessionName = SessionName;
         result.ClientDescription = ClientDescription==null ? null : ClientDescription.clone();

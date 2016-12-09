@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Extension object contains a {@link Structure} which is either 
- * XML or binary encoded. 
+ * Extension object contains a {@link Structure} which is either
+ * XML or binary encoded.
  */
 public class ExtensionObject {
 
@@ -43,12 +43,13 @@ public class ExtensionObject {
 	/**
 	 * Create extension object by encoding an encodeable to the defined encoding
 	 * using the default serializer.
-	 * 
+	 *
 	 * @param encodeable the objects to encode
 	 * @param encodingType the requested encoding type either QualifiedName.DEFAULT_BINARY_ENCODING or QualifiedName.DEFAULT_XML_ENCODING
 	 * @param serializer the serializer to use (default is {@link StackUtils#getDefaultSerializer()})
 	 * @return the encodeable as an ExtensionObject
-	 * @throws EncodingException if the encodingType is unsupported or the encoding fails
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if the encodingType is unsupported or the encoding fails
+	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
 	 */
 	public static ExtensionObject encode(
 			Structure encodeable,
@@ -67,11 +68,12 @@ public class ExtensionObject {
 	/**
 	 * Create extension object by encoding an encodeable to the defined encoding
 	 * using {@link StackUtils#getDefaultSerializer() the default serializer}.
-	 * 
+	 *
 	 * @param encodeable the objects to encode
 	 * @param encodingType the requested encoding type either QualifiedName.DEFAULT_BINARY_ENCODING or QualifiedName.DEFAULT_XML_ENCODING
 	 * @return the encodeable as an ExtensionObject
-	 * @throws EncodingException if the encodingType is unsupported or the encoding fails
+	 * @throws org.opcfoundation.ua.encoding.EncodingException if the encodingType is unsupported or the encoding fails
+	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
 	 */
 	public static ExtensionObject encode(
 			Structure encodeable,
@@ -80,12 +82,13 @@ public class ExtensionObject {
 	}
 	
 	/**
-	 * Create extension object by encoding an encodeable to a binary format 
+	 * Create extension object by encoding an encodeable to a binary format
 	 * using the default serializer.
-	 * 
+	 *
 	 * @param encodeable encodeable
 	 * @return binary encoded encodeable
-	 * @throws EncodingException on encoding problem
+	 * @throws org.opcfoundation.ua.encoding.EncodingException on encoding problem
+	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
 	 */
 	public static ExtensionObject binaryEncode(Structure encodeable, EncoderContext ctx)
 	throws EncodingException
@@ -97,11 +100,12 @@ public class ExtensionObject {
 	
 	/**
 	 * Create extension object by encoding an encodeable to a binary format
-	 * 
+	 *
 	 * @param encodeable encodeable
 	 * @param serializer serializer
 	 * @return binary encoded encodeable
-	 * @throws EncodingException on encoding problem
+	 * @throws org.opcfoundation.ua.encoding.EncodingException on encoding problem
+	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
 	 */
 	public static ExtensionObject binaryEncode(Structure encodeable, IEncodeableSerializer serializer, EncoderContext ctx)
 	throws EncodingException
@@ -121,10 +125,10 @@ public class ExtensionObject {
 	/**
 	 * Create extension object by encoding an encodeable to xml format using
 	 * the default serializer
-	 * 
+	 *
 	 * @param encodeable encodeable
 	 * @return xml encoded encodeable
-	 * @throws EncodingException on encoding problem. Currently always, since the encoding is not supported.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException on encoding problem. Currently always, since the encoding is not supported.
 	 */
 	public static ExtensionObject xmlEncode(Structure encodeable)
 	throws EncodingException
@@ -134,11 +138,11 @@ public class ExtensionObject {
 	
 	/**
 	 * Create extension object by encoding an encodeable to xml format
-	 * 
+	 *
 	 * @param encodeable encodeable
 	 * @param serializer serializer
 	 * @return xml encoded encodeable
-	 * @throws EncodingException on encoding problem. Currently always, since the encoding is not supported.
+	 * @throws org.opcfoundation.ua.encoding.EncodingException on encoding problem. Currently always, since the encoding is not supported.
 	 */
 	public static ExtensionObject xmlEncode(Structure encodeable, IEncodeableSerializer serializer)
 	throws EncodingException
@@ -151,12 +155,23 @@ public class ExtensionObject {
 	Integer hash;
 	EncodeType encodeType;
 
+	/**
+	 * <p>Constructor for ExtensionObject.</p>
+	 *
+	 * @param typeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 */
 	public ExtensionObject(ExpandedNodeId typeId) {
 		if (typeId==null)
 			throw new IllegalArgumentException("typeId argument must not be null");
 		this.typeId = typeId;
 	}
 	
+	/**
+	 * <p>Constructor for ExtensionObject.</p>
+	 *
+	 * @param typeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @param object an array of byte.
+	 */
 	public ExtensionObject(ExpandedNodeId typeId, byte[] object) {
 		if (typeId==null)
 			throw new IllegalArgumentException("typeId argument must not be null");
@@ -169,6 +184,12 @@ public class ExtensionObject {
 		}
 	}
 
+	/**
+	 * <p>Constructor for ExtensionObject.</p>
+	 *
+	 * @param typeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @param object a {@link org.opcfoundation.ua.builtintypes.XmlElement} object.
+	 */
 	public ExtensionObject(ExpandedNodeId typeId, XmlElement object) {
 		if (typeId==null)
 			throw new IllegalArgumentException("typeId argument must not be null");
@@ -191,25 +212,42 @@ public class ExtensionObject {
 //		this.encodeType = EncodeType.Xml;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>encodeType</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncodeType} object.
+	 */
 	public EncodeType getEncodeType() {
 		return encodeType;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>object</code>.</p>
+	 *
+	 * @return a {@link java.lang.Object} object.
+	 */
 	public Object getObject() {
 		return object;
 	}
 
+	/**
+	 * <p>Getter for the field <code>typeId</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 */
 	public ExpandedNodeId getTypeId() {
 		return typeId;
 	}
 	
 	/**
-	 * Decode the extension object 
-	 * 
+	 * Decode the extension object
+	 *
+	 * @param <T> type
 	 * @param serializer serializer to use
-	 * @param <T>
+	 * @param ctx context
+	 * @param namespaceTable namespace table
 	 * @return decoded object
-	 * @throws DecodingException
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends IEncodeable> T decode(IEncodeableSerializer serializer, EncoderContext ctx,
@@ -267,16 +305,27 @@ public class ExtensionObject {
 	
 	/**
 	 * Attempts to decode the extension object using the default serializer of the stack.
-	 * 
-	 * @param <T>
+	 *
+	 * @param <T> type
+	 * @param ctx context
 	 * @return decoded object
-	 * @throws DecodingException
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 * 
 	 */
 	public <T extends IEncodeable> T decode(EncoderContext ctx)
 	throws DecodingException {
 		return decode(ctx, null);
 	}
 
+	/**
+	 * <p>decode.</p>
+	 *
+	 * @param ctx context
+	 * @param namespaceTable a {@link org.opcfoundation.ua.common.NamespaceTable} object.
+	 * @param <T> a T object.
+	 * @return a T object.
+	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
+	 */
 	@SuppressWarnings("unchecked")
 	public <T extends IEncodeable> T decode(EncoderContext ctx,
 			NamespaceTable namespaceTable)
@@ -284,6 +333,7 @@ public class ExtensionObject {
 		return (T) decode(ctx.getEncodeableSerializer(), ctx, namespaceTable);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public synchronized int hashCode() {
 		if (hash==null) {
@@ -297,6 +347,7 @@ public class ExtensionObject {
 		return hash;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

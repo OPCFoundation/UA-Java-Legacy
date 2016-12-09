@@ -37,9 +37,10 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.core.MonitoredItemModifyResult;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class ModifyMonitoredItemsResponse extends Object implements ServiceResponse {
+public class ModifyMonitoredItemsResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ModifyMonitoredItemsResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ModifyMonitoredItemsResponse_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class ModifyMonitoredItemsResponse extends Object implements ServiceRespo
       */
     public ModifyMonitoredItemsResponse clone()
     {
-        ModifyMonitoredItemsResponse result = new ModifyMonitoredItemsResponse();
+        ModifyMonitoredItemsResponse result = (ModifyMonitoredItemsResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         if (Results!=null) {
             result.Results = new MonitoredItemModifyResult[Results.length];

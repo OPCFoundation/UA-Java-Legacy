@@ -36,10 +36,10 @@ import org.opcfoundation.ua.utils.bytebuffer.ByteQueue;
 
 /**
  * Async socket.
- * <p> 
- * The object has monitorable internal state {@link SocketState}. 
- * 
- * @see IStatefulObject Methods for monitoring the state  
+ * <p>
+ * The object has monitorable internal state {@link SocketState}.
+ *
+ * @see IStatefulObject Methods for monitoring the state
  * @see SocketState State of the socket
  * @see AsyncInputStream Async input stream
  * @see AsyncOutputStream Async output stream
@@ -58,18 +58,37 @@ public class AsyncSocketImpl extends AbstractState<SocketState, IOException> imp
 	Executor triggerExecutor;
 	static Logger log = LoggerFactory.getLogger(AsyncSocketImpl.class);
 			
+	/**
+	 * <p>Constructor for AsyncSocketImpl.</p>
+	 *
+	 * @throws java.io.IOException if any.
+	 */
 	public AsyncSocketImpl() 
 	throws IOException 
 	{
 		this((SocketChannel) SocketChannel.open().configureBlocking(false), CurrentThreadExecutor.INSTANCE, new AsyncSelector());		
 	}
 
+	/**
+	 * <p>Constructor for AsyncSocketImpl.</p>
+	 *
+	 * @param chan a {@link java.nio.channels.SocketChannel} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public AsyncSocketImpl(SocketChannel chan) 
 	throws IOException 
 	{
 		this(chan, CurrentThreadExecutor.INSTANCE, new AsyncSelector());		
 	}
 	
+	/**
+	 * <p>Constructor for AsyncSocketImpl.</p>
+	 *
+	 * @param channel a {@link java.nio.channels.SocketChannel} object.
+	 * @param triggerExecutor a {@link java.util.concurrent.Executor} object.
+	 * @param selectorThread a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncSelector} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public AsyncSocketImpl(
 			SocketChannel channel, 
 			Executor triggerExecutor, 
@@ -95,6 +114,7 @@ public class AsyncSocketImpl extends AbstractState<SocketState, IOException> imp
 			}});
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	protected void onStateTransition(SocketState oldState, SocketState newState) {
 		if (SocketState.FINAL_STATES.contains(newState))
@@ -104,16 +124,32 @@ public class AsyncSocketImpl extends AbstractState<SocketState, IOException> imp
 		}
 	}
 	
+	/**
+	 * <p>getInputStream.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncInputStream} object.
+	 */
 	public AsyncInputStream getInputStream()
 	{
 		return is;
 	}
 	
+	/**
+	 * <p>getOutputStream.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncOutputStream} object.
+	 */
 	public AsyncOutputStream getOutputStream()
 	{
 		return os;
 	}
 	
+	/**
+	 * <p>close.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncSocketImpl} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public AsyncSocketImpl close() 
 	throws IOException 
 	{
@@ -122,19 +158,36 @@ public class AsyncSocketImpl extends AbstractState<SocketState, IOException> imp
 		return this;
 	}
 	
+	/**
+	 * <p>socketChannel.</p>
+	 *
+	 * @return a {@link java.nio.channels.SocketChannel} object.
+	 */
 	public SocketChannel socketChannel() {
 		return chan;
 	}
 	
+	/**
+	 * <p>socket.</p>
+	 *
+	 * @return a {@link java.net.Socket} object.
+	 */
 	public Socket socket() {
 		return chan.socket();
 	}
 	
+	/**
+	 * <p>setState.</p>
+	 *
+	 * @param state a {@link org.opcfoundation.ua.utils.asyncsocket.SocketState} object.
+	 * @return a boolean.
+	 */
 	protected boolean setState(SocketState state) {
 		// We are already in correct thread
 		return super.setState(state, CurrentThreadExecutor.INSTANCE, null) == state;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	protected boolean isStateTransitionAllowed(SocketState oldState,
 			SocketState newState) {
@@ -142,15 +195,14 @@ public class AsyncSocketImpl extends AbstractState<SocketState, IOException> imp
 	}
 	
 	/**
-	 * Async connect. The state is set to Connecting upon successful attempt 
+	 * {@inheritDoc}
+	 *
+	 * Async connect. The state is set to Connecting upon successful attempt
 	 * (method returns without exeception).
-	 * Once the connection attempt is finished the object state will shift 
-	 * either to Error or to Connected (See getState()). 
+	 * Once the connection attempt is finished the object state will shift
+	 * either to Error or to Connected (See getState()).
 	 * State changes can be monitored by attaching
-	 * listeners (See addStateListener()). 
-	 *  
-	 * @param addr address to connect to
-	 * @throws IOException 
+	 * listeners (See addStateListener()).
 	 */
 	public void connect(SocketAddress addr)
 	throws IOException 
@@ -172,6 +224,13 @@ public class AsyncSocketImpl extends AbstractState<SocketState, IOException> imp
 		}
 	}
 	
+	/**
+	 * <p>syncConnect.</p>
+	 *
+	 * @param addr a {@link java.net.SocketAddress} object.
+	 * @return a boolean.
+	 * @throws java.io.IOException if any.
+	 */
 	public boolean syncConnect(SocketAddress addr)
 	throws IOException
 	{
@@ -186,6 +245,11 @@ public class AsyncSocketImpl extends AbstractState<SocketState, IOException> imp
 		return chan.isConnected();
 	}
 	
+	/**
+	 * <p>getStateMonitor.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.IStatefulObject} object.
+	 */
 	public IStatefulObject<SocketState, IOException> getStateMonitor()
 	{
 		return this;

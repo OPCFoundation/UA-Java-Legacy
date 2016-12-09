@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.Variant;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class CallMethodRequest extends Object implements Structure, Cloneable {
+public class CallMethodRequest extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CallMethodRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CallMethodRequest_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class CallMethodRequest extends Object implements Structure, Cloneable {
       */
     public CallMethodRequest clone()
     {
-        CallMethodRequest result = new CallMethodRequest();
+        CallMethodRequest result = (CallMethodRequest) super.clone();
         result.ObjectId = ObjectId;
         result.MethodId = MethodId;
         result.InputArguments = InputArguments==null ? null : InputArguments.clone();

@@ -37,7 +37,7 @@ import org.opcfoundation.ua.core.UserIdentityToken;
 
 
 
-public class UserNameIdentityToken extends UserIdentityToken implements Structure, Cloneable {
+public class UserNameIdentityToken extends UserIdentityToken {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.UserNameIdentityToken);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.UserNameIdentityToken_Encoding_DefaultBinary);
@@ -94,7 +94,7 @@ public class UserNameIdentityToken extends UserIdentityToken implements Structur
       */
     public UserNameIdentityToken clone()
     {
-        UserNameIdentityToken result = new UserNameIdentityToken();
+        UserNameIdentityToken result = (UserNameIdentityToken) super.clone();
         result.PolicyId = PolicyId;
         result.UserName = UserName;
         result.Password = Password;

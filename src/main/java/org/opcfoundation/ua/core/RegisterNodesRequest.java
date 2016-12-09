@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class RegisterNodesRequest extends Object implements ServiceRequest {
+public class RegisterNodesRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RegisterNodesRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RegisterNodesRequest_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class RegisterNodesRequest extends Object implements ServiceRequest {
       */
     public RegisterNodesRequest clone()
     {
-        RegisterNodesRequest result = new RegisterNodesRequest();
+        RegisterNodesRequest result = (RegisterNodesRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.NodesToRegister = NodesToRegister==null ? null : NodesToRegister.clone();
         return result;

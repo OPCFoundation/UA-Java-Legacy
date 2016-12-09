@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.MonitoringParameters;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class MonitoredItemModifyRequest extends Object implements Structure, Cloneable {
+public class MonitoredItemModifyRequest extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.MonitoredItemModifyRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.MonitoredItemModifyRequest_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class MonitoredItemModifyRequest extends Object implements Structure, Clo
       */
     public MonitoredItemModifyRequest clone()
     {
-        MonitoredItemModifyRequest result = new MonitoredItemModifyRequest();
+        MonitoredItemModifyRequest result = (MonitoredItemModifyRequest) super.clone();
         result.MonitoredItemId = MonitoredItemId;
         result.RequestedParameters = RequestedParameters==null ? null : RequestedParameters.clone();
         return result;

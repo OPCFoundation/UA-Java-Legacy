@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.builtintypes.StatusCode;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class StatusResult extends Object implements Structure, Cloneable {
+public class StatusResult extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.StatusResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.StatusResult_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class StatusResult extends Object implements Structure, Cloneable {
       */
     public StatusResult clone()
     {
-        StatusResult result = new StatusResult();
+        StatusResult result = (StatusResult) super.clone();
         result.StatusCode = StatusCode;
         result.DiagnosticInfo = DiagnosticInfo;
         return result;

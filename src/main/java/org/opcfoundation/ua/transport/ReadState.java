@@ -21,10 +21,10 @@ import java.util.EnumSet;
  * Final states: Complete, Error
  * 
  * The only allowed state transition paths: 
- *   Waiting -> Reading -> Complete
- *   Waiting -> Reading -> Error
- *   Reading -> Complete
- *   Reading -> Error
+ *   Waiting -&gt; Reading -&gt; Complete
+ *   Waiting -&gt; Reading -&gt; Error
+ *   Reading -&gt; Complete
+ *   Reading -&gt; Error
  *
  * @see AsyncRead
  */

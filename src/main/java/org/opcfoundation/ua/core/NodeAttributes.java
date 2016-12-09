@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.LocalizedText;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class NodeAttributes extends Object implements Structure, Cloneable {
+public class NodeAttributes extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.NodeAttributes);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.NodeAttributes_Encoding_DefaultBinary);
@@ -118,7 +119,7 @@ public class NodeAttributes extends Object implements Structure, Cloneable {
       */
     public NodeAttributes clone()
     {
-        NodeAttributes result = new NodeAttributes();
+        NodeAttributes result = (NodeAttributes) super.clone();
         result.SpecifiedAttributes = SpecifiedAttributes;
         result.DisplayName = DisplayName;
         result.Description = Description;

@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.core.ContentFilterElementResult;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ContentFilterResult extends Object implements Structure, Cloneable {
+public class ContentFilterResult extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ContentFilterResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ContentFilterResult_Encoding_DefaultBinary);
@@ -83,7 +84,7 @@ public class ContentFilterResult extends Object implements Structure, Cloneable 
       */
     public ContentFilterResult clone()
     {
-        ContentFilterResult result = new ContentFilterResult();
+        ContentFilterResult result = (ContentFilterResult) super.clone();
         if (ElementResults!=null) {
             result.ElementResults = new ContentFilterElementResult[ElementResults.length];
             for (int i=0; i<ElementResults.length; i++)

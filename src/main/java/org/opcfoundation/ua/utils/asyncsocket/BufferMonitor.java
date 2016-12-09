@@ -19,7 +19,7 @@ import org.opcfoundation.ua.utils.AbstractState;
 
 /**
  * BufferMonitor is a monitor that triggers when a specific position is reached.
- * The position to monitor in AsyncSocketInputStream is the number of bytes 
+ * The position to monitor in AsyncSocketInputStream is the number of bytes
  * received (buffered, not read) and in AsyncSocketOutputStream the number
  * of bytes flushed to TCP Stack.
  * <p>
@@ -28,9 +28,8 @@ import org.opcfoundation.ua.utils.AbstractState;
  *    // Block until stream has buffered 1000 bytes
  *    inputStream.
  *        createAlarm(inputStream.getPosition() + 1000, null).
- *        waitForState(AlarmState.FINAL_STATES); 
- * 
- * 
+ *        waitForState(AlarmState.FINAL_STATES);
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public abstract class BufferMonitor extends AbstractState<BufferMonitorState, IOException> implements Comparable<BufferMonitor> {
@@ -44,23 +43,37 @@ public abstract class BufferMonitor extends AbstractState<BufferMonitorState, IO
 		this.eventExecutor = eventExecutor;
 	}
 		
+	/**
+	 * <p>Getter for the field <code>triggerPos</code>.</p>
+	 *
+	 * @return a long.
+	 */
 	public long getTriggerPos()
 	{
 		return triggerPos;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int compareTo(BufferMonitor o) {
 		long diff = triggerPos - o.triggerPos;			
 		return diff==0 ? 0 : (diff<0 ? -1 : 1);
 	}
 		
+	/**
+	 * <p>cancel.</p>
+	 */
 	public synchronized void cancel()
 	{
 		if (getState() != BufferMonitorState.Waiting) return;
 		setState(BufferMonitorState.Canceled, eventExecutor, null);
 	}
 	
+	/**
+	 * <p>setError.</p>
+	 *
+	 * @param e a {@link java.io.IOException} object.
+	 */
 	protected synchronized void setError(IOException e)
 	{
 		super.setError(e);

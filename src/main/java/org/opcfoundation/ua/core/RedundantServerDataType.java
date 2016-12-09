@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedByte;
 import org.opcfoundation.ua.core.ServerState;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class RedundantServerDataType extends Object implements Structure, Cloneable {
+public class RedundantServerDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RedundantServerDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RedundantServerDataType_Encoding_DefaultBinary);
@@ -94,7 +95,7 @@ public class RedundantServerDataType extends Object implements Structure, Clonea
       */
     public RedundantServerDataType clone()
     {
-        RedundantServerDataType result = new RedundantServerDataType();
+        RedundantServerDataType result = (RedundantServerDataType) super.clone();
         result.ServerId = ServerId;
         result.ServiceLevel = ServiceLevel;
         result.ServerState = ServerState;

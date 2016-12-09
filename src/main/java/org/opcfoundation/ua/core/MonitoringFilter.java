@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class MonitoringFilter extends Object implements Structure, Cloneable {
+public class MonitoringFilter extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.MonitoringFilter);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.MonitoringFilter_Encoding_DefaultBinary);
@@ -53,7 +54,7 @@ public class MonitoringFilter extends Object implements Structure, Cloneable {
       */
     public MonitoringFilter clone()
     {
-        MonitoringFilter result = new MonitoringFilter();
+        MonitoringFilter result = (MonitoringFilter) super.clone();
         return result;
     }
     

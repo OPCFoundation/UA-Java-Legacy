@@ -37,7 +37,7 @@ import org.opcfoundation.ua.core.UserIdentityToken;
 
 
 
-public class X509IdentityToken extends UserIdentityToken implements Structure, Cloneable {
+public class X509IdentityToken extends UserIdentityToken {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.X509IdentityToken);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.X509IdentityToken_Encoding_DefaultBinary);
@@ -70,7 +70,7 @@ public class X509IdentityToken extends UserIdentityToken implements Structure, C
       */
     public X509IdentityToken clone()
     {
-        X509IdentityToken result = new X509IdentityToken();
+        X509IdentityToken result = (X509IdentityToken) super.clone();
         result.PolicyId = PolicyId;
         result.CertificateData = CertificateData;
         return result;

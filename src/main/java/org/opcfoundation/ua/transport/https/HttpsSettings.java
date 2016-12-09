@@ -102,11 +102,8 @@ public class HttpsSettings {
 	 * Set keypair of a https application. This replaces a keyManager.
 	 * Additional CA certifications can be attached. 
 	 * 
-	 * @param keypair
-	 * @param caCerts
-	 * @throws KeyStoreException
-	 * @throws UnrecoverableKeyException
-	 * @throws NoSuchAlgorithmException
+	 * @param keypair key pair
+	 * @param caCerts ca certs
 	 */
 	public void setKeyPair(KeyPair keypair, Cert...caCerts) 
 	{
@@ -146,11 +143,8 @@ public class HttpsSettings {
 	 * Set keypairs to a https application. This replaces previous keyManager.
 	 * Additional CA certifications can be attached. 
 	 * 
-	 * @param keypairs
-	 * @param caCerts
-	 * @throws KeyStoreException
-	 * @throws UnrecoverableKeyException
-	 * @throws NoSuchAlgorithmException
+	 * @param keypairs key paris
+	 * @param caCerts ca certs
 	 */
 	public void setKeyPairs(KeyPair[] keypairs, Cert...caCerts) 
 	{
@@ -196,11 +190,9 @@ public class HttpsSettings {
 	/**
 	 * Set keystore as the key manager for a https application.   
 	 *  
-	 * @param keystore
-	 * @param password
-	 * @throws NoSuchAlgorithmException
-	 * @throws UnrecoverableKeyException
-	 * @throws KeyStoreException
+	 * @param keystore key store
+	 * @param password the password for the key store
+	 * @throws ServiceResultException if error
 	 */
 	public void setKeyStore(KeyStore keystore, String password) throws ServiceResultException
 	{
@@ -221,8 +213,8 @@ public class HttpsSettings {
 	/**
 	 * Set keymanager for a https application.
 	 * 
-	 * @param keyManager
-	 * @throws ServiceResultException 
+	 * @param keyManager key manager
+	 * @throws ServiceResultException if error 
 	 */
 	public void setKeyManager(X509KeyManager keyManager) throws ServiceResultException 
 	{
@@ -233,8 +225,8 @@ public class HttpsSettings {
 	 * Set the trust manager for a https application. 
 	 * Trust manager validates peer's certificates and certificate issuers.
 	 * 
-	 * @param trustManager
-	 * @throws ServiceResultException 
+	 * @param trustManager trustmanager
+	 * @throws ServiceResultException if error
 	 */
 	public void setTrustManager(TrustManager trustManager) throws ServiceResultException 
 	{
@@ -245,7 +237,7 @@ public class HttpsSettings {
 	 * Set an implementation of CertificateValidator as TrustManager.
 	 * Trust manager validates peer's certificates and certificate issuers.
 	 * 
-	 * @param certValidator
+	 * @param certValidator certificate validator
 	 */
 	public void setCertificateValidator(CertificateValidator certValidator)
 	{
@@ -255,8 +247,8 @@ public class HttpsSettings {
 	/**
 	 * Set SSL Authentication information. Must be set before #initialization.
 	 * 
-	 * @param username
-	 * @param password
+	 * @param username user name
+	 * @param password password
 	 */
 	public void setHttpsAuth(String username, String password) {
 		this.username = username;

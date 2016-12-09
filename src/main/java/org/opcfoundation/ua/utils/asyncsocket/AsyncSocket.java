@@ -20,18 +20,56 @@ import java.nio.channels.SocketChannel;
 import org.opcfoundation.ua.utils.IStatefulObject;
 
 /**
+ * <p>AsyncSocket interface.</p>
  *
  * @see AsyncSocketImpl
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public interface AsyncSocket {
 
+	/**
+	 * <p>getInputStream.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncInputStream} object.
+	 */
 	AsyncInputStream getInputStream();
+	/**
+	 * <p>getOutputStream.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncOutputStream} object.
+	 */
 	AsyncOutputStream getOutputStream();
+	/**
+	 * <p>close.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncSocketImpl} object.
+	 * @throws java.io.IOException if any.
+	 */
 	AsyncSocketImpl close() throws IOException;
+	/**
+	 * <p>socketChannel.</p>
+	 *
+	 * @return a {@link java.nio.channels.SocketChannel} object.
+	 */
 	SocketChannel socketChannel();
+	/**
+	 * <p>socket.</p>
+	 *
+	 * @return a {@link java.net.Socket} object.
+	 */
 	Socket socket();
+	/**
+	 * <p>connect.</p>
+	 *
+	 * @param addr a {@link java.net.SocketAddress} object.
+	 * @throws java.io.IOException if any.
+	 */
 	void connect(SocketAddress addr) throws IOException;
+	/**
+	 * <p>getStateMonitor.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.IStatefulObject} object.
+	 */
 	IStatefulObject<SocketState, IOException> getStateMonitor();
 	
 }

@@ -31,7 +31,7 @@ import org.opcfoundation.ua.encoding.utils.EncodeableDescTable;
 /**
  * Serializes {@link IEncodeable}s using reflection.
  * This class can encode anything that implements IEncodeable.
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class EncodeableReflectionSerializer implements IEncodeableSerializer {
@@ -40,6 +40,11 @@ public class EncodeableReflectionSerializer implements IEncodeableSerializer {
 	Set<Class<? extends IEncodeable>> encodeSet;
 	Set<ExpandedNodeId> decodeSet;
 	
+	/**
+	 * <p>Constructor for EncodeableReflectionSerializer.</p>
+	 *
+	 * @param table a {@link org.opcfoundation.ua.encoding.utils.EncodeableDescTable} object.
+	 */
 	public EncodeableReflectionSerializer(EncodeableDescTable table)
 	{
 		this.encodeableTable = table;
@@ -47,6 +52,7 @@ public class EncodeableReflectionSerializer implements IEncodeableSerializer {
 		decodeSet = table.getBinIdMap().keySet();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void calcEncodeable(Class<? extends IEncodeable> clazz, IEncodeable encodeable, IEncoder calculator) 
 	throws EncodingException 
@@ -66,6 +72,7 @@ public class EncodeableReflectionSerializer implements IEncodeableSerializer {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	@Override
 	public IEncodeable getEncodeable(Class<? extends IEncodeable> clazz, IDecoder decoder) throws DecodingException
@@ -122,6 +129,7 @@ public class EncodeableReflectionSerializer implements IEncodeableSerializer {
 	}
 	
 
+	/** {@inheritDoc} */
 	@Override
 	public void putEncodeable(Class<? extends IEncodeable> clazz,
 			IEncodeable encodeable, IEncoder encoder) throws EncodingException
@@ -141,17 +149,20 @@ public class EncodeableReflectionSerializer implements IEncodeableSerializer {
 		}
 	}	
 
+	/** {@inheritDoc} */
 	@Override
 	public void getSupportedNodeIds(Collection<ExpandedNodeId> result) {
 		result.addAll(decodeSet);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void getSupportedClasses(Collection<Class<? extends IEncodeable>> result)
 	{
 		result.addAll(encodeSet);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Class<? extends IEncodeable> getClass(ExpandedNodeId id) {
 		EncodeableDesc info = encodeableTable.get(id);
@@ -159,6 +170,7 @@ public class EncodeableReflectionSerializer implements IEncodeableSerializer {
 		return info.clazz;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public ExpandedNodeId getNodeId(Class<? extends IEncodeable> clazz, EncodeType type) {
 		EncodeableDesc info = encodeableTable.get(clazz);

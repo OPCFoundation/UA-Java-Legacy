@@ -49,10 +49,9 @@ import org.spongycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.spongycastle.util.encoders.Base64;
 
 /**
- * SpongyCastle specific implementations of certain Crypto Utilities. 
- * Called normally from the {@link CryptoUtil} or {@link CertificateUtils} class, 
+ * SpongyCastle specific implementations of certain Crypto Utilities.
+ * Called normally from the {@link CryptoUtil} or {@link CertificateUtils} class,
  * so use those methods instead.
- *
  */
 public class SpongyCastleUtils {
 
@@ -62,7 +61,7 @@ public class SpongyCastleUtils {
 	 * Build a X509 V3 certificate to use as an issuer (CA) certificate. The
 	 * certificate does not define OPC UA specific fields, so it cannot be used
 	 * for an application instance certificate.
-	 * 
+	 *
 	 * @param publicKey
 	 *            the public key to use for the certificate
 	 * @param privateKey
@@ -72,10 +71,12 @@ public class SpongyCastleUtils {
 	 *            null a self-signed certificate is created.
 	 * @param commonName
 	 *            the CommonName to use for the subject of the certificate.
-	 * @param serialNr
-	 * @param startDate
-	 * @param expiryDate
-	 * @throws OperatorCreationException
+	 * @param serialNr a {@link java.math.BigInteger} object.
+	 * @param startDate a {@link java.util.Date} object.
+	 * @param expiryDate a {@link java.util.Date} object.
+	 * @return a {@link java.security.cert.X509Certificate} object.
+	 * @throws java.security.GeneralSecurityException if any.
+	 * @throws java.io.IOException if any.
 	 */
 	public static X509Certificate generateIssuerCert(PublicKey publicKey,
 			PrivateKey privateKey, KeyPair issuerKeys, String commonName, BigInteger serialNr, Date startDate, Date expiryDate)
@@ -131,7 +132,7 @@ public class SpongyCastleUtils {
 	 * {@link CertificateUtils#createApplicationInstanceCertificate(String, String, String, int, String...)}
 	 * and
 	 * {@link CertificateUtils#renewApplicationInstanceCertificate(String, String, String, int, org.opcfoundation.ua.transport.security.KeyPair, String...)}
-	 * 
+	 *
 	 * @param domainName
 	 *            the X500 domain name for the certificate
 	 * @param publicKey
@@ -144,18 +145,17 @@ public class SpongyCastleUtils {
 	 *            validity start time
 	 * @param to
 	 *            validity end time
-	 * @param serialNumber
-	 *            a unique serial number for the certificate
 	 * @param applicationUri
 	 *            the OPC UA ApplicationUri of the application - added to
 	 *            SubjectAlternativeName
 	 * @param hostNames
 	 *            the additional host names to ass to SubjectAlternativeName
 	 * @return the generated certificate
-	 * @throws GeneralSecurityException
+	 * @throws java.security.GeneralSecurityException
 	 *             if the generation fails
-	 * @throws IOException
+	 * @throws java.io.IOException
 	 *             if the generation fails due to an IO exception
+	 * @param serial a {@link java.math.BigInteger} object.
 	 */
 	public static X509Certificate generateCertificate(String domainName, PublicKey publicKey, PrivateKey privateKey, KeyPair issuerKeys,
 			Date from, Date to, BigInteger serial, 
@@ -266,10 +266,22 @@ public class SpongyCastleUtils {
 	}
 	
 
+	/**
+	 * <p>base64Decode.</p>
+	 *
+	 * @param string a {@link java.lang.String} object.
+	 * @return an array of byte.
+	 */
 	public static byte[] base64Decode(String string) {
 		return Base64.decode(string);
 	}
 
+	/**
+	 * <p>base64Encode.</p>
+	 *
+	 * @param bytes an array of byte.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String base64Encode(byte[] bytes) {
 		try {
 			return new String(Base64.encode(bytes), "UTF-8");
@@ -278,6 +290,13 @@ public class SpongyCastleUtils {
 		}
 	}
 
+	/**
+	 * <p>getSubjectAlternativeNames.</p>
+	 *
+	 * @param cert a {@link java.security.cert.X509Certificate} object.
+	 * @return a {@link java.util.Collection} object.
+	 * @throws java.security.cert.CertificateParsingException if any.
+	 */
 	@SuppressWarnings("unchecked")
 	public static Collection<List<?>> getSubjectAlternativeNames(
 			X509Certificate cert) throws CertificateParsingException {

@@ -45,7 +45,7 @@ import org.opcfoundation.ua.core.ReferenceNode;
 
 
 
-public class ObjectNode extends InstanceNode implements Structure, Cloneable {
+public class ObjectNode extends InstanceNode {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ObjectNode);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ObjectNode_Encoding_DefaultBinary);
@@ -78,7 +78,7 @@ public class ObjectNode extends InstanceNode implements Structure, Cloneable {
       */
     public ObjectNode clone()
     {
-        ObjectNode result = new ObjectNode();
+        ObjectNode result = (ObjectNode) super.clone();
         result.NodeId = NodeId;
         result.NodeClass = NodeClass;
         result.BrowseName = BrowseName;

@@ -35,9 +35,10 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class BrowseNextRequest extends Object implements ServiceRequest {
+public class BrowseNextRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.BrowseNextRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.BrowseNextRequest_Encoding_DefaultBinary);
@@ -93,7 +94,7 @@ public class BrowseNextRequest extends Object implements ServiceRequest {
       */
     public BrowseNextRequest clone()
     {
-        BrowseNextRequest result = new BrowseNextRequest();
+        BrowseNextRequest result = (BrowseNextRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.ReleaseContinuationPoints = ReleaseContinuationPoints;
         result.ContinuationPoints = ContinuationPoints==null ? null : ContinuationPoints.clone();

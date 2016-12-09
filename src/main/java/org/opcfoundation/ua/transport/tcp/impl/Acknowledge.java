@@ -19,7 +19,6 @@ import org.opcfoundation.ua.encoding.IEncodeable;
 
 /**
  * Acknowledge is a message used in TCP Handshake.
- * 
  */
 public class Acknowledge implements IEncodeable {
 
@@ -51,14 +50,28 @@ public class Acknowledge implements IEncodeable {
 	private static Field[] fields;
 	
 	/**
+	 * <p>Getter for the field <code>fields</code>.</p>
+	 *
 	 * @return the fields
 	 */
 	public static Field[] getFields() {
 		return fields;
 	}
 
+	/**
+	 * <p>Constructor for Acknowledge.</p>
+	 */
 	public Acknowledge() {}
 
+	/**
+	 * <p>Constructor for Acknowledge.</p>
+	 *
+	 * @param protocolVersion a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 * @param receiveBufferSize a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 * @param sendBufferSize a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 * @param maxMessageSize a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 * @param maxChunkCount a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public Acknowledge(
 			UnsignedInteger protocolVersion,
 			UnsignedInteger receiveBufferSize, 
@@ -73,42 +86,92 @@ public class Acknowledge implements IEncodeable {
 		SendBufferSize = sendBufferSize;
 	}
 
+	/**
+	 * <p>getProtocolVersion.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public UnsignedInteger getProtocolVersion() {
 		return ProtocolVersion;
 	}
 
+	/**
+	 * <p>setProtocolVersion.</p>
+	 *
+	 * @param protocolVersion a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public void setProtocolVersion(UnsignedInteger protocolVersion) {
 		ProtocolVersion = protocolVersion;
 	}
 
+	/**
+	 * <p>getReceiveBufferSize.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public UnsignedInteger getReceiveBufferSize() {
 		return ReceiveBufferSize;
 	}
 
+	/**
+	 * <p>setReceiveBufferSize.</p>
+	 *
+	 * @param receiveBufferSize a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public void setReceiveBufferSize(UnsignedInteger receiveBufferSize) {
 		ReceiveBufferSize = receiveBufferSize;
 	}
 
+	/**
+	 * <p>getSendBufferSize.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public UnsignedInteger getSendBufferSize() {
 		return SendBufferSize;
 	}
 
+	/**
+	 * <p>setSendBufferSize.</p>
+	 *
+	 * @param sendBufferSize a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public void setSendBufferSize(UnsignedInteger sendBufferSize) {
 		SendBufferSize = sendBufferSize;
 	}
 
+	/**
+	 * <p>getMaxMessageSize.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public UnsignedInteger getMaxMessageSize() {
 		return MaxMessageSize;
 	}
 
+	/**
+	 * <p>setMaxMessageSize.</p>
+	 *
+	 * @param maxMessageSize a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public void setMaxMessageSize(UnsignedInteger maxMessageSize) {
 		MaxMessageSize = maxMessageSize;
 	}
 
+	/**
+	 * <p>getMaxChunkCount.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public UnsignedInteger getMaxChunkCount() {
 		return MaxChunkCount;
 	}
 
+	/**
+	 * <p>setMaxChunkCount.</p>
+	 *
+	 * @param maxChunkCount a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public void setMaxChunkCount(UnsignedInteger maxChunkCount) {
 		MaxChunkCount = maxChunkCount;
 	}

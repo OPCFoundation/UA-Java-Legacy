@@ -43,15 +43,16 @@ import org.opcfoundation.ua.builtintypes.UnsignedByte;
 import org.opcfoundation.ua.core.ApplicationDescription;
 import org.opcfoundation.ua.core.MessageSecurityMode;
 import org.opcfoundation.ua.core.UserTokenPolicy;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 /**
  * Endpoint Description
  * 
- * @See {@link EndpointUtil} for utility methods
+ * @see EndpointUtil for utility methods
  */
 
-public class EndpointDescription extends Object implements Structure, Cloneable {
+public class EndpointDescription extends AbstractStructure implements Structure, Cloneable {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.EndpointDescription);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.EndpointDescription_Encoding_DefaultBinary);
@@ -167,7 +168,7 @@ public class EndpointDescription extends Object implements Structure, Cloneable 
       */
     public EndpointDescription clone()
     {
-        EndpointDescription result = new EndpointDescription();
+        EndpointDescription result = (EndpointDescription) super.clone();
         result.EndpointUrl = EndpointUrl;
         result.Server = Server==null ? null : Server.clone();
         result.ServerCertificate = ServerCertificate;
@@ -260,7 +261,6 @@ public class EndpointDescription extends Object implements Structure, Cloneable 
 	/**
 	 * Finds UserTokenPolicy of given type that this stack can encrypt
 	 * 
-	 * @param endpoint
 	 * @param type
 	 * @return user token policy or null 
 	 */
@@ -288,6 +288,7 @@ public class EndpointDescription extends Object implements Structure, Cloneable 
     /**
      * Finds the user token policy with the specified id.
      * 
+     * @param policyId policy id
      * @return user token policy or null
      */
     public UserTokenPolicy findUserTokenPolicy(String policyId)

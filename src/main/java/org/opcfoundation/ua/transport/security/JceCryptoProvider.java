@@ -37,6 +37,10 @@ import org.opcfoundation.ua.utils.CryptoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>Abstract JceCryptoProvider class.</p>
+ *
+ */
 public abstract class JceCryptoProvider implements CryptoProvider {
 
 	// base implementations should use Cipher, Signature, Mac...
@@ -44,66 +48,23 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 	static Logger logger = LoggerFactory.getLogger(JceCryptoProvider.class);
 	protected Provider provider;
 
+	/**
+	 * <p>Constructor for JceCryptoProvider.</p>
+	 */
 	public JceCryptoProvider() {
 		String securityProviderName = CryptoUtil.getSecurityProviderName();
 		this.provider = Security.getProvider(securityProviderName);
 	}
 
-	// asymmEncrypt(byte[] input, Key privKey, SecurityAlgorithm algorithm)
-
+	/** {@inheritDoc} */
 	@Override
 	abstract public byte[] base64Decode(String string);
 
-	/*
-	 * @Override public int decryptAsymm(SecurityConfiguration profile, byte[]
-	 * dataToDecrypt, Certificate decryptingCertificate, byte[] output, int
-	 * outputOffset) throws ServiceResultException {
-	 * 
-	 * SecurityPolicy policy = profile.getSecurityPolicy();
-	 * 
-	 * RSAPrivateKey rsaPrivateKey = profile.getLocalPrivateKey(); int
-	 * inputBlockSize = rsaPrivateKey.getModulus().bitLength() / 8;
-	 * 
-	 * Cipher cipher; try { cipher =
-	 * getAsymmetricCipher(policy.getAsymmetricEncryptionAlgorithm(),
-	 * rsaPrivateKey); } catch (InvalidKeyException e) {
-	 * logger.info("decrypt: The provided RSA key is invalid", e); throw new
-	 * ServiceResultException( StatusCodes.Bad_SecurityChecksFailed, e); } catch
-	 * (GeneralSecurityException e) { throw new
-	 * ServiceResultException(StatusCodes.Bad_InternalError, e); }
-	 * 
-	 * // Verify block sizes if (dataToDecrypt.length % inputBlockSize != 0) {
-	 * logger.error("decrypt: Wrong blockSize!!!"); throw new
-	 * ServiceResultException( StatusCodes.Bad_InternalError,
-	 * "Error in asymmetric decrypt: Input data is not an even number of encryption blocks."
-	 * ); }
-	 * 
-	 * try {
-	 * 
-	 * logger.info("JceCipherDecrypt={}", cipher.toString());
-	 * 
-	 * // int outputs = decrypter.getOutputSize(dataToDecrypt.length); // // int
-	 * blocks = decrypter.getBlockSize(); // int stop = 0; int maxIndex =
-	 * outputOffset + dataToDecrypt.length; // initialize return value, value
-	 * tells how bytes has been stored in // output int totalDecryptedBytes = 0;
-	 * // this value tells how many bytes where added to buffer in each //
-	 * iteration int amountOfDecryptedBytes = -1; int inputOffset = 0; for (int
-	 * index = outputOffset; index < maxIndex; index += inputBlockSize) {
-	 * amountOfDecryptedBytes = cipher.doFinal(dataToDecrypt, inputOffset,
-	 * inputBlockSize, output, outputOffset); inputOffset += inputBlockSize;
-	 * outputOffset += amountOfDecryptedBytes; // Update amount of total
-	 * decrypted bytes totalDecryptedBytes += amountOfDecryptedBytes; } return
-	 * totalDecryptedBytes;
-	 * 
-	 * } catch (GeneralSecurityException e) { logger.error("decrypt: error", e);
-	 * throw new ServiceResultException(StatusCodes.Bad_InternalError, e); }
-	 * 
-	 * }
-	 */
-
+	/** {@inheritDoc} */
 	@Override
 	abstract public String base64Encode(byte[] bytes);
 
+	/** {@inheritDoc} */
 	@Override
 	public Mac createMac(SecurityAlgorithm algorithm, byte[] secret)
 			throws ServiceResultException {
@@ -122,6 +83,7 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 		return hmac;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int decryptAsymm(PrivateKey decryptingKey,
 			SecurityAlgorithm algorithm, byte[] dataToDecrypt, byte[] output,
@@ -182,16 +144,7 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 
 	}
 
-	/*
-	 * @Override public byte[] signAsymm(SecurityConfiguration profile, byte[]
-	 * dataToSign, RSAPrivateKey senderPrivate) throws ServiceResultException {
-	 * 
-	 * SecurityAlgorithm algorithm =
-	 * profile.getSecurityPolicy().getAsymmetricSignatureAlgorithm();
-	 * 
-	 * return signAsymm(algorithm, dataToSign, senderPrivate).getSignature(); }
-	 */
-
+	/** {@inheritDoc} */
 	@Override
 	public int decryptSymm(SecurityToken token, byte[] dataToDecrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
@@ -243,6 +196,7 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void encryptAsymm(PublicKey remotePublicKey,
 			SecurityAlgorithm algorithm, byte[] dataToEncrypt, byte[] output,
@@ -289,6 +243,7 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int encryptSymm(SecurityToken token, byte[] dataToEncrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
@@ -328,20 +283,7 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 
 	}
 
-	/*
-	 * @Override public boolean verifyAsymm(SecurityConfiguration profile,
-	 * byte[] dataToVerify, Certificate signingCertificate, byte[] signature)
-	 * throws ServiceResultException {
-	 * 
-	 * SecurityAlgorithm algorithm =
-	 * profile.getSecurityPolicy().getAsymmetricSignatureAlgorithm();
-	 * 
-	 * return verifyAsymm(algorithm, dataToVerify, signingCertificate,
-	 * signature);
-	 * 
-	 * }
-	 */
-
+	/** {@inheritDoc} */
 	@Override
 	public byte[] signAsymm(PrivateKey senderPrivate,
 			SecurityAlgorithm algorithm, byte[] dataToSign)
@@ -367,6 +309,7 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void signSymm(SecurityToken token, byte[] input, int verifyLen,
 			byte[] output) throws ServiceResultException {
@@ -380,6 +323,7 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean verifyAsymm(PublicKey signingCertificate,
 			SecurityAlgorithm algorithm, byte[] dataToVerify, byte[] signature)
@@ -407,6 +351,7 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void verifySymm(SecurityToken token, byte[] dataToVerify,
 			byte[] signature) throws ServiceResultException {

@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.ApplicationDescription;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class CreateSessionRequest extends Object implements ServiceRequest {
+public class CreateSessionRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CreateSessionRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CreateSessionRequest_Encoding_DefaultBinary);
@@ -166,7 +167,7 @@ public class CreateSessionRequest extends Object implements ServiceRequest {
       */
     public CreateSessionRequest clone()
     {
-        CreateSessionRequest result = new CreateSessionRequest();
+        CreateSessionRequest result = (CreateSessionRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.ClientDescription = ClientDescription==null ? null : ClientDescription.clone();
         result.ServerUri = ServerUri;

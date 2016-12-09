@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.EndpointDescription;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class GetEndpointsResponse extends Object implements ServiceResponse {
+public class GetEndpointsResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.GetEndpointsResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.GetEndpointsResponse_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class GetEndpointsResponse extends Object implements ServiceResponse {
       */
     public GetEndpointsResponse clone()
     {
-        GetEndpointsResponse result = new GetEndpointsResponse();
+        GetEndpointsResponse result = (GetEndpointsResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         if (Endpoints!=null) {
             result.Endpoints = new EndpointDescription[Endpoints.length];

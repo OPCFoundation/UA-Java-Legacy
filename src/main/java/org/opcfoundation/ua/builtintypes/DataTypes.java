@@ -13,18 +13,20 @@
 package org.opcfoundation.ua.builtintypes;
 
 
-/** 
-* A class that defines constants used by UA applications.
-* 
-* @deprecated See BuiltinsMap#ID_CLASS_MAP and {@link BuiltinsMap#BuiltinsMap.CLASS_ID_MAP}
-*/ 
+/**
+ * A class that defines constants used by UA applications.
+ *
+ * @deprecated 
+ * @see BuiltinsMap
+ */
 public class DataTypes{
 
 	/**
 	 * Returns the class for the data type.
-	 * @param dataTypeId
-	 * @return
+	 *
+	 * @param dataTypeId a {@link org.opcfoundation.ua.builtintypes.NodeId} object.
 	 * @deprecated Use @See {@link BuiltinsMap#ID_CLASS_MAP}
+	 * @return a {@link java.lang.Class} object.
 	 */
 	public static Class<?> getSystemType(NodeId dataTypeId) {
 		return BuiltinsMap.ID_CLASS_MAP.getRight(dataTypeId);

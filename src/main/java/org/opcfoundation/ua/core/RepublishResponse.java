@@ -35,9 +35,10 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.core.NotificationMessage;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class RepublishResponse extends Object implements ServiceResponse {
+public class RepublishResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RepublishResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RepublishResponse_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class RepublishResponse extends Object implements ServiceResponse {
       */
     public RepublishResponse clone()
     {
-        RepublishResponse result = new RepublishResponse();
+        RepublishResponse result = (RepublishResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.NotificationMessage = NotificationMessage==null ? null : NotificationMessage.clone();
         return result;

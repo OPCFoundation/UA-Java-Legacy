@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.UnsignedByte;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ModelChangeStructureDataType extends Object implements Structure, Cloneable {
+public class ModelChangeStructureDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ModelChangeStructureDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ModelChangeStructureDataType_Encoding_DefaultBinary);
@@ -94,7 +95,7 @@ public class ModelChangeStructureDataType extends Object implements Structure, C
       */
     public ModelChangeStructureDataType clone()
     {
-        ModelChangeStructureDataType result = new ModelChangeStructureDataType();
+        ModelChangeStructureDataType result = (ModelChangeStructureDataType) super.clone();
         result.Affected = Affected;
         result.AffectedType = AffectedType;
         result.Verb = Verb;

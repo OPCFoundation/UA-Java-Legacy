@@ -37,9 +37,10 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.MonitoringMode;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class SetMonitoringModeRequest extends Object implements ServiceRequest {
+public class SetMonitoringModeRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SetMonitoringModeRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SetMonitoringModeRequest_Encoding_DefaultBinary);
@@ -107,7 +108,7 @@ public class SetMonitoringModeRequest extends Object implements ServiceRequest {
       */
     public SetMonitoringModeRequest clone()
     {
-        SetMonitoringModeRequest result = new SetMonitoringModeRequest();
+        SetMonitoringModeRequest result = (SetMonitoringModeRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.SubscriptionId = SubscriptionId;
         result.MonitoringMode = MonitoringMode;

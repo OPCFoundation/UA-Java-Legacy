@@ -20,6 +20,10 @@ import java.util.Set;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.core.StatusCodes;
 
+/**
+ * <p>CertificateValidatorImpl class.</p>
+ *
+ */
 public class CertificateValidatorImpl implements CertificateValidator {
 
 	/** List of explicitely trusted certificates */
@@ -28,31 +32,55 @@ public class CertificateValidatorImpl implements CertificateValidator {
 	/** List of public keys of explicitely trusted signers */
 	Set<PublicKey> trustedPublicKeys = new HashSet<PublicKey>();
 	
+	/**
+	 * <p>Constructor for CertificateValidatorImpl.</p>
+	 */
 	public CertificateValidatorImpl()
 	{		
 	}
 	
+	/**
+	 * <p>Constructor for CertificateValidatorImpl.</p>
+	 *
+	 * @param trustedCertificates a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public CertificateValidatorImpl(Cert ... trustedCertificates)
 	{		
 		for (Cert c : trustedCertificates)
 			addTrustedCertificate(c);
 	}
 	
+	/**
+	 * <p>addTrustedCertificate.</p>
+	 *
+	 * @param certificate a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public void addTrustedCertificate(Cert certificate)
 	{
 		trustedCertificates.add(certificate);
 	}
 	
+	/**
+	 * <p>addTrustedSigner.</p>
+	 *
+	 * @param signer a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public void addTrustedSigner(Cert signer)
 	{
 		addTrustedSignerPublicKey(signer.getCertificate().getPublicKey());
 	}
 	
+	/**
+	 * <p>addTrustedSignerPublicKey.</p>
+	 *
+	 * @param signerPublicKey a {@link java.security.PublicKey} object.
+	 */
 	public void addTrustedSignerPublicKey(PublicKey signerPublicKey)
 	{
 		trustedPublicKeys.add(signerPublicKey);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public StatusCode validateCertificate(Cert c) {
 		for (Cert certs : trustedCertificates)

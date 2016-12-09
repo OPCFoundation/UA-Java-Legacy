@@ -37,10 +37,11 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.LocalizedText;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class Argument extends Object implements Structure, Cloneable {
+public class Argument extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.Argument);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.Argument_Encoding_DefaultBinary);
@@ -120,7 +121,7 @@ public class Argument extends Object implements Structure, Cloneable {
       */
     public Argument clone()
     {
-        Argument result = new Argument();
+        Argument result = (Argument) super.clone();
         result.Name = Name;
         result.DataType = DataType;
         result.ValueRank = ValueRank;

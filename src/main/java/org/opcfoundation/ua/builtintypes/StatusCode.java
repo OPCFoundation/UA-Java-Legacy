@@ -20,15 +20,16 @@ import org.opcfoundation.ua.core.StatusCodes;
 /**
  * A numeric identifier for a error or condition that is associated with a
  * value or an operation. StatusCode is immutable.
- * 
+ *
  * TODO Add type-safe enums
- * 
+ *
  * @see StatusCodes
  * @see StatusCodeDescriptions
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public final class StatusCode {	
 	
+	/** Constant <code>ID</code> */
 	public static final NodeId ID = Identifiers.StatusCode;
 	
 	/** 
@@ -36,12 +37,16 @@ public final class StatusCode {
 	 * condition. 
 	 */
 	public static final int SEVERITY_MASK		= 0xC0000000;
+	/** Constant <code>SEVERITY_GOOD=0x00000000</code> */
 	public static final int SEVERITY_GOOD		= 0x00000000;
+	/** Constant <code>SEVERITY_UNCERTAIN=0x40000000</code> */
 	public static final int SEVERITY_UNCERTAIN	= 0x40000000;
+	/** Constant <code>SEVERITY_BAD=0x80000000</code> */
 	public static final int SEVERITY_BAD		= 0x80000000;		
 
 	/** GOOD Result */
 	public static final StatusCode GOOD = getFromBits(SEVERITY_GOOD);
+	/** Constant <code>BAD</code> */
 	public static final StatusCode BAD = getFromBits(SEVERITY_BAD);
 		
 	/** Reserved for future use. Shall always be zero. */
@@ -153,21 +158,39 @@ public final class StatusCode {
 	 * how the Client uses the data value. 
 	 */
 	public static final int HISTORIANBITS_MASK			= 0x0000001F;
+	/** Constant <code>HISTORIANBITS_RAW=0x00000000</code> */
 	public static final int HISTORIANBITS_RAW			= 0x00000000;
+	/** Constant <code>HISTORIANBITS_CALCULATED=0x00000001</code> */
 	public static final int HISTORIANBITS_CALCULATED	= 0x00000001;
+	/** Constant <code>HISTORIANBITS_INTERPOLATED=0x00000002</code> */
 	public static final int HISTORIANBITS_INTERPOLATED	= 0x00000002;
+	/** Constant <code>HISTORIANBITS_RESERVED=0x00000003</code> */
 	public static final int HISTORIANBITS_RESERVED		= 0x00000003;
+	/** Constant <code>HISTORIANBITS_PARTIAL=0x00000004</code> */
 	public static final int HISTORIANBITS_PARTIAL		= 0x00000004;
+	/** Constant <code>HISTORIANBITS_EXTRADATA=0x00000008</code> */
 	public static final int HISTORIANBITS_EXTRADATA		= 0x00000008;
+	/** Constant <code>HISTORIANBITS_MULTIVALUE=0x00000010</code> */
 	public static final int HISTORIANBITS_MULTIVALUE	= 0x00000010;
 	
 	private final int value;
 	
+	/**
+	 * <p>getFromBits.</p>
+	 *
+	 * @param value a int.
+	 * @return a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+	 */
 	public static StatusCode getFromBits(int value)
 	{
 		return new StatusCode(value);
 	}
 
+	/**
+	 * <p>Constructor for StatusCode.</p>
+	 *
+	 * @param value a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public StatusCode(UnsignedInteger value)
 	{
 		this.value = value.intValue();
@@ -182,21 +205,33 @@ public final class StatusCode {
 		this.value = value;
 	}
 	
+	/**
+	 * <p>getValueAsIntBits.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getValueAsIntBits() 
 	{
 		return value;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>value</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public UnsignedInteger getValue()
 	{
 		return UnsignedInteger.getFromBits(value);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		return value;
 	}
 	
+    /** {@inheritDoc} */
     @Override
 	public boolean equals(Object obj) {
 	    if (!(obj instanceof StatusCode)) return false;
@@ -204,6 +239,11 @@ public final class StatusCode {
 	    return value==other.value;
 	}	
     
+	/**
+	 * <p>getDescription.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getDescription() {
 		final String s = StatusCodeDescriptions.getStatusCodeDescription(value);
 		if (s == null)
@@ -211,6 +251,11 @@ public final class StatusCode {
 		return s;
     }
 	
+    /**
+     * <p>getName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getName() {
 		if (value == GOOD.value)
 			return "GOOD";
@@ -222,6 +267,7 @@ public final class StatusCode {
 		return s;
     }
     
+    /** {@inheritDoc} */
     @Override
 	public String toString() {
 	    return 
@@ -232,24 +278,27 @@ public final class StatusCode {
     
     // Redundant convenience methods
     
-    /** 
-     * Tests if this status code is bad. 
+    /**
+     * Tests if this status code is bad.
+     *
      * @return true if bad
      */
     public boolean isBad() 
     {
         return (value & SEVERITY_MASK) == SEVERITY_BAD;
     }
-    /** 
+    /**
      * Tests if this status code is good.
+     *
      * @return true if good
      */
     public boolean isGood() 
     {        
         return (value & SEVERITY_MASK) == SEVERITY_GOOD;
     }
-    /** 
-     * tests if a status code is not bad. 
+    /**
+     * tests if a status code is not bad.
+     *
      * @return true if not bad
      */
     public boolean isNotBad() 
@@ -257,7 +306,8 @@ public final class StatusCode {
         return (value & SEVERITY_MASK) != SEVERITY_BAD;
     }
     /**
-     * Tests if this status code is not good. 
+     * Tests if this status code is not good.
+     *
      * @return true if not good
      */
     public boolean isNotGood() 
@@ -265,8 +315,9 @@ public final class StatusCode {
         return (value & SEVERITY_MASK) != SEVERITY_GOOD;
     }
 	
-    /** 
-     * Tests if this status code is not uncertain. 
+    /**
+     * Tests if this status code is not uncertain.
+     *
      * @return true if not uncertain
      */
     public boolean isNotUncertain() 
@@ -274,8 +325,9 @@ public final class StatusCode {
     	return (value & SEVERITY_MASK) != SEVERITY_UNCERTAIN;
     }
     
-    /** 
-     * Tests if this status code is not uncertain. 
+    /**
+     * Tests if this status code is not uncertain.
+     *
      * @return true if not uncertain
      */
     public boolean isUncertain() 
@@ -283,41 +335,81 @@ public final class StatusCode {
     	return (value & SEVERITY_MASK) == SEVERITY_UNCERTAIN;
     }
     
+    /**
+     * <p>isSemanticsChanged.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isSemanticsChanged()
     {
     	return (value & SEMANTICSCHANGED_MASK) != 0;
     }
     
+    /**
+     * <p>isStructureChanged.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isStructureChanged()
     {
     	return (value & STRUCTURECHANGED_MASK) != 0;
     }
     
+	/**
+	 * <p>isOverflow.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isOverflow()
 	{
 		return (value & OVERFLOW_MASK) != 0;
 	}
 	
+	/**
+	 * <p>getSeverity.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSeverity()
 	{
 		return value & SEVERITY_MASK;
 	}
 	
+	/**
+	 * <p>getSubcode.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getSubcode()
 	{
 		return value & SUBCODE_MASK;
 	}
 		
+	/**
+	 * <p>getInfotype.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getInfotype()
 	{
 		return value & INFOTYPE_MASK;
 	}
 	
+	/**
+	 * <p>getLimitBits.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getLimitBits()
 	{
 		return value & LIMITBITS_MASK;
 	}
 	
+	/**
+	 * <p>getHistorianBits.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getHistorianBits()
 	{
 		return value & HISTORIANBITS_MASK;
@@ -325,9 +417,9 @@ public final class StatusCode {
 	
 	/**
 	 * Matches argument against subcode and severity.
-	 * This method can be used to compare statuscode to values in {@link StatusCodes}. 
-	 * 
-	 * @param statusCode
+	 * This method can be used to compare statuscode to values in {@link StatusCodes}.
+	 *
+	 * @param statusCode a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
 	 * @return true if subcode and severity matches
 	 * @see StatusCode#equalsStatusCode(StatusCode)
 	 */
@@ -339,6 +431,7 @@ public final class StatusCode {
 
 	/**
 	 * Check if the status codes equal to severity and subcode, ignoring the lowest bits of the code.
+	 *
 	 * @param statusCode the StatusCode to compare this one to
 	 * @return true if the codes are equal when masked with SEVERITY_MASK and SUBCODE_MASK
 	 */

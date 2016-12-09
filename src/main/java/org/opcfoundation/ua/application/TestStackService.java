@@ -22,14 +22,15 @@ import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
 
 /**
  * Service handler that implements stack test
- * 
  */
 public class TestStackService implements TestServiceSetHandler {
 
+	/** {@inheritDoc} */
 	public void onTestStack(EndpointServiceRequest<TestStackRequest, TestStackResponse> req) throws ServiceFaultException {
 		req.sendResponse( new TestStackResponse(null, req.getRequest().getInput() ) );
 	}
 
+	/** {@inheritDoc} */
 	public void onTestStackEx(EndpointServiceRequest<TestStackExRequest, TestStackExResponse> req) throws ServiceFaultException {
 		TestStackExResponse res = new TestStackExResponse();
 		res.setOutput( req.getRequest().getInput() );		

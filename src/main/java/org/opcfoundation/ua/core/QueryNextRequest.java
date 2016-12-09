@@ -34,9 +34,10 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class QueryNextRequest extends Object implements ServiceRequest {
+public class QueryNextRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.QueryNextRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.QueryNextRequest_Encoding_DefaultBinary);
@@ -92,7 +93,7 @@ public class QueryNextRequest extends Object implements ServiceRequest {
       */
     public QueryNextRequest clone()
     {
-        QueryNextRequest result = new QueryNextRequest();
+        QueryNextRequest result = (QueryNextRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.ReleaseContinuationPoint = ReleaseContinuationPoint;
         result.ContinuationPoint = ContinuationPoint;

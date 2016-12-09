@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.NodeClass;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class AddReferencesItem extends Object implements Structure, Cloneable {
+public class AddReferencesItem extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.AddReferencesItem);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.AddReferencesItem_Encoding_DefaultBinary);
@@ -130,7 +131,7 @@ public class AddReferencesItem extends Object implements Structure, Cloneable {
       */
     public AddReferencesItem clone()
     {
-        AddReferencesItem result = new AddReferencesItem();
+        AddReferencesItem result = (AddReferencesItem) super.clone();
         result.SourceNodeId = SourceNodeId;
         result.ReferenceTypeId = ReferenceTypeId;
         result.IsForward = IsForward;

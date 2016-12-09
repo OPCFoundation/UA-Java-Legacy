@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class NotificationData extends Object implements Structure, Cloneable {
+public class NotificationData extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.NotificationData);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.NotificationData_Encoding_DefaultBinary);
@@ -53,7 +54,7 @@ public class NotificationData extends Object implements Structure, Cloneable {
       */
     public NotificationData clone()
     {
-        NotificationData result = new NotificationData();
+        NotificationData result = (NotificationData) super.clone();
         return result;
     }
     

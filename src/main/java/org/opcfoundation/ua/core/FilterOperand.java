@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class FilterOperand extends Object implements Structure, Cloneable {
+public class FilterOperand extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.FilterOperand);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.FilterOperand_Encoding_DefaultBinary);
@@ -53,7 +54,7 @@ public class FilterOperand extends Object implements Structure, Cloneable {
       */
     public FilterOperand clone()
     {
-        FilterOperand result = new FilterOperand();
+        FilterOperand result = (FilterOperand) super.clone();
         return result;
     }
     

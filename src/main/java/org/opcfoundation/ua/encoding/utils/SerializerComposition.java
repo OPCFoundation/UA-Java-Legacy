@@ -40,9 +40,17 @@ public class SerializerComposition implements IEncodeableSerializer {
 	Set<ExpandedNodeId> nodeIds = idToClass.keySet();
 	Set<Class<? extends IEncodeable>> classes = classToBinId.keySet();
 
+	/**
+	 * <p>Constructor for SerializerComposition.</p>
+	 */
 	public SerializerComposition() {
 	}
 	
+	/**
+	 * <p>addSerializer.</p>
+	 *
+	 * @param serializer a {@link org.opcfoundation.ua.encoding.binary.IEncodeableSerializer} object.
+	 */
 	public void addSerializer(IEncodeableSerializer serializer)
 	{
 		List<Class<? extends IEncodeable>> classes = new ArrayList<Class<? extends IEncodeable>>();
@@ -75,12 +83,14 @@ public class SerializerComposition implements IEncodeableSerializer {
 		}
 	}
 
+	/** {@inheritDoc} */
 	public void putEncodeable(Class<? extends IEncodeable> clazz, IEncodeable encodeable, IEncoder encoder) throws EncodingException {
 		IEncodeableSerializer s = serializers.get(clazz);
 		if (s==null) throw new EncodingException("Cannot encode "+clazz);
 		s.putEncodeable(clazz, encodeable, encoder);
 	}
 	
+	/** {@inheritDoc} */
 	public void calcEncodeable(Class<? extends IEncodeable> clazz, IEncodeable encodeable, IEncoder calculator)
 	throws EncodingException {
 		IEncodeableSerializer s = serializers.get(clazz);
@@ -88,16 +98,19 @@ public class SerializerComposition implements IEncodeableSerializer {
 		s.calcEncodeable(clazz, encodeable, calculator);		
 	}
 
+	/** {@inheritDoc} */
 	public IEncodeable getEncodeable(Class<? extends IEncodeable> clazz, IDecoder decoder) throws DecodingException {
 		IEncodeableSerializer s = serializers.get(clazz);
 		if (s==null) throw new DecodingException("Cannot decode "+clazz);
 		return s.getEncodeable(clazz, decoder);
 	}
 
+	/** {@inheritDoc} */
 	public Class<? extends IEncodeable> getClass(ExpandedNodeId id) {
 		return idToClass.get(id);
 	}
 	
+	/** {@inheritDoc} */
 	public ExpandedNodeId getNodeId(Class<? extends IEncodeable> clazz, EncodeType type) {
 		if (type == EncodeType.Binary)
 			return classToBinId.get(clazz);
@@ -106,10 +119,12 @@ public class SerializerComposition implements IEncodeableSerializer {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	public void getSupportedClasses(Collection<Class<? extends IEncodeable>> result) {
 		result.addAll(classes);
 	}
 
+	/** {@inheritDoc} */
 	public void getSupportedNodeIds(Collection<ExpandedNodeId> result) {
 		result.addAll(nodeIds);
 	}

@@ -60,10 +60,9 @@ import org.opcfoundation.ua.transport.security.KeyPair;
 
 
 /**
- * BouncyCastle specific implementations of certain Crypto Utilities. 
-* Called normally from the {@link CryptoUtil} or {@link CertificateUtils} class, 
+ * BouncyCastle specific implementations of certain Crypto Utilities.
+ * Called normally from the {@link CryptoUtil} or {@link CertificateUtils} class,
  * so use those methods instead.
-  *
  */
 public class BouncyCastleUtils {
 	static Logger logger = LoggerFactory.getLogger(BouncyCastleUtils.class);
@@ -94,7 +93,7 @@ public class BouncyCastleUtils {
 	 * Build a X509 V3 certificate to use as an issuer (CA) certificate. The
 	 * certificate does not define OPC UA specific fields, so it cannot be used
 	 * for an application instance certificate.
-	 * 
+	 *
 	 * @param publicKey
 	 *            the public key to use for the certificate
 	 * @param privateKey
@@ -104,10 +103,12 @@ public class BouncyCastleUtils {
 	 *            null a self-signed certificate is created.
 	 * @param commonName
 	 *            the CommonName to use for the subject of the certificate.
-	 * @param serialNr
-	 * @param startDate
-	 * @param expiryDate
-	 * @throws OperatorCreationException
+	 * @param serialNr a {@link java.math.BigInteger} object.
+	 * @param startDate a {@link java.util.Date} object.
+	 * @param expiryDate a {@link java.util.Date} object.
+	 * @return a {@link java.security.cert.X509Certificate} object.
+	 * @throws java.security.GeneralSecurityException if any.
+	 * @throws java.io.IOException if any.
 	 */
 	public static X509Certificate generateIssuerCert(PublicKey publicKey,
 			PrivateKey privateKey, KeyPair issuerKeys, String commonName, BigInteger serialNr, Date startDate, Date expiryDate)
@@ -163,7 +164,7 @@ public class BouncyCastleUtils {
 	 * {@link CertificateUtils#createApplicationInstanceCertificate(String, String, String, int, String...)}
 	 * and
 	 * {@link CertificateUtils#renewApplicationInstanceCertificate(String, String, String, int, org.opcfoundation.ua.transport.security.KeyPair, String...)}
-	 * 
+	 *
 	 * @param domainName
 	 *            the X500 domain name for the certificate
 	 * @param publicKey
@@ -176,18 +177,17 @@ public class BouncyCastleUtils {
 	 *            validity start time
 	 * @param to
 	 *            validity end time
-	 * @param serialNumber
-	 *            a unique serial number for the certificate
 	 * @param applicationUri
 	 *            the OPC UA ApplicationUri of the application - added to
 	 *            SubjectAlternativeName
 	 * @param hostNames
 	 *            the additional host names to ass to SubjectAlternativeName
 	 * @return the generated certificate
-	 * @throws GeneralSecurityException
+	 * @throws java.security.GeneralSecurityException
 	 *             if the generation fails
-	 * @throws IOException
+	 * @throws java.io.IOException
 	 *             if the generation fails due to an IO exception
+	 * @param serial a {@link java.math.BigInteger} object.
 	 */
 	public static X509Certificate generateCertificate(String domainName, PublicKey publicKey, PrivateKey privateKey, KeyPair issuerKeys,
 			Date from, Date to, BigInteger serial, 
@@ -309,12 +309,14 @@ public class BouncyCastleUtils {
 	}
 
 	/**
+	 * <p>writeToPem.</p>
+	 *
 	 * @param key certificate of private key
-	 * @param savePath
-	 * @param password 
-	 * @param  algorithm 
-	 * @throws FileNotFoundException
-	 * @throws IOException
+	 * @param savePath a {@link java.io.File} object.
+	 * @param password a {@link java.lang.String} object.
+	 * @param  algorithm a {@link java.lang.String} object.
+	 * @throws FileNotFoundException if any.
+	 * @throws java.io.IOException if any.
 	 */
 	public static void writeToPem(Object key, File savePath, String password, String  algorithm)
 			throws IOException {
@@ -331,10 +333,22 @@ public class BouncyCastleUtils {
 		pemWrt.close();
 	}
 
+	/**
+	 * <p>base64Decode.</p>
+	 *
+	 * @param string a {@link java.lang.String} object.
+	 * @return an array of byte.
+	 */
 	public static byte[] base64Decode(String string) {
 		return Base64.decode(string);
 	}
 
+	/**
+	 * <p>base64Encode.</p>
+	 *
+	 * @param bytes an array of byte.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String base64Encode(byte[] bytes) {
 		try {
 			return new String(Base64.encode(bytes), "UTF-8");
@@ -343,6 +357,13 @@ public class BouncyCastleUtils {
 		}
 	}
 
+	/**
+	 * <p>getSubjectAlternativeNames.</p>
+	 *
+	 * @param cert a {@link java.security.cert.X509Certificate} object.
+	 * @return a {@link java.util.Collection} object.
+	 * @throws java.security.cert.CertificateParsingException if any.
+	 */
 	@SuppressWarnings("unchecked")
 	public static Collection<List<?>> getSubjectAlternativeNames(
 			X509Certificate cert) throws CertificateParsingException {
@@ -375,6 +396,7 @@ public class BouncyCastleUtils {
 
 	/**
 	 * Converts a password to a byte array according to the scheme in PKCS5 (ascii, no padding)
+	 *
 	 * @param password a character array representing the password.
 	 * @return a byte array representing the password.
 	 */

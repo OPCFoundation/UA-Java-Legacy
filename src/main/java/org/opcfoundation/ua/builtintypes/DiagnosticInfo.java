@@ -18,8 +18,13 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 
 
+/**
+ * <p>DiagnosticInfo class.</p>
+ *
+ */
 public class DiagnosticInfo {
 
+	/** Constant <code>ID</code> */
 	public static final NodeId ID = Identifiers.DiagnosticInfo;
 	
 	Integer symbolicId;	
@@ -32,10 +37,24 @@ public class DiagnosticInfo {
 	List<String> stringTable;
 	String[] stringArray;
 	
+	/**
+	 * <p>Constructor for DiagnosticInfo.</p>
+	 */
 	public DiagnosticInfo() 
 	{	
 	}
 
+	/**
+	 * <p>Constructor for DiagnosticInfo.</p>
+	 *
+	 * @param additionalInfo a {@link java.lang.String} object.
+	 * @param innerDiagnosticInfo a {@link org.opcfoundation.ua.builtintypes.DiagnosticInfo} object.
+	 * @param innerStatusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+	 * @param locale a {@link java.lang.Integer} object.
+	 * @param localizedText a {@link java.lang.Integer} object.
+	 * @param namespaceUri a {@link java.lang.Integer} object.
+	 * @param symbolicId a {@link java.lang.Integer} object.
+	 */
 	public DiagnosticInfo(
 			String additionalInfo,
 			DiagnosticInfo innerDiagnosticInfo, 
@@ -53,6 +72,18 @@ public class DiagnosticInfo {
 		this.symbolicId = symbolicId;
 	}
 	
+	/**
+	 * <p>Constructor for DiagnosticInfo.</p>
+	 *
+	 * @param additionalInfo a {@link java.lang.String} object.
+	 * @param innerDiagnosticInfo a {@link org.opcfoundation.ua.builtintypes.DiagnosticInfo} object.
+	 * @param innerStatusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+	 * @param locale a {@link java.lang.String} object.
+	 * @param localizedText a {@link java.lang.String} object.
+	 * @param namespaceUri a {@link java.lang.String} object.
+	 * @param symbolicId a {@link java.lang.String} object.
+	 * @param stringTable a {@link java.util.List} object.
+	 */
 	public DiagnosticInfo(
 			String additionalInfo,
 			DiagnosticInfo innerDiagnosticInfo, 
@@ -72,18 +103,33 @@ public class DiagnosticInfo {
 		this.symbolicId = addOrGetIndex(symbolicId);
 	}	
 	
+	/**
+	 * <p>Setter for the field <code>stringArray</code>.</p>
+	 *
+	 * @param array an array of {@link java.lang.String} objects.
+	 */
 	public void setStringArray(String[] array)
 	{
 		this.stringTable = null;
 		this.stringArray = array;
 	}
 	
+	/**
+	 * <p>Setter for the field <code>stringTable</code>.</p>
+	 *
+	 * @param stringTable a {@link java.util.List} object.
+	 */
 	public void setStringTable(List<String> stringTable)
 	{
 		this.stringTable = stringTable;
 		this.stringArray = null;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>stringTable</code>.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<String> getStringTable()
 	{
 		return stringTable;
@@ -97,14 +143,29 @@ public class DiagnosticInfo {
 		return stringTable.size()-1;		
 	}
 	
+	/**
+	 * <p>Getter for the field <code>symbolicId</code>.</p>
+	 *
+	 * @return a {@link java.lang.Integer} object.
+	 */
 	public Integer getSymbolicId() {
 		return symbolicId;
 	}
 
+	/**
+	 * <p>Setter for the field <code>symbolicId</code>.</p>
+	 *
+	 * @param symbolicId a {@link java.lang.Integer} object.
+	 */
 	public void setSymbolicId(Integer symbolicId) {
 		this.symbolicId = symbolicId;
 	}
 
+	/**
+	 * <p>getSymbolicIdStr.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSymbolicIdStr() {
 		if (symbolicId==null) return null;
 		if (stringArray!=null)
@@ -114,10 +175,20 @@ public class DiagnosticInfo {
 		return symbolicId.toString();
 	}
 
+	/**
+	 * <p>setSymbolicIdStr.</p>
+	 *
+	 * @param symbolicId a {@link java.lang.String} object.
+	 */
 	public void setSymbolicIdStr(String symbolicId) {
 		this.symbolicId = addOrGetIndex(symbolicId);
 	}
 
+	/**
+	 * <p>getNamespaceUriStr.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getNamespaceUriStr() {
 		if (namespaceUri==null) return null;
 		if (stringArray!=null)
@@ -127,18 +198,38 @@ public class DiagnosticInfo {
 		return namespaceUri.toString();
 	}
 
+	/**
+	 * <p>setNamespaceUriStr.</p>
+	 *
+	 * @param namespaceUri a {@link java.lang.String} object.
+	 */
 	public void setNamespaceUriStr(String namespaceUri) {
 		this.namespaceUri = addOrGetIndex(namespaceUri);
 	}
 
+	/**
+	 * <p>Getter for the field <code>namespaceUri</code>.</p>
+	 *
+	 * @return a {@link java.lang.Integer} object.
+	 */
 	public Integer getNamespaceUri() {
 		return namespaceUri;
 	}
 
+	/**
+	 * <p>Setter for the field <code>namespaceUri</code>.</p>
+	 *
+	 * @param namespaceUri a {@link java.lang.Integer} object.
+	 */
 	public void setNamespaceUri(Integer namespaceUri) {
 		this.namespaceUri = namespaceUri;
 	}
 
+	/**
+	 * <p>getLocalizedTextStr.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getLocalizedTextStr() {
 		if (localizedText==null) return null;
 		if (stringArray!=null)
@@ -148,28 +239,58 @@ public class DiagnosticInfo {
 		return localizedText.toString();
 	}
 
+	/**
+	 * <p>setLocalizedTextStr.</p>
+	 *
+	 * @param localizedText a {@link java.lang.String} object.
+	 */
 	public void setLocalizedTextStr(String localizedText) {
 		this.localizedText = addOrGetIndex(localizedText);
 	}	
 	
+	/**
+	 * <p>Getter for the field <code>localizedText</code>.</p>
+	 *
+	 * @return a {@link java.lang.Integer} object.
+	 */
 	public Integer getLocalizedText() {
 		return localizedText;
 	}
 
+	/**
+	 * <p>Setter for the field <code>localizedText</code>.</p>
+	 *
+	 * @param localizedText a {@link java.lang.Integer} object.
+	 */
 	public void setLocalizedText(Integer localizedText) {
 		this.localizedText = localizedText;
 	}
 
+	/**
+	 * <p>Getter for the field <code>locale</code>.</p>
+	 *
+	 * @return a {@link java.lang.Integer} object.
+	 */
 	public Integer getLocale()
 	{
 		return locale;
 	}
 	
+	/**
+	 * <p>Setter for the field <code>locale</code>.</p>
+	 *
+	 * @param locale a {@link java.lang.Integer} object.
+	 */
 	public void setLocale(Integer locale)
 	{
 		this.locale = locale;
 	}
 
+	/**
+	 * <p>getLocaleStr.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getLocaleStr() {
 		if (locale==null) return null;
 		if (stringArray!=null)
@@ -179,34 +300,70 @@ public class DiagnosticInfo {
 		return locale.toString();
 	}
 
+	/**
+	 * <p>setLocaleStr.</p>
+	 *
+	 * @param locale a {@link java.lang.String} object.
+	 */
 	public void setLocaleStr(String locale) {
 		this.locale = addOrGetIndex( locale );
 	}
 
+	/**
+	 * <p>Getter for the field <code>additionalInfo</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getAdditionalInfo() {
 		return additionalInfo;
 	}
 
+	/**
+	 * <p>Setter for the field <code>additionalInfo</code>.</p>
+	 *
+	 * @param additionalInfo a {@link java.lang.String} object.
+	 */
 	public void setAdditionalInfo(String additionalInfo) {
 		this.additionalInfo = additionalInfo;
 	}
 
+	/**
+	 * <p>Getter for the field <code>innerStatusCode</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+	 */
 	public StatusCode getInnerStatusCode() {
 		return innerStatusCode;
 	}
 
+	/**
+	 * <p>Setter for the field <code>innerStatusCode</code>.</p>
+	 *
+	 * @param innerStatusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+	 */
 	public void setInnerStatusCode(StatusCode innerStatusCode) {
 		this.innerStatusCode = innerStatusCode;
 	}
 
+	/**
+	 * <p>Getter for the field <code>innerDiagnosticInfo</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.builtintypes.DiagnosticInfo} object.
+	 */
 	public DiagnosticInfo getInnerDiagnosticInfo() {
 		return innerDiagnosticInfo;
 	}
 
+	/**
+	 * <p>Setter for the field <code>innerDiagnosticInfo</code>.</p>
+	 *
+	 * @param innerDiagnosticInfo a {@link org.opcfoundation.ua.builtintypes.DiagnosticInfo} object.
+	 */
 	public void setInnerDiagnosticInfo(DiagnosticInfo innerDiagnosticInfo) {
 		this.innerDiagnosticInfo = innerDiagnosticInfo;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		return 
@@ -219,6 +376,7 @@ public class DiagnosticInfo {
 		ObjectUtils.hashCode(innerStatusCode)*19;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof DiagnosticInfo)) return false;
@@ -234,6 +392,15 @@ public class DiagnosticInfo {
 			ObjectUtils.objectEquals(di.innerDiagnosticInfo, innerDiagnosticInfo);		
 	}
 	
+	/**
+	 * <p>toString.</p>
+	 *
+	 * @param di a {@link org.opcfoundation.ua.builtintypes.DiagnosticInfo} object.
+	 * @param sb a {@link java.lang.StringBuilder} object.
+	 * @param omitLocalizedTextField a boolean.
+	 * @param omitStatusCode a boolean.
+	 * @param innerInfo a boolean.
+	 */
 	public static void toString(DiagnosticInfo di, StringBuilder sb, boolean omitLocalizedTextField, boolean omitStatusCode, boolean innerInfo) {
         sb.append(innerInfo ? "Inner Info: " : "Diagnostic Info: ");
 
@@ -269,6 +436,7 @@ public class DiagnosticInfo {
 		}		
 	}	
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

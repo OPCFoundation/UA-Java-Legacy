@@ -51,19 +51,28 @@ import org.spongycastle.crypto.params.RSAPrivateCrtKeyParameters;
 import org.spongycastle.crypto.signers.RSADigestSigner;
 import org.spongycastle.util.encoders.Base64;
 
+/**
+ * <p>ScCryptoProvider class.</p>
+ *
+ */
 public class ScCryptoProvider implements CryptoProvider {
 
 	static Logger logger = LoggerFactory.getLogger(ScCryptoProvider.class);
 
+	/**
+	 * <p>Constructor for ScCryptoProvider.</p>
+	 */
 	public ScCryptoProvider() {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public byte[] base64Decode(String string) {
 		return Base64.decode(string);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String base64Encode(byte[] bytes) {
 		try {
@@ -73,6 +82,7 @@ public class ScCryptoProvider implements CryptoProvider {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Mac createMac(SecurityAlgorithm algorithm, byte[] secret)
 			throws ServiceResultException {
@@ -91,6 +101,7 @@ public class ScCryptoProvider implements CryptoProvider {
 		return hmac;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int decryptAsymm(PrivateKey decryptingKey,
 			SecurityAlgorithm algorithm, byte[] dataToDecrypt, byte[] output,
@@ -129,6 +140,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int decryptSymm(SecurityToken token, byte[] dataToDecrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
@@ -163,6 +175,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	public void encryptAsymm(PublicKey encryptingCertificate,
 			SecurityAlgorithm algorithm, byte[] dataToEncrypt, byte[] output,
 			int outputOffset) throws ServiceResultException {
@@ -194,6 +207,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int encryptSymm(SecurityToken token, byte[] dataToEncrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
@@ -230,6 +244,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public byte[] signAsymm(PrivateKey senderPrivate,
 			SecurityAlgorithm algorithm, byte[] dataToSign)
@@ -272,6 +287,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void signSymm(SecurityToken token, byte[] input, int verifyLen,
 			byte[] output) throws ServiceResultException {
@@ -285,6 +301,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean verifyAsymm(PublicKey signingCertificate,
 			SecurityAlgorithm algorithm, byte[] dataToVerify, byte[] signature)
@@ -305,6 +322,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void verifySymm(SecurityToken token, byte[] dataToVerify,
 			byte[] signature) throws ServiceResultException {

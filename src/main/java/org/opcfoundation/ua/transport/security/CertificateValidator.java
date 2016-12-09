@@ -15,19 +15,20 @@ package org.opcfoundation.ua.transport.security;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 
 /**
- * Certificate Validator estimates the validity of an certificate. 
- * 
+ * Certificate Validator estimates the validity of an certificate.
+ *
  * @see AllowAllCertificatesValidator allow all certificates
  * @see CertificateValidatorImpl basic implementation
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public interface CertificateValidator {
 	
+	/** Constant <code>ALLOW_ALL</code> */
 	public static final CertificateValidator ALLOW_ALL = new AllowAllCertificatesValidator(); 
 
 	/**
-	 * Validate (peer's) certificate  
-	 * 
+	 * Validate (peer's) certificate
+	 *
 	 * @param c the certificate
 	 * @return Certificate bad status code to reject the certificate or good / null to accept
 	 */

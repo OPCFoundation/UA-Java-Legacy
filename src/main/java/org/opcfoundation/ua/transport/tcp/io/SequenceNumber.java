@@ -32,26 +32,26 @@ public class SequenceNumber {
 	private AtomicInteger recvSequenceNumber = null;	
 	
 	/**
-	 * Check whether recv sequence number has been set. 
-	 * 
+	 * Check whether recv sequence number has been set.
+	 *
 	 * @return true if setRecvSequenceNumber has been called
 	 */
 	public boolean hasRecvSequenceNumber() {
 		return recvSequenceNumber != null;
 	}
 
-	/** 
+	/**
 	 * Get current recv sequence number
-	 *  
+	 *
 	 * @return recv number or null
 	 */
 	public Integer getRecvSequenceNumber() {
 		return recvSequenceNumber == null ? null : recvSequenceNumber.get();
 	}
 	
-	/** 
+	/**
 	 * Get next recv sequence number
-	 *  
+	 *
 	 * @return recv number or null
 	 */
 	public Integer getNextRecvSequenceNumber() {
@@ -59,20 +59,25 @@ public class SequenceNumber {
 	}
 	
 	
+	/**
+	 * <p>Setter for the field <code>recvSequenceNumber</code>.</p>
+	 *
+	 * @param value a int.
+	 */
 	public void setRecvSequenceNumber(int value) {
 		recvSequenceNumber = new AtomicInteger(value);
 	}
 	
 	/**
 	 * Tests whether value matches expected sequence number and sets a new value.
-	 * 
+	 *
 	 * If value has never been set before the test passes and new value is set.
-	 * 
+	 *
 	 * Test passes if the value is one larger than previous value or if previous value is
 	 * 4294966271 or larger.
-	 * 
-	 * @param value value to test
+	 *
 	 * @return true if value matches
+	 * @param newValue a int.
 	 */
 	public boolean testAndSetRecvSequencenumber(int newValue) {
 		if (recvSequenceNumber==null) {
@@ -95,7 +100,7 @@ public class SequenceNumber {
 	 * Get the next send sequence number.
 	 * Send sequence number wraps between 4294966271 and 4294967295 to a new
 	 * value that is below 1024.
-	 * 
+	 *
 	 * @return send sequnce numner.
 	 */
 	public int getNextSendSequencenumber() {
@@ -110,10 +115,20 @@ public class SequenceNumber {
 		return (int) newValue;
 	}
 	
+	/**
+	 * <p>getCurrentSendSequenceNumber.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getCurrentSendSequenceNumber() {
 		return sendSequenceNumber.get();
 	}
 	
+	/**
+	 * <p>setCurrentSendSequenceNumber.</p>
+	 *
+	 * @param newValue a int.
+	 */
 	public void setCurrentSendSequenceNumber(int newValue) {
 		sendSequenceNumber.set(newValue);
 	}	

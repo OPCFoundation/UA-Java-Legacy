@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.QualifiedName;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class RelativePathElement extends Object implements Structure, Cloneable {
+public class RelativePathElement extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RelativePathElement);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RelativePathElement_Encoding_DefaultBinary);
@@ -106,7 +107,7 @@ public class RelativePathElement extends Object implements Structure, Cloneable 
       */
     public RelativePathElement clone()
     {
-        RelativePathElement result = new RelativePathElement();
+        RelativePathElement result = (RelativePathElement) super.clone();
         result.ReferenceTypeId = ReferenceTypeId;
         result.IsInverse = IsInverse;
         result.IncludeSubtypes = IncludeSubtypes;

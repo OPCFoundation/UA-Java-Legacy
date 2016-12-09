@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.Variant;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class QueryDataSet extends Object implements Structure, Cloneable {
+public class QueryDataSet extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.QueryDataSet);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.QueryDataSet_Encoding_DefaultBinary);
@@ -94,7 +95,7 @@ public class QueryDataSet extends Object implements Structure, Cloneable {
       */
     public QueryDataSet clone()
     {
-        QueryDataSet result = new QueryDataSet();
+        QueryDataSet result = (QueryDataSet) super.clone();
         result.NodeId = NodeId;
         result.TypeDefinitionNode = TypeDefinitionNode;
         result.Values = Values==null ? null : Values.clone();

@@ -41,7 +41,7 @@ import org.opcfoundation.ua.core.PerformUpdateType;
 
 
 
-public class UpdateDataDetails extends HistoryUpdateDetails implements Structure, Cloneable {
+public class UpdateDataDetails extends HistoryUpdateDetails {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.UpdateDataDetails);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.UpdateDataDetails_Encoding_DefaultBinary);
@@ -86,7 +86,7 @@ public class UpdateDataDetails extends HistoryUpdateDetails implements Structure
       */
     public UpdateDataDetails clone()
     {
-        UpdateDataDetails result = new UpdateDataDetails();
+        UpdateDataDetails result = (UpdateDataDetails) super.clone();
         result.NodeId = NodeId;
         result.PerformInsertReplace = PerformInsertReplace;
         result.UpdateValues = UpdateValues==null ? null : UpdateValues.clone();

@@ -30,8 +30,8 @@ public final class QualifiedName {
 
 	/**
 	 * Initializes the object with default values.
-	 * @param namespaceIndex
-	 * @param name  
+	 * @param namespaceIndex namespace index
+	 * @param name name part
 	 */
 	public QualifiedName(UnsignedShort namespaceIndex, String name)
 	{		
@@ -53,7 +53,7 @@ public final class QualifiedName {
 	 * Convenience method. 
 	 * 
 	 * @param namespaceIndex int bits of an unsigned short
-	 * @param name 
+	 * @param name name part
 	 */
 	public QualifiedName(int namespaceIndex, String name)
 	{
@@ -112,7 +112,7 @@ public final class QualifiedName {
 	
 	/**
 	 * Returns true if the value is null.
-	 * @param value
+	 * @param value the qualified name
 	 * @return true if value is null or equal to NULL
 	 */
 	public static boolean isNull(QualifiedName value) {
@@ -121,7 +121,7 @@ public final class QualifiedName {
 	
 	/**
 	 * Return true if the value is null, or name part is empty string
-	 * @param value
+	 * @param value the qualified name
 	 * @return true if isNull(value) is true or the name part is empty string
 	 */
 	public static boolean isNullOrEmpty(QualifiedName value){

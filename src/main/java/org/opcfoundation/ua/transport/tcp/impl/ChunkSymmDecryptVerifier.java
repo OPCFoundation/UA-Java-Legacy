@@ -27,8 +27,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- *
- * 
+ * <p>ChunkSymmDecryptVerifier class.</p>
  */
 public class ChunkSymmDecryptVerifier implements Runnable {
 
@@ -47,12 +46,19 @@ public class ChunkSymmDecryptVerifier implements Runnable {
 	ByteBuffer chunk;
 	SecurityToken token;
 
+	/**
+	 * <p>Constructor for ChunkSymmDecryptVerifier.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @param token a {@link org.opcfoundation.ua.transport.tcp.impl.SecurityToken} object.
+	 */
 	public ChunkSymmDecryptVerifier(ByteBuffer chunk, SecurityToken token)
 	{
 		this.chunk = chunk;
 		this.token = token;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void run()
 	throws RuntimeServiceResultException

@@ -20,7 +20,7 @@ import java.nio.ByteOrder;
 
 /**
  * Sends events when chunks are complete
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
@@ -35,6 +35,12 @@ public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
 		void onChunkComplete(ByteBuffer[] chunks, int index);
 	}	
 	
+	/**
+	 * <p>Constructor for ByteBufferArrayWriteable2.</p>
+	 *
+	 * @param bufs an array of {@link java.nio.ByteBuffer} objects.
+	 * @param listener a {@link org.opcfoundation.ua.utils.bytebuffer.ByteBufferArrayWriteable2.ChunkListener} object.
+	 */
 	public ByteBufferArrayWriteable2(ByteBuffer[] bufs, ChunkListener listener) {
 		if (bufs==null || listener==null)
 			throw new IllegalArgumentException("null arg");
@@ -43,17 +49,24 @@ public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
 		cur = bufs[0];		
 	}
 	
+	/**
+	 * <p>fireChunkComplete.</p>
+	 *
+	 * @param index a int.
+	 */
 	protected void fireChunkComplete(int index)
 	{
 		if (listener!=null)
 			listener.onChunkComplete(bufs, index);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ByteOrder order() {
 		return order;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void order(ByteOrder order) {
 		this.order = order;
@@ -85,6 +98,7 @@ public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
 		checkChunk();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte b) throws IOException {
 		prepareNextChunk();
@@ -92,6 +106,7 @@ public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
 		checkChunk();		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(ByteBuffer src) throws IOException {
 		while (src.hasRemaining()) {
@@ -101,6 +116,7 @@ public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(ByteBuffer src, int length) throws IOException {
 		while (length>0) {
@@ -112,6 +128,7 @@ public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte[] src, int offset, int length) throws IOException {		
 		while (length>0) {
@@ -124,21 +141,25 @@ public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte[] src) throws IOException {
 		put(src, 0, src.length);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putDouble(double value) throws IOException {
 		putLong(Double.doubleToLongBits(value));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putFloat(float value) throws IOException {
 		putInt(Float.floatToIntBits(value));
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putInt(int value) throws IOException {
 		if (order == ByteOrder.BIG_ENDIAN) {
@@ -154,6 +175,7 @@ public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putLong(long value) throws IOException {
 		if (order == ByteOrder.BIG_ENDIAN) {
@@ -177,6 +199,7 @@ public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putShort(short value) throws IOException {
 		if (order == ByteOrder.BIG_ENDIAN) {
@@ -188,6 +211,7 @@ public class ByteBufferArrayWriteable2 implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void flush() {
 	}

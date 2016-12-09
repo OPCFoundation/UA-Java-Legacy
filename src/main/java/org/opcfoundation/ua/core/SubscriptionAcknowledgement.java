@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class SubscriptionAcknowledgement extends Object implements Structure, Cloneable {
+public class SubscriptionAcknowledgement extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SubscriptionAcknowledgement);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SubscriptionAcknowledgement_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class SubscriptionAcknowledgement extends Object implements Structure, Cl
       */
     public SubscriptionAcknowledgement clone()
     {
-        SubscriptionAcknowledgement result = new SubscriptionAcknowledgement();
+        SubscriptionAcknowledgement result = (SubscriptionAcknowledgement) super.clone();
         result.SubscriptionId = SubscriptionId;
         result.SequenceNumber = SequenceNumber;
         return result;

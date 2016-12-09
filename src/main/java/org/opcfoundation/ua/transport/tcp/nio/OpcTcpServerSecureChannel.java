@@ -51,12 +51,26 @@ import org.opcfoundation.ua.utils.StackUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>OpcTcpServerSecureChannel class.</p>
+ *
+ */
 public class OpcTcpServerSecureChannel extends AbstractServerSecureChannel {
 	
+	/**
+	 * <p>getLocalCertificate.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
+	 */
 	public KeyPair getLocalCertificate() {
 		return securityConfiguration.getLocalCertificate2();
 	}
 	
+	/**
+	 * <p>getRemoteCertificate.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public Cert getRemoteCertificate() {
 		return securityConfiguration.getRemoteCertificate2();
 	}
@@ -74,36 +88,58 @@ public class OpcTcpServerSecureChannel extends AbstractServerSecureChannel {
 	/** Sequence number counter of inbound messages */
 	public final AtomicInteger		recvSequenceNumber = new AtomicInteger();
 	
+	/**
+	 * <p>Constructor for OpcTcpServerSecureChannel.</p>
+	 *
+	 * @param connection a {@link org.opcfoundation.ua.transport.tcp.nio.OpcTcpServerConnection} object.
+	 * @param secureChannelId a int.
+	 */
 	public OpcTcpServerSecureChannel(OpcTcpServerConnection connection, int secureChannelId)
 	{
 		super(secureChannelId);
 		this.connection = connection;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String getConnectURL() {
 		return connection.ctx.endpointUrl;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ServerConnection getConnection() {
 		return connection;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public Endpoint getEndpoint() {
 		return connection.binding.endpointAddress;
 	}
 	
+	/**
+	 * <p>getServer.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.application.Server} object.
+	 */
 	public Server getServer() {
 		return connection.binding.serviceServer;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void getPendingServiceRequests(Collection<EndpointServiceRequest<?, ?>> result) {
 		result.addAll( connection.pendingRequests.values() );
 	}
 	
+	/**
+	 * <p>handleSecureMessage.</p>
+	 *
+	 * @param mb a {@link org.opcfoundation.ua.transport.tcp.nio.InputMessage} object.
+	 * @param msg a {@link org.opcfoundation.ua.encoding.IEncodeable} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	protected void handleSecureMessage(InputMessage mb, IEncodeable msg) throws ServiceResultException {
 		logger.debug("onSecureMessage: server={}", getServer());
 		logger.debug("onSecureMessage: endpoint={}", getEndpoint());
@@ -172,6 +208,13 @@ public class OpcTcpServerSecureChannel extends AbstractServerSecureChannel {
 		
 	}
 
+	/**
+	 * <p>handleOpenChannel.</p>
+	 *
+	 * @param mb a {@link org.opcfoundation.ua.transport.tcp.nio.InputMessage} object.
+	 * @param req a {@link org.opcfoundation.ua.core.OpenSecureChannelRequest} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	protected void handleOpenChannel(InputMessage mb, OpenSecureChannelRequest req) throws ServiceResultException {
 
 		SecurityConfiguration sc			= (SecurityConfiguration) mb.getToken();
@@ -208,6 +251,13 @@ public class OpcTcpServerSecureChannel extends AbstractServerSecureChannel {
 		logger.info("SecureChannel opened; {}", getActiveSecurityToken());
 	}
 
+	/**
+	 * <p>handleRenewSecureChannelRequest.</p>
+	 *
+	 * @param mb a {@link org.opcfoundation.ua.transport.tcp.nio.InputMessage} object.
+	 * @param req a {@link org.opcfoundation.ua.core.OpenSecureChannelRequest} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	protected void handleRenewSecureChannelRequest(InputMessage mb, OpenSecureChannelRequest req) throws ServiceResultException {
 		/*// Untested code, therefore commented out //
 		if ( !getState().isOpen() ) {
@@ -221,6 +271,12 @@ public class OpcTcpServerSecureChannel extends AbstractServerSecureChannel {
 		logger.info("SecureChannel renewed; {}", token);
 	}
 	
+	/**
+	 * <p>handleCloseSecureChannelRequest.</p>
+	 *
+	 * @param mb a {@link org.opcfoundation.ua.transport.tcp.nio.InputMessage} object.
+	 * @param req a {@link org.opcfoundation.ua.core.CloseSecureChannelRequest} object.
+	 */
 	protected void handleCloseSecureChannelRequest(InputMessage mb, CloseSecureChannelRequest req) {
 		close();	
 		CloseSecureChannelResponse res = new CloseSecureChannelResponse();
@@ -233,6 +289,7 @@ public class OpcTcpServerSecureChannel extends AbstractServerSecureChannel {
 	}
 	
 	// Propagate channel closed/error to pending requests
+	/** {@inheritDoc} */
 	@Override
 	protected synchronized void onStateTransition(CloseableObjectState oldState, CloseableObjectState newState) 
 	{			
@@ -253,6 +310,11 @@ public class OpcTcpServerSecureChannel extends AbstractServerSecureChannel {
 		}
 	}
 	
+	/**
+	 * <p>getPendingRequests2.</p>
+	 *
+	 * @return a {@link java.util.Collection} object.
+	 */
 	protected Collection<PendingRequest> getPendingRequests2() {
 		ArrayList<PendingRequest> result = new ArrayList<PendingRequest>();
 		for (PendingRequest pr : connection.pendingRequests.values()) {
@@ -262,10 +324,12 @@ public class OpcTcpServerSecureChannel extends AbstractServerSecureChannel {
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void dispose() {
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean needsCertificate() {
 		return getMessageSecurityMode().hasSigning() || EndpointUtil.containsSecureUserTokenPolicy(getServer().getUserTokenPolicies());

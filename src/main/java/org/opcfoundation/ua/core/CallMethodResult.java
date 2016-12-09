@@ -37,10 +37,11 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.builtintypes.Variant;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class CallMethodResult extends Object implements Structure, Cloneable {
+public class CallMethodResult extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CallMethodResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CallMethodResult_Encoding_DefaultBinary);
@@ -108,7 +109,7 @@ public class CallMethodResult extends Object implements Structure, Cloneable {
       */
     public CallMethodResult clone()
     {
-        CallMethodResult result = new CallMethodResult();
+        CallMethodResult result = (CallMethodResult) super.clone();
         result.StatusCode = StatusCode;
         result.InputArgumentResults = InputArgumentResults==null ? null : InputArgumentResults.clone();
         result.InputArgumentDiagnosticInfos = InputArgumentDiagnosticInfos==null ? null : InputArgumentDiagnosticInfos.clone();

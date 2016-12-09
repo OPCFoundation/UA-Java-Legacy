@@ -23,20 +23,20 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 /**
  * This primitive DataType is specified as a string that is composed of a 
  * language component and a country/region component as specified by RFC 3066. 
- * The <country/region> component is always preceded by a hyphen. The format of 
+ * The &lt;country/region&gt; component is always preceded by a hyphen. The format of 
  * the LocaleId string is shown below:
  * 
- *    <language>[-<country/region>], where <language> is the two letter ISO 639 
- *    code for a language, <country/region> is the two letter ISO 3166 code for 
+ *    &lt;language&gt;[-&lt;country/region&gt;], where &lt;language&gt; is the two letter ISO 639 
+ *    code for a language, &lt;country/region&gt; is the two letter ISO 3166 code for 
  *    the country/region.
  * 
  * The rules for constructing LocaleIds defined by RFC 3066 are restricted for 
  * OPC UA as follows:
- *  d) OPC UA permits only zero or one <country/region> component to follow the 
- *    <language> component,
- *  e) OPC UA also permits the "-CHS" and "-CHT" three-letter <country/region> 
+ *  d) OPC UA permits only zero or one &lt;country/region&gt; component to follow the 
+ *    &lt;language&gt; component,
+ *  e) OPC UA also permits the "-CHS" and "-CHT" three-letter &lt;country/region&gt; 
  *    codes for "Simplified" and "Traditional" Chinese locales.
- *  f) OPC UA also allows the use of other <country/region> codes as deemed 
+ *  f) OPC UA also allows the use of other &lt;country/region&gt; codes as deemed 
  *    necessary by the client or the server.
  *    
  * Example:
@@ -109,7 +109,7 @@ public final class LocalizedText {
 	 * Create new Localized Text
 	 * 
 	 * @param text Localized text or null
-	 * @param localeId <language>[-<country/region>] or null
+	 * @param localeId &lt;language&gt;[-&lt;country/region&gt;] or null
 	 */
 	public LocalizedText(String text, String localeId) {
 		this.text = text;

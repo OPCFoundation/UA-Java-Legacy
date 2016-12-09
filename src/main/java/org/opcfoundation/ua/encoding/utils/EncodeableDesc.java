@@ -24,7 +24,7 @@ import org.opcfoundation.ua.encoding.IEncodeable;
 
 /**
  * Contains information about IEncodeable class
- * 
+ *
  * @see EncodeableDescTable table of stub infos
  */
 public final class EncodeableDesc {
@@ -38,6 +38,16 @@ public final class EncodeableDesc {
 	public final int				length;
 	public final Map<String, FieldInfo> fieldNameMap = new HashMap<String, FieldInfo>();	
 	
+	/**
+	 * <p>Constructor for EncodeableDesc.</p>
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
+	 * @param fields an array of {@link org.opcfoundation.ua.encoding.utils.EncodeableDesc.FieldInfo} objects.
+	 * @param id a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @param url a {@link java.lang.String} object.
+	 * @param binaryId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @param xmlId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 */
 	public EncodeableDesc(Class<? extends IEncodeable> clazz,		
 			FieldInfo[] fields, ExpandedNodeId id, String url, ExpandedNodeId binaryId, ExpandedNodeId xmlId) {
 		if (clazz == null || fields==null /*|| url==null  || id==null || xmlId==null || binaryId==null*/ )
@@ -63,6 +73,13 @@ public final class EncodeableDesc {
 		return new FieldInfo(bt, f, isArray, clazz);
 	}	
 	
+	/**
+	 * <p>readFromClass.</p>
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
+	 * @param fields an array of {@link java.lang.reflect.Field} objects.
+	 * @return a {@link org.opcfoundation.ua.encoding.utils.EncodeableDesc} object.
+	 */
 	public static EncodeableDesc readFromClass(Class<? extends IEncodeable> clazz, Field[] fields)
 	{
 		ExpandedNodeId binaryId = null;

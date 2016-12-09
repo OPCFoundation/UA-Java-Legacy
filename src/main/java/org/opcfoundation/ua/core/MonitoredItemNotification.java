@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class MonitoredItemNotification extends Object implements Structure, Cloneable {
+public class MonitoredItemNotification extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.MonitoredItemNotification);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.MonitoredItemNotification_Encoding_DefaultBinary);
@@ -82,7 +83,7 @@ public class MonitoredItemNotification extends Object implements Structure, Clon
       */
     public MonitoredItemNotification clone()
     {
-        MonitoredItemNotification result = new MonitoredItemNotification();
+        MonitoredItemNotification result = (MonitoredItemNotification) super.clone();
         result.ClientHandle = ClientHandle;
         result.Value = Value;
         return result;

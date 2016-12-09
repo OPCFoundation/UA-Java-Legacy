@@ -37,9 +37,10 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.core.ResponseHeader;
 import org.opcfoundation.ua.core.ServerOnNetwork;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class FindServersOnNetworkResponse extends Object implements ServiceResponse {
+public class FindServersOnNetworkResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.FindServersOnNetworkResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.FindServersOnNetworkResponse_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class FindServersOnNetworkResponse extends Object implements ServiceRespo
       */
     public FindServersOnNetworkResponse clone()
     {
-        FindServersOnNetworkResponse result = new FindServersOnNetworkResponse();
+        FindServersOnNetworkResponse result = (FindServersOnNetworkResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.LastCounterResetTime = LastCounterResetTime;
         if (Servers!=null) {

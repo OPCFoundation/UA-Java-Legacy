@@ -19,10 +19,10 @@ import java.lang.reflect.Array;
 
 /**
  * SnapshotArray is synchronized list that provides copy-on-write-arraylist
- * of its contents. 
- * 
+ * of its contents.
+ *
  * @author Toni Kalajainen
- * @param <T> 
+ * @param <T>
  */
 public class SnapshotArray<T> {
     
@@ -38,6 +38,7 @@ public class SnapshotArray<T> {
            
     /**
      * Construct new Listener List
+     *
      * @param componentType the class of the listener type
      */
     public SnapshotArray(Class<T> componentType)
@@ -48,15 +49,20 @@ public class SnapshotArray<T> {
     
     /**
      * Get a snapshot of the contents. This method exposes an internal state
-     * which must not be modified. 
-     * 
-     * @return an array. 
+     * which must not be modified.
+     *
+     * @return an array.
      */
     public T[] getArray()
     {
         return array;
     }
     
+    /**
+     * <p>add.</p>
+     *
+     * @param item a T object.
+     */
     public synchronized void add(T item)
     {
         int oldLength = array.length;
@@ -71,7 +77,7 @@ public class SnapshotArray<T> {
      * Removes the first occurance of the item.
      * If the item is added multiple times, then it must be removed
      * as many times.
-     * 
+     *
      * @param item an item
      * @return true if the item was removed from the list
      */
@@ -104,16 +110,29 @@ public class SnapshotArray<T> {
         return -1;
     }
     
+    /**
+     * <p>size.</p>
+     *
+     * @return a int.
+     */
     public int size()
     {
         return array.length;
     }
     
+    /**
+     * <p>isEmpty.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isEmpty()
     {
         return array.length == 0;
     }
     
+    /**
+     * <p>clear.</p>
+     */
     public void clear()
     {
         array = createArray(0);

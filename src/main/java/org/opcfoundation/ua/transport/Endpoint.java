@@ -23,12 +23,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 
 /**
  * Endpoint is a connection point to a server.
- * An endpoint is assigned to a {@link Server} using {@link BindingFactory}.
- * Endpoint doesn't contain service logic, it is merely description of a connection point. 
+ * An endpoint is assigned to a {@link Server}.
+ * Endpoint doesn't contain service logic, it is merely description of a connection point.
  * <p>
- * This class is hash-equals comparable. 
- * 
- * @see BindingFactory#bind(Endpoint, Server) to bind an endpoint to a {@link Server}
+ * This class is hash-equals comparable.
+ *
  */
 public class Endpoint {
 
@@ -43,7 +42,7 @@ public class Endpoint {
 	
 	/**
 	 * Create a new endpoint.
-	 * 
+	 *
 	 * @param endpointUrl endpoint address
 	 * @param modes security modes
 	 */
@@ -62,7 +61,7 @@ public class Endpoint {
 	
 	/**
 	 * Create new endpoint.
-	 * 
+	 *
 	 * @param endpointUrl endpoint address
 	 * @param modes security modes
 	 */
@@ -79,14 +78,30 @@ public class Endpoint {
 		hash = 13*hash + endpointUrl.hashCode();
 	}
 
+	/**
+	 * <p>Getter for the field <code>endpointUrl</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getEndpointUrl() {
 		return endpointUrl;
 	}
 
+	/**
+	 * <p>getSecurityModes.</p>
+	 *
+	 * @return an array of {@link org.opcfoundation.ua.transport.security.SecurityMode} objects.
+	 */
 	public SecurityMode[] getSecurityModes() {
 		return modes;
 	}
 	
+	/**
+	 * <p>supportsSecurityMode.</p>
+	 *
+	 * @param mode a {@link org.opcfoundation.ua.transport.security.SecurityMode} object.
+	 * @return a boolean.
+	 */
 	public boolean supportsSecurityMode(SecurityMode mode)
 	{
 		for (SecurityMode m : modes)
@@ -94,6 +109,12 @@ public class Endpoint {
 		return false;
 	}
 	
+	/**
+	 * <p>supportsSecurityPolicy.</p>
+	 *
+	 * @param policy a {@link org.opcfoundation.ua.transport.security.SecurityPolicy} object.
+	 * @return a boolean.
+	 */
 	public boolean supportsSecurityPolicy(SecurityPolicy policy)
 	{
 		for (SecurityMode m : modes)
@@ -102,11 +123,13 @@ public class Endpoint {
 	}
 	
 	
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		return hash;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Endpoint)) return false;
@@ -116,15 +139,26 @@ public class Endpoint {
 		return true;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return endpointUrl+" "+Arrays.toString(modes);
 	}
 
+	/**
+	 * <p>Getter for the field <code>endpointConfiguration</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.EndpointConfiguration} object.
+	 */
 	public EndpointConfiguration getEndpointConfiguration() {
 		return endpointConfiguration;
 	}
 	
+	/**
+	 * <p>Setter for the field <code>endpointConfiguration</code>.</p>
+	 *
+	 * @param endpointConfiguration a {@link org.opcfoundation.ua.core.EndpointConfiguration} object.
+	 */
 	public void setEndpointConfiguration( EndpointConfiguration endpointConfiguration ) {
 		this.endpointConfiguration = endpointConfiguration; 
 	}

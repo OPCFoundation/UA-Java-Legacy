@@ -36,10 +36,11 @@ import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.EndpointConfiguration;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class EndpointConfiguration extends Object implements Structure, Cloneable {
+public class EndpointConfiguration extends AbstractStructure implements Structure, Cloneable {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.EndpointConfiguration);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.EndpointConfiguration_Encoding_DefaultBinary);
@@ -189,7 +190,7 @@ public class EndpointConfiguration extends Object implements Structure, Cloneabl
       */
     public EndpointConfiguration clone()
     {
-        EndpointConfiguration result = new EndpointConfiguration();
+        EndpointConfiguration result = (EndpointConfiguration) super.clone();
         result.OperationTimeout = OperationTimeout;
         result.UseBinaryEncoding = UseBinaryEncoding;
         result.MaxStringLength = MaxStringLength;

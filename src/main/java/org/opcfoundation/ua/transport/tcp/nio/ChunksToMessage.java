@@ -23,8 +23,7 @@ import org.opcfoundation.ua.transport.tcp.impl.TcpConnectionParameters;
 import org.opcfoundation.ua.utils.bytebuffer.ByteBufferArrayReadable;
 
 /**
- * This {@link Callable} class unserializes chunk plaintexts into a message. 
- * 
+ * This {@link Callable} class unserializes chunk plaintexts into a message.
  */
 public class ChunksToMessage implements Callable<IEncodeable> {
 
@@ -34,10 +33,12 @@ public class ChunksToMessage implements Callable<IEncodeable> {
 	ByteBuffer[] plaintexts;
 	
 	/**
-	 * 
-	 * @param ctx
+	 * <p>Constructor for ChunksToMessage.</p>
+	 *
+	 * @param ctx a {@link org.opcfoundation.ua.transport.tcp.impl.TcpConnectionParameters} object.
 	 * @param expectedType type or null (if message expected)
-	 * @param plaintexts
+	 * @param plaintexts a {@link java.nio.ByteBuffer} object.
+	 * @param encoderCtx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
 	 */
 	public ChunksToMessage(TcpConnectionParameters ctx, EncoderContext encoderCtx, Class<? extends IEncodeable> expectedType, ByteBuffer...plaintexts)
 	{
@@ -47,6 +48,7 @@ public class ChunksToMessage implements Callable<IEncodeable> {
 		this.encoderCtx = encoderCtx;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public IEncodeable call() throws Exception {
 		ByteBufferArrayReadable readable = new ByteBufferArrayReadable(plaintexts);

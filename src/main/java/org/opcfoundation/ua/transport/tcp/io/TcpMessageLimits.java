@@ -15,6 +15,10 @@ package org.opcfoundation.ua.transport.tcp.io;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 
+/**
+ * <p>TcpMessageLimits class.</p>
+ *
+ */
 public class TcpMessageLimits {
 
     /** The size of the message type and size prefix in each message. */

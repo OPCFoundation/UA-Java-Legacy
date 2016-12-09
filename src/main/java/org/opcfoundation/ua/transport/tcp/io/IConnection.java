@@ -21,43 +21,49 @@ import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.transport.IConnectionListener;
 import org.opcfoundation.ua.transport.TransportChannelSettings;
 
+/**
+ * <p>IConnection interface.</p>
+ *
+ */
 public interface IConnection {	
 	
 	/**
-	 * Set connection configuration parameters. 
-	 * 
-	 * @param addr
-	 * @param settings
-	 * @throws ServiceResultException
+	 * Set connection configuration parameters.
+	 *
+	 * @param addr a {@link java.net.InetSocketAddress} object.
+	 * @param settings a {@link org.opcfoundation.ua.transport.TransportChannelSettings} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
 	 */
 	public void initialize(InetSocketAddress addr, TransportChannelSettings settings, EncoderContext ctx)
 	throws ServiceResultException; 
 
 	/**
 	 * Send request to the connection.
-	 * 
-	 * 
+	 *
+	 *
 	 * If the connection is closed Bad_NotConnected is thrown
-	 * 
+	 *
 	 * @param request
-	 * @param secureChannelId
 	 * @param requestId
-	 * @throws ServiceResultException varies. Bad_NotConnected if connection is not established
+	 * @param secureChannelId a int.
+	 * @param requestId a int.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException varies. Bad_NotConnected if connection is not established
 	 */
 	public void sendRequest(ServiceRequest request, int secureChannelId, int requestId)
 	throws ServiceResultException; 
 
 	/**
-	 * Add response listener 
-	 * 
-	 * @param listener
+	 * Add response listener
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.tcp.io.IConnection.IMessageListener} object.
 	 */
 	public void addMessageListener(IMessageListener listener);
 	
 	/**
 	 * Add response listener
-	 * 
-	 * @param listener
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.tcp.io.IConnection.IMessageListener} object.
 	 */
 	public void removeMessageListener(IMessageListener listener);	
 
@@ -79,38 +85,37 @@ public interface IConnection {
 	}
 
 	/**
-	 * Add response listener 
-	 * 
-	 * @param listener
+	 * Add response listener
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.IConnectionListener} object.
 	 */
 	public void addConnectionListener(IConnectionListener listener);
 	
 	/**
 	 * Add response listener
-	 * 
-	 * @param listener
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.transport.IConnectionListener} object.
 	 */
 	public void removeConnectionListener(IConnectionListener listener);	
 	
 	/**
-	 * Attempt to open the connection. 
+	 * Attempt to open the connection.
 	 * There is no error if the connection is already open.
-	 * 
-	 * @throws ServiceResultException 
+	 *
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
 	public void open() throws ServiceResultException;
 	
 	/**
 	 * Close the connection.
 	 * There is no error if the connection is already closed.
-	 * 
 	 */
 	public void close();	
 
 	/**
 	 * Open if the connection is not open.
-	 * 
-	 * @throws ServiceResultException
+	 *
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
 	public void reconnect() throws ServiceResultException; 
 	

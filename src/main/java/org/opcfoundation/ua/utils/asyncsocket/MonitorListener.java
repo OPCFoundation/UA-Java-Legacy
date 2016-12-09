@@ -14,6 +14,10 @@ package org.opcfoundation.ua.utils.asyncsocket;
 
 import org.opcfoundation.ua.utils.StateListener;
 
+/**
+ * <p>MonitorListener interface.</p>
+ *
+ */
 public interface MonitorListener extends StateListener<BufferMonitorState> {
 
 }

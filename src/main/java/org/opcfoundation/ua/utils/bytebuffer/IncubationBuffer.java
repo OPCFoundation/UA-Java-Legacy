@@ -25,21 +25,26 @@ import org.opcfoundation.ua.utils.IncubationQueue;
  * The data in ByteBuffers in read in the order they are "incubated"
  * The data becomes available when the ByteBuffers are "hatched"
  * Input stream blocks until data becomes available.
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class IncubationBuffer extends InputStream {
 
+	/** Constant <code>CLOSED_MARKER</code> */
 	protected final static ByteBuffer CLOSED_MARKER = ByteBuffer.allocate(0);
 	protected IncubationQueue<ByteBuffer> queue = new IncubationQueue<ByteBuffer>(true);
 	protected ByteBuffer cur;
 	
+	/**
+	 * <p>Constructor for IncubationBuffer.</p>
+	 */
 	public IncubationBuffer() {
 		super();
 	}
 	
 	/**
 	 * Submits a byte buffer to the use of input stream
+	 *
 	 * @param buf byte buffer to offer for use
 	 */
 	public void incubate(ByteBuffer buf)
@@ -51,7 +56,8 @@ public class IncubationBuffer extends InputStream {
 	
 	/**
 	 * Makes the byte buffer available to input stream reader
-	 * @param buf
+	 *
+	 * @param buf a {@link java.nio.ByteBuffer} object.
 	 */
 	public void hatch(ByteBuffer buf)
 	{
@@ -60,6 +66,9 @@ public class IncubationBuffer extends InputStream {
 		}
 	}
 	
+	/**
+	 * <p>close.</p>
+	 */
 	public void close()
 	{
 		synchronized(queue) {
@@ -68,6 +77,9 @@ public class IncubationBuffer extends InputStream {
 		}
 	}
 	
+	/**
+	 * <p>forceClose.</p>
+	 */
 	public void forceClose()
 	{
 		synchronized(queue) {
@@ -97,6 +109,7 @@ public class IncubationBuffer extends InputStream {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public int read() throws IOException {
 		ByteBuffer b = getByteBuffer();
@@ -104,6 +117,7 @@ public class IncubationBuffer extends InputStream {
 		return b.get() & 0xff;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
 		int bytesRead = 0;
@@ -119,6 +133,7 @@ public class IncubationBuffer extends InputStream {
 		return bytesRead;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int available() throws IOException {
 		synchronized(queue) {

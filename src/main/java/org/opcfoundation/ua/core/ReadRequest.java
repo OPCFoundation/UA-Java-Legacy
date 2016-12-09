@@ -37,9 +37,10 @@ import java.util.Arrays;
 import org.opcfoundation.ua.core.ReadValueId;
 import org.opcfoundation.ua.core.RequestHeader;
 import org.opcfoundation.ua.core.TimestampsToReturn;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class ReadRequest extends Object implements ServiceRequest {
+public class ReadRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ReadRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ReadRequest_Encoding_DefaultBinary);
@@ -107,7 +108,7 @@ public class ReadRequest extends Object implements ServiceRequest {
       */
     public ReadRequest clone()
     {
-        ReadRequest result = new ReadRequest();
+        ReadRequest result = (ReadRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.MaxAge = MaxAge;
         result.TimestampsToReturn = TimestampsToReturn;

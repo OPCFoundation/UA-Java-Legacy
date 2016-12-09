@@ -19,25 +19,42 @@ import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
 
 /**
- *
- * 
+ * <p>ChunkUtils class.</p>
  */
 public class ChunkUtils {
 
 	private static Charset UTF8 = Charset.forName("UTF8"); 
 
+	/**
+	 * <p>getMessageType.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @return a int.
+	 */
 	public static int getMessageType(ByteBuffer chunk)
 	{
 		chunk.position(0);
 		return chunk.getInt();
 	}
 	
+	/**
+	 * <p>getSecureChannelId.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @return a int.
+	 */
 	public static int getSecureChannelId(ByteBuffer chunk)
 	{
 		chunk.position(8);
 		return chunk.getInt();
 	}
 	
+	/**
+	 * <p>getTokenId.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @return a int.
+	 */
 	public static int getTokenId(ByteBuffer chunk)
 	{
 		chunk.position(12);
@@ -46,8 +63,9 @@ public class ChunkUtils {
 	
 	/**
 	 * Get sequence number of a symmetric message
-	 * @param chunk
-	 * @return
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @return a int.
 	 */
 	public static int getSequenceNumber(ByteBuffer chunk)
 	{
@@ -55,6 +73,12 @@ public class ChunkUtils {
 		return chunk.getInt();
 	}
 	
+	/**
+	 * <p>getRecvCertificateThumbprint.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @return an array of byte.
+	 */
 	public static byte[] getRecvCertificateThumbprint(ByteBuffer chunk)
 	{
 		chunk.position(12);
@@ -67,12 +91,25 @@ public class ChunkUtils {
 		return getByteString(chunk);
 	}
 		
+	/**
+	 * <p>getRequestId.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @return a int.
+	 */
 	public static int getRequestId(ByteBuffer chunk)
 	{
 		chunk.position(20);
 		return chunk.getInt();
 	}
 	
+	/**
+	 * <p>getAbortMessage.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public static String getAbortMessage(ByteBuffer chunk)
 	throws ServiceResultException
 	{
@@ -80,6 +117,13 @@ public class ChunkUtils {
 		return getString(chunk);		
 	}
 
+	/**
+	 * <p>getSecurityPolicyUri.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public static String getSecurityPolicyUri(ByteBuffer chunk)
 	throws ServiceResultException
 	{
@@ -87,6 +131,13 @@ public class ChunkUtils {
 		return getString(chunk);		
 	}	
 	
+	/**
+	 * <p>getString.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @return a {@link java.lang.String} object.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 */
 	public static String getString(ByteBuffer chunk)
 	throws ServiceResultException
 	{
@@ -95,6 +146,12 @@ public class ChunkUtils {
 		return result;
 	}	
 
+	/**
+	 * <p>getByteString.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @return an array of byte.
+	 */
 	public static byte[] getByteString(ByteBuffer chunk)
 	{
 		int length = chunk.getInt();

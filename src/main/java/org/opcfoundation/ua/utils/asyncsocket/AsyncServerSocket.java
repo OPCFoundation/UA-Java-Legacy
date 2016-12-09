@@ -28,7 +28,7 @@ import org.opcfoundation.ua.utils.asyncsocket.ListenableServerSocketChannel.Serv
 
 /**
  * ASyncoronous Server Socket
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class AsyncServerSocket extends AbstractState<ServerSocketState, IOException> {
@@ -51,6 +51,14 @@ public class AsyncServerSocket extends AbstractState<ServerSocketState, IOExcept
 			}
 		}};
 	static Logger logger = LoggerFactory.getLogger(AsyncServerSocket.class); 
+	/**
+	 * <p>Constructor for AsyncServerSocket.</p>
+	 *
+	 * @param chan a {@link java.nio.channels.ServerSocketChannel} object.
+	 * @param e a {@link java.util.concurrent.Executor} object.
+	 * @param sel a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncSelector} object.
+	 * @throws java.nio.channels.ClosedChannelException if any.
+	 */
 	public AsyncServerSocket(ServerSocketChannel chan, Executor e, AsyncSelector sel) 
 	throws ClosedChannelException
 	{
@@ -60,6 +68,13 @@ public class AsyncServerSocket extends AbstractState<ServerSocketState, IOExcept
 		this.c = chan;
 	}
 
+    /**
+     * <p>Constructor for AsyncServerSocket.</p>
+     *
+     * @param chan a {@link java.nio.channels.ServerSocketChannel} object.
+     * @param e a {@link java.util.concurrent.Executor} object.
+     * @throws java.io.IOException if any.
+     */
     public AsyncServerSocket(ServerSocketChannel chan, Executor e)
             throws IOException
     {
@@ -73,27 +88,25 @@ public class AsyncServerSocket extends AbstractState<ServerSocketState, IOExcept
 		public void onConnected(AsyncServerSocket sender, AsyncSocketImpl newConnection);
 	}
 	
-   /**
-    *
-    * Binds the <code>ServerSocket</code> to a specific address
-    * (IP address and port number).
-    * <p>
-    * If the address is <code>null</code>, then the system will pick up
-    * an ephemeral port and a valid local address to bind the socket.
-    * <P>
-    * The <code>backlog</code> argument must be a positive
-    * value greater than 0. If the value passed if equal or less
-    * than 0, then the default value will be assumed.
-    * @param	addr		The IP address & port number to bind to.
-    * @param	backlog		The listen backlog length.
-    * @throws	IOException if the bind operation fails, or if the socket
-    *			   is already bound.
-    * @throws	SecurityException	if a <code>SecurityManager</code> is present and
-    * its <code>checkListen</code> method doesn't allow the operation.
-    * @throws  IllegalArgumentException if endpoint is a
-    *          SocketAddress subclass not supported by this socket
-    * @return this object. This is used for chained invocation
-    */
+	/**
+	 *
+	 * Binds the <code>ServerSocket</code> to a specific address
+	 * (IP address and port number).
+	 * <p>
+	 * If the address is <code>null</code>, then the system will pick up
+	 * an ephemeral port and a valid local address to bind the socket.
+	 * <P>
+	 * The <code>backlog</code> argument must be a positive
+	 * value greater than 0. If the value passed if equal or less
+	 * than 0, then the default value will be assumed.
+	 *
+	 * @param addr address
+	 * @param backlog backlog
+	 * @throws  java.lang.IllegalArgumentException if endpoint is a
+	 *          SocketAddress subclass not supported by this socket
+	 * @throws IOException if error
+	 * @return this object. This is used for chained invocation
+	 */
 	public /*synchronized*/ AsyncServerSocket bind(SocketAddress addr, int backlog) 
 	throws IOException
 	{				
@@ -108,6 +121,11 @@ public class AsyncServerSocket extends AbstractState<ServerSocketState, IOExcept
 		return this;
 	}
 	
+	/**
+	 * <p>close.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncServerSocket} object.
+	 */
 	public AsyncServerSocket close()
 	{
 		logger.debug("close");
@@ -121,22 +139,42 @@ public class AsyncServerSocket extends AbstractState<ServerSocketState, IOExcept
 		return this;
 	}
 
+	/**
+	 * <p>channel.</p>
+	 *
+	 * @return a {@link java.nio.channels.ServerSocketChannel} object.
+	 */
 	public ServerSocketChannel channel()
 	{
 		return c;
 	}
 	
+	/**
+	 * <p>socket.</p>
+	 *
+	 * @return a {@link java.net.ServerSocket} object.
+	 */
 	public ServerSocket socket()
 	{
 		return c.socket();
 	}
 	
+	/**
+	 * <p>addListener.</p>
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncServerSocket.ConnectListener} object.
+	 */
 	public void addListener(ConnectListener listener)
 	{
 		listeners.add(listener);
 	}
 
 	
+	/**
+	 * <p>removeListener.</p>
+	 *
+	 * @param listener a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncServerSocket.ConnectListener} object.
+	 */
 	public void removeListener(ConnectListener listener)
 	{
 		listeners.remove(listener);
@@ -156,6 +194,7 @@ public class AsyncServerSocket extends AbstractState<ServerSocketState, IOExcept
 		}
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		if (!c.socket().isBound()) return "unbound";

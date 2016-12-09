@@ -40,7 +40,7 @@ import org.opcfoundation.ua.core.SimpleAttributeOperand;
 
 
 
-public class EventFilter extends MonitoringFilter implements Structure, Cloneable {
+public class EventFilter extends MonitoringFilter {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.EventFilter);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.EventFilter_Encoding_DefaultBinary);
@@ -84,7 +84,7 @@ public class EventFilter extends MonitoringFilter implements Structure, Cloneabl
       */
     public EventFilter clone()
     {
-        EventFilter result = new EventFilter();
+        EventFilter result = (EventFilter) super.clone();
         if (SelectClauses!=null) {
             result.SelectClauses = new SimpleAttributeOperand[SelectClauses.length];
             for (int i=0; i<SelectClauses.length; i++)

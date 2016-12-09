@@ -43,9 +43,12 @@ import org.opcfoundation.ua.core.Identifiers;
 
 
 
+/**
+ * <p>NodeClass class.</p>
+ *
+ */
 public enum NodeClass implements Enumeration {
 
-    Unspecified(0),
     Object(1),
     Variable(2),
     Method(4),
@@ -56,8 +59,11 @@ public enum NodeClass implements Enumeration {
     View(128);
 	
 
+	/** Constant <code>ID</code> */
 	public static final NodeId ID = Identifiers.NodeClass;
+	/** Constant <code>NONE</code> */
 	public static EnumSet<NodeClass> NONE = EnumSet.noneOf( NodeClass.class );
+	/** Constant <code>ALL</code> */
 	public static EnumSet<NodeClass> ALL = EnumSet.allOf( NodeClass.class );
 	
 	private final int value;
@@ -65,6 +71,7 @@ public enum NodeClass implements Enumeration {
 		this.value = value;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public int getValue() {
 		return value;
@@ -77,21 +84,45 @@ public enum NodeClass implements Enumeration {
 			map.put(i.value, i);        
 	}
 
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value a int.
+	 * @return a {@link org.opcfoundation.ua.core.NodeClass} object.
+	 */
 	public static NodeClass valueOf(int value)
 	{
 		return map.get(value);
 	}
 	
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value a {@link java.lang.Integer} object.
+	 * @return a {@link org.opcfoundation.ua.core.NodeClass} object.
+	 */
 	public static NodeClass valueOf(Integer value)
 	{
 		return value == null ? null : valueOf(value.intValue());
 	}
 
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 * @return a {@link org.opcfoundation.ua.core.NodeClass} object.
+	 */
 	public static NodeClass valueOf(UnsignedInteger value)
 	{
 		return value == null ? null : valueOf(value.intValue());
 	}
 
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value an array of int.
+	 * @return an array of {@link org.opcfoundation.ua.core.NodeClass} objects.
+	 */
 	public static NodeClass[] valueOf(int[] value)
 	{
 		NodeClass[] result = new NodeClass[value.length];
@@ -100,6 +131,12 @@ public enum NodeClass implements Enumeration {
 		return result;
 	}
 
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value an array of {@link java.lang.Integer} objects.
+	 * @return an array of {@link org.opcfoundation.ua.core.NodeClass} objects.
+	 */
 	public static NodeClass[] valueOf(Integer[] value)
 	{
 		NodeClass[] result = new NodeClass[value.length];
@@ -108,6 +145,12 @@ public enum NodeClass implements Enumeration {
 		return result;
 	}
 	
+	/**
+	 * <p>valueOf.</p>
+	 *
+	 * @param value an array of {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} objects.
+	 * @return an array of {@link org.opcfoundation.ua.core.NodeClass} objects.
+	 */
 	public static NodeClass[] valueOf(UnsignedInteger[] value)
 	{
 		NodeClass[] result = new NodeClass[value.length];
@@ -116,6 +159,12 @@ public enum NodeClass implements Enumeration {
 		return result;
 	}
 
+	/**
+	 * <p>getMask.</p>
+	 *
+	 * @param list a {@link org.opcfoundation.ua.core.NodeClass} object.
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public static UnsignedInteger getMask(NodeClass...list) 
 	{
 		int result = 0;
@@ -124,6 +173,12 @@ public enum NodeClass implements Enumeration {
 		return UnsignedInteger.getFromBits(result);
 	}	
 
+	/**
+	 * <p>getMask.</p>
+	 *
+	 * @param list a {@link java.util.Collection} object.
+	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 */
 	public static UnsignedInteger getMask(Collection<NodeClass> list) 
 	{
 		int result = 0;
@@ -132,11 +187,23 @@ public enum NodeClass implements Enumeration {
 		return UnsignedInteger.getFromBits(result);
 	}	
 
+	/**
+	 * <p>getSet.</p>
+	 *
+	 * @param mask a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+	 * @return a {@link java.util.EnumSet} object.
+	 */
 	public static EnumSet<NodeClass> getSet(UnsignedInteger mask)
 	{
 		return getSet(mask.intValue());
 	}
 	
+	/**
+	 * <p>getSet.</p>
+	 *
+	 * @param mask a int.
+	 * @return a {@link java.util.EnumSet} object.
+	 */
 	public static EnumSet<NodeClass> getSet(int mask)
 	{
 		List<NodeClass> res = new ArrayList<NodeClass>();

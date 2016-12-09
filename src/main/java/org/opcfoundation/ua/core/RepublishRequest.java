@@ -35,9 +35,10 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class RepublishRequest extends Object implements ServiceRequest {
+public class RepublishRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RepublishRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RepublishRequest_Encoding_DefaultBinary);
@@ -93,7 +94,7 @@ public class RepublishRequest extends Object implements ServiceRequest {
       */
     public RepublishRequest clone()
     {
-        RepublishRequest result = new RepublishRequest();
+        RepublishRequest result = (RepublishRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.SubscriptionId = SubscriptionId;
         result.RetransmitSequenceNumber = RetransmitSequenceNumber;

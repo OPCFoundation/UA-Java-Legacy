@@ -15,16 +15,17 @@ package org.opcfoundation.ua.utils.bytebuffer;
 import java.nio.ByteBuffer;
 
 /**
+ * <p>ByteBufferUtils class.</p>
  *
- * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class ByteBufferUtils {
 
 	/**
 	 * Copies as much as possible
-	 * @param src
-	 * @param dst
+	 *
+	 * @param src a {@link java.nio.ByteBuffer} object.
+	 * @param dst a {@link java.nio.ByteBuffer} object.
 	 */
 	public static void copyRemaining(ByteBuffer src, ByteBuffer dst)
 	{
@@ -32,6 +33,13 @@ public class ByteBufferUtils {
 		copy(src, dst, n);
 	}
 	
+	/**
+	 * <p>copy.</p>
+	 *
+	 * @param src a {@link java.nio.ByteBuffer} object.
+	 * @param dst a {@link java.nio.ByteBuffer} object.
+	 * @param length a int.
+	 */
 	public static void copy(ByteBuffer src, ByteBuffer dst, int length)
 	{
 		int srcLimit = src.limit();
@@ -45,7 +53,8 @@ public class ByteBufferUtils {
 	
 	/**
 	 * Concatenate two arrays to one
-	 * @param chunks 
+	 *
+	 * @param chunks an array of byte.
 	 * @return concatenation of all chunks
 	 */
 	public static byte[] concatenate(byte[]...chunks)

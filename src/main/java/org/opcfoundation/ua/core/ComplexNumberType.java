@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ComplexNumberType extends Object implements Structure, Cloneable {
+public class ComplexNumberType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ComplexNumberType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ComplexNumberType_Encoding_DefaultBinary);
@@ -80,7 +81,7 @@ public class ComplexNumberType extends Object implements Structure, Cloneable {
       */
     public ComplexNumberType clone()
     {
-        ComplexNumberType result = new ComplexNumberType();
+        ComplexNumberType result = (ComplexNumberType) super.clone();
         result.Real = Real;
         result.Imaginary = Imaginary;
         return result;

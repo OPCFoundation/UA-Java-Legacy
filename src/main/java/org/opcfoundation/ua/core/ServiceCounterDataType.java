@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ServiceCounterDataType extends Object implements Structure, Cloneable {
+public class ServiceCounterDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ServiceCounterDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ServiceCounterDataType_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class ServiceCounterDataType extends Object implements Structure, Cloneab
       */
     public ServiceCounterDataType clone()
     {
-        ServiceCounterDataType result = new ServiceCounterDataType();
+        ServiceCounterDataType result = (ServiceCounterDataType) super.clone();
         result.TotalCount = TotalCount;
         result.ErrorCount = ErrorCount;
         return result;

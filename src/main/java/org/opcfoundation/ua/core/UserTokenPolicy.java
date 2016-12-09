@@ -37,10 +37,11 @@ import org.opcfoundation.ua.core.UserTokenPolicy;
 import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.core.UserTokenType;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class UserTokenPolicy extends Object implements Structure, Cloneable {
+public class UserTokenPolicy extends AbstractStructure implements Structure, Cloneable {
 	
 	public static final UserTokenPolicy ANONYMOUS = new UserTokenPolicy("anonymous", UserTokenType.Anonymous, null, null, null);
 	public static final UserTokenPolicy SECURE_USERNAME_PASSWORD = new UserTokenPolicy("username_basic128", UserTokenType.UserName, null, null, SecurityPolicy.BASIC128RSA15.getPolicyUri());
@@ -126,7 +127,7 @@ public class UserTokenPolicy extends Object implements Structure, Cloneable {
       */
     public UserTokenPolicy clone()
     {
-        UserTokenPolicy result = new UserTokenPolicy();
+        UserTokenPolicy result = (UserTokenPolicy) super.clone();
         result.PolicyId = PolicyId;
         result.TokenType = TokenType;
         result.IssuedTokenType = IssuedTokenType;

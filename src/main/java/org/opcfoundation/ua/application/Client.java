@@ -71,6 +71,12 @@ public class Client {
 	Application application;
 	EndpointConfiguration endpointConfiguration = EndpointConfiguration.defaults(); 
 	
+	/**
+	 * <p>createClientApplication.</p>
+	 *
+	 * @param cert a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
+	 * @return a {@link org.opcfoundation.ua.application.Client} object.
+	 */
 	public static Client createClientApplication(KeyPair cert) {
 		Application application = new Application();
 		Client client = new Client(application);
@@ -93,37 +99,57 @@ public class Client {
 	 * <p>
 	 * Note: Client needs an application instance certificate to create secure
 	 * channels. See {@link Application#addApplicationInstanceCertificate(KeyPair)}
-	 * 
-	 * @param cert
+	 *
+	 * @param application common application data
 	 */
 	public Client(Application application) {
 		this.application = application;
 	}
 	
+	/**
+	 * <p>createApplicationDescription.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.ApplicationDescription} object.
+	 */
 	public ApplicationDescription createApplicationDescription() {
 		ApplicationDescription result = application.applicationDescription.clone();
 		result.setApplicationType( ApplicationType.Client );
 		return result;
 	}	
 
+	/**
+	 * <p>Getter for the field <code>application</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.application.Application} object.
+	 */
 	public Application getApplication() {
 		return application;
 	}
 	
+	/**
+	 * <p>getApplicationHttpsSettings.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.https.HttpsSettings} object.
+	 */
 	public HttpsSettings getApplicationHttpsSettings() {
 		return application.getHttpsSettings();
 	}
 	
+	/**
+	 * <p>getApplicatioOpcTcpSettings.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.tcp.io.OpcTcpSettings} object.
+	 */
 	public OpcTcpSettings getApplicatioOpcTcpSettings() {
 		return application.getOpctcpSettings();
 	}
 
 	/**
-	 * Create a new session on a server
-	 * 
-	 * @param channel
-	 *            open channel
-	 * @throws ServiceResultException
+	 * Create a new session on a server.
+	 *
+	 * @param channel open channel
+	 * @return Session made with the channel
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public Session createSession(SecureChannel channel) throws ServiceResultException 
 	{
@@ -133,7 +159,7 @@ public class Client {
 
 	/**
 	 * Create a new session on a server
-	 * 
+	 *
 	 * @param channel
 	 *            open channel to use
 	 * @param maxResponseMessageSize
@@ -144,8 +170,8 @@ public class Client {
 	 *            session name - if null a random GUID is used to generate the
 	 *            name
 	 * @return the session
-	 * @throws IllegalArgumentException
-	 * @throws ServiceResultException
+	 * @throws java.lang.IllegalArgumentException if error
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public Session createSession(SecureChannel channel,	UnsignedInteger maxResponseMessageSize,
 			Double requestedSessionTimeout, String sessionName)
@@ -156,14 +182,17 @@ public class Client {
 		
 	/**
 	 * Create a new session on a server
+	 *
 	 * @param channel open channel to use
 	 * @param maxResponseMessageSize max size of response messages - if null, defaulting to 4194304
 	 * @param requestedSessionTimeout requested session timeout (ms) - if null, defaulting to 3600000 (one hour)
 	 * @param sessionName session name - if null, a random GUID is used to generate the name
-	 * @param discoveredEndpoints list of previously discovered Endpoints using GetEndpoints service. 
-	 * This list is checked against the Endpoint list received from CreateSessionResponse, 
+	 * @param discoveredEndpoints list of previously discovered Endpoints using GetEndpoints service.
+	 * This list is checked against the Endpoint list received from CreateSessionResponse,
 	 * if it does not match, an exception is thrown, if null the check is disabled
 	 * @return the session
+	 * @throws java.lang.IllegalArgumentException if endpoint or channel is null
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public Session createSession(SecureChannel channel,
 			UnsignedInteger maxResponseMessageSize,
@@ -273,15 +302,14 @@ public class Client {
 		EndpointDescription[] filteredEndpoints = select(endpoints, endpoint
 				.getEndpointUrl(), null, endpoint.getSecurityMode(),
 				SecurityPolicy.getSecurityPolicy(endpoint
-						.getSecurityPolicyUri()), endpoint
-						.getServerCertificate());
+						.getSecurityPolicyUri()), null);
 		// If discoveredEndpoints is not defined, retry without the endpointUrl check 
 		if (filteredEndpoints.length == 0 && discoveredEndpoints == null)
 			filteredEndpoints = select(endpoints, null, null,
 					endpoint.getSecurityMode(),
 					SecurityPolicy.getSecurityPolicy(endpoint
 							.getSecurityPolicyUri()),
-					endpoint.getServerCertificate());
+					null);
 		if (filteredEndpoints.length == 0) {
 			logger.error(
 					"Requested endpoint is not found on the server: Endpoint={}",
@@ -307,10 +335,10 @@ public class Client {
 	 * To close the object, both secure channel and the session must be close
 	 * separately. SessionChannel.closeSession()
 	 * SessionChannel.closeSecureChannel()
-	 * 
+	 *
 	 * @param endpointUrl endpoint identifier and socket address
-	 * @return
-	 * @throws ServiceResultException
+	 * @return channel
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public SessionChannel createSessionChannel(String endpointUrl) throws ServiceResultException 
 	{
@@ -326,11 +354,11 @@ public class Client {
 	 * To close the object, both secure channel and the session must be close
 	 * separately. SessionChannel.closeSession()
 	 * SessionChannel.closeSecureChannel()
-	 * 
+	 *
 	 * @param connectUrl address that contains the socket address to the endpoint
 	 * @param endpointUri endpoint identifier
-	 * @return
-	 * @throws ServiceResultException
+	 * @return channel
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public SessionChannel createSessionChannel(String connectUrl, String endpointUri) throws ServiceResultException 
 	{
@@ -360,11 +388,10 @@ public class Client {
 	 * To close the object, both secure channel and the session must be close
 	 * separately. SessionChannel.closeSession()
 	 * SessionChannel.closeSecureChannel()
-	 * 
-	 * @param connectUrl address that contains the socket address to the endpoint
+	 *
 	 * @param endpoint endpoint description
 	 * @return session channel
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             on errors
 	 */
 	public SessionChannel createSessionChannel(EndpointDescription endpoint)
@@ -379,11 +406,11 @@ public class Client {
 	 * To close the object, both secure channel and the session must be close
 	 * separately. SessionChannel.closeSession()
 	 * SessionChannel.closeSecureChannel()
-	 * 
+	 *
 	 * @param connectUrl address that contains the socket address to the endpoint
 	 * @param endpoint endpoint description
 	 * @return session channel
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             on errors
 	 */
 	public SessionChannel createSessionChannel(String connectUrl, EndpointDescription endpoint) throws ServiceResultException 
@@ -410,10 +437,10 @@ public class Client {
 	 * To close the object, both secure channel and the session must be close
 	 * separately. SessionChannel.closeSession()
 	 * SessionChannel.closeSecureChannel()
-	 * 
+	 *
 	 * @param applicationDescription application description
 	 * @return session channel
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             on errors
 	 */
 	public SessionChannel createSessionChannel(ApplicationDescription applicationDescription) throws ServiceResultException 
@@ -435,10 +462,10 @@ public class Client {
 	/**
 	 * Create a secure channel to a UA Server This method first queries
 	 * endpoints, chooses the most suitable and connects to it.
-	 * 
+	 *
 	 * @param endpointUrl Endpoint identifier and socket address
 	 * @return service channel
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public SecureChannel createSecureChannel(String endpointUrl) throws ServiceResultException {
 		return createSecureChannel(endpointUrl, endpointUrl);
@@ -447,11 +474,11 @@ public class Client {
 	/**
 	 * Create a secure channel to a UA Server This method first queries
 	 * endpoints, chooses the most suitable and connects to it.
-	 * 
+	 *
 	 * @param connectUrl address that contains the socket address to the endpoint
 	 * @param endpointUri EndpointUri identifier or "" for discovery
 	 * @return service channel
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public SecureChannel createSecureChannel(String connectUrl, String endpointUri) throws ServiceResultException 
 	{
@@ -472,11 +499,10 @@ public class Client {
 	 * <p>
 	 * Note this implementation is unsafe as the dialog with discover endpoint
 	 * is not encrypted.
-	 * 
-	 * @param connectUrl address that contains the socket address to the endpoint
-	 * @param applicationDescription
+	 *
+	 * @param applicationDescription application description
 	 * @return service channel
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public SecureChannel createSecureChannel(ApplicationDescription applicationDescription) throws ServiceResultException 
 	{
@@ -502,9 +528,10 @@ public class Client {
 
 	/**
 	 * Create a secure channel to an endpoint
-	 * 
+	 *
 	 * @param endpoint endpoint description
 	 * @return an open service channel
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if errror
 	 */
 	public SecureChannel createSecureChannel(EndpointDescription endpoint) throws ServiceResultException 
 	{
@@ -513,10 +540,11 @@ public class Client {
 	
 	/**
 	 * Create a secure channel to an endpoint.
-	 * 
+	 *
 	 * @param connectUrl address that contains the socket address to the endpoint
 	 * @param endpoint endpoint description
 	 * @return an open service channel
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public SecureChannel createSecureChannel(String connectUrl, EndpointDescription endpoint) throws ServiceResultException 
 	{
@@ -556,13 +584,13 @@ public class Client {
 
 	/**
 	 * Create and open a secure channel.
-	 * 
+	 *
 	 * @param connectUrl address that contains the socket address to the endpoint
-	 * @param endpointUri
-	 * @param mode
-	 * @param remoteCertificate
+	 * @param endpointUri endpoint uri
+	 * @param mode security mode
+	 * @param remoteCertificate remove certificate
 	 * @return an open secure channel
-	 * @throws ServiceResultException 
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public SecureChannel createSecureChannel(String connectUrl, String endpointUri, SecurityMode mode, Cert remoteCertificate) 
 			throws ServiceResultException 
@@ -582,13 +610,11 @@ public class Client {
 	
 	/**
 	 * Create and open a secure channel.
-	 * 
+	 *
 	 * @param connectUrl address that contains the socket address to the endpoint
 	 * @param settings (optional) overriding settings
-	 * @param mode
-	 * @param remoteCertificate
 	 * @return an open secure channel
-	 * @throws ServiceResultException 
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public SecureChannel createSecureChannel(String connectUrl, TransportChannelSettings settings) throws ServiceResultException 
 	{
@@ -625,12 +651,10 @@ public class Client {
 
 	/**
 	 * Create and open a secure channel.
-	 * 
-	 * @param settings
-	 * @param mode
-	 * @param remoteCertificate
+	 *
+	 * @param settings transport settings
 	 * @return an open secure channel
-	 * @throws ServiceResultException 
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public SecureChannel createSecureChannel(TransportChannelSettings settings) throws ServiceResultException 
 	{
@@ -640,10 +664,10 @@ public class Client {
 	/**
 	 * Create a service channel to a UA Server This method first queries
 	 * endpoints, chooses the most suitable and connects to it.
-	 * 
+	 *
 	 * @param endpointUrl endpoint idenfier and socket address
 	 * @return service channel
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ServiceChannel createServiceChannel(String endpointUrl) throws ServiceResultException 
 	{
@@ -653,10 +677,11 @@ public class Client {
 	/**
 	 * Create a service channel to a UA Server This method first queries
 	 * endpoints, chooses the most suitable and connects to it.
-	 * 
+	 *
+	 * @param connectUrl connection url
 	 * @param endpointUri endpointUri idenfier or "" for discovery service
 	 * @return service channel
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ServiceChannel createServiceChannel(String connectUrl, String endpointUri) throws ServiceResultException 
 	{
@@ -668,10 +693,10 @@ public class Client {
 	 * <p>
 	 * Note this implementation is unsecure as the dialog with discover endpoint
 	 * is not encrypted.
-	 * 
-	 * @param applicationDescription
+	 *
+	 * @param applicationDescription application description
 	 * @return service channel
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ServiceChannel createServiceChannel(ApplicationDescription applicationDescription) throws ServiceResultException 
 	{
@@ -679,11 +704,11 @@ public class Client {
 	}
 
 	/**
-	 * Create a service channel to an endpoint. 
-	 * 
-	 * @param connectUrl address that contains the socket address to the endpoint
+	 * Create a service channel to an endpoint.
+	 *
 	 * @param endpoint endpoint description
 	 * @return an open service channel
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ServiceChannel createServiceChannel(EndpointDescription endpoint) throws ServiceResultException {
 		return new ServiceChannel( createSecureChannel( endpoint.getEndpointUrl(), endpoint ) );
@@ -691,10 +716,11 @@ public class Client {
 	
 	/**
 	 * Create a service channel to an endpoint
-	 * 
+	 *
 	 * @param connectUrl address that contains the socket address to the endpoint
 	 * @param endpoint endpoint description
 	 * @return an open service channel
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ServiceChannel createServiceChannel(String connectUrl, EndpointDescription endpoint)
 			throws ServiceResultException {
@@ -703,13 +729,13 @@ public class Client {
 
 	/**
 	 * Create and open a service channel.
-	 * 
+	 *
 	 * @param connectUrl address that contains the socket address to the endpoint
 	 * @param endpointUri endpointUri identifier of the endpoint
-	 * @param mode
-	 * @param remoteCertificate
+	 * @param mode security mode
+	 * @param remoteCertificate remote certificate
 	 * @return an open secure channel
-	 * @throws ServiceResultException 
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ServiceChannel createServiceChannel(String connectUrl, String endpointUri, SecurityMode mode, org.opcfoundation.ua.transport.security.Cert remoteCertificate) throws ServiceResultException {
 		return new ServiceChannel( createSecureChannel( connectUrl, endpointUri, mode, remoteCertificate ) );
@@ -717,12 +743,10 @@ public class Client {
 	
 	/**
 	 * Create and open a secure channel and adapt to service channel.
-	 * 
-	 * @param settings
-	 * @param mode
-	 * @param remoteCertificate
+	 *
+	 * @param settings transport settings
 	 * @return an open service channel
-	 * @throws ServiceResultException 
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ServiceChannel createServiceChannel(TransportChannelSettings settings) 
 	throws ServiceResultException {
@@ -731,23 +755,23 @@ public class Client {
 
 	/**
 	 * Discover endpoints
-	 * 
-	 * @param discoveryEndpointUrl endpoint identifier or socket address 
+	 *
+	 * @param discoveryEndpointUrl endpoint identifier or socket address
 	 * @return Endpoint Descriptions
-	 * @throws ServiceResultException Error that occured while processing the operation.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException Error that occured while processing the operation.
 	 */
-	public EndpointDescription[] discoverEndpoints(String connectUrl) throws ServiceResultException
+	public EndpointDescription[] discoverEndpoints(String discoveryEndpointUrl) throws ServiceResultException
 	{
-		return discoverEndpoints(connectUrl,  "");
+		return discoverEndpoints(discoveryEndpointUrl,  discoveryEndpointUrl);
 	}
 	
 	/**
-	 * Discover endpoints
-	 * 
+	 * Discover endpoints.
+	 *
 	 * @param connectUrl address that contains the socket address to the endpoint
-	 * @param discoveryEndpointUri endpointUri the endpoint identifier, or "" for discovery endpoint 
+	 * @param discoveryEndpointUri the endpoint identifier that identifies the endpoints that are being discovered
 	 * @return Endpoint Descriptions
-	 * @throws ServiceResultException Error that occured while processing the operation.
+	 * @throws org.opcfoundation.ua.common.ServiceResultException Error that occured while processing the operation.
 	 */
 	public EndpointDescription[] discoverEndpoints(String connectUrl, String discoveryEndpointUri)
 			throws ServiceResultException {
@@ -770,10 +794,10 @@ public class Client {
 
 	/**
 	 * Discover applications
-	 * 
+	 *
 	 * @param discoverServerEndpointUrl endpointURI that is also the socket address
 	 * @return Endpoint Application Descriptions
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ApplicationDescription[] discoverApplications(String discoverServerEndpointUrl) throws ServiceResultException {
 		return discoverApplications(discoverServerEndpointUrl, discoverServerEndpointUrl);
@@ -781,11 +805,11 @@ public class Client {
 	
 	/**
 	 * Discover applications
-	 * 
+	 *
 	 * @param connectUrl address that contains the socket address to the endpoint
 	 * @param discoverServerEndpointUri endpointURI or ""
 	 * @return Endpoint Application Descriptions
-	 * @throws ServiceResultException
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ApplicationDescription[] discoverApplications(String connectUrl, String discoverServerEndpointUri) throws ServiceResultException {
 		// Must not use encryption!
@@ -807,6 +831,11 @@ public class Client {
 		}
 	}
 
+	/**
+	 * <p>getEncoderContext.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 */
 	public EncoderContext getEncoderContext() {
 		return application.getEncoderContext();
 	}
@@ -831,26 +860,56 @@ public class Client {
 		} else throw new ServiceResultException("Unsupported protocol: "+proto);		
 	}
 
+	/**
+	 * <p>setTimeout.</p>
+	 *
+	 * @param timeout a int.
+	 */
 	public void setTimeout(int timeout) {
 		endpointConfiguration.setOperationTimeout( timeout );		
 	}
 
+	/**
+	 * <p>getTimeout.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getTimeout() {
 		return endpointConfiguration.getOperationTimeout();
 	}
 	
+	/**
+	 * <p>setMaxMessageSize.</p>
+	 *
+	 * @param maxMessagSize a int.
+	 */
 	public void setMaxMessageSize(int maxMessagSize) {
 		endpointConfiguration.setMaxMessageSize( maxMessagSize );
 	}
 	
+	/**
+	 * <p>getMaxMessageSize.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getMaxMessageSize() {
 		return endpointConfiguration.getMaxMessageSize();
 	}
 	
+	/**
+	 * <p>Getter for the field <code>endpointConfiguration</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.EndpointConfiguration} object.
+	 */
 	public EndpointConfiguration getEndpointConfiguration() {
 		return endpointConfiguration;
 	}
 	
+	/**
+	 * <p>Setter for the field <code>endpointConfiguration</code>.</p>
+	 *
+	 * @param endpointConfiguration a {@link org.opcfoundation.ua.core.EndpointConfiguration} object.
+	 */
 	public void setEndpointConfiguration( EndpointConfiguration endpointConfiguration ) {
 		this.endpointConfiguration = endpointConfiguration; 
 	}

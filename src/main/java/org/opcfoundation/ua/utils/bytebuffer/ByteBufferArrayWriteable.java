@@ -18,8 +18,8 @@ import java.nio.ByteOrder;
 
 
 /**
+ * <p>ByteBufferArrayWriteable class.</p>
  *
- * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class ByteBufferArrayWriteable implements IBinaryWriteable {
@@ -27,6 +27,11 @@ public class ByteBufferArrayWriteable implements IBinaryWriteable {
 	ByteQueue q;
 	ByteBuffer tmp = ByteBuffer.allocate(8);
 	
+	/**
+	 * <p>Constructor for ByteBufferArrayWriteable.</p>
+	 *
+	 * @param bufs an array of {@link java.nio.ByteBuffer} objects.
+	 */
 	public ByteBufferArrayWriteable(ByteBuffer[] bufs) {		
 		if (bufs == null)
 			throw new IllegalArgumentException("null");
@@ -36,6 +41,11 @@ public class ByteBufferArrayWriteable implements IBinaryWriteable {
 			q.offer(buf);
 	}	
 	
+	/**
+	 * <p>Constructor for ByteBufferArrayWriteable.</p>
+	 *
+	 * @param q a {@link org.opcfoundation.ua.utils.bytebuffer.ByteQueue} object.
+	 */
 	public ByteBufferArrayWriteable(ByteQueue q) {		
 		if (q == null)
 			throw new IllegalArgumentException("null");
@@ -43,42 +53,50 @@ public class ByteBufferArrayWriteable implements IBinaryWriteable {
 		tmp.order(q.order());
 	}		
 	
+	/** {@inheritDoc} */
 	@Override
 	public ByteOrder order() {
 		return q.order();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void order(ByteOrder order) {
 		tmp.order( order );
 		q.order(order);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte b) throws IOException {
 		q.getWriteChunk().put(b);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(ByteBuffer src) throws IOException {
 		q.put(src);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(ByteBuffer src, int length) throws IOException {
 		q.put(src, length);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte[] src, int offset, int length) throws IOException {
 		q.put(src, offset, length);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte[] src) throws IOException {
 		q.put(src);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putDouble(double value) throws IOException {
 		if (q.getWriteChunk().remaining()>8)
@@ -91,6 +109,7 @@ public class ByteBufferArrayWriteable implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putFloat(float value) throws IOException {
 		if (q.getWriteChunk().remaining()>4)
@@ -103,6 +122,7 @@ public class ByteBufferArrayWriteable implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putInt(int value) throws IOException {
 		if (q.getWriteChunk().remaining()>4)
@@ -115,6 +135,7 @@ public class ByteBufferArrayWriteable implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putLong(long value) throws IOException {
 		if (q.getWriteChunk().remaining()>8)
@@ -127,6 +148,7 @@ public class ByteBufferArrayWriteable implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putShort(short value) throws IOException {
 		if (q.getWriteChunk().remaining()>2)
@@ -139,6 +161,7 @@ public class ByteBufferArrayWriteable implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void flush() {		
 	}

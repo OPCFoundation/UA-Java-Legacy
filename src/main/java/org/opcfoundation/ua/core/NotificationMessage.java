@@ -37,10 +37,11 @@ import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class NotificationMessage extends Object implements Structure, Cloneable {
+public class NotificationMessage extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.NotificationMessage);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.NotificationMessage_Encoding_DefaultBinary);
@@ -96,7 +97,7 @@ public class NotificationMessage extends Object implements Structure, Cloneable 
       */
     public NotificationMessage clone()
     {
-        NotificationMessage result = new NotificationMessage();
+        NotificationMessage result = (NotificationMessage) super.clone();
         result.SequenceNumber = SequenceNumber;
         result.PublishTime = PublishTime;
         result.NotificationData = NotificationData==null ? null : NotificationData.clone();

@@ -17,32 +17,54 @@ import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.utils.AbstractState;
 
 /**
- *
- * 
+ * <p>AsyncRead class.</p>
  */
 public class AsyncRead extends AbstractState<ReadState, ServiceResultException> {
 
 	IEncodeable msg;
 	
+	/**
+	 * <p>Constructor for AsyncRead.</p>
+	 */
 	public AsyncRead() {
 		super(ReadState.Waiting, ReadState.Error);
 	}
 	
+	/**
+	 * <p>getMessage.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.encoding.IEncodeable} object.
+	 */
 	public IEncodeable getMessage()
 	{
 		return msg;
 	}
 	
+	/**
+	 * <p>setError.</p>
+	 *
+	 * @param e a {@link org.opcfoundation.ua.common.ServiceResultException} object.
+	 */
 	public synchronized void setError(ServiceResultException e) {
 		assert(!getState().isFinal());
 		super.setError(e);
 	}
 		
+	/**
+	 * <p>attemptSetError.</p>
+	 *
+	 * @param e a {@link org.opcfoundation.ua.common.ServiceResultException} object.
+	 */
 	public synchronized void attemptSetError(ServiceResultException e) {
 		if (getState().isFinal()) return;
 		super.setError(e);
 	}
 		
+	/**
+	 * <p>setComplete.</p>
+	 *
+	 * @param msg a {@link org.opcfoundation.ua.encoding.IEncodeable} object.
+	 */
 	public synchronized void setComplete(IEncodeable msg) {
 		assert(!getState().isFinal());
 		this.msg = msg;

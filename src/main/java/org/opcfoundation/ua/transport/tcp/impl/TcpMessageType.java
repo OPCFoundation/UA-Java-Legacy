@@ -14,7 +14,6 @@ package org.opcfoundation.ua.transport.tcp.impl;
 
 /**
  * TCP Communication headers
- * 
  */
 public class TcpMessageType {
 
@@ -52,27 +51,54 @@ public class TcpMessageType {
     /** An error message. */
     public static final int ERROR = 0x00525245;
     
+	/** Constant <code>MSGC=MESSAGE | CONTINUE</code> */
 	public static final int MSGC = MESSAGE | CONTINUE;  
+	/** Constant <code>MSGF=MESSAGE | FINAL</code> */
 	public static final int MSGF = MESSAGE | FINAL;  
+	/** Constant <code>MSGA=MESSAGE | ABORT</code> */
 	public static final int MSGA = MESSAGE | ABORT;  
+	/** Constant <code>OPNC=OPEN | CONTINUE</code> */
 	public static final int OPNC = OPEN | CONTINUE;  
+	/** Constant <code>OPNF=OPEN | FINAL</code> */
 	public static final int OPNF = OPEN | FINAL;  
+	/** Constant <code>OPNA=OPEN | ABORT</code> */
 	public static final int OPNA = OPEN | ABORT;
 
+	/** Constant <code>HELF=HELLO | FINAL</code> */
 	public static final int HELF = HELLO | FINAL;  
+	/** Constant <code>ACKF=ACKNOWLEDGE | FINAL</code> */
 	public static final int ACKF = ACKNOWLEDGE | FINAL;  
+	/** Constant <code>ERRF=ERROR | FINAL</code> */
 	public static final int ERRF = ERROR | FINAL;  
 	
+	/**
+	 * <p>isFinal.</p>
+	 *
+	 * @param msgType a int.
+	 * @return a boolean.
+	 */
 	public static boolean isFinal(int msgType)
 	{
 		return (msgType & CHUNK_TYPE_MASK) == FINAL;
 	}
 
+	/**
+	 * <p>continues.</p>
+	 *
+	 * @param msgType a int.
+	 * @return a boolean.
+	 */
 	public static boolean continues(int msgType)
 	{
 		return (msgType & CHUNK_TYPE_MASK) == CONTINUE;
 	}
 	
+	/**
+	 * <p>isAbort.</p>
+	 *
+	 * @param msgType a int.
+	 * @return a boolean.
+	 */
 	public static boolean isAbort(int msgType)
 	{
 		return (msgType & CHUNK_TYPE_MASK) == ABORT;

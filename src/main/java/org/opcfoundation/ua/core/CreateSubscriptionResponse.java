@@ -35,9 +35,10 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class CreateSubscriptionResponse extends Object implements ServiceResponse {
+public class CreateSubscriptionResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CreateSubscriptionResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CreateSubscriptionResponse_Encoding_DefaultBinary);
@@ -117,7 +118,7 @@ public class CreateSubscriptionResponse extends Object implements ServiceRespons
       */
     public CreateSubscriptionResponse clone()
     {
-        CreateSubscriptionResponse result = new CreateSubscriptionResponse();
+        CreateSubscriptionResponse result = (CreateSubscriptionResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.SubscriptionId = SubscriptionId;
         result.RevisedPublishingInterval = RevisedPublishingInterval;

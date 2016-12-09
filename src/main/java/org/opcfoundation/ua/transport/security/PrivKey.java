@@ -62,15 +62,15 @@ public class PrivKey {
 	private static Logger logger = LoggerFactory.getLogger(PrivKey.class);
 	/**
 	 * Load private key from a PKCS12 key store
-	 * 
+	 *
 	 * @param keystoreUrl url to key store
 	 * @param password password to key store
 	 * @return private key
-	 * @throws IOException
-	 * @throws KeyStoreException 
-	 * @throws CertificateException 
-	 * @throws NoSuchAlgorithmException 
-	 * @throws UnrecoverableKeyException 
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.KeyStoreException if any.
+	 * @throws java.security.cert.CertificateException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.UnrecoverableKeyException if any.
 	 */
 	public static PrivKey loadFromKeyStore(URL keystoreUrl, String password) throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
 	{
@@ -80,19 +80,19 @@ public class PrivKey {
 
 	/**
 	 * Load private key from a PEM encoded file
-	 * 
-	 * @param file
-	 * @param password
-	 * @return
-	 * @throws IOException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
-	 * @throws NoSuchPaddingException 
-	 * @throws InvalidAlgorithmParameterException 
-	 * @throws InvalidKeyException 
-	 * @throws BadPaddingException 
-	 * @throws IllegalBlockSizeException 
-	 * @throws InvalidParameterSpecException 
+	 *
+	 * @param file a {@link java.io.File} object.
+	 * @param password a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.spec.InvalidKeySpecException if any.
+	 * @throws javax.crypto.NoSuchPaddingException if any.
+	 * @throws java.security.InvalidAlgorithmParameterException if any.
+	 * @throws java.security.InvalidKeyException if any.
+	 * @throws javax.crypto.BadPaddingException if any.
+	 * @throws javax.crypto.IllegalBlockSizeException if any.
+	 * @throws java.security.spec.InvalidParameterSpecException if any.
+	 * @return a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
 	 */
 	public static PrivKey load(File file, final String password)
 			throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException  {
@@ -102,6 +102,22 @@ public class PrivKey {
 		return load(keyData, password);
 	}
 		
+	/**
+	 * <p>load.</p>
+	 *
+	 * @param is a {@link java.io.InputStream} object.
+	 * @param password a {@link java.lang.String} object.
+	 * @return a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.spec.InvalidKeySpecException if any.
+	 * @throws javax.crypto.NoSuchPaddingException if any.
+	 * @throws java.security.InvalidKeyException if any.
+	 * @throws java.security.InvalidAlgorithmParameterException if any.
+	 * @throws javax.crypto.IllegalBlockSizeException if any.
+	 * @throws javax.crypto.BadPaddingException if any.
+	 * @throws java.security.spec.InvalidParameterSpecException if any.
+	 */
 	public static PrivKey load(InputStream is, final String password)
 			throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException  {
 		byte[] keyData = FileUtil.readStream(is);
@@ -110,19 +126,19 @@ public class PrivKey {
 	
 	/**
 	 * Load private key from key data
-	 * 
-	 * @param keydata
-	 * @param password
-	 * @return
-	 * @throws IOException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidKeySpecException
-	 * @throws NoSuchPaddingException 
-	 * @throws InvalidAlgorithmParameterException 
-	 * @throws InvalidKeyException 
-	 * @throws BadPaddingException 
-	 * @throws IllegalBlockSizeException 
-	 * @throws InvalidParameterSpecException 
+	 *
+	 * @param password a {@link java.lang.String} object.
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.spec.InvalidKeySpecException if any.
+	 * @throws javax.crypto.NoSuchPaddingException if any.
+	 * @throws java.security.InvalidAlgorithmParameterException if any.
+	 * @throws java.security.InvalidKeyException if any.
+	 * @throws javax.crypto.BadPaddingException if any.
+	 * @throws javax.crypto.IllegalBlockSizeException if any.
+	 * @throws java.security.spec.InvalidParameterSpecException if any.
+	 * @param keyBytes an array of byte.
+	 * @return a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
 	 */
 	public static PrivKey load(byte[] keyBytes, final String password)
 			throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException  {
@@ -230,15 +246,15 @@ public class PrivKey {
 	    }
 	
 	/**
-	 * Load private key from a file. 
+	 * Load private key from a file.
 	 * <p>
-	 * @Deprecated Use {@link #load(File, String)} or {@link #loadFromKeyStore(File, String)} instead 
-	 * 
-	 * @param file
-	 * @return
-	 * @throws IOException
-	 * @throws InvalidKeySpecException
-	 * @throws NoSuchAlgorithmException
+	 *
+	 * @deprecated Use {@link #load(File, String)} or {@link #loadFromKeyStore(File, String)} instead
+	 * @param file a {@link java.io.File} object.
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.spec.InvalidKeySpecException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @return a {@link org.opcfoundation.ua.transport.security.PrivKey} object.
 	 */
 	@Deprecated
 	public static PrivKey load(File file) throws IOException, InvalidKeySpecException, NoSuchAlgorithmException
@@ -249,15 +265,15 @@ public class PrivKey {
 	
 	/**
 	 * Load private key from a key store (PKCS12) file
-	 * 
+	 *
 	 * @param file key store file
 	 * @param password password to key store
 	 * @return private key
-	 * @throws IOException
-	 * @throws KeyStoreException 
-	 * @throws CertificateException 
-	 * @throws NoSuchAlgorithmException 
-	 * @throws UnrecoverableKeyException 
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.KeyStoreException if any.
+	 * @throws java.security.cert.CertificateException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 * @throws java.security.UnrecoverableKeyException if any.
 	 */
 	public static PrivKey loadFromKeyStore(File file, String password) throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
 	{
@@ -266,9 +282,9 @@ public class PrivKey {
 	
 	/**
 	 * Save the key in a binary file. Note that the file is not secured by a password.
-	 * 
-	 * @param file
-	 * @throws IOException
+	 *
+	 * @param file a {@link java.io.File} object.
+	 * @throws java.io.IOException if any.
 	 */
 	public void save(File file)
 	throws IOException
@@ -278,10 +294,10 @@ public class PrivKey {
 	
 	/**
 	 * Save the private key to a PEM file
-	 * 
+	 *
 	 * @param file the file
 	 * @param privateKeyPassword the password used to store the key
-	 * @throws IOException
+	 * @throws java.io.IOException if any.
 	 */
 	public void save(File file, String privateKeyPassword) throws IOException
 	{
@@ -313,6 +329,14 @@ public class PrivKey {
 		BouncyCastleUtils.writeToPem(getPrivateKey(), file, privateKeyPassword, "AES-128-CBC");
 	}
 
+	/**
+	 * <p>Constructor for PrivKey.</p>
+	 *
+	 * @param encodedPrivateKey an array of byte.
+	 * @throws java.io.IOException if any.
+	 * @throws java.security.spec.InvalidKeySpecException if any.
+	 * @throws java.security.NoSuchAlgorithmException if any.
+	 */
 	public PrivKey(byte[] encodedPrivateKey) 
 	throws IOException, InvalidKeySpecException, NoSuchAlgorithmException
 	{
@@ -339,16 +363,31 @@ public class PrivKey {
 		}
 	}
 
+	/**
+	 * <p>Constructor for PrivKey.</p>
+	 *
+	 * @param privateKey a {@link java.security.interfaces.RSAPrivateKey} object.
+	 */
 	public PrivKey(RSAPrivateKey privateKey)
 	{
 		this.privateKey = privateKey;
 	}
 	
+	/**
+	 * <p>getEncodedPrivateKey.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getEncodedPrivateKey() 
 	{
 		return privateKey.getEncoded();
 	}
 	
+	/**
+	 * <p>Getter for the field <code>privateKey</code>.</p>
+	 *
+	 * @return a {@link java.security.interfaces.RSAPrivateKey} object.
+	 */
 	public RSAPrivateKey getPrivateKey()
 	{
 		return privateKey;
@@ -356,7 +395,7 @@ public class PrivKey {
 
 	/**
 	 * Save the identity to a password protected keystore.
-	 * 
+	 *
 	 * @param cert
 	 *            the certificate used to chain the key
 	 * @param file
@@ -368,16 +407,15 @@ public class PrivKey {
 	 *            the password to the key store, must not be null
 	 * @param keyStoreType
 	 *            key store type, either "PKCS12" or "JKS"
-	 * 
-	 * @throws IOException
+	 * @throws java.io.IOException
 	 *             if the file cannot be written to
-	 * @throws NoSuchProviderException
+	 * @throws java.security.NoSuchProviderException
 	 *             Bouncy Castle Provider not found
-	 * @throws KeyStoreException
+	 * @throws java.security.KeyStoreException
 	 *             keystore failed
-	 * @throws CertificateException
+	 * @throws java.security.cert.CertificateException
 	 *             certificate problem
-	 * @throws NoSuchAlgorithmException
+	 * @throws java.security.NoSuchAlgorithmException
 	 *             cryptographic algorithm not found
 	 */
 	public void saveToKeyStore(Cert cert, File file, 

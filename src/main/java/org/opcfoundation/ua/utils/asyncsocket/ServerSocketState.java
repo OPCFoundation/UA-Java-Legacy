@@ -21,9 +21,9 @@ import java.util.EnumSet;
  * Final states: Closed, Error
  * 
  * State transitions:
- *   Ready -> Bound -> Closed  
- *   Ready -> Bound -> Error
- *   Ready -> Closed  
+ *   Ready -&gt; Bound -&gt; Closed  
+ *   Ready -&gt; Bound -&gt; Error
+ *   Ready -&gt; Closed  
  * 
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */

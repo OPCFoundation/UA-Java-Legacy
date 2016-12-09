@@ -22,13 +22,20 @@ import java.util.EnumSet;
  * Final states: Canceled, Error, Flushed
  * 
  * State transition paths: 
- *   Encoding -> Encrypting -> Writing -> Flushed
- *   Encoding -> Encrypting -> Writing -> Error
- *   Encoding -> Encrypting -> Writing -> Canceled
- *   Encoding -> Encrypting -> Error
- *   Encoding -> Encrypting -> Canceled
- *   Encoding -> Error
- *   Encoding -> Canceled
+ * <p>
+ *   Encoding -&gt; Encrypting -&gt; Writing -&gt; Flushed
+ *   <p>
+ *   Encoding -&gt; Encrypting -&gt; Writing -&gt; Error
+ *   <p>
+ *   Encoding -&gt; Encrypting -&gt; Writing -&gt; Canceled
+ *   <p>
+ *   Encoding -&gt; Encrypting -&gt; Error
+ *   <p>
+ *   Encoding -&gt; Encrypting -&gt; Canceled
+ *   <p>
+ *   Encoding -&gt; Error
+ *   <p>
+ *   Encoding -&gt; Canceled
  */
 public enum MessageWriteState {
 

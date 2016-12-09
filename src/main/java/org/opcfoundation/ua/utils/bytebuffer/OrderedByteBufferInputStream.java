@@ -22,9 +22,9 @@ import java.util.TreeMap;
  * Input stream with a sequence of ByteBuffers as backend.
  * ByteBuffers can be submitted in random order.
  * Input stream sleeps until data becomes available.
- * Sequence number determines the order of how the data becomes visible 
- * to the input stream.   
- * 
+ * Sequence number determines the order of how the data becomes visible
+ * to the input stream.
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class OrderedByteBufferInputStream extends InputStream {
@@ -40,14 +40,18 @@ public class OrderedByteBufferInputStream extends InputStream {
 	/** Sorted byte buffers */
 	TreeMap<Integer, ByteBuffer> bufs = new TreeMap<Integer, ByteBuffer>();
 	
+	/**
+	 * <p>Constructor for OrderedByteBufferInputStream.</p>
+	 */
 	public OrderedByteBufferInputStream() {
 		super();
 	}
 	
 	/**
 	 * Submits a byte buffer to the use of input stream
-	 * @param sequenceNumber
-	 * @param buf
+	 *
+	 * @param sequenceNumber a int.
+	 * @param buf a {@link java.nio.ByteBuffer} object.
 	 */
 	public synchronized void offer(int sequenceNumber, ByteBuffer buf)
 	{			
@@ -63,19 +67,27 @@ public class OrderedByteBufferInputStream extends InputStream {
 	
 	/**
 	 * Submits a byte buffer for the input stream to use
-	 * 
-	 * @param buf
+	 *
+	 * @param buf a {@link java.nio.ByteBuffer} object.
 	 */
 	public void offer(ByteBuffer buf)
 	{
 		offer(last+1, buf);
 	}
 
+	/**
+	 * <p>close.</p>
+	 */
 	public void close()
 	{
 		close(last+1);
 	}
 	
+	/**
+	 * <p>close.</p>
+	 *
+	 * @param sequenceNumber a int.
+	 */
 	public synchronized void close(int sequenceNumber)
 	{
 		if (close>=0) return; //throw new RuntimeException("Already closed");
@@ -85,6 +97,9 @@ public class OrderedByteBufferInputStream extends InputStream {
 		notifyAll();
 	}
 	
+	/**
+	 * <p>forceClose.</p>
+	 */
 	public synchronized void forceClose()
 	{
 		close = next;
@@ -116,6 +131,7 @@ public class OrderedByteBufferInputStream extends InputStream {
 		return cur;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public synchronized int read() throws IOException {
 		ByteBuffer b = getByteBuffer();
@@ -123,6 +139,7 @@ public class OrderedByteBufferInputStream extends InputStream {
 		return b.get() & 0xff;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
 		int bytesRead = 0;
@@ -138,6 +155,7 @@ public class OrderedByteBufferInputStream extends InputStream {
 		return bytesRead;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public synchronized int available() throws IOException {
 		int result = 0;

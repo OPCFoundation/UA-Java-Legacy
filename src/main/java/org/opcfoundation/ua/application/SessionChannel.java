@@ -49,12 +49,12 @@ import org.opcfoundation.ua.utils.bytebuffer.ByteBufferUtils;
 
 /**
  * Session channel is a request channel of an active session.
- * <p> 
+ * <p>
  * It is fully safe to use session channel from different thread simultaneosly.
  * <p>
- * Session channel adds authentication token and time stamp to all 
+ * Session channel adds authentication token and time stamp to all
  * requests.
- * 
+ *
  * TODO Keep-Alive
  */
 public class SessionChannel extends ChannelService implements RequestChannel {
@@ -73,6 +73,13 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	/** Service Channel */
 	SecureChannel channel;
 
+	/**
+	 * <p>Constructor for SessionChannel.</p>
+	 *
+	 * @param client a {@link org.opcfoundation.ua.application.Client} object.
+	 * @param session a {@link org.opcfoundation.ua.application.Session} object.
+	 * @param channel a {@link org.opcfoundation.ua.transport.SecureChannel} object.
+	 */
 	public SessionChannel(Client client, Session session, SecureChannel channel) {
 		super();
 		this.session = session;
@@ -82,8 +89,10 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	}
 	
 	/**
-	 * Activate session using anonymous access
-	 * @return 
+	 * Activate session using anonymous access.
+	 *
+	 * @return response
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ActivateSessionResponse activate()
 	throws ServiceResultException
@@ -93,11 +102,12 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	}
 	
 	/**
-	 * Activate session using user name and password
-	 * @param username
-	 * @param password
-	 * @return 
-	 * @throws ServiceResultException 
+	 * Activate session using user name and password.
+	 *
+	 * @param username user name
+	 * @param password user password
+	 * @return response
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ActivateSessionResponse activate(String username, String password) throws ServiceResultException
 	{
@@ -106,10 +116,11 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	}
 
 	/**
-	 * Activate session using identity token
+	 * Activate session using identity token.
+	 *
 	 * @param issuedIdentityToken token
-	 * @return 
-	 * @throws ServiceResultException 
+	 * @return response
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ActivateSessionResponse activate(byte[] issuedIdentityToken) throws ServiceResultException
 	{
@@ -119,12 +130,13 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	
 	
 	/**
-	 * Activate session
-	 *  
+	 * Activate session.
+	 *
 	 * @param identity user identity, see {@link EndpointUtil#createIssuedIdentityToken(EndpointDescription, byte[], byte[])}
-	 * @param identitySignature used with {@link X509IdentityToken} and {@link IssuedIdentityToken} ? 
-	 * @return 
-	 * @throws ServiceResultException 
+	 * @param identitySignature used with {@link X509IdentityToken} and {@link IssuedIdentityToken} ?
+	 * @param identitySignature used with {@link X509IdentityToken} and {@link IssuedIdentityToken} ?
+	 * @return response
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
 	 */
 	public ActivateSessionResponse activate(UserIdentityToken identity, SignatureData identitySignature) throws ServiceResultException
 	{
@@ -171,8 +183,8 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	}	
 	
 	/**
-	 * Get the session
-	 * 
+	 * Get the session.
+	 *
 	 * @return session
 	 */
 	public Session getSession()
@@ -181,8 +193,8 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	}
 	
 	/**
-	 * Get secure channel
-	 * 
+	 * Get secure channel.
+	 *
 	 * @return secure channel
 	 */
 	public SecureChannel getSecureChannel()
@@ -191,16 +203,17 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	}
 	
 	/**
-	 * Close the session and the secure channel. 
+	 * Close the session and the secure channel.
 	 * Subscriptions are deleted.
-	 * 
+	 *
 	 * This convenience method logs the errors to default Logger
 	 * but doesn't throw exceptions. Rationale is that in typical
-	 * case, the client cannot handle close errors. 
-	 *  
+	 * case, the client cannot handle close errors.
+	 *
 	 * To capture errors use {@link #CloseSession(RequestHeader, Boolean)} and {@link #closeSecureChannel()}.
-	 * @throws ServiceResultException 
-	 * @throws ServiceFaultException 
+	 *
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
+	 * @throws org.opcfoundation.ua.common.ServiceFaultException if error
 	 */
 	public void close() throws ServiceFaultException, ServiceResultException {		
 		CloseSession(null, true);
@@ -208,13 +221,13 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	}
 	
 	/**
-	 * Close the session and the secure channel. 
+	 * Close the session and the secure channel.
 	 * Subscriptions are deleted.
-	 * 
+	 *
 	 * This convenience method logs the errors to default Logger
 	 * but doesn't throw exceptions. Rationale is that in typical
-	 * case, the client cannot handle close errors. 
-	 *  
+	 * case, the client cannot handle close errors.
+	 *
 	 * To capture errors use {@link #close()}.
 	 */
 	public void closeUnsafe() {
@@ -234,9 +247,11 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	
 	/**
 	 * Close the session and the secure channel asynchronously.
-	 * <p> 
-	 * Use {@link #close()} to close the session before 
+	 * <p>
+	 * Use {@link #close()} to close the session before
 	 * closing the session.
+	 *
+	 * @return async result of the operation
 	 */
 	public AsyncResult<SecureChannel> closeAsync() {
 		final AsyncResultImpl<SecureChannel> result = new AsyncResultImpl<SecureChannel>();
@@ -255,6 +270,9 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 		return result;
 	}
 
+	/**
+	 * <p>dispose.</p>
+	 */
 	public void dispose() {
 //		close();		
 		channel.close();
@@ -264,17 +282,15 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Invoke session service request.
-	 * <p> 
+	 * <p>
 	 * AuthenticationToken and Timestamp is added to RequestHeader.
-	 * <p> 
-	 *  
-	 * If the operation timeouts or the thread is interrupted a 
-	 * ServiceResultException is thrown with {@link StatusCodes#Bad_Timeout}.<p>
-	 * 
-	 * @param httpRequest
-	 * @return
-	 * @throws ServiceResultException
+	 * </p>
+	 *
+	 * If the operation timeouts or the thread is interrupted a
+	 * ServiceResultException is thrown with {@link StatusCodes#Bad_Timeout}
 	 */
 	public IEncodeable serviceRequest(ServiceRequest serviceRequest) throws ServiceResultException
 	{
@@ -291,14 +307,13 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Asynchronous operation to send a request over the secure channel.
-	 *  
+	 *
 	 * Invoke session service request.
-	 * <p> 
-	 * AuthenticationToken and Timestamp is added to RequestHeader. 
-
-	 * @param request the request
-	 * @return the result
+	 * <p>
+	 * AuthenticationToken and Timestamp is added to RequestHeader.
 	 */
 	public AsyncResult<ServiceResponse> serviceRequestAsync(ServiceRequest request) {
 		RequestHeader rh = request.getRequestHeader();

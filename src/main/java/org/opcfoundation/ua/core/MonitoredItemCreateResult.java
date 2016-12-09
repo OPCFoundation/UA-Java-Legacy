@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class MonitoredItemCreateResult extends Object implements Structure, Cloneable {
+public class MonitoredItemCreateResult extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.MonitoredItemCreateResult);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.MonitoredItemCreateResult_Encoding_DefaultBinary);
@@ -119,7 +120,7 @@ public class MonitoredItemCreateResult extends Object implements Structure, Clon
       */
     public MonitoredItemCreateResult clone()
     {
-        MonitoredItemCreateResult result = new MonitoredItemCreateResult();
+        MonitoredItemCreateResult result = (MonitoredItemCreateResult) super.clone();
         result.StatusCode = StatusCode;
         result.MonitoredItemId = MonitoredItemId;
         result.RevisedSamplingInterval = RevisedSamplingInterval;

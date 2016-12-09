@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.UnsignedByte;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class SubscriptionDiagnosticsDataType extends Object implements Structure, Cloneable {
+public class SubscriptionDiagnosticsDataType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SubscriptionDiagnosticsDataType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SubscriptionDiagnosticsDataType_Encoding_DefaultBinary);
@@ -431,7 +432,7 @@ public class SubscriptionDiagnosticsDataType extends Object implements Structure
       */
     public SubscriptionDiagnosticsDataType clone()
     {
-        SubscriptionDiagnosticsDataType result = new SubscriptionDiagnosticsDataType();
+        SubscriptionDiagnosticsDataType result = (SubscriptionDiagnosticsDataType) super.clone();
         result.SessionId = SessionId;
         result.SubscriptionId = SubscriptionId;
         result.Priority = Priority;

@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ServerOnNetwork extends Object implements Structure, Cloneable {
+public class ServerOnNetwork extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ServerOnNetwork);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ServerOnNetwork_Encoding_DefaultBinary);
@@ -106,7 +107,7 @@ public class ServerOnNetwork extends Object implements Structure, Cloneable {
       */
     public ServerOnNetwork clone()
     {
-        ServerOnNetwork result = new ServerOnNetwork();
+        ServerOnNetwork result = (ServerOnNetwork) super.clone();
         result.RecordId = RecordId;
         result.ServerName = ServerName;
         result.DiscoveryUrl = DiscoveryUrl;

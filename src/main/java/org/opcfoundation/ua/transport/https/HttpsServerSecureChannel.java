@@ -32,12 +32,26 @@ import org.opcfoundation.ua.utils.StackUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>HttpsServerSecureChannel class.</p>
+ *
+ */
 public class HttpsServerSecureChannel extends AbstractServerSecureChannel {
 	
+	/**
+	 * <p>getLocalCertificate.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.KeyPair} object.
+	 */
 	public KeyPair getLocalCertificate() {
 		return null;
 	}
 	
+	/**
+	 * <p>getRemoteCertificate.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.Cert} object.
+	 */
 	public Cert getRemoteCertificate() {
 		return null;
 	}
@@ -57,45 +71,76 @@ public class HttpsServerSecureChannel extends AbstractServerSecureChannel {
 	 */
 	Map<Integer, PendingRequest> requests = new ConcurrentHashMap<Integer, PendingRequest>();
 	
+	/**
+	 * <p>Constructor for HttpsServerSecureChannel.</p>
+	 *
+	 * @param httpsEndpointHandler a {@link org.opcfoundation.ua.transport.https.HttpsServerEndpointHandler} object.
+	 * @param secureChannelId a int.
+	 */
 	public HttpsServerSecureChannel(HttpsServerEndpointHandler httpsEndpointHandler, int secureChannelId) {
 		super(secureChannelId);
 		this.endpointBinding = httpsEndpointHandler.endpointBinding;
 		this.httpsEndpointHandler = httpsEndpointHandler;
 	}
 
+	/**
+	 * <p>getMessageSecurityMode.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.core.MessageSecurityMode} object.
+	 */
 	public MessageSecurityMode getMessageSecurityMode() {
 		return MessageSecurityMode.None;
 	}
 
+	/**
+	 * <p>getSecurityPolicy.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.security.SecurityPolicy} object.
+	 */
 	public SecurityPolicy getSecurityPolicy() {
 		return SecurityPolicy.NONE;
 	}	
 		
+	/** {@inheritDoc} */
 	public synchronized void setError(ServiceResultException e) {
 		super.setError( e );
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	protected void onListenerException(RuntimeException rte) {
 		setError( StackUtils.toServiceResultException(rte) );
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ServerConnection getConnection() {
 		return lastConnection;
 	}
+	/**
+	 * <p>setConnection.</p>
+	 *
+	 * @param connection a {@link org.opcfoundation.ua.transport.https.HttpsServerConnection} object.
+	 */
 	public void setConnection(HttpsServerConnection connection) {
 		lastConnection = connection;
 	}
 
+	/**
+	 * <p>getConnectURL.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getConnectURL() {
 		return endpointBinding.endpointAddress.getEndpointUrl();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void dispose() {
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void getPendingServiceRequests(Collection<EndpointServiceRequest<?, ?>> result) {
 		Map<Integer, HttpsServerPendingRequest> snapshot = new HashMap<Integer, HttpsServerPendingRequest>( httpsEndpointHandler.pendingRequests );
@@ -105,16 +150,19 @@ public class HttpsServerSecureChannel extends AbstractServerSecureChannel {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Endpoint getEndpoint() {
 		return endpointBinding.endpointAddress;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Server getServer() {
 		return endpointBinding.serviceServer;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean needsCertificate() {
 		return true;

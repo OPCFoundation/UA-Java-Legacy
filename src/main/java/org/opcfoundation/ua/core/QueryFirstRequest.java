@@ -39,9 +39,10 @@ import org.opcfoundation.ua.core.ContentFilter;
 import org.opcfoundation.ua.core.NodeTypeDescription;
 import org.opcfoundation.ua.core.RequestHeader;
 import org.opcfoundation.ua.core.ViewDescription;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class QueryFirstRequest extends Object implements ServiceRequest {
+public class QueryFirstRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.QueryFirstRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.QueryFirstRequest_Encoding_DefaultBinary);
@@ -133,7 +134,7 @@ public class QueryFirstRequest extends Object implements ServiceRequest {
       */
     public QueryFirstRequest clone()
     {
-        QueryFirstRequest result = new QueryFirstRequest();
+        QueryFirstRequest result = (QueryFirstRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.View = View==null ? null : View.clone();
         if (NodeTypes!=null) {

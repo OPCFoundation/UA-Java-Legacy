@@ -12,9 +12,15 @@
 
 package org.opcfoundation.ua.transport;
 
+/**
+ * <p>TransportConstants class.</p>
+ *
+ */
 public class TransportConstants {
 
+	/** Constant <code>UA_TCP="http://opcfoundation.org/UA/profiles/tr"{trunked}</code> */
 	public static final String UA_TCP = "http://opcfoundation.org/UA/profiles/transport/uatcp";
+	/** Constant <code>WS_XML="http://opcfoundation.org/UA/profiles/tr"{trunked}</code> */
 	public static final String WS_XML = "http://opcfoundation.org/UA/profiles/transport/wsxmlorbinary";
 	
 	

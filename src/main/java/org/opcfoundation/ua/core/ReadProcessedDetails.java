@@ -41,7 +41,7 @@ import org.opcfoundation.ua.core.HistoryReadDetails;
 
 
 
-public class ReadProcessedDetails extends HistoryReadDetails implements Structure, Cloneable {
+public class ReadProcessedDetails extends HistoryReadDetails {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ReadProcessedDetails);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ReadProcessedDetails_Encoding_DefaultBinary);
@@ -121,7 +121,7 @@ public class ReadProcessedDetails extends HistoryReadDetails implements Structur
       */
     public ReadProcessedDetails clone()
     {
-        ReadProcessedDetails result = new ReadProcessedDetails();
+        ReadProcessedDetails result = (ReadProcessedDetails) super.clone();
         result.StartTime = StartTime;
         result.EndTime = EndTime;
         result.ProcessingInterval = ProcessingInterval;

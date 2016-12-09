@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class DoubleComplexNumberType extends Object implements Structure, Cloneable {
+public class DoubleComplexNumberType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DoubleComplexNumberType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DoubleComplexNumberType_Encoding_DefaultBinary);
@@ -80,7 +81,7 @@ public class DoubleComplexNumberType extends Object implements Structure, Clonea
       */
     public DoubleComplexNumberType clone()
     {
-        DoubleComplexNumberType result = new DoubleComplexNumberType();
+        DoubleComplexNumberType result = (DoubleComplexNumberType) super.clone();
         result.Real = Real;
         result.Imaginary = Imaginary;
         return result;

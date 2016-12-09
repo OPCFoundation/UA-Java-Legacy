@@ -39,7 +39,7 @@ import org.opcfoundation.ua.core.HistoryUpdateDetails;
 
 
 
-public class DeleteRawModifiedDetails extends HistoryUpdateDetails implements Structure, Cloneable {
+public class DeleteRawModifiedDetails extends HistoryUpdateDetails {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DeleteRawModifiedDetails);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteRawModifiedDetails_Encoding_DefaultBinary);
@@ -96,7 +96,7 @@ public class DeleteRawModifiedDetails extends HistoryUpdateDetails implements St
       */
     public DeleteRawModifiedDetails clone()
     {
-        DeleteRawModifiedDetails result = new DeleteRawModifiedDetails();
+        DeleteRawModifiedDetails result = (DeleteRawModifiedDetails) super.clone();
         result.NodeId = NodeId;
         result.IsDeleteModified = IsDeleteModified;
         result.StartTime = StartTime;

@@ -25,6 +25,10 @@ import org.opcfoundation.ua.utils.StackUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>AsyncResultImpl class.</p>
+ *
+ */
 public class AsyncResultImpl<T> implements AsyncResult<T> {
 
 	/** Logger */
@@ -42,19 +46,25 @@ public class AsyncResultImpl<T> implements AsyncResult<T> {
 	/** Semaphore that is released once there is a result or error */
 	Semaphore s = new Semaphore(0);
 
+	/**
+	 * <p>Constructor for AsyncResultImpl.</p>
+	 */
 	public AsyncResultImpl() {
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ServiceResultException getError() {
 		return error;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public T getResult() {
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public AsyncResultStatus getStatus() {
 		if (error!=null)
@@ -69,7 +79,7 @@ public class AsyncResultImpl<T> implements AsyncResult<T> {
 	 *
 	 * If result or error has already been set, this method does nothing.
 	 *
-	 * @param error
+	 * @param error a {@link org.opcfoundation.ua.common.ServiceResultException} object.
 	 */
 	public void setError(final ServiceResultException error)
 	{
@@ -98,7 +108,8 @@ public class AsyncResultImpl<T> implements AsyncResult<T> {
 	 * Set error, invokes any listener here and now.
 	 * Note the listener may throw unexpected {@link RuntimeException}
 	 *
-	 * @param error
+	 * @param error a {@link org.opcfoundation.ua.common.ServiceResultException} object.
+	 * @throws java.lang.RuntimeException if any.
 	 */
 	public void setErrorSync(final ServiceResultException error)
 			throws RuntimeException
@@ -121,6 +132,7 @@ public class AsyncResultImpl<T> implements AsyncResult<T> {
 		s.release(Integer.MAX_VALUE);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setListener(ResultListener<T> listener) {
 		ServiceResultException _error;
@@ -141,7 +153,7 @@ public class AsyncResultImpl<T> implements AsyncResult<T> {
 	 *
 	 * If result or error has already been set, this method does nothing.
 	 *
-	 * @param result
+	 * @param result a T object.
 	 */
 	public void setResult(T result) {
 		synchronized(this) {
@@ -165,6 +177,12 @@ public class AsyncResultImpl<T> implements AsyncResult<T> {
 		s.release(Integer.MAX_VALUE);
 	}
 
+	/**
+	 * <p>setResultSync.</p>
+	 *
+	 * @param result a T object.
+	 * @throws java.lang.RuntimeException if any.
+	 */
 	public void setResultSync(T result)
 			throws RuntimeException
 	{
@@ -188,7 +206,7 @@ public class AsyncResultImpl<T> implements AsyncResult<T> {
 	/**
 	 * Links another result as a source of this result object
 	 *
-	 * @param source
+	 * @param source a {@link org.opcfoundation.ua.transport.AsyncResult} object.
 	 */
 	public void setSource(AsyncResult<T> source)
 	{
@@ -204,6 +222,7 @@ public class AsyncResultImpl<T> implements AsyncResult<T> {
 		});
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public T waitForResult()
 			throws ServiceResultException
@@ -226,6 +245,7 @@ public class AsyncResultImpl<T> implements AsyncResult<T> {
 		throw new ServiceResultException(StatusCodes.Bad_UnexpectedError);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public T waitForResult(long timeout, TimeUnit unit)
 			throws ServiceResultException {

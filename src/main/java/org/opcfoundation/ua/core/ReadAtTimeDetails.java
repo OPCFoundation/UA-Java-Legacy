@@ -39,7 +39,7 @@ import org.opcfoundation.ua.core.HistoryReadDetails;
 
 
 
-public class ReadAtTimeDetails extends HistoryReadDetails implements Structure, Cloneable {
+public class ReadAtTimeDetails extends HistoryReadDetails {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ReadAtTimeDetails);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ReadAtTimeDetails_Encoding_DefaultBinary);
@@ -83,7 +83,7 @@ public class ReadAtTimeDetails extends HistoryReadDetails implements Structure, 
       */
     public ReadAtTimeDetails clone()
     {
-        ReadAtTimeDetails result = new ReadAtTimeDetails();
+        ReadAtTimeDetails result = (ReadAtTimeDetails) super.clone();
         result.ReqTimes = ReqTimes==null ? null : ReqTimes.clone();
         result.UseSimpleBounds = UseSimpleBounds;
         return result;

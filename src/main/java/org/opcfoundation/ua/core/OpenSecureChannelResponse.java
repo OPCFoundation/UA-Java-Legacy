@@ -36,9 +36,10 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.ChannelSecurityToken;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class OpenSecureChannelResponse extends Object implements ServiceResponse {
+public class OpenSecureChannelResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.OpenSecureChannelResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.OpenSecureChannelResponse_Encoding_DefaultBinary);
@@ -106,7 +107,7 @@ public class OpenSecureChannelResponse extends Object implements ServiceResponse
       */
     public OpenSecureChannelResponse clone()
     {
-        OpenSecureChannelResponse result = new OpenSecureChannelResponse();
+        OpenSecureChannelResponse result = (OpenSecureChannelResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.ServerProtocolVersion = ServerProtocolVersion;
         result.SecurityToken = SecurityToken==null ? null : SecurityToken.clone();

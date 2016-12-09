@@ -34,14 +34,14 @@ import org.opcfoundation.ua.utils.asyncsocket.AsyncSelector.SelectListener;
 // Do not expose ConnectListener
 
 /**
- * ListenableSocketChannel adds event listening convenience to the use of 
- * async sockets. 
+ * ListenableSocketChannel adds event listening convenience to the use of
+ * async sockets.
  * <p>
  * Select events (read, write, connect) are handled in thread other than selector.
  * The thread is determined by an executor which is given as argument to the constructor.
  * ListenableSocketChannel guarantees that each event type (read/write/connect) is handled
  * at most by one thread.
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class ListenableSocketChannel {
@@ -61,9 +61,9 @@ public class ListenableSocketChannel {
 
 	/**
 	 * Create new async-socket with given event handling thread
-	 * 
+	 *
 	 * @param eventExecutor event handling thread or null for selector thread
-	 * @throws IOException
+	 * @throws java.io.IOException if any.
 	 */
 	public ListenableSocketChannel(Executor eventExecutor) 
 	throws IOException {
@@ -76,9 +76,10 @@ public class ListenableSocketChannel {
 	/**
 	 * Create async-socket wrapper over given socket channel and given listener handling
 	 * thread.
-	 * @param channel
+	 *
+	 * @param channel a {@link java.nio.channels.SocketChannel} object.
 	 * @param eventExecutor event worker thread or null for selector thread
-	 * @throws IOException
+	 * @throws java.io.IOException if any.
 	 */
 	public ListenableSocketChannel(SocketChannel channel, Executor eventExecutor) 
 	throws IOException {
@@ -89,11 +90,11 @@ public class ListenableSocketChannel {
 	/**
 	 * Create async-socket wrapper over given socket channel, given listener handling
 	 * thread, and given selector thread.
-	 * 
-	 * @param channel
-	 * @param executor
-	 * @param selectorThread
-	 * @throws IOException
+	 *
+	 * @param channel a {@link java.nio.channels.SocketChannel} object.
+	 * @param executor a {@link java.util.concurrent.Executor} object.
+	 * @param selectorThread a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncSelector} object.
+	 * @throws java.io.IOException if any.
 	 */
 	public ListenableSocketChannel(SocketChannel channel, Executor executor, AsyncSelector selectorThread) 
 	throws IOException {
@@ -108,6 +109,9 @@ public class ListenableSocketChannel {
 		selector.register(channel, 0, selListener);
 	}
 	
+	/**
+	 * <p>close.</p>
+	 */
 	public /* synchronized */ void close() 
 	{
 		//These are used is logging and if-clauses; call methods only once for performance
@@ -136,11 +140,21 @@ public class ListenableSocketChannel {
 			}
 	}
 	
+	/**
+	 * <p>Getter for the field <code>channel</code>.</p>
+	 *
+	 * @return a {@link java.nio.channels.SocketChannel} object.
+	 */
 	public SocketChannel getChannel()
 	{
 		return channel;
 	}
 	
+	/**
+	 * <p>getSelectorThread.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.AsyncSelector} object.
+	 */
 	public AsyncSelector getSelectorThread()
 	{
 		return selector;
@@ -176,10 +190,10 @@ public class ListenableSocketChannel {
 	/**
 	 * Connect to a remote socket.
 	 * To monitor connect result, set ConnectListener first.
-	 * 
-	 * @param addr
-	 * @throws IOException
-	 */ 
+	 *
+	 * @param addr a {@link java.net.SocketAddress} object.
+	 * @throws java.io.IOException if any.
+	 */
 	public void connect(SocketAddress addr) 
 	throws IOException
 	{		
@@ -188,11 +202,12 @@ public class ListenableSocketChannel {
 	}
 	
 	/**
-	 * 
-	 * @param addr
+	 * <p>syncConnect.</p>
+	 *
+	 * @param addr a {@link java.net.SocketAddress} object.
 	 * @param timeout timeout in milliseconds
 	 * @return true if connected
-	 * @throws IOException
+	 * @throws java.io.IOException if any.
 	 */
 	public boolean syncConnect(SocketAddress addr, long timeout)
 	throws IOException
@@ -228,9 +243,10 @@ public class ListenableSocketChannel {
 		 * The implementor must invoke getChannel().finishConnect()
 		 * to determine which was the case.
 		 * 
-		 * @param sender
+		 * @param sender sender
 		 */
 		void onConnected(ListenableSocketChannel sender);
+		
 		void onConnectFailed(ListenableSocketChannel sender, IOException error);
 	}	
 	
@@ -240,7 +256,7 @@ public class ListenableSocketChannel {
 		 * This event is triggered either
 		 *  (a) data can be read from the socket channel
 		 *  (b) socket is disconnected (bytes read = 0) and channel must be closed
-		 * @param sender
+		 * @param sender sender
 		 */
 		void onDataReadable(ListenableSocketChannel sender);
 	}
@@ -249,7 +265,7 @@ public class ListenableSocketChannel {
 	{
 		/**
 		 * Bytes can be written to the socket.
-		 * @param sender
+		 * @param sender sender
 		 */
 		void onDataWriteable(ListenableSocketChannel sender);		
 	}	
@@ -287,8 +303,8 @@ public class ListenableSocketChannel {
 	
 	/**
 	 * Set connection listener (make its selector key interested on connect events)
-	 * 
-	 * @param connectListener
+	 *
+	 * @param connectListener a {@link org.opcfoundation.ua.utils.asyncsocket.ListenableSocketChannel.ConnectionListener} object.
 	 */
 	public /* synchronized */  void setConnectListener(final ConnectionListener connectListener) {
 		this.connectListener = connectListener;
@@ -320,8 +336,8 @@ public class ListenableSocketChannel {
 	
 	/**
 	 * Set Read listener (makes its selector key interested on read events)
-	 * 
-	 * @param readListener
+	 *
+	 * @param readListener a {@link org.opcfoundation.ua.utils.asyncsocket.ListenableSocketChannel.ReadableListener} object.
 	 */
 	public /*synchronized */ void setReadListener(final ReadableListener readListener) {
 		this.readListener = readListener;
@@ -345,8 +361,8 @@ public class ListenableSocketChannel {
 	
 	/**
 	 * Set write listener (makes its selector key interAsyncSocketImplested on write events)
-	 * 
-	 * @param writeListener
+	 *
+	 * @param writeListener a {@link org.opcfoundation.ua.utils.asyncsocket.ListenableSocketChannel.WriteableListener} object.
 	 */
 	public /* synchronized */ void setWriteListener(final WriteableListener writeListener) {
 		this.writeListener = writeListener;
@@ -371,18 +387,34 @@ public class ListenableSocketChannel {
 	
 	
 
+	/**
+	 * <p>Getter for the field <code>connectListener</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.ListenableSocketChannel.ConnectionListener} object.
+	 */
 	public /* synchronized */ ConnectionListener getConnectListener() {
 		return connectListener;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>readListener</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.ListenableSocketChannel.ReadableListener} object.
+	 */
 	public /* synchronized */  ReadableListener getReadListener() {
 		return readListener;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>writeListener</code>.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.utils.asyncsocket.ListenableSocketChannel.WriteableListener} object.
+	 */
 	public /* synchronized */  WriteableListener getWriteListener() {
 		return writeListener;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	protected void finalize() throws Throwable {
 		try {

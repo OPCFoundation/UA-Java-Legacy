@@ -13,8 +13,7 @@
 package org.opcfoundation.ua.encoding;
 
 /**
- *
- * 
+ * <p>EncodeType class.</p>
  */
 public enum EncodeType {
 	Binary,

@@ -49,6 +49,8 @@ public enum SecurityAlgorithm {
 
 	private AlgorithmType type;
 	/**
+	 * <p>Getter for the field <code>type</code>.</p>
+	 *
 	 * @return the type
 	 */
 	public AlgorithmType getType() {
@@ -61,30 +63,40 @@ public enum SecurityAlgorithm {
 	private final String mode;
 	private final String padding;
 	/**
+	 * <p>Getter for the field <code>mode</code>.</p>
+	 *
 	 * @return the mode
 	 */
 	public String getMode() {
 		return mode;
 	}
 	/**
+	 * <p>Getter for the field <code>padding</code>.</p>
+	 *
 	 * @return the padding
 	 */
 	public String getPadding() {
 		return padding;
 	}
 	/**
+	 * <p>Getter for the field <code>keySize</code>.</p>
+	 *
 	 * @return the keySize
 	 */
 	public int getKeySize() {
 		return keySize;
 	}
 	/**
+	 * <p>Getter for the field <code>uri</code>.</p>
+	 *
 	 * @return the uri
 	 */
 	public String getUri() {
 		return uri;
 	}
 	/**
+	 * <p>Getter for the field <code>standardName</code>.</p>
+	 *
 	 * @return the standardName
 	 */
 	public String getStandardName() {
@@ -101,6 +113,7 @@ public enum SecurityAlgorithm {
 		this.keySize = keySize;
 		
 	}
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "Algorithm URI=" + uri + " StandardName=" + standardName
@@ -108,6 +121,7 @@ public enum SecurityAlgorithm {
 	}
 	/**
 	 * Find the SecurityAlgorithm with URI.
+	 *
 	 * @param algorithmUri the Uri to look for
 	 * @return the respective SecurityAlgorithm or null if none is found.
 	 */
@@ -117,6 +131,11 @@ public enum SecurityAlgorithm {
 				return a;
 		return null;
 	}
+	/**
+	 * <p>Getter for the field <code>transformation</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getTransformation() {
 		return this.transformation;
 	}

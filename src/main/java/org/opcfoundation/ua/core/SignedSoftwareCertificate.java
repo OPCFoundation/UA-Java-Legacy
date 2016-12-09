@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class SignedSoftwareCertificate extends Object implements Structure, Cloneable {
+public class SignedSoftwareCertificate extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SignedSoftwareCertificate);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SignedSoftwareCertificate_Encoding_DefaultBinary);
@@ -80,7 +81,7 @@ public class SignedSoftwareCertificate extends Object implements Structure, Clon
       */
     public SignedSoftwareCertificate clone()
     {
-        SignedSoftwareCertificate result = new SignedSoftwareCertificate();
+        SignedSoftwareCertificate result = (SignedSoftwareCertificate) super.clone();
         result.CertificateData = CertificateData;
         result.Signature = Signature;
         return result;

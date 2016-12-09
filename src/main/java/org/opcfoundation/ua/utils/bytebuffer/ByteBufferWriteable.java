@@ -19,13 +19,18 @@ import java.nio.ByteOrder;
 
 /**
  * IWriteable implementation with ByteBuffer as backend
- * 
+ *
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class ByteBufferWriteable implements IBinaryWriteable {
 
 	ByteBuffer buf;
 	
+	/**
+	 * <p>Constructor for ByteBufferWriteable.</p>
+	 *
+	 * @param buf a {@link java.nio.ByteBuffer} object.
+	 */
 	public ByteBufferWriteable(ByteBuffer buf)
 	{
 		if (buf == null)
@@ -33,16 +38,19 @@ public class ByteBufferWriteable implements IBinaryWriteable {
 		this.buf = buf;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte b) {
 		buf.put(b);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(ByteBuffer src) {
 		buf.put(src);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(ByteBuffer src, int length) {
 		if (src.hasArray()) {
@@ -54,59 +62,81 @@ public class ByteBufferWriteable implements IBinaryWriteable {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte[] src, int offset, int length) {
 		buf.put(src, offset, length);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void put(byte[] src) {
 		buf.put(src);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putDouble(double value) {
 		buf.putDouble(value);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putFloat(float value) {
 		buf.putFloat(value);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putInt(int value) {
 		buf.putInt(value);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putLong(long value) {
 		buf.putLong(value);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void putShort(short value) {
 		buf.putShort(value);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ByteOrder order() {
 		return buf.order();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void order(ByteOrder order) {
 		buf.order(order);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void flush() {
 	}
 	
+	/**
+	 * <p>position.</p>
+	 *
+	 * @return a long.
+	 * @throws java.io.IOException if any.
+	 */
 	public long position() throws IOException {
 		return buf.position();
 	}
 	
+	/**
+	 * <p>position.</p>
+	 *
+	 * @param newPosition a long.
+	 * @throws java.io.IOException if any.
+	 */
 	public void position(long newPosition) throws IOException {
 		if (newPosition>=Integer.MAX_VALUE || newPosition<0) throw new IllegalArgumentException("index out of range");
 		buf.position((int) newPosition);		

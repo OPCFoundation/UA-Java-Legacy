@@ -12,13 +12,23 @@
 
 package org.opcfoundation.ua.common;
 
+/**
+ * <p>RuntimeServiceResultException class.</p>
+ *
+ */
 @SuppressWarnings("serial")
 public class RuntimeServiceResultException extends RuntimeException {
 
+	/**
+	 * <p>Constructor for RuntimeServiceResultException.</p>
+	 *
+	 * @param cause a {@link org.opcfoundation.ua.common.ServiceResultException} object.
+	 */
 	public RuntimeServiceResultException(ServiceResultException cause) {
 		super(cause);
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public ServiceResultException getCause() {
 		return (ServiceResultException) super.getCause();

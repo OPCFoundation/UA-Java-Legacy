@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.RelativePath;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class QueryDataDescription extends Object implements Structure, Cloneable {
+public class QueryDataDescription extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.QueryDataDescription);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.QueryDataDescription_Encoding_DefaultBinary);
@@ -94,7 +95,7 @@ public class QueryDataDescription extends Object implements Structure, Cloneable
       */
     public QueryDataDescription clone()
     {
-        QueryDataDescription result = new QueryDataDescription();
+        QueryDataDescription result = (QueryDataDescription) super.clone();
         result.RelativePath = RelativePath==null ? null : RelativePath.clone();
         result.AttributeId = AttributeId;
         result.IndexRange = IndexRange;

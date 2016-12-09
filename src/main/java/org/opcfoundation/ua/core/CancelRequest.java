@@ -35,9 +35,10 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class CancelRequest extends Object implements ServiceRequest {
+public class CancelRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CancelRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CancelRequest_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class CancelRequest extends Object implements ServiceRequest {
       */
     public CancelRequest clone()
     {
-        CancelRequest result = new CancelRequest();
+        CancelRequest result = (CancelRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.RequestHandle = RequestHandle;
         return result;

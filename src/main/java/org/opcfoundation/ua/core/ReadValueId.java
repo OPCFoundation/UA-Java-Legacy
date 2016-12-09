@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.QualifiedName;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ReadValueId extends Object implements Structure, Cloneable {
+public class ReadValueId extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ReadValueId);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ReadValueId_Encoding_DefaultBinary);
@@ -107,7 +108,7 @@ public class ReadValueId extends Object implements Structure, Cloneable {
       */
     public ReadValueId clone()
     {
-        ReadValueId result = new ReadValueId();
+        ReadValueId result = (ReadValueId) super.clone();
         result.NodeId = NodeId;
         result.AttributeId = AttributeId;
         result.IndexRange = IndexRange;

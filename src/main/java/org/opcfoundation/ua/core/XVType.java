@@ -33,10 +33,11 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class XVType extends Object implements Structure, Cloneable {
+public class XVType extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.XVType);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.XVType_Encoding_DefaultBinary);
@@ -80,7 +81,7 @@ public class XVType extends Object implements Structure, Cloneable {
       */
     public XVType clone()
     {
-        XVType result = new XVType();
+        XVType result = (XVType) super.clone();
         result.X = X;
         result.Value = Value;
         return result;

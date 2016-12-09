@@ -14,6 +14,10 @@ package org.opcfoundation.ua.transport;
 
 import java.util.Collection;
 
+/**
+ * <p>ConnectionMonitor interface.</p>
+ *
+ */
 public interface ConnectionMonitor {
 
 	/**
@@ -25,8 +29,23 @@ public interface ConnectionMonitor {
 		void onClose(Object sender, ServerConnection connection);
 	}
 	
+	/**
+	 * <p>getConnections.</p>
+	 *
+	 * @param result a {@link java.util.Collection} object.
+	 */
 	void getConnections(Collection<ServerConnection> result);
+	/**
+	 * <p>addConnectionListener.</p>
+	 *
+	 * @param l a {@link org.opcfoundation.ua.transport.ConnectionMonitor.ConnectListener} object.
+	 */
 	void addConnectionListener(ConnectListener l);
+	/**
+	 * <p>removeConnectionListener.</p>
+	 *
+	 * @param l a {@link org.opcfoundation.ua.transport.ConnectionMonitor.ConnectListener} object.
+	 */
 	void removeConnectionListener(ConnectListener l);
 	
 }

@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class MonitoringParameters extends Object implements Structure, Cloneable {
+public class MonitoringParameters extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.MonitoringParameters);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.MonitoringParameters_Encoding_DefaultBinary);
@@ -118,7 +119,7 @@ public class MonitoringParameters extends Object implements Structure, Cloneable
       */
     public MonitoringParameters clone()
     {
-        MonitoringParameters result = new MonitoringParameters();
+        MonitoringParameters result = (MonitoringParameters) super.clone();
         result.ClientHandle = ClientHandle;
         result.SamplingInterval = SamplingInterval;
         result.Filter = Filter;

@@ -35,9 +35,10 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class GetEndpointsRequest extends Object implements ServiceRequest {
+public class GetEndpointsRequest extends AbstractStructure implements ServiceRequest {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.GetEndpointsRequest);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.GetEndpointsRequest_Encoding_DefaultBinary);
@@ -105,7 +106,7 @@ public class GetEndpointsRequest extends Object implements ServiceRequest {
       */
     public GetEndpointsRequest clone()
     {
-        GetEndpointsRequest result = new GetEndpointsRequest();
+        GetEndpointsRequest result = (GetEndpointsRequest) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.EndpointUrl = EndpointUrl;
         result.LocaleIds = LocaleIds==null ? null : LocaleIds.clone();

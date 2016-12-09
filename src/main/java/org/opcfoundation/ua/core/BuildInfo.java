@@ -34,10 +34,11 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.DateTime;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class BuildInfo extends Object implements Structure, Cloneable {
+public class BuildInfo extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.BuildInfo);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.BuildInfo_Encoding_DefaultBinary);
@@ -129,7 +130,7 @@ public class BuildInfo extends Object implements Structure, Cloneable {
       */
     public BuildInfo clone()
     {
-        BuildInfo result = new BuildInfo();
+        BuildInfo result = (BuildInfo) super.clone();
         result.ProductUri = ProductUri;
         result.ManufacturerName = ManufacturerName;
         result.ProductName = ProductName;

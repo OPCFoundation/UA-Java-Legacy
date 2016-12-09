@@ -22,12 +22,11 @@ import org.opcfoundation.ua.transport.Endpoint;
 import org.opcfoundation.ua.transport.ServerSecureChannel;
 
 /**
- * Asynchronous message exchange. 
- * 
+ * Asynchronous message exchange.
+ *
  * A service request to be processed by a server (as opposed to service request queried by a client).
  * <p>
  * To send service error use sendResponse(new ServiceFault());
- * 
  */
 public abstract class EndpointServiceRequest<Request extends ServiceRequest, Response extends ServiceResponse> {
 
@@ -35,6 +34,13 @@ public abstract class EndpointServiceRequest<Request extends ServiceRequest, Res
 	protected Endpoint endpoint;
 	protected Request request;
 
+	/**
+	 * <p>Constructor for EndpointServiceRequest.</p>
+	 *
+	 * @param request a Request object.
+	 * @param server a {@link org.opcfoundation.ua.application.Server} object.
+	 * @param endpoint a {@link org.opcfoundation.ua.transport.Endpoint} object.
+	 */
 	public EndpointServiceRequest(Request request, Server server, Endpoint endpoint)
 	{
 		this.request = request;
@@ -44,7 +50,7 @@ public abstract class EndpointServiceRequest<Request extends ServiceRequest, Res
 	
 	/**
 	 * Get Request. The request is in Complete state.
-	 *  
+	 *
 	 * @return read request
 	 */
 	public Request getRequest() {
@@ -53,7 +59,7 @@ public abstract class EndpointServiceRequest<Request extends ServiceRequest, Res
 	
 	/**
 	 * Get server
-	 * 
+	 *
 	 * @return server
 	 */
 	public Server getServer() {
@@ -62,7 +68,7 @@ public abstract class EndpointServiceRequest<Request extends ServiceRequest, Res
 	
 	/**
 	 * Get endpoint
-	 * 
+	 *
 	 * @return endpoint
 	 */
 	public Endpoint getEndpoint() {
@@ -71,7 +77,7 @@ public abstract class EndpointServiceRequest<Request extends ServiceRequest, Res
 	
 	/**
 	 * Send response.
-	 *  
+	 *
 	 * @param response async write wrapping response or {@link ServiceFault}
 	 */
 	public abstract void sendResponse(AsyncWrite response);
@@ -79,14 +85,14 @@ public abstract class EndpointServiceRequest<Request extends ServiceRequest, Res
 	/**
 	 * Send a response.
 	 *
-	 * @param response to send, either {@link ServiceFault} or {@link ServiceResult} 
-	 * @return monitor for write status 
+	 * @param response to send, either {@link ServiceFault} or {@link ServiceResult}
+	 * @return monitor for write status
 	 */
 	public abstract AsyncWrite sendResponse(Response response);
 
 	/**
 	 * Send a service fault
-	 * 
+	 *
 	 * @param fault error
 	 */
 	public void sendFault(ServiceFault fault) {
@@ -95,15 +101,20 @@ public abstract class EndpointServiceRequest<Request extends ServiceRequest, Res
 	
 	/**
 	 * Convert Throwable into an Service fault and send that to the client.
-	 * NOTE! This is a convenience method that exposes stack trace to the client. 
-	 * Use with care! 
-	 * 
+	 * NOTE! This is a convenience method that exposes stack trace to the client.
+	 * Use with care!
+	 *
 	 * @param e ServiceResultException or other
 	 */
 	public void sendException(Throwable e) {
 		sendResponse( new AsyncWrite( ServiceFault.toServiceFault(e) ) );
 	}
 	
+	/**
+	 * <p>getChannel.</p>
+	 *
+	 * @return a {@link org.opcfoundation.ua.transport.ServerSecureChannel} object.
+	 */
 	public abstract ServerSecureChannel getChannel();
 	
 }

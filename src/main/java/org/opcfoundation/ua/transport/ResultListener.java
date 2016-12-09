@@ -16,21 +16,21 @@ import org.opcfoundation.ua.common.ServiceResultException;
 
 /**
  * Result listener.
- * 
+ *
  * Used with {@link AsyncResult}.
  */
 public interface ResultListener<T> {
 	
 	/**
 	 * Request completed, the result is available
-	 * 
-	 * @param result the result 
+	 *
+	 * @param result the result
 	 */
 	void onCompleted(T result);
 	
 	/**
 	 * There was an error in processing the request
-	 * 
+	 *
 	 * @param error the error
 	 */
 	void onError(ServiceResultException error);

@@ -20,8 +20,8 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.encoding.IEncodeable;
 
 /**
- * Table containing descriptions of stub classes. 
- * 
+ * Table containing descriptions of stub classes.
+ *
  * @see EncodeableDesc
  */
 public class EncodeableDescTable {
@@ -35,17 +35,34 @@ public class EncodeableDescTable {
 	private Map<ExpandedNodeId, EncodeableDesc> _binIdMap = Collections.unmodifiableMap(binIdMap);
 	private Map<ExpandedNodeId, EncodeableDesc> _xmlIdMap = Collections.unmodifiableMap(xmlIdMap);
 	
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
+	 * @return a {@link org.opcfoundation.ua.encoding.utils.EncodeableDesc} object.
+	 */
 	public EncodeableDesc get(Class<?> clazz)
 	{
 		return classMap.get(clazz);
 	}
 	
+	/**
+	 * <p>get.</p>
+	 *
+	 * @param id a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @return a {@link org.opcfoundation.ua.encoding.utils.EncodeableDesc} object.
+	 */
 	public EncodeableDesc get(ExpandedNodeId id)
 	{
 		return idMap.get(id);
 	}
 
 	
+	/**
+	 * <p>addStructureInfo.</p>
+	 *
+	 * @param s a {@link org.opcfoundation.ua.encoding.utils.EncodeableDesc} object.
+	 */
 	public void addStructureInfo(EncodeableDesc s)
 	{
 		classMap.put(s.clazz, s);
@@ -57,21 +74,41 @@ public class EncodeableDescTable {
 		xmlIdMap.put(s.binaryId, s);
 	}
 	
+	/**
+	 * <p>Getter for the field <code>idMap</code>.</p>
+	 *
+	 * @return a {@link java.util.Map} object.
+	 */
 	public Map<ExpandedNodeId, EncodeableDesc> getIdMap()
 	{
 		return _idMap;		
 	}
 	
+	/**
+	 * <p>Getter for the field <code>binIdMap</code>.</p>
+	 *
+	 * @return a {@link java.util.Map} object.
+	 */
 	public Map<ExpandedNodeId, EncodeableDesc> getBinIdMap()
 	{
 		return _binIdMap;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>xmlIdMap</code>.</p>
+	 *
+	 * @return a {@link java.util.Map} object.
+	 */
 	public Map<ExpandedNodeId, EncodeableDesc> getXmlIdMap()
 	{
 		return _xmlIdMap;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>classMap</code>.</p>
+	 *
+	 * @return a {@link java.util.Map} object.
+	 */
 	public Map<Class<? extends IEncodeable>, EncodeableDesc> getClassMap()
 	{
 		return _classMap;

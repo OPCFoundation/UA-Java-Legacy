@@ -41,10 +41,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.QualifiedName;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.QualifiedName;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class HistoryReadValueId extends Object implements Structure, Cloneable {
+public class HistoryReadValueId extends AbstractStructure implements Structure, Cloneable {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryReadValueId);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryReadValueId_Encoding_DefaultBinary);
@@ -113,7 +114,7 @@ public class HistoryReadValueId extends Object implements Structure, Cloneable {
       */
     public HistoryReadValueId clone()
     {
-        HistoryReadValueId result = new HistoryReadValueId();
+        HistoryReadValueId result = (HistoryReadValueId) super.clone();
         result.NodeId = NodeId;
         result.IndexRange = IndexRange;
         result.DataEncoding = DataEncoding;

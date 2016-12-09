@@ -35,9 +35,10 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.core.ResponseHeader;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class TestStackResponse extends Object implements ServiceResponse {
+public class TestStackResponse extends AbstractStructure implements ServiceResponse {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TestStackResponse);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TestStackResponse_Encoding_DefaultBinary);
@@ -81,7 +82,7 @@ public class TestStackResponse extends Object implements ServiceResponse {
       */
     public TestStackResponse clone()
     {
-        TestStackResponse result = new TestStackResponse();
+        TestStackResponse result = (TestStackResponse) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
         result.Output = Output;
         return result;

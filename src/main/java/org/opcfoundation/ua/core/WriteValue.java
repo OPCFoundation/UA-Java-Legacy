@@ -41,10 +41,11 @@ import org.opcfoundation.ua.utils.NumericRange;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class WriteValue extends Object implements Structure, Cloneable {
+public class WriteValue extends AbstractStructure implements Structure, Cloneable {
 
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.WriteValue);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.WriteValue_Encoding_DefaultBinary);
@@ -115,7 +116,7 @@ public class WriteValue extends Object implements Structure, Cloneable {
       */
     public WriteValue clone()
     {
-        WriteValue result = new WriteValue();
+        WriteValue result = (WriteValue) super.clone();
         result.NodeId = NodeId;
         result.AttributeId = AttributeId;
         result.IndexRange = IndexRange;

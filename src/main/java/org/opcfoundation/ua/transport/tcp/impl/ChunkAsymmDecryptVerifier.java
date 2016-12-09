@@ -31,8 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Decrypts & Verifies Chunk secured with asymmetric encryption
- * 
+ * Decrypts and Verifies Chunk secured with asymmetric encryption
  */
 public class ChunkAsymmDecryptVerifier implements Runnable {
 
@@ -51,12 +50,19 @@ public class ChunkAsymmDecryptVerifier implements Runnable {
 	byte[] receiverCertificateThumbPrint;
 	
 	
+	/**
+	 * <p>Constructor for ChunkAsymmDecryptVerifier.</p>
+	 *
+	 * @param chunk a {@link java.nio.ByteBuffer} object.
+	 * @param securityProfile a {@link org.opcfoundation.ua.transport.security.SecurityConfiguration} object.
+	 */
 	public ChunkAsymmDecryptVerifier(ByteBuffer chunk, SecurityConfiguration securityProfile)
 	{
 		this.chunk = chunk;
 		this.securityProfile = securityProfile;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public void run() throws RuntimeServiceResultException {
 		try {
@@ -184,14 +190,29 @@ public class ChunkAsymmDecryptVerifier implements Runnable {
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>securityPolicyUri</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getSecurityPolicyUri() {
 		return securityPolicyUri;
 	}
 
+	/**
+	 * <p>Getter for the field <code>senderCertificate</code>.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getSenderCertificate() {
 		return senderCertificate;
 	}
 
+	/**
+	 * <p>getReceiverCertificateThumbprint.</p>
+	 *
+	 * @return an array of byte.
+	 */
 	public byte[] getReceiverCertificateThumbprint() {
 		return receiverCertificateThumbPrint;
 	}

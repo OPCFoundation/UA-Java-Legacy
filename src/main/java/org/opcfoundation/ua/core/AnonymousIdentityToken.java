@@ -37,7 +37,7 @@ import org.opcfoundation.ua.core.UserIdentityToken;
 
 
 
-public class AnonymousIdentityToken extends UserIdentityToken implements Structure, Cloneable {
+public class AnonymousIdentityToken extends UserIdentityToken {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.AnonymousIdentityToken);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.AnonymousIdentityToken_Encoding_DefaultBinary);
@@ -58,7 +58,7 @@ public class AnonymousIdentityToken extends UserIdentityToken implements Structu
       */
     public AnonymousIdentityToken clone()
     {
-        AnonymousIdentityToken result = new AnonymousIdentityToken();
+        AnonymousIdentityToken result = (AnonymousIdentityToken) super.clone();
         result.PolicyId = PolicyId;
         return result;
     }

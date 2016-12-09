@@ -27,8 +27,9 @@ import org.opcfoundation.ua.encoding.EncoderContext;
 
 /**
  * Multi-dimension array utils.
- * 
+ *
  * @see Array related
+ * @see Arrays related
  * @see Arrays related
  * @see Collections related
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
@@ -38,7 +39,8 @@ public class MultiDimensionArrayUtils {
 	
 	/**
 	 * Format object to string
-	 * @param o
+	 *
+	 * @param o a {@link java.lang.Object} object.
 	 * @return string representation of the object
 	 */
 	public static String toString(Object o)
@@ -84,8 +86,8 @@ public class MultiDimensionArrayUtils {
 	 * Clones the multi-dimension structure of an array but the not
 	 * the individual elements. Element references remain the same is in the
 	 * original.
-	 * 
-	 * @param array
+	 *
+	 * @param array a {@link java.lang.Object} object.
 	 * @return cloned array
 	 */
 	public static Object clone(Object array)
@@ -99,9 +101,9 @@ public class MultiDimensionArrayUtils {
 	/**
 	 * Deep clone structure and elements. Elements are cloned if they are cloneable,
 	 * otherwise references are copied.
-	 * 
-	 * @param array
-	 * @return
+	 *
+	 * @param array a {@link java.lang.Object} object.
+	 * @return a {@link java.lang.Object} object.
 	 */
 	public static Object deepClone(Object array)
 	{
@@ -136,8 +138,8 @@ public class MultiDimensionArrayUtils {
 	
 	/**
 	 * Print multi-dimension array
-	 * 
-	 * @param v
+	 *
+	 * @param v a {@link java.lang.Object} object.
 	 * @param out output stream
 	 */
 	public static void printArrayDeep(Object v, PrintStream out)
@@ -147,12 +149,12 @@ public class MultiDimensionArrayUtils {
 			System.out.println(Arrays.toString(i.getIndices())+" = "+i.next());
 	}	
 	
-    /**
-     * Get array length of each dimension of a multi-dimension array.
-     * 
-     * @param value multi-dimension array
-     * @return lengths of each dimension
-     */
+	/**
+	 * Get array length of each dimension of a multi-dimension array.
+	 *
+	 * @param value multi-dimension array
+	 * @return lengths of each dimension
+	 */
 	public static int[] getArrayLengths(Object value)
 	{			
 		int dim = getDimension(value);
@@ -172,7 +174,7 @@ public class MultiDimensionArrayUtils {
 	
 	/**
 	 * Get the number of dimensions in a multi-dimension array.
-	 * 
+	 *
 	 * @param value multi-dimension array
 	 * @return the number of dimensions
 	 */
@@ -189,7 +191,7 @@ public class MultiDimensionArrayUtils {
 	
 	/**
 	 * Deep create multi-level array
-	 * 
+	 *
 	 * @param componentType component type
 	 * @param dims dimension lengths
 	 * @return multi-level array
@@ -230,7 +232,7 @@ public class MultiDimensionArrayUtils {
 		
 	/**
 	 * Returns the total number of elements in a multi-dimension array
-	 * 
+	 *
 	 * @param dims lengths of each dimension
 	 * @return total number of elements
 	 */
@@ -244,7 +246,7 @@ public class MultiDimensionArrayUtils {
 
 	/**
 	 * Get the component type of an array class
-	 * 
+	 *
 	 * @param clazz (array) class
 	 * @return component type
 	 */
@@ -258,9 +260,9 @@ public class MultiDimensionArrayUtils {
 	
 	/**
 	 * Demux single-dimension array (x[]) to a multi-dimension array (x[][][])
-	 * 
+	 *
 	 * @param src single-dimension array
-	 * @param dims
+	 * @param dims an array of int.
 	 * @return multi-dimension array
 	 */
 	public static Object demuxArray(Object src, int[] dims)
@@ -270,10 +272,10 @@ public class MultiDimensionArrayUtils {
 
 	/**
 	 * Demux single-dimension array (x[]) to a multi-dimension array (x[][][])
-	 * 
+	 *
 	 * @param src single-dimension array
-	 * @param dims 
-	 * @param componentType
+	 * @param dims an array of int.
+	 * @param componentType a {@link java.lang.Class} object.
 	 * @return multi-dimension array
 	 */
 	public static Object demuxArray(Object src, int[] dims, Class<?> componentType)
@@ -294,7 +296,7 @@ public class MultiDimensionArrayUtils {
 	
 	/**
 	 * Demuxes single dimension array into a multi-dimension array
-	 *  
+	 *
 	 * @param src one dimension array (e.g. int[])
 	 * @param dims length of each dimension
 	 * @param dst multi-dimension array to be filled (use createMultiDimArray())
@@ -323,7 +325,7 @@ public class MultiDimensionArrayUtils {
 
 	/**
 	 * Multiplex multi-dimension array (x[][][]) to single-dimension array (x[])
-	 * 
+	 *
 	 * @param src multi-dimension array
 	 * @return single-dimension array
 	 */
@@ -334,9 +336,9 @@ public class MultiDimensionArrayUtils {
 	
 	/**
 	 * Multiplex multi-dimension array (x[][][]) to single-dimension array (x[])
-	 * 
+	 *
 	 * @param src multi-dimension array
-	 * @param dims
+	 * @param dims an array of int.
 	 * @return single-dimension array
 	 */
 	public static Object muxArray(Object src, int[] dims)
@@ -346,10 +348,10 @@ public class MultiDimensionArrayUtils {
 	
 	/**
 	 * Multiplex multi-dimension array (x[][][]) to single-dimension array (x[])
-	 * 
+	 *
 	 * @param src multi-dimension array
-	 * @param dims
-	 * @param componentType
+	 * @param dims an array of int.
+	 * @param componentType a {@link java.lang.Class} object.
 	 * @return single-dimension array
 	 */
 	public static Object muxArray(Object src, int[] dims, Class<?> componentType)
@@ -362,7 +364,7 @@ public class MultiDimensionArrayUtils {
 	
 	/**
 	 * Multiplexes multi-dimension array into a single-dimension array
-	 * 
+	 *
 	 * @param src multi-dimension array
 	 * @param dims dimensions
 	 * @param dst single-dimension array
@@ -391,6 +393,14 @@ public class MultiDimensionArrayUtils {
 		return 0;
 	}
 	
+	/**
+	 * <p>arrayIterator.</p>
+	 *
+	 * @param array a {@link java.lang.Object} object.
+	 * @param dimLens an array of int.
+	 * @param <R> a R object.
+	 * @return a {@link org.opcfoundation.ua.utils.MultiDimensionArrayUtils.ArrayIterator} object.
+	 */
 	public static <R> ArrayIterator<R> arrayIterator(Object array, int[] dimLens)
 	{
 		return new ArrayIterator<R>(array, dimLens);

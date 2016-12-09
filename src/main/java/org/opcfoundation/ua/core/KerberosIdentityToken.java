@@ -37,7 +37,7 @@ import org.opcfoundation.ua.core.UserIdentityToken;
 
 
 
-public class KerberosIdentityToken extends UserIdentityToken implements Structure, Cloneable {
+public class KerberosIdentityToken extends UserIdentityToken {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.KerberosIdentityToken);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.KerberosIdentityToken_Encoding_DefaultBinary);
@@ -70,7 +70,7 @@ public class KerberosIdentityToken extends UserIdentityToken implements Structur
       */
     public KerberosIdentityToken clone()
     {
-        KerberosIdentityToken result = new KerberosIdentityToken();
+        KerberosIdentityToken result = (KerberosIdentityToken) super.clone();
         result.PolicyId = PolicyId;
         result.TicketData = TicketData;
         return result;

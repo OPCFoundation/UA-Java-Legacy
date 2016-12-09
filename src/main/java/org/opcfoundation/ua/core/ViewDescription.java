@@ -36,10 +36,11 @@ import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class ViewDescription extends Object implements Structure, Cloneable {
+public class ViewDescription extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ViewDescription);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ViewDescription_Encoding_DefaultBinary);
@@ -95,7 +96,7 @@ public class ViewDescription extends Object implements Structure, Cloneable {
       */
     public ViewDescription clone()
     {
-        ViewDescription result = new ViewDescription();
+        ViewDescription result = (ViewDescription) super.clone();
         result.ViewId = ViewId;
         result.Timestamp = Timestamp;
         result.ViewVersion = ViewVersion;

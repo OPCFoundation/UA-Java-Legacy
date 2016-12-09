@@ -15,7 +15,6 @@ package org.opcfoundation.ua.encoding.xml;
 
 /**
  * TODO Implement this
- * 
  */
 public class XmlEncoder /*implements IEncoder*/ {
 

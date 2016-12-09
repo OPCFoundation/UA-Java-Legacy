@@ -23,7 +23,7 @@ import org.opcfoundation.ua.utils.Description;
 /**
  * Reads statuscode description annotations from generated StatusCode class
  * using reflection.
- * 
+ *
  * @see StatusCode
  * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
@@ -60,6 +60,12 @@ public class StatusCodeDescriptions {
 		}
     }
     
+    /**
+     * <p>getStatusCode.</p>
+     *
+     * @param statuscode a int.
+     * @return a {@link java.lang.String} object.
+     */
     public static String getStatusCode(int statuscode)
     {
     	readDescriptions();
@@ -67,6 +73,12 @@ public class StatusCodeDescriptions {
     	return ERROR_NAMES.get(i);
     }
 
+    /**
+     * <p>getStatusCodeDescription.</p>
+     *
+     * @param statuscode a int.
+     * @return a {@link java.lang.String} object.
+     */
     public static String getStatusCodeDescription(int statuscode)
     {
     	readDescriptions();
@@ -74,6 +86,12 @@ public class StatusCodeDescriptions {
     	return ERROR_DESCRIPTIONS.get(i);
     }
 
+    /**
+     * <p>getStatusCodeDescription.</p>
+     *
+     * @param statusCode a {@link org.opcfoundation.ua.builtintypes.StatusCode} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String getStatusCodeDescription(StatusCode statusCode)
     {
     	readDescriptions();
@@ -81,6 +99,12 @@ public class StatusCodeDescriptions {
     	return ERROR_DESCRIPTIONS.get(i);
     }
 
+    /**
+     * <p>getStatusCode.</p>
+     *
+     * @param description a {@link java.lang.String} object.
+     * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
+     */
     public static UnsignedInteger getStatusCode(String description)
     {
     	readDescriptions();

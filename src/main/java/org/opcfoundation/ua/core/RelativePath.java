@@ -35,10 +35,11 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
 import org.opcfoundation.ua.core.RelativePathElement;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class RelativePath extends Object implements Structure, Cloneable {
+public class RelativePath extends AbstractStructure {
 	
 	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.RelativePath);
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.RelativePath_Encoding_DefaultBinary);
@@ -70,7 +71,7 @@ public class RelativePath extends Object implements Structure, Cloneable {
       */
     public RelativePath clone()
     {
-        RelativePath result = new RelativePath();
+        RelativePath result = (RelativePath) super.clone();
         if (Elements!=null) {
             result.Elements = new RelativePathElement[Elements.length];
             for (int i=0; i<Elements.length; i++)
