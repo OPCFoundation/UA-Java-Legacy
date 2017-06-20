@@ -96,15 +96,6 @@ public class TestStack extends TestCase {
 		}
 	}
 
-	public void testHttps_TLS_1_0() throws Exception {
-		try {
-			_setupTest("https://localhost:6125/TestServer", HttpsSecurityPolicy.TLS_1_0, 2048);
-			executeTest();
-		} finally {
-			_tearDown();
-		}
-	}
-
 	public void testHttps_TLS_1_1() throws Exception {
 		try {
 			_setupTest("https://localhost:6125/TestServer", HttpsSecurityPolicy.TLS_1_1, 2048);
