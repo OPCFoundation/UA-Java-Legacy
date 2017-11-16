@@ -12,20 +12,6 @@
 
 package org.opcfoundation.ua.encoding.binary;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.ConnectException;
-import java.net.SocketException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.channels.ClosedChannelException;
-import java.nio.charset.Charset;
-import java.util.UUID;
-
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
@@ -54,6 +40,20 @@ import org.opcfoundation.ua.utils.bytebuffer.IBinaryReadable;
 import org.opcfoundation.ua.utils.bytebuffer.InputStreamReadable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.ConnectException;
+import java.net.SocketException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.ClosedChannelException;
+import java.nio.charset.Charset;
+import java.util.UUID;
 
 /**
  * Decodes builtinTypes, structures, enumerations and messages from byte buffer.
@@ -1443,7 +1443,7 @@ public class BinaryDecoder implements IDecoder {
 			 * shall stop and raise a Bad_DecodingError", therefore we must check it here.
 			 */
 			if(hasDimensionLengths){
-				long total = 0;
+				long total = 1;
 				for(int i : dims){
 					total = total * i;
 				}
