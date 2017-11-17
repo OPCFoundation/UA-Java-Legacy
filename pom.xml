@@ -6,6 +6,7 @@
   <name>OPC Foundation Unified Architecture Java Stack</name>
     <properties>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  		<javadoc.arg>-Xdoclint:none</javadoc.arg>
   	</properties>
   <build>
     <plugins>
@@ -82,7 +83,8 @@
             			</additionalJOptions>   
             			-->
             			<!-- these are for javadoc:fix goal -->
-            			<fixTags>param,return,throws</fixTags>        			
+            			<fixTags>param,return,throws</fixTags>        	
+            			<additionalparam>${javadoc.arg}</additionalparam>		
 			</configuration>
   			<executions>
       			<execution>
@@ -253,6 +255,9 @@
   <profiles>
   	<profile>
       <id>jdk6</id>
+      <properties>
+      	<javadoc.arg></javadoc.arg>
+      </properties>
 	  <build>
 	  	<plugins>
 			<plugin>
