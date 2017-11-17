@@ -34,6 +34,7 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.core.RequestHeader;
 import org.opcfoundation.ua.utils.AbstractStructure;
 
@@ -46,11 +47,11 @@ public class BrowseNextRequest extends AbstractStructure implements ServiceReque
 	
     protected RequestHeader RequestHeader;
     protected Boolean ReleaseContinuationPoints;
-    protected byte[][] ContinuationPoints;
+    protected ByteString[] ContinuationPoints;
     
     public BrowseNextRequest() {}
     
-    public BrowseNextRequest(RequestHeader RequestHeader, Boolean ReleaseContinuationPoints, byte[][] ContinuationPoints)
+    public BrowseNextRequest(RequestHeader RequestHeader, Boolean ReleaseContinuationPoints, ByteString[] ContinuationPoints)
     {
         this.RequestHeader = RequestHeader;
         this.ReleaseContinuationPoints = ReleaseContinuationPoints;
@@ -77,12 +78,12 @@ public class BrowseNextRequest extends AbstractStructure implements ServiceReque
         this.ReleaseContinuationPoints = ReleaseContinuationPoints;
     }
     
-    public byte[][] getContinuationPoints()
+    public ByteString[] getContinuationPoints()
     {
         return ContinuationPoints;
     }
     
-    public void setContinuationPoints(byte[][] ContinuationPoints)
+    public void setContinuationPoints(ByteString[] ContinuationPoints)
     {
         this.ContinuationPoints = ContinuationPoints;
     }

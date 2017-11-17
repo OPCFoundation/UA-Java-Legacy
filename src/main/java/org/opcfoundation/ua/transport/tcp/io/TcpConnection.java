@@ -46,6 +46,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.ServiceRequest;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
@@ -206,7 +207,7 @@ public class TcpConnection implements IConnection {
 	 * OpenSecureMessageResponse. The captured nonce is used in the
 	 * instantiation of a SecurityToken.
 	 */
-	final Map<Integer, byte[]> clientNonces = new ConcurrentHashMap<Integer, byte[]>();
+	final Map<Integer, ByteString> clientNonces = new ConcurrentHashMap<Integer, ByteString>();
 
 	/**
 	 * Map<SecureChannelId, SequenceNumber> Sequence numbering of secure
@@ -932,8 +933,8 @@ public class TcpConnection implements IConnection {
 						OpenSecureChannelResponse opn = (OpenSecureChannelResponse) message;
 						ChannelSecurityToken tkn = opn.getSecurityToken();
 
-						byte[] clientNonce = clientNonces.get(requestId);
-						byte[] serverNonce = opn.getServerNonce();
+						ByteString clientNonce = clientNonces.get(requestId);
+						ByteString serverNonce = opn.getServerNonce();
 
 						// HAX! In Reconnect to secure channel -situation, the
 						// C# Server implementation sends
@@ -1117,7 +1118,7 @@ public class TcpConnection implements IConnection {
 								if (asymm) {
 									// Capture ClientNonce of the request
 									// message
-									byte[] clientNonce = ((OpenSecureChannelRequest) request).getClientNonce();
+									ByteString clientNonce = ((OpenSecureChannelRequest) request).getClientNonce();
 									clientNonces.put(requestId, clientNonce);
 									//
 

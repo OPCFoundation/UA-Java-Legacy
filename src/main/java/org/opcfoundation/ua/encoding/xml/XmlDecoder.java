@@ -12,6 +12,7 @@
 package org.opcfoundation.ua.encoding.xml;
 
 import java.io.StringReader;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -24,6 +25,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
@@ -167,12 +169,184 @@ public class XmlDecoder implements IDecoder {
 	}
 
 	/** {@inheritDoc} */
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T get(String fieldName, Class<T> clazz) throws DecodingException {
-		if(beginFieldSafe(fieldName, true)) {
-			endField(fieldName);
+		if (clazz.equals(Boolean.class)) {
+			return (T) getBoolean(fieldName);
 		}
-		return null;
+		if (clazz.equals(Byte.class)) {
+			return (T) getSByte(fieldName);
+		}
+		if (clazz.equals(UnsignedByte.class)) {
+			return (T) getByte(fieldName);
+		}
+		if (clazz.equals(Short.class)) {
+			return (T) getInt16(fieldName);
+		}
+		if (clazz.equals(UnsignedShort.class)) {
+			return (T) getUInt16(fieldName);
+		}
+		if (clazz.equals(Integer.class)) {
+			return (T) getInt32(fieldName);
+		}
+		if (clazz.equals(UnsignedInteger.class)) {
+			return (T) getUInt32(fieldName);
+		}
+		if (clazz.equals(Long.class)) {
+			return (T) getInt64(fieldName);
+		}
+		if (clazz.equals(UnsignedLong.class)) {
+			return (T) getUInt64(fieldName);
+		}
+		if (clazz.equals(Float.class)) {
+			return (T) getFloat(fieldName);
+		}
+		if (clazz.equals(Double.class)) {
+			return (T) getDouble(fieldName);
+		}
+		if (clazz.equals(String.class)) {
+			return (T) getString(fieldName);
+		}
+		if (clazz.equals(DateTime.class)) {
+			return (T) getDateTime(fieldName);
+		}
+		if (clazz.equals(UUID.class)) {
+			return (T) getGuid(fieldName);
+		}
+		if (clazz.equals(ByteString.class)) {
+			return (T) getByteString(fieldName);
+		}
+		if (clazz.equals(XmlElement.class)) {
+			return (T) getXmlElement(fieldName);
+		}
+		if (clazz.equals(NodeId.class)) {
+			return (T) getNodeId(fieldName);
+		}
+		if (clazz.equals(ExpandedNodeId.class)) {
+			return (T) getExpandedNodeId(fieldName);
+		}
+		if (clazz.equals(StatusCode.class)) {
+			return (T) getStatusCode(fieldName);
+		}
+		if (clazz.equals(QualifiedName.class)) {
+			return (T) getQualifiedName(fieldName);
+		}
+		if (clazz.equals(LocalizedText.class)) {
+			return (T) getLocalizedText(fieldName);
+		}
+		if (clazz.equals(ExtensionObject.class)) {
+			return (T) getExtensionObject(fieldName);
+		}
+		if (Structure.class.isAssignableFrom(clazz)) {
+			return (T) getEncodeable(fieldName, (Class<? extends IEncodeable>) clazz);
+		}
+		if (clazz.equals(DataValue.class)) {
+			return (T) getDataValue(fieldName);
+		}
+		if (clazz.equals(Variant.class)) {
+			return (T) getVariant(fieldName);
+		}
+		if (clazz.equals(Object.class)) {
+			return (T) getVariant(fieldName).getValue();
+		}
+		if (clazz.equals(DiagnosticInfo.class)) {
+			return (T) getDiagnosticInfo(fieldName);
+		}
+		if (clazz.equals(Boolean[].class)) {
+			return (T) getBooleanArray(fieldName);
+		}
+		if (clazz.equals(Byte[].class)) {
+			return (T) getSByteArray(fieldName);
+		}
+		if (clazz.equals(UnsignedByte[].class)) {
+			return (T) getByteArray(fieldName);
+		}
+		if (clazz.equals(Short[].class)) {
+			return (T) getInt16Array(fieldName);
+		}
+		if (clazz.equals(UnsignedShort[].class)) {
+			return (T) getUInt16Array(fieldName);
+		}
+		if (clazz.equals(Integer[].class)) {
+			return (T) getInt32Array(fieldName);
+		}
+		if (clazz.equals(UnsignedInteger[].class)) {
+			return (T) getUInt32Array(fieldName);
+		}
+		if (clazz.equals(Long[].class)) {
+			return (T) getInt64Array(fieldName);
+		}
+		if (clazz.equals(UnsignedLong[].class)) {
+			return (T) getUInt64Array(fieldName);
+		}
+		if (clazz.equals(Float[].class)) {
+			return (T) getFloatArray(fieldName);
+		}
+		if (clazz.equals(Double[].class)) {
+			return (T) getDoubleArray(fieldName);
+		}
+		if (clazz.equals(String[].class)) {
+			return (T) getStringArray(fieldName);
+		}
+		if (clazz.equals(DateTime[].class)) {
+			return (T) getDateTimeArray(fieldName);
+		}
+		if (clazz.equals(UUID[].class)) {
+			return (T) getGuidArray(fieldName);
+		}
+		if (clazz.equals(ByteString[].class)) {
+			return (T) getByteStringArray(fieldName);
+		}
+		if (clazz.equals(XmlElement[].class)) {
+			return (T) getXmlElementArray(fieldName);
+		}
+		if (clazz.equals(NodeId[].class)) {
+			return (T) getNodeIdArray(fieldName);
+		}
+		if (clazz.equals(ExpandedNodeId[].class)) {
+			return (T) getExpandedNodeIdArray(fieldName);
+		}
+		if (clazz.equals(StatusCode[].class)) {
+			return (T) getStatusCodeArray(fieldName);
+		}
+		if (clazz.equals(QualifiedName[].class)) {
+			return (T) getQualifiedNameArray(fieldName);
+		}
+		if (clazz.equals(LocalizedText[].class)) {
+			return (T) getLocalizedTextArray(fieldName);
+		}
+		if (clazz.equals(ExtensionObject[].class)) {
+			return (T) getExtensionObjectArray(fieldName);
+		}
+		if (clazz.getComponentType() != null && Structure.class.isAssignableFrom(clazz.getComponentType())) {
+			final Class<? extends Structure> param = (Class<? extends Structure>) clazz.getComponentType();
+			Structure[] r = getEncodeableArray(fieldName, param);
+			return (T) r;
+		}
+		if (clazz.equals(DataValue[].class)) {
+			return (T) getDataValueArray(fieldName);
+		}
+		if (clazz.equals(Variant[].class)) {
+			return (T) getVariantArray(fieldName);
+		}
+		if (clazz.equals(Object[].class)) {
+			Variant[] varArray = getVariantArray(fieldName);
+			Object[] objArray = new Object[varArray.length];
+			for (int i = 0; i < varArray.length; i++)
+				objArray[i] = varArray[i].getValue();
+			return (T) objArray;
+		}
+		if (clazz.equals(DiagnosticInfo[].class)) {
+			return (T) getDiagnosticInfoArray(fieldName);
+		}
+		if (Enumeration.class.isAssignableFrom(clazz)) {
+			return (T) getEnumeration(fieldName, (Class<? extends Enumeration>) clazz);
+		}
+		if (clazz.getComponentType() != null && Enumeration.class.isAssignableFrom(clazz.getComponentType())) {
+			return (T) getEnumerationArray(fieldName, (Class<? extends Enumeration>) clazz);
+		}
+		throw new DecodingException("Cannot decode " + clazz);
 	}
 
 	/** {@inheritDoc} */
@@ -324,7 +498,7 @@ public class XmlDecoder implements IDecoder {
 	/// </summary>
 	/** {@inheritDoc} */
 	@Override
-	public byte[] getByteString(String fieldName) throws DecodingException
+	public ByteString getByteString(String fieldName) throws DecodingException
 	{
 		if (beginFieldSafe(fieldName, true))
 		{
@@ -348,7 +522,7 @@ public class XmlDecoder implements IDecoder {
 			}
 
 			endField(fieldName);
-			return value;
+			return ByteString.valueOf(value);
 		}
 
 		return null;
@@ -375,9 +549,9 @@ public class XmlDecoder implements IDecoder {
 	/// </summary>
 	/** {@inheritDoc} */
 	@Override
-	public byte[][] getByteStringArray(String fieldName) throws DecodingException
+	public ByteString[] getByteStringArray(String fieldName) throws DecodingException
 	{
-		List<byte[]> values = new ArrayList<byte[]>();
+		List<ByteString> values = new ArrayList<ByteString>();
 
 		if (beginFieldSafe(fieldName, true))
 		{
@@ -399,7 +573,7 @@ public class XmlDecoder implements IDecoder {
 			endField(fieldName);
 		}
 
-		return values.toArray(new byte[0][]);
+		return values.toArray(new ByteString[0]);
 	}
 
 	/// <summary>
@@ -778,7 +952,7 @@ public class XmlDecoder implements IDecoder {
 
 		//				boolean isNil = false;
 
-		List<IEncodeable> encodeables = new ArrayList<IEncodeable>();
+		List<T> encodeables = new ArrayList<T>();
 
 		//		try {
 		if (beginFieldSafe(fieldName, true))
@@ -820,7 +994,7 @@ public class XmlDecoder implements IDecoder {
 		//			return null;
 		//		}
 
-		return (T[]) encodeables.toArray(new IEncodeable[0]);
+		return (T[]) encodeables.toArray((T[])Array.newInstance(encodeableClass, encodeables.size()));
 	}
 
 	/**
@@ -1080,10 +1254,21 @@ public class XmlDecoder implements IDecoder {
 		// read end of extension object.
 		endField(fieldName);
 
+		
+		final ExtensionObject tmp;
 		if(body instanceof XmlElement)
-			return new ExtensionObject(absoluteId, (XmlElement)body);
+			tmp = new ExtensionObject(absoluteId, (XmlElement)body);
 		else
-			return new ExtensionObject(absoluteId, (byte[])body);
+			tmp = new ExtensionObject(absoluteId, (byte[])body);
+		
+		//try decoding, but failing is allowed (might be e.g. unknown Structure)
+        try{
+          Structure decoded = tmp.decode(getEncoderContext());
+          return new ExtensionObject(decoded);
+        }catch(DecodingException e){
+          return tmp;
+        }
+		
 	}
 
 	/// <summary>
@@ -1137,10 +1322,10 @@ public class XmlDecoder implements IDecoder {
 		if (reader.getLocalName() == "ByteString" && reader.getNamespaceURI() == OPC_UA_XSD_NAMESPACE)
 		{
 			//pushNamespace(OPC_UA_XSD_NAMESPACE);
-			byte[] bytes = getByteString("ByteString");
+			ByteString bytes = getByteString("ByteString");
 			//popNamespace();
 
-			return bytes;
+			return ByteString.asByteArray(bytes);
 		}
 		return getXmlElement(EMPTY_STRING);
 		//		// check for empty body.

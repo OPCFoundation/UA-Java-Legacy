@@ -12,6 +12,7 @@
 
 package org.opcfoundation.ua.application;
 
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.EndpointDescription;
@@ -35,7 +36,7 @@ public class Session {
 	/** Server nonce */
 	byte[] serverNonce;
 	/** Client nonce */
-	byte[] clientNonce;
+	ByteString clientNonce;
 	/** NodeId that contains SessionDiagnosticsInfo, see {@link SessionDiagnosticsDataType} */
 	NodeId diagnosticsInfo;
 	/** Server assigned authentication token. It is passed in every request and response */
@@ -174,7 +175,7 @@ public class Session {
 	 *
 	 * @return an array of byte.
 	 */
-	public byte[] getClientNonce() {
+	public ByteString getClientNonce() {
 		return clientNonce;
 	}
 

@@ -21,6 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.ServiceRequest;
 import org.opcfoundation.ua.builtintypes.UnsignedByte;
 import org.opcfoundation.ua.common.ServiceResultException;
@@ -493,7 +494,7 @@ public class Server {
 					desc.setSecurityLevel( UnsignedByte.valueOf(securityLevel) );					
 					desc.setSecurityPolicyUri( securityPolicyUri );
 					desc.setServer( ap );
-					desc.setServerCertificate( keypair.getCertificate().getEncoded() );
+					desc.setServerCertificate(ByteString.valueOf(keypair.getCertificate().getEncoded() ));
 					desc.setTransportProfileUri( transportProfileUri );
 					desc.setUserIdentityTokens( userTokenPolicies );
 					result.add(desc);

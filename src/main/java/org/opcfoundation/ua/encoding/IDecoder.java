@@ -14,6 +14,7 @@ package org.opcfoundation.ua.encoding;
 
 import java.util.UUID;
 
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
@@ -341,7 +342,7 @@ public interface IDecoder {
 	 * @return an array of byte.
 	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
 	 */
-	public byte[] getByteString(String fieldName)
+	public ByteString getByteString(String fieldName)
     throws DecodingException;	
 	
 	/**
@@ -351,7 +352,7 @@ public interface IDecoder {
 	 * @return an array of byte.
 	 * @throws org.opcfoundation.ua.encoding.DecodingException if any.
 	 */
-	public byte[][] getByteStringArray(String fieldName)
+	public ByteString[] getByteStringArray(String fieldName)
     throws DecodingException;	
 	
 	/**

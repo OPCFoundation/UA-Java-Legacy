@@ -29,14 +29,69 @@
 
 package org.opcfoundation.ua.core;
 
-import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
-import org.opcfoundation.ua.common.ServiceFaultException;
+import org.opcfoundation.ua.builtintypes.Structure;
+import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
+import org.opcfoundation.ua.core.Identifiers;
+import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public interface TestServiceSetHandler {
+
+public class Union extends AbstractStructure {
+	
+	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.Union);
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.Union_Encoding_DefaultBinary);
+	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.Union_Encoding_DefaultXml);
+	
     
-    void onTestStack(EndpointServiceRequest<TestStackRequest, TestStackResponse> req) throws ServiceFaultException;
+    public Union() {}
     
-    void onTestStackEx(EndpointServiceRequest<TestStackExRequest, TestStackExResponse> req) throws ServiceFaultException;
- 
+    
+    /**
+      * Deep clone
+      *
+      * @return cloned Union
+      */
+    public Union clone()
+    {
+        Union result = (Union) super.clone();
+        return result;
+    }
+    
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Union other = (Union) obj;
+        return true;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        return result;
+    }
+    
+
+
+	public ExpandedNodeId getTypeId() {
+		return ID;
+	}
+
+	public ExpandedNodeId getXmlEncodeId() {
+		return XML;
+	}
+
+	public ExpandedNodeId getBinaryEncodeId() {
+		return BINARY;
+	}
+	
+	public String toString() {
+		return "Union: "+ObjectUtils.printFieldsDeep(this);
+	}
+
 }

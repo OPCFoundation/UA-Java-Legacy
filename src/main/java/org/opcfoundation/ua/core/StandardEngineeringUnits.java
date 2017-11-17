@@ -33,6 +33,8 @@ import org.opcfoundation.ua.core.EUInformation;
 import org.opcfoundation.ua.builtintypes.LocalizedText;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 
 
@@ -43,6 +45,7 @@ public class StandardEngineeringUnits {
 	
 	private static Map<Integer, EUInformation> unitMap = new HashMap<Integer, EUInformation>();
 	private static Map<String, EUInformation> ccUnitMap = new HashMap<String, EUInformation>();
+	private static List<EUInformation> all = new ArrayList<EUInformation>();
 	
     public static final EUInformation ACCESS_LINE = init("AL", 16716, "", "access line");
     public static final EUInformation ACCOUNTING_UNIT = init("E50", 4535600, "", "accounting unit");
@@ -1774,11 +1777,20 @@ public class StandardEngineeringUnits {
 	public static EUInformation getByCommonCode(String commonCode){
 		return ccUnitMap.get(commonCode);
 	}
+	
+	public static List<EUInformation> getAll(){
+	  List<EUInformation> r = new ArrayList<EUInformation>();
+	  for(EUInformation eui : all){
+	    r.add(eui.clone());
+	  }
+	  return r;
+	}
 
 	private static EUInformation init(String commonCode, int unitId, String displayName, String description){
 		 EUInformation unit = new EUInformation(URI, unitId, new LocalizedText(displayName), new LocalizedText(description));
 		 unitMap.put(unitId, unit);
 		 ccUnitMap.put(commonCode, unit);
+		 all.add(unit);
 		 return unit;
 	}
 

@@ -33,6 +33,7 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.utils.AbstractStructure;
 
 
@@ -43,33 +44,33 @@ public class SignedSoftwareCertificate extends AbstractStructure {
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SignedSoftwareCertificate_Encoding_DefaultBinary);
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.SignedSoftwareCertificate_Encoding_DefaultXml);
 	
-    protected byte[] CertificateData;
-    protected byte[] Signature;
+    protected ByteString CertificateData;
+    protected ByteString Signature;
     
     public SignedSoftwareCertificate() {}
     
-    public SignedSoftwareCertificate(byte[] CertificateData, byte[] Signature)
+    public SignedSoftwareCertificate(ByteString CertificateData, ByteString Signature)
     {
         this.CertificateData = CertificateData;
         this.Signature = Signature;
     }
     
-    public byte[] getCertificateData()
+    public ByteString getCertificateData()
     {
         return CertificateData;
     }
     
-    public void setCertificateData(byte[] CertificateData)
+    public void setCertificateData(ByteString CertificateData)
     {
         this.CertificateData = CertificateData;
     }
     
-    public byte[] getSignature()
+    public ByteString getSignature()
     {
         return Signature;
     }
     
-    public void setSignature(byte[] Signature)
+    public void setSignature(ByteString Signature)
     {
         this.Signature = Signature;
     }

@@ -213,12 +213,14 @@ public class BcCertificateProvider implements CertificateProvider {
 		JcaX509v3CertificateBuilder certBldr;
 		JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
 		AuthorityKeyIdentifier authorityKeyIdentifier;
+		PrivateKey signerKey;
 		if (issuerKeys == null) {
 			X500Name dn = new X500Name(commonName);
 			certBldr = new JcaX509v3CertificateBuilder(dn, serialNr, startDate,
 					expiryDate, dn, publicKey);
 			authorityKeyIdentifier = extUtils
 					.createAuthorityKeyIdentifier(publicKey);
+			signerKey = privateKey;
 		} else {
 			X509Certificate caCert = issuerKeys.getCertificate()
 					.getCertificate();
@@ -227,6 +229,7 @@ public class BcCertificateProvider implements CertificateProvider {
 					publicKey);
 			authorityKeyIdentifier = extUtils
 					.createAuthorityKeyIdentifier(caCert);
+			signerKey = issuerKeys.getPrivateKey().getPrivateKey();
 		}
 
 		certBldr.addExtension(Extension.authorityKeyIdentifier, false,
@@ -234,7 +237,7 @@ public class BcCertificateProvider implements CertificateProvider {
 				.addExtension(Extension.subjectKeyIdentifier, false,
 						extUtils.createSubjectKeyIdentifier(publicKey))
 						.addExtension(Extension.basicConstraints, true,
-								new BasicConstraints(0))
+								new BasicConstraints(true))
 								.addExtension(
 										Extension.keyUsage,
 										true,
@@ -242,9 +245,9 @@ public class BcCertificateProvider implements CertificateProvider {
 												| KeyUsage.keyCertSign | KeyUsage.cRLSign));
 		ContentSigner signer;
 		try {
-			signer = new JcaContentSignerBuilder(
-					CertificateUtils.getCertificateSignatureAlgorithm())
-			.setProvider("BC").build(privateKey);
+            signer = new JcaContentSignerBuilder(
+                CertificateUtils.getCertificateSignatureAlgorithm())
+                   .setProvider("BC").build(signerKey);		    
 		} catch (OperatorCreationException e) {
 			throw new GeneralSecurityException(
 					"Failed to sign the certificate", e);

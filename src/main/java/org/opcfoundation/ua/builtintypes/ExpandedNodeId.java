@@ -14,7 +14,6 @@ package org.opcfoundation.ua.builtintypes;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.UUID;
 
 import org.opcfoundation.ua.common.NamespaceTable;
@@ -117,15 +116,15 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 		throw new ClassCastException("String is not a valid ExpandedNodeId: "
 				+ s);
 	}
-	IdType type;
+	final IdType type;
 
-	int namespaceIndex;
+	final int namespaceIndex;
 
-	UnsignedInteger serverIndex;
+	final UnsignedInteger serverIndex;
 
-	String namespaceUri;
+	final String namespaceUri;
 
-	Object value;
+	final Object value;
 
 	/**
 	 * Convenience constructor that creates ExpandedNodeId from
@@ -152,16 +151,23 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 	 *
 	 * @param serverIndex Server Index (optional)
 	 * @param namespaceIndex namespace index
-	 * @param value value (must be UnsignedInteger, String, UUID, byte[] or null)
+	 * @param value value (must be UnsignedInteger, String, UUID, ByteString or null)
 	 */
 	public ExpandedNodeId(UnsignedInteger serverIndex, int namespaceIndex, Object value)
 	{
 		if (namespaceIndex<0 || namespaceIndex>65535)
 			throw new IllegalArgumentException("namespaceIndex out of bounds");
 		this.serverIndex = serverIndex == null ? UnsignedInteger.ZERO : serverIndex;
-		if (value instanceof Integer) value = UnsignedInteger.getFromBits((Integer)value);
+		if (value instanceof Integer){
+			value = UnsignedInteger.getFromBits((Integer)value);
+		}
+		if(value instanceof byte[]){
+			value = ByteString.valueOf((byte[]) value);
+		}
+		
 		this.value = value;
 		this.namespaceIndex = namespaceIndex;
+		
 
 		// add uri only for non-nulls
 		if(namespaceIndex == 0){
@@ -171,7 +177,11 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 					&& !ObjectUtils.equals(value, NodeId.NULL_OPAQUE.getValue())){
 
 				this.namespaceUri = NamespaceTable.OPCUA_NAMESPACE;
+			}else{
+				this.namespaceUri = null;
 			}
+		}else{
+			this.namespaceUri = null;
 		}
 
 
@@ -179,7 +189,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 		else if (value instanceof UnsignedInteger) type = IdType.Numeric;
 		else if (value instanceof String) type = IdType.String;
 		else if (value instanceof UUID) type = IdType.Guid;
-		else if (value instanceof byte[]) type = IdType.Opaque;
+		else if (value instanceof ByteString) type = IdType.Opaque;
 		else throw new IllegalArgumentException("value cannot be "+value.getClass().getName());
 	}
 
@@ -199,7 +209,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 	 *
 	 * @param serverIndex Server Index (optional)
 	 * @param namespaceUri a {@link java.lang.String} object.
-	 * @param value value (must be UnsignedInteger, String, UUID or byte[])
+	 * @param value value (must be UnsignedInteger, String, UUID or ByteString)
 	 */
 	public ExpandedNodeId(UnsignedInteger serverIndex, String namespaceUri, Object value)
 	{
@@ -208,16 +218,23 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 		if (namespaceUri.isEmpty())
 			throw new IllegalArgumentException("namespaceUri not defined");
 		this.serverIndex = serverIndex == null ? UnsignedInteger.ZERO : serverIndex;
-		if (value instanceof Integer)
+		if (value instanceof Integer){
 			value = UnsignedInteger.valueOf((Integer) value);
+		}
+		if(value instanceof byte[]){
+			value = ByteString.valueOf((byte[]) value);
+		}
 		this.value = value;
 		this.namespaceUri = namespaceUri;
+		
+		//if uri is present then index is 0 and ignored
+		this.namespaceIndex = 0;
 
 		if (value==null) type = IdType.String;
 		else if (value instanceof UnsignedInteger) type = IdType.Numeric;
 		else if (value instanceof String) type = IdType.String;
 		else if (value instanceof UUID) type = IdType.Guid;
-		else if (value instanceof byte[]) type = IdType.Opaque;
+		else if (value instanceof ByteString) type = IdType.Opaque;
 		else throw new IllegalArgumentException("value cannot be "+value.getClass().getName());
 	}
 
@@ -244,9 +261,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 				value = ((UUID) this.value).compareTo((UUID) other.value);
 				break;
 			case Opaque:
-				value = Arrays
-				.equals((byte[]) this.value, (byte[]) other.value) ? 0
-						: 1;
+				value = ((ByteString) this.value).compareTo((ByteString) other.value);
 				break;
 			}
 		return value;
@@ -261,9 +276,6 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 			NodeId other = (NodeId) obj;
 			if (other.namespaceIndex!=namespaceIndex || other.type!=type) return false;
 			if (this.value==other.value) return true;
-			if (other.type==IdType.Opaque)
-				// Deep compare
-				return Arrays.equals((byte[])value, (byte[])other.value);
 			return other.value.equals(value);
 		} else
 			if (obj instanceof ExpandedNodeId) {
@@ -281,9 +293,6 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 				}
 				if (other.type!=type) return false;
 				if (this.value==other.value) return true;
-				if (other.type==IdType.Opaque)
-					// Deep compare
-					return Arrays.equals((byte[])value, (byte[])other.value);
 				if (other.value != null) {
 					return other.value.equals(value);
 				} else {
@@ -348,7 +357,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 	public int hashCode() {
 		int hashCode = 0;
 		if (value!=null)
-			hashCode += value instanceof byte[] ? 3*Arrays.hashCode((byte[])value) : 3*value.hashCode();
+			hashCode += 3*value.hashCode();
 
 			// Does not calc using nsIdx/nsUri (one or both can be defined and cannot do idx->uri mapping here)
 			if (serverIndex!=null) hashCode += serverIndex.hashCode()*17;
@@ -421,7 +430,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 			if (type == IdType.Guid) return srvPart+nsPart+"g="+value;
 			if (type == IdType.Opaque) {
 				if (value==null) return srvPart+nsPart+"b=null";
-				return srvPart+nsPart+"b="+new String( CryptoUtil.base64Encode((byte[])value) );
+				return srvPart+nsPart+"b="+new String( CryptoUtil.base64Encode(((ByteString)value).getValue()) );
 			}
 		} catch (UnsupportedEncodingException e) {
 		}

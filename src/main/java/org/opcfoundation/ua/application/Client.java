@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.common.ServiceResultException;
@@ -31,12 +32,15 @@ import org.opcfoundation.ua.core.CreateSessionRequest;
 import org.opcfoundation.ua.core.CreateSessionResponse;
 import org.opcfoundation.ua.core.EndpointConfiguration;
 import org.opcfoundation.ua.core.EndpointDescription;
+import org.opcfoundation.ua.core.FindServersOnNetworkRequest;
+import org.opcfoundation.ua.core.FindServersOnNetworkResponse;
 import org.opcfoundation.ua.core.FindServersRequest;
 import org.opcfoundation.ua.core.FindServersResponse;
 import org.opcfoundation.ua.core.GetEndpointsRequest;
 import org.opcfoundation.ua.core.GetEndpointsResponse;
 import org.opcfoundation.ua.core.MessageSecurityMode;
 import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.core.ServerOnNetwork;
 import org.opcfoundation.ua.core.SignatureData;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.EncoderContext;
@@ -229,7 +233,7 @@ public class Client {
 		req.setClientNonce(session.clientNonce);
 		req.setClientDescription(client.createApplicationDescription());
 		if (session.clientCertificate != null)
-			req.setClientCertificate(session.getClientCertificate().getEncoded());
+			req.setClientCertificate(ByteString.valueOf(session.getClientCertificate().getEncoded()));
 		req.setEndpointUrl(endpoint.getEndpointUrl());
 		req.setMaxResponseMessageSize(maxResponseMessageSize);
 		if (endpoint.getServer() != null)
@@ -243,10 +247,10 @@ public class Client {
 		
 		CreateSessionResponse res = (CreateSessionResponse) channel.serviceRequest(req);
 
-		byte[] serverCert = res.getServerCertificate();
+		byte[] serverCert = ByteString.asByteArray(res.getServerCertificate());
 		session.serverCertificate = serverCert == null || serverCert.length == 0 ? null
 				: new Cert(serverCert);
-		session.serverNonce = res.getServerNonce();
+		session.serverNonce = ByteString.asByteArray(res.getServerNonce());
 		session.sessionId = res.getSessionId();
 		session.authenticationToken = res.getAuthenticationToken();
 		session.sessionTimeout = res.getRevisedSessionTimeout();
@@ -259,8 +263,7 @@ public class Client {
 			// Verify Server Signature
 			SignatureData serverSignature = res.getServerSignature();
 			// Client Cert + Client nonce
-			byte[] dataServerSigned = ByteBufferUtils.concatenate(req
-					.getClientCertificate(), session.clientNonce);
+			byte[] dataServerSigned = ByteBufferUtils.concatenate(ByteString.asByteArray(req.getClientCertificate()), ByteString.asByteArray(session.clientNonce));
 				
 				String signatureAlgorithm = serverSignature == null ? null : serverSignature.getAlgorithm();
 				logger.debug("Algorithm: {}", signatureAlgorithm);
@@ -268,7 +271,7 @@ public class Client {
 
 				// This proofs that the server has the private key of its
 				// certificate
-				boolean ok = CryptoUtil.getCryptoProvider().verifyAsymm(session.serverCertificate.getCertificate().getPublicKey(), algorithm, dataServerSigned, serverSignature.getSignature());
+				boolean ok = CryptoUtil.getCryptoProvider().verifyAsymm(session.serverCertificate.getCertificate().getPublicKey(), algorithm, dataServerSigned, ByteString.asByteArray(serverSignature.getSignature()));
 				if (!ok)
 					throw new ServiceResultException(
 							Bad_ApplicationSignatureInvalid,
@@ -603,7 +606,7 @@ public class Client {
 		Cert _remoteCertificate = mode.getMessageSecurityMode() == MessageSecurityMode.None ? null : remoteCertificate;
 		
 		if (_remoteCertificate != null)
-			ed.setServerCertificate( _remoteCertificate.getEncoded() );
+			ed.setServerCertificate(ByteString.valueOf( _remoteCertificate.getEncoded() ));
 
 		return createSecureChannel(connectUrl, ed);
 	}
@@ -830,7 +833,75 @@ public class Client {
 			channel.dispose();
 		}
 	}
+	
+	/**
+	 * Discover ServerOnNetwork records from LDS
+	 * 
+	 * @param discoverServerEndpointUrl endpointURI that is also the socket address
+	 * @return ServerOnNetwork records
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
+	 */
+	public ServerOnNetwork[] discoverServersOnNetwork(String discoverServerEndpointUrl) throws ServiceResultException {
+		return discoverServersOnNetwork(discoverServerEndpointUrl, discoverServerEndpointUrl);
+	}
+	
+	/**
+	 * Discover ServerOnNetwork records from LDS
+	 * 
+	 * @param connectUrl address that contains the socket address to the endpoint
+	 * @param discoverServerEndpointUri endpointURI or ""
+	 * @return ServerOnNetwork records
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
+	 */
+	public ServerOnNetwork[] discoverServersOnNetwork(String connectUrl, String discoverServerEndpointUri) throws ServiceResultException {
+		return discoverServersOnNetwork(connectUrl, discoverServerEndpointUri, new String[0]);
+	}
+	
+	/**
+	 * Discover ServerOnNetwork records from LDS
+	 * 
+	 * @param connectUrl address that contains the socket address to the endpoint
+	 * @param discoverServerEndpointUri endpointURI or ""
+	 * @param serverCapabilities list of server capability filters
+	 * @return ServerOnNetwork records
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
+	 */
+	public ServerOnNetwork[] discoverServersOnNetwork(String connectUrl, String discoverServerEndpointUri, String[] serverCapabilities) throws ServiceResultException {
+		return discoverServersOnNetwork(connectUrl, discoverServerEndpointUri, UnsignedInteger.ZERO, UnsignedInteger.ZERO,
+					serverCapabilities).getServers();
+	}
 
+	/**
+	 * Get FindServersOnNetworkResponse to retrieve ServerOnNetwork records and lastCounterResetTime associated with them
+	 * 
+	 * @param connectUrl address that contains the socket address to the endpoint
+	 * @param discoverServerEndpointUri endpointURI or ""
+	 * @param startingRecordId smallest id of records to be returned
+	 * @param maxRecordsToReturn maximum number of records to return
+	 * @param serverCapabilities list of server capability filters
+	 * @return response to the FindServersOnNetworkRequest constructed from the parameters
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if error
+	 */
+	public FindServersOnNetworkResponse discoverServersOnNetwork(String connectUrl, String discoverServerEndpointUri, 
+			UnsignedInteger startingRecordId, UnsignedInteger maxRecordsToReturn, String[] serverCapabilities) throws ServiceResultException {
+		// Must not use encryption!
+		SecurityMode mode = SecurityMode.NONE;
+		
+		SecureChannel channel = createSecureChannel(connectUrl, discoverServerEndpointUri, mode, null);
+		ChannelService chan = new ChannelService(channel);
+		try {
+			FindServersOnNetworkRequest req = new FindServersOnNetworkRequest(null,
+					startingRecordId, maxRecordsToReturn, serverCapabilities);
+			req.setRequestHeader( new RequestHeader() );
+			req.getRequestHeader().setTimeoutHint( UnsignedInteger.valueOf( getTimeout() ) );
+			FindServersOnNetworkResponse res = chan.FindServersOnNetwork(req);
+			return res;
+		} finally {
+			channel.close();
+			channel.dispose();
+		}
+	}	
+	
 	/**
 	 * <p>getEncoderContext.</p>
 	 *

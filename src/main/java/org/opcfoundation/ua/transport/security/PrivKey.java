@@ -45,6 +45,7 @@ import org.opcfoundation.ua.utils.BouncyCastleUtils;
 import org.opcfoundation.ua.utils.CertificateUtils;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.FileUtil;
+import org.opcfoundation.ua.utils.StringUtils;
 
 
 /**
@@ -53,8 +54,8 @@ import org.opcfoundation.ua.utils.FileUtil;
  */
 public class PrivKey {
 
-	private static final String END_RSA_PRIVATE_KEY = "\n-----END RSA PRIVATE KEY-----";
-	private static final String BEGIN_RSA_PRIVATE_KEY = "-----BEGIN RSA PRIVATE KEY-----\n";
+	private static final String END_RSA_PRIVATE_KEY = StringUtils.lineSeparator() + "-----END RSA PRIVATE KEY-----";
+	private static final String BEGIN_RSA_PRIVATE_KEY = "-----BEGIN RSA PRIVATE KEY-----" + StringUtils.lineSeparator();
 	private static final String END_PRIVATE_KEY_REGEX = "-----END .*PRIVATE KEY-----";
 	private static final String BEGIN_PRIVATE_KEY_REGEX = "-----BEGIN .*PRIVATE KEY-----";
 
@@ -307,7 +308,7 @@ public class PrivKey {
 			FileWriter fw = new FileWriter(file);
 			try {
 				fw.append(BEGIN_RSA_PRIVATE_KEY);
-				fw.append(CryptoUtil.base64Encode(spec.getEncoded()));
+				fw.append(StringUtils.addLineBreaks(CryptoUtil.base64Encode(spec.getEncoded()), 72));
 				fw.append(END_RSA_PRIVATE_KEY);
 			} finally {
 				fw.close();

@@ -1,3 +1,18 @@
+1.03.342.0
+API Change (#81): Create ByteString class, mapping UA ByteString to ByteString instead of byte[], affects API, request/responses and e.g. NodeId opaque value type. 
+
+Fixed (#8): SampleClient uses the #22 cert store and validation
+Fixed (#9): StringUtils.addLineBreaks is now used when storing Cert and PrivKey in pem mode
+Fixed (#13): Fixed a problem where server socket goes to unrecoverable CLOSE_WAIT state
+Fixed (#23): Cert chain is now validated until a root CA is found
+Fixed (#44): Sun JCE Crypto/Certificate fallback is now by default disabled 
+Fixed (#82): Variant accepts any dimension (+scalar) Enumeration arrays and converts it to equivalent integer array. For Variants containing Integer arrays (or scalar), can be converted to Enumerations via asEnum method
+Fixed (#87): SunJCECryptoProvider.base64Decode handles line breaks (Fixed as part of #9)
+Fixed (#97): Fixed BinaryDecoder.getVariant ArrayDimensions handling (via pull request #101)
+
+New (#79): Unsigned types have new method .parseTYPE(String, radix)
+New (#80): Client new method discoverServersOnNetwork
+
 1.03.341.0
 API Change (Github #49): NodeClass.Unspecified is removed
 

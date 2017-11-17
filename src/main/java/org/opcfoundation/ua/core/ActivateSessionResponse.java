@@ -34,6 +34,7 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.core.ResponseHeader;
@@ -47,13 +48,13 @@ public class ActivateSessionResponse extends AbstractStructure implements Servic
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.ActivateSessionResponse_Encoding_DefaultXml);
 	
     protected ResponseHeader ResponseHeader;
-    protected byte[] ServerNonce;
+    protected ByteString ServerNonce;
     protected StatusCode[] Results;
     protected DiagnosticInfo[] DiagnosticInfos;
     
     public ActivateSessionResponse() {}
     
-    public ActivateSessionResponse(ResponseHeader ResponseHeader, byte[] ServerNonce, StatusCode[] Results, DiagnosticInfo[] DiagnosticInfos)
+    public ActivateSessionResponse(ResponseHeader ResponseHeader, ByteString ServerNonce, StatusCode[] Results, DiagnosticInfo[] DiagnosticInfos)
     {
         this.ResponseHeader = ResponseHeader;
         this.ServerNonce = ServerNonce;
@@ -71,12 +72,12 @@ public class ActivateSessionResponse extends AbstractStructure implements Servic
         this.ResponseHeader = ResponseHeader;
     }
     
-    public byte[] getServerNonce()
+    public ByteString getServerNonce()
     {
         return ServerNonce;
     }
     
-    public void setServerNonce(byte[] ServerNonce)
+    public void setServerNonce(ByteString ServerNonce)
     {
         this.ServerNonce = ServerNonce;
     }

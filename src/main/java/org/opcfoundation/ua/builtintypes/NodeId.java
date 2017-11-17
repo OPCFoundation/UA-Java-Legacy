@@ -12,7 +12,6 @@
 
 package org.opcfoundation.ua.builtintypes;
 
-import java.util.Arrays;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,7 +26,6 @@ import org.opcfoundation.ua.utils.CryptoUtil;
  * An identifier of a node in the address space of an OPC UA server.
  * The class Id is immutable, and hash-equals-comparable with NodeIds and ExpandedNodeIds 
  * with a NamespaceIndex and no ServerIndex.  
- * If the given object is byte[] it must not be changed.  
  * <p>
  * NodeIds are equals comparable with ExpandedNodeIds that are constructed with NamespaceIndex
  * and no ServerIndex.
@@ -43,14 +41,14 @@ public final class NodeId implements Comparable<NodeId> {
 	public static final NodeId NULL_NUMERIC = new NodeId(0, UnsignedInteger.getFromBits(0));
 	public static final NodeId NULL_STRING = NodeId.get(IdType.String, 0, "");
 	public static final NodeId NULL_GUID = NodeId.get(IdType.Guid, 0, new UUID(0, 0));
-	public static final NodeId NULL_OPAQUE = NodeId.get(IdType.Opaque, 0, new byte[0]);
+	public static final NodeId NULL_OPAQUE = NodeId.get(IdType.Opaque, 0, ByteString.EMPTY);
 	public static final NodeId NULL = NULL_NUMERIC;
 	
 	/** Identifier of "NodeId" in UA AddressSpace */
 	public static final NodeId ID = Identifiers.NodeId;
 
 	
-	IdType type;
+	final IdType type;
 	final int namespaceIndex;
 	final Object value;
 
@@ -58,7 +56,12 @@ public final class NodeId implements Comparable<NodeId> {
 	{
 		if (type==IdType.Guid) return new NodeId(namespaceIndex, (UUID)value);
 		if (type==IdType.Numeric) return new NodeId(namespaceIndex, (UnsignedInteger)value);
-		if (type==IdType.Opaque) return new NodeId(namespaceIndex, (byte[])value);
+		if (type==IdType.Opaque){
+			if(value instanceof byte[]){
+				return new NodeId(namespaceIndex, ByteString.valueOf((byte[]) value));
+			}
+			return new NodeId(namespaceIndex, (ByteString)value);
+		}
 		if (type==IdType.String) return new NodeId(namespaceIndex, (String)value);
 		throw new IllegalArgumentException("bad type");
 	}
@@ -123,21 +126,33 @@ public final class NodeId implements Comparable<NodeId> {
 	}
 	
 	/**
-	 * Create new NodeId from byte[]. value must not be modified after it has been
-	 * contributed to the node id because precalculated hash code will be ruined.  
+	 * Create new NodeId from byte[]. It is converted to {@link ByteString}.
 	 * 
 	 * @param namespaceIndex 0..65535
 	 * @param value byte[] or null
 	 */
 	public NodeId(int namespaceIndex, byte[] value)
 	{
-		if (namespaceIndex<0 || namespaceIndex>65535) 
+		this(namespaceIndex, ByteString.valueOf(value));
+	}	
+	
+	/**
+	 * Create new Opaque NodeId from ByteString.
+	 * 
+	 * @param namespaceIndex namespaceIndex 0..65535
+	 * @param value ByteString, max length 4096 bytes
+	 */
+	public NodeId(int namespaceIndex, ByteString value){
+		if(namespaceIndex < 0 || namespaceIndex > 65535){
 			throw new IllegalArgumentException("namespaceIndex out of bounds");
-		if (value!=null && value.length>4096) throw new IllegalArgumentException("The length is restricted to 4096 bytes");
-		type = IdType.Opaque;
+		}
+		if(value != null && value.getLength() > 4096){
+			throw new IllegalArgumentException("The length is restricted to 4096 bytes");
+		}
+		this.type = IdType.Opaque;
 		this.value = value;
 		this.namespaceIndex = namespaceIndex;
-	}	
+	}
 	
 	/**
 	 * Whether the object represents a Null NodeId.
@@ -157,7 +172,7 @@ public final class NodeId implements Comparable<NodeId> {
 		case Guid:
 			return this.value.equals(NULL_GUID.value);
 		case Opaque:
-			return java.util.Arrays.equals((byte[])this.value, (byte[])NULL_OPAQUE.value);
+			return this.value.equals(NULL_OPAQUE.value);
 		default:
 			return false;
 		}
@@ -184,7 +199,7 @@ public final class NodeId implements Comparable<NodeId> {
 	
 	/**
 	 * 
-	 * @return the value, UnsignedInteger, UUID, String, byte[], or null (null opaque) 
+	 * @return the value, UnsignedInteger, UUID, String, ByteString, or null
 	 */
 	public Object getValue()
 	{
@@ -195,10 +210,7 @@ public final class NodeId implements Comparable<NodeId> {
 	public int hashCode() {
 		int hashCode = 13*namespaceIndex;
 		if (value != null)
-			if (value instanceof byte[])
-				hashCode += 3 * Arrays.hashCode((byte[]) value);
-			else
-				hashCode += 3 * value.hashCode();
+			hashCode += 3 * value.hashCode();
 		return hashCode;
 	}
 	
@@ -213,9 +225,6 @@ public final class NodeId implements Comparable<NodeId> {
 			if (isNull(this) || isNull(other)) return isNull(this) == isNull(other); //handle null
 			if (other.namespaceIndex!=namespaceIndex || other.type!=type) return false;
 			if (this.value==other.value) return true;
-			if (other.type==IdType.Opaque) 
-				// Deep compare
-				return Arrays.equals((byte[])value, (byte[])other.value);			
 			return other.value.equals(value);
 		} else
 		if (obj instanceof ExpandedNodeId) {
@@ -223,9 +232,6 @@ public final class NodeId implements Comparable<NodeId> {
 			if ((other.namespaceUri!=null && other.namespaceUri != NamespaceTable.OPCUA_NAMESPACE) || !other.isLocal()) return false;
 			if (this.namespaceIndex!=other.namespaceIndex || this.type!=other.type) return false;
 			if (this.value==other.value) return true;
-			if (this.type==IdType.Opaque) 
-				// Deep compare
-				return Arrays.equals((byte[])other.value, (byte[])this.value);
 			return this.value.equals(other.value);
 		} else
 		return false;
@@ -233,27 +239,23 @@ public final class NodeId implements Comparable<NodeId> {
 	
 	@Override
 	public int compareTo(NodeId other) {
+		//Note Comparable docs, should throw NPE if other is null
 		int value = namespaceIndex - other.namespaceIndex;
 		if (value == 0)
 			value = type.getValue() - other.type.getValue();
 		if (value == 0)
 			switch (type) {
 			case Numeric:
-				value = ((UnsignedInteger) this.value)
+				return ((UnsignedInteger) this.value)
 						.compareTo((UnsignedInteger) other.value);
-				break;
 			case String:
-				value = ((String) this.value).compareTo((String) other.value);
-				break;
+				return ((String) this.value).compareTo((String) other.value);
 			case Guid:
-				value = ((UUID) this.value).compareTo((UUID) other.value);
-				break;
+				return ((UUID) this.value).compareTo((UUID) other.value);
 			case Opaque:
-				// TODO: does not keep order
-				value = Arrays
-						.equals((byte[]) this.value, (byte[]) other.value) ? 0
-						: 1;
-				break;
+				return ((ByteString) this.value).compareTo((ByteString) other.value);
+			default:
+				throw new Error("Unkonwn IdType:"+type);
 			}
 		return value;
 	}	
@@ -266,7 +268,7 @@ public final class NodeId implements Comparable<NodeId> {
 		if (type == IdType.Guid) return nsPart+"g="+value;
 		if (type == IdType.Opaque) {
 			if (value==null) return nsPart+"b=null";
-			return nsPart+"b="+new String( CryptoUtil.base64Encode((byte[])value) );
+			return nsPart+"b="+new String( CryptoUtil.base64Encode(((ByteString)value).getValue()) );
 		}
 		return "error";
 	}
@@ -348,7 +350,7 @@ public final class NodeId implements Comparable<NodeId> {
 		m = NONE_OPAQUE.matcher(nodeIdRef);
 		if (m.matches()) {			
 			byte[] obj = CryptoUtil.base64Decode( m.group(1) );
-			return new NodeId(0, obj);
+			return new NodeId(0, ByteString.valueOf(obj));
 		}		
 		
 
@@ -377,7 +379,7 @@ public final class NodeId implements Comparable<NodeId> {
 		if (m.matches()) {			
 			Integer nsi = Integer.valueOf( m.group(1) );
 			byte[] obj = CryptoUtil.base64Decode( m.group(2) );
-			return new NodeId(nsi, obj);
+			return new NodeId(nsi, ByteString.valueOf(obj));
 		}
 		
 		throw new IllegalArgumentException("Invalid string representation of a nodeId: " + nodeIdRef);

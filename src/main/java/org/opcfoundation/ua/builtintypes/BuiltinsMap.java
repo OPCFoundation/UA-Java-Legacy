@@ -52,7 +52,7 @@ public class BuiltinsMap {
 		MAP.put("http://opcfoundation.org/UA/String", String.class);
 		MAP.put("http://opcfoundation.org/UA/DateTime", DateTime.class);
 		MAP.put("http://opcfoundation.org/UA/Guid", UUID.class);
-		MAP.put("http://opcfoundation.org/UA/ByteString", byte[].class);
+		MAP.put("http://opcfoundation.org/UA/ByteString", ByteString.class);
 		MAP.put("http://opcfoundation.org/UA/XmlElement", XmlElement.class);
 		MAP.put("http://opcfoundation.org/UA/NodeId", NodeId.class);
 		MAP.put("http://opcfoundation.org/UA/ExpandedNodeId", ExpandedNodeId.class);
@@ -79,7 +79,7 @@ public class BuiltinsMap {
 		ID_MAP.put(String.class, 12);
 		ID_MAP.put(DateTime.class, 13);
 		ID_MAP.put(UUID.class, 14);
-		ID_MAP.put(byte[].class, 15);
+		ID_MAP.put(ByteString.class, 15);
 		ID_MAP.put(XmlElement.class, 16);
 		ID_MAP.put(NodeId.class, 17);
 		ID_MAP.put(ExpandedNodeId.class, 18);
@@ -105,7 +105,7 @@ public class BuiltinsMap {
 		ID_MAP.put(String[].class, 12);
 		ID_MAP.put(DateTime[].class, 13);
 		ID_MAP.put(UUID[].class, 14);
-		ID_MAP.put(byte[][].class, 15);
+		ID_MAP.put(ByteString[].class, 15);
 		ID_MAP.put(XmlElement[].class, 16);
 		ID_MAP.put(NodeId[].class, 17);
 		ID_MAP.put(ExpandedNodeId[].class, 18);
@@ -135,7 +135,7 @@ public class BuiltinsMap {
 		SCALAR_LIST.add(String.class);
 		SCALAR_LIST.add(DateTime.class);
 		SCALAR_LIST.add(UUID.class);
-		SCALAR_LIST.add(byte[].class);
+		SCALAR_LIST.add(ByteString.class);
 		SCALAR_LIST.add(XmlElement.class);
 		SCALAR_LIST.add(NodeId.class);
 		SCALAR_LIST.add(ExpandedNodeId.class);
@@ -163,7 +163,7 @@ public class BuiltinsMap {
 		ARRAY_LIST.add(String[].class);
 		ARRAY_LIST.add(DateTime[].class);
 		ARRAY_LIST.add(UUID[].class);
-		ARRAY_LIST.add(byte[][].class);
+		ARRAY_LIST.add(ByteString[].class);
 		ARRAY_LIST.add(XmlElement[].class);
 		ARRAY_LIST.add(NodeId[].class);
 		ARRAY_LIST.add(ExpandedNodeId[].class);
@@ -190,7 +190,7 @@ public class BuiltinsMap {
 		ID_CLASS_MAP.map(Identifiers.String, String.class);
 		ID_CLASS_MAP.map(Identifiers.DateTime, DateTime.class);
 		ID_CLASS_MAP.map(Identifiers.Guid, UUID.class);
-		ID_CLASS_MAP.map(Identifiers.ByteString, byte[].class);
+		ID_CLASS_MAP.map(Identifiers.ByteString, ByteString.class);
 		ID_CLASS_MAP.map(Identifiers.XmlElement, XmlElement.class);
 		ID_CLASS_MAP.map(Identifiers.NodeId, NodeId.class);
 		ID_CLASS_MAP.map(Identifiers.ExpandedNodeId, ExpandedNodeId.class);

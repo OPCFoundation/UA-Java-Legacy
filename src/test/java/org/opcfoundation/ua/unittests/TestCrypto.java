@@ -30,11 +30,11 @@ package org.opcfoundation.ua.unittests;
 
 import java.security.cert.Certificate;
 import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
+import java.util.Arrays;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
+import org.junit.Assert;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.transport.security.BcCryptoProvider;
 import org.opcfoundation.ua.transport.security.BcJceCryptoProvider;
@@ -45,6 +45,7 @@ import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
 import org.opcfoundation.ua.transport.security.SecurityConfiguration;
 import org.opcfoundation.ua.transport.security.SecurityMode;
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +59,35 @@ public class TestCrypto extends TestCase {
 	CryptoProvider clientCryptoProvider;
 	CryptoProvider serverCryptoProvider;
 	
-	public void testEncryptDecryptRsa15() throws Exception {
+	public void testBase64Encode() {
+      base64EncodeDecode(0);
+      CryptoUtil.setSecurityProviderName("SunJCE");
+      base64EncodeDecode(0);
+	}
+	
+    public void testBase64EncodeMultiline() {
+      int lineLength = 64;
+      base64EncodeDecode(lineLength);
+      CryptoUtil.setSecurityProviderName("SunJCE");
+      base64EncodeDecode(lineLength);
+    }
+
+    /**
+     * @param lineLength
+     */
+    protected void base64EncodeDecode(int lineLength) {
+      byte[] expected = new byte[100];
+      for (int i=0; i < expected.length; i++)
+          expected[i] = (byte)i;
+      String s = CryptoUtil.base64Encode(expected);
+      s = StringUtils.addLineBreaks(s, lineLength);
+      logger.info("testBase64Encode: " + s);
+      byte[] actual = CryptoUtil.base64Decode(s);
+      assertTrue("expected=" + CryptoUtil.toHex(expected) + " actual=" + CryptoUtil.toHex(actual),
+              Arrays.equals(expected, actual));
+    }
+    
+    public void testEncryptDecryptRsa15() throws Exception {
 		try {
 			clientCryptoProvider = new BcJceCryptoProvider();
 			serverCryptoProvider = new BcCryptoProvider();

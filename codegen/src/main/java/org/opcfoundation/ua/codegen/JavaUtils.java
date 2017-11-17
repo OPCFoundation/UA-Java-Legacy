@@ -37,59 +37,9 @@ import java.util.Set;
 
 public class JavaUtils {
 	
-	/**
-	 * Convert full class name to simple class name
-	 * @param fullClassName
-	 * @return class name
-	 */
-	public static String getClassName(String fullClassName)
-	{
-		int i = fullClassName.lastIndexOf(".");
-		if (i<0) return fullClassName;
-		return fullClassName.substring(i+1);
-	}
+	static Map<String, String> uriToClassNameMap = new HashMap<String, String>();
 	
-	/**
-	 * Converts file reference from file and ensures that the path exists
-	 * 
-	 * @param dstPath src folder 
-	 * @param fullClassName full class name
-	 * @return java file path
-	 */
-	public static File toFile(File dstPath, String fullClassName)
-	{
-		String packageName = getPackageName(fullClassName);
-		String packagePath = packageName.replaceAll("\\.", "/");
-		File path = new File( dstPath, packagePath );
-		path.mkdirs();
-		if (!path.exists()) throw new RuntimeException("Could not create "+path);
-		String fileName = fullClassName.replaceAll("\\.", "/");
-		File file = new File( dstPath, fileName+".java" );
-		return file;
-	}		
-	
-	public static String getPackageName(String fullClassName)
-	{
-		int i = fullClassName.lastIndexOf(".");
-		if (i<0) return "";
-		return fullClassName.substring(0, i);
-	}
-
-	/**
-	 * Converts symbolic name (URI) to full java class name
-	 * 
-	 * @param symbolicName URI
-	 * @return class name (with package & name)
-	 */
-	public static String toFullClassName(String symbolicName)
-	{
-		if (uriToClassNameMap.containsKey(symbolicName)) 
-			return uriToClassNameMap.get(symbolicName);
-		return symbolicName.replace("http://opcfoundation.org/UA/", "org.opcfoundation.ua.core.");
-	}
-	
-	static Map<String, String> uriToClassNameMap = new HashMap<String, String>();	
-	static Set<String> primitives = new HashSet<String>();	
+	static Set<String> primitives = new HashSet<String>();		
 	
 	static {
 //		 Fills .ClassName field of each DataType instance.
@@ -114,7 +64,7 @@ public class JavaUtils {
 		map.put("http://opcfoundation.org/UA/String", "java.lang.String");
 		map.put("http://opcfoundation.org/UA/DateTime", prefix+"DateTime");
 		map.put("http://opcfoundation.org/UA/Guid", "java.util.UUID");
-		map.put("http://opcfoundation.org/UA/ByteString", "java.lang.byte[]");
+		map.put("http://opcfoundation.org/UA/ByteString", prefix+ "ByteString");
 		map.put("http://opcfoundation.org/UA/XmlElement", prefix+"XmlElement");
 		map.put("http://opcfoundation.org/UA/NodeId", prefix+"NodeId");
 		map.put("http://opcfoundation.org/UA/ExpandedNodeId", prefix+"ExpandedNodeId");
@@ -134,8 +84,62 @@ public class JavaUtils {
 		map.put("http://opcfoundation.org/UA/Enumeration", prefix+"Enumeration");
 		map.put("http://opcfoundation.org/UA/Structure", prefix+"ExtensionObject");			
 	}
+
+	/**
+	 * Fixes data type. If the argument is primitive wrapper the actual primitive type is returned 
+	 * @param dt input data type
+	 * @return data type or primitive type
+	 */
+	public static DictionaryTypes2.ModelDesign.DataType fixWrapper(DictionaryTypes2.ModelDesign.DataType dt)
+	{
+		if (dt==null) return null;
+		
+		return isPrimitiveWrapper(dt) ? dt.getSuperType() : dt;
+	}
+	
+	/**
+	 * Convert full class name to simple class name
+	 * @param fullClassName
+	 * @return class name
+	 */
+	public static String getClassName(String fullClassName)
+	{
+		int i = fullClassName.lastIndexOf(".");
+		if (i<0) return fullClassName;
+		return fullClassName.substring(i+1);
+	}	
+	public static String getPackageName(String fullClassName)
+	{
+		int i = fullClassName.lastIndexOf(".");
+		if (i<0) return "";
+		return fullClassName.substring(0, i);
+	}	
+	
+	/**
+	 * A data type is a primitive  
+	 * 
+	 * @param dt data type
+	 * @return true if dt is primitive wrapper
+	 */
+	public static boolean isPrimitive(DictionaryTypes2.ModelDesign.DataType dt)
+	{
+		String className = toFullClassName(dt.SymbolicName);
+		if (dt.Name.equals("Structure")) className = "java.lang.Object";
+		return isPrimitive(className);
+	}
 	
 	
+	/**
+	 * A data type is a primitive  
+	 * 
+	 * @param fullClassName
+	 * @return true if dt is primitive wrapper
+	 */
+	public static boolean isPrimitive(String fullClassName)
+	{
+		return primitives.contains(fullClassName);
+	}
+
 	/**
 	 * A data type is a primitive wrapper if it inherits primitive type and 
 	 * adds no new fields 
@@ -154,44 +158,40 @@ public class JavaUtils {
 		if (isPrimitive(superType)) return true;
 		
 		return isPrimitiveWrapper(superType);
-	}
-
-	/**
-	 * A data type is a primitive  
-	 * 
-	 * @param dt data type
-	 * @return true if dt is primitive wrapper
-	 */
-	public static boolean isPrimitive(DictionaryTypes2.ModelDesign.DataType dt)
-	{
-		String className = toFullClassName(dt.SymbolicName);
-		if (dt.Name.equals("Structure")) className = "java.lang.Object";
-		return isPrimitive(className);
 	}	
 	
 	
 	
 	/**
-	 * A data type is a primitive  
+	 * Converts file reference from file and ensures that the path exists
 	 * 
-	 * @param fullClassName
-	 * @return true if dt is primitive wrapper
+	 * @param dstPath src folder 
+	 * @param fullClassName full class name
+	 * @return java file path
 	 */
-	public static boolean isPrimitive(String fullClassName)
+	public static File toFile(File dstPath, String fullClassName)
 	{
-		return primitives.contains(fullClassName);
+		String packageName = getPackageName(fullClassName);
+		String packagePath = packageName.replaceAll("\\.", "/");
+		File path = new File( dstPath, packagePath );
+		path.mkdirs();
+		if (!path.exists()) throw new RuntimeException("Could not create "+path);
+		String fileName = fullClassName.replaceAll("\\.", "/");
+		File file = new File( dstPath, fileName+".java" );
+		return file;
 	}	
 	
 	/**
-	 * Fixes data type. If the argument is primitive wrapper the actual primitive type is returned 
-	 * @param dt input data type
-	 * @return data type or primitive type
+	 * Converts symbolic name (URI) to full java class name
+	 * 
+	 * @param symbolicName URI
+	 * @return class name (with package & name)
 	 */
-	public static DictionaryTypes2.ModelDesign.DataType fixWrapper(DictionaryTypes2.ModelDesign.DataType dt)
+	public static String toFullClassName(String symbolicName)
 	{
-		if (dt==null) return null;
-		
-		return isPrimitiveWrapper(dt) ? dt.getSuperType() : dt;
+		if (uriToClassNameMap.containsKey(symbolicName)) 
+			return uriToClassNameMap.get(symbolicName);
+		return symbolicName.replace("http://opcfoundation.org/UA/", "org.opcfoundation.ua.core.");
 	}
 		
 }

@@ -43,8 +43,7 @@ public enum UserTokenType implements Enumeration {
     Anonymous,
     UserName,
     Certificate,
-    IssuedToken,
-    Kerberos;
+    IssuedToken;
 	
 	public static final NodeId ID = Identifiers.UserTokenType;
 	public static EnumSet<UserTokenType> NONE = EnumSet.noneOf( UserTokenType.class );

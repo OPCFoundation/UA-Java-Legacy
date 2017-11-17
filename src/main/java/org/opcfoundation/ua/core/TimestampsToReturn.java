@@ -43,7 +43,8 @@ public enum TimestampsToReturn implements Enumeration {
     Source,
     Server,
     Both,
-    Neither;
+    Neither,
+    Invalid;
 	
 	public static final NodeId ID = Identifiers.TimestampsToReturn;
 	public static EnumSet<TimestampsToReturn> NONE = EnumSet.noneOf( TimestampsToReturn.class );

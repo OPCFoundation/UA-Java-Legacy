@@ -1,6 +1,6 @@
 /**
 OPC UA Part 6 defines 25 builtin types. Those 25 types are represented with the following java classes.
-Most builtin classes are immutable. byte[] is not immutable but modifications are forbidden.
+Most builtin classes are immutable.
 <table summary="builtin types table">
 <tr><th>ID</th><th>Name</th><th>Java Class</th><th>Notes</th></tr>
 <tr><td>1</td><td>Boolean</td><td>java.lang.Boolean</td></tr>
@@ -17,7 +17,7 @@ Most builtin classes are immutable. byte[] is not immutable but modifications ar
 <tr><td>12</td><td>String</td><td>java.lang.String</td></tr>
 <tr><td>13</td><td>DateTime</td><td>org.opcfoundation.ua.builtintypes.DateTime</td></tr>
 <tr><td>14</td><td>Guid</td><td>java.util.UUID</td></tr>
-<tr><td>15</td><td>ByteString</td><td>byte[]</td><td>The contents must not be modified after instantiation.</td></tr>
+<tr><td>15</td><td>ByteString</td><td>org.opcfoundation.ua.builtintypes.ByteString</td></tr>
 <tr><td>16</td><td>XmlElement</td><td>org.opcfoundation.ua.builtintypes.XmlElement</td></tr>
 <tr><td>17</td><td>NodeId</td><td>org.opcfoundation.ua.builtintypes.NodeId</td></tr>
 <tr><td>18</td><td>ExpandedNodeId</td><td>org.opcfoundation.ua.builtintypes.ExpandedNodeId</td></tr>

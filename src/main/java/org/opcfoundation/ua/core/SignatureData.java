@@ -33,6 +33,7 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.utils.AbstractStructure;
 
 
@@ -44,11 +45,11 @@ public class SignatureData extends AbstractStructure {
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.SignatureData_Encoding_DefaultXml);
 	
     protected String Algorithm;
-    protected byte[] Signature;
+    protected ByteString Signature;
     
     public SignatureData() {}
     
-    public SignatureData(String Algorithm, byte[] Signature)
+    public SignatureData(String Algorithm, ByteString Signature)
     {
         this.Algorithm = Algorithm;
         this.Signature = Signature;
@@ -64,12 +65,12 @@ public class SignatureData extends AbstractStructure {
         this.Algorithm = Algorithm;
     }
     
-    public byte[] getSignature()
+    public ByteString getSignature()
     {
         return Signature;
     }
     
-    public void setSignature(byte[] Signature)
+    public void setSignature(ByteString Signature)
     {
         this.Signature = Signature;
     }

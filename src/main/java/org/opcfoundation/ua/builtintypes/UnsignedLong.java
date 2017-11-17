@@ -252,11 +252,20 @@ public final class UnsignedLong extends Number implements Comparable<Number> {
 	 * @return the respective UnsignedInteger
 	 */
 	public static UnsignedLong parseUnsignedLong(String s) {
-		try {
-			return valueOf(Long.parseLong(s));
-		} catch (NumberFormatException e) {
-			return new UnsignedLong(s);
-		}
+		return new UnsignedLong(new BigInteger(s));
+	}
+	
+    /**
+     * Parses the string argument as an unsigned long similar to {@link Integer#parseInt(String, int)}
+     *
+	 * @param s the   string to parse, assumed to contain a positive Long value
+     * @param radix   the radix to be used while parsing <code>s</code>.
+	 * @return the respective UnsignedLong
+	 * @throws java.lang.NumberFormatException if the string cannot be parsed into an integer value
+	 * @throws java.lang.IllegalArgumentException if the parsed value does not fit in the range of UnsignedInteger
+	 */
+	public static UnsignedLong parseUnsignedLong(String s, int radix) throws NumberFormatException, IllegalArgumentException{
+		return new UnsignedLong(new BigInteger(s, radix));
 	}
     
 	/**

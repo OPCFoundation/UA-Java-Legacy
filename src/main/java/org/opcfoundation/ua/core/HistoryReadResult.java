@@ -33,6 +33,7 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.utils.AbstractStructure;
@@ -46,12 +47,12 @@ public class HistoryReadResult extends AbstractStructure {
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.HistoryReadResult_Encoding_DefaultXml);
 	
     protected StatusCode StatusCode;
-    protected byte[] ContinuationPoint;
+    protected ByteString ContinuationPoint;
     protected ExtensionObject HistoryData;
     
     public HistoryReadResult() {}
     
-    public HistoryReadResult(StatusCode StatusCode, byte[] ContinuationPoint, ExtensionObject HistoryData)
+    public HistoryReadResult(StatusCode StatusCode, ByteString ContinuationPoint, ExtensionObject HistoryData)
     {
         this.StatusCode = StatusCode;
         this.ContinuationPoint = ContinuationPoint;
@@ -68,12 +69,12 @@ public class HistoryReadResult extends AbstractStructure {
         this.StatusCode = StatusCode;
     }
     
-    public byte[] getContinuationPoint()
+    public ByteString getContinuationPoint()
     {
         return ContinuationPoint;
     }
     
-    public void setContinuationPoint(byte[] ContinuationPoint)
+    public void setContinuationPoint(ByteString ContinuationPoint)
     {
         this.ContinuationPoint = ContinuationPoint;
     }

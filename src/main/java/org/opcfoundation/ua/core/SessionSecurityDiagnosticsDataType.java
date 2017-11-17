@@ -34,6 +34,7 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.MessageSecurityMode;
 import org.opcfoundation.ua.utils.AbstractStructure;
@@ -54,11 +55,11 @@ public class SessionSecurityDiagnosticsDataType extends AbstractStructure {
     protected String TransportProtocol;
     protected MessageSecurityMode SecurityMode;
     protected String SecurityPolicyUri;
-    protected byte[] ClientCertificate;
+    protected ByteString ClientCertificate;
     
     public SessionSecurityDiagnosticsDataType() {}
     
-    public SessionSecurityDiagnosticsDataType(NodeId SessionId, String ClientUserIdOfSession, String[] ClientUserIdHistory, String AuthenticationMechanism, String Encoding, String TransportProtocol, MessageSecurityMode SecurityMode, String SecurityPolicyUri, byte[] ClientCertificate)
+    public SessionSecurityDiagnosticsDataType(NodeId SessionId, String ClientUserIdOfSession, String[] ClientUserIdHistory, String AuthenticationMechanism, String Encoding, String TransportProtocol, MessageSecurityMode SecurityMode, String SecurityPolicyUri, ByteString ClientCertificate)
     {
         this.SessionId = SessionId;
         this.ClientUserIdOfSession = ClientUserIdOfSession;
@@ -151,12 +152,12 @@ public class SessionSecurityDiagnosticsDataType extends AbstractStructure {
         this.SecurityPolicyUri = SecurityPolicyUri;
     }
     
-    public byte[] getClientCertificate()
+    public ByteString getClientCertificate()
     {
         return ClientCertificate;
     }
     
-    public void setClientCertificate(byte[] ClientCertificate)
+    public void setClientCertificate(ByteString ClientCertificate)
     {
         this.ClientCertificate = ClientCertificate;
     }

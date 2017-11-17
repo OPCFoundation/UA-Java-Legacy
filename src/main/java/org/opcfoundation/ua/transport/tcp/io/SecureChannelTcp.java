@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.ServiceRequest;
 import org.opcfoundation.ua.builtintypes.ServiceResponse;
 import org.opcfoundation.ua.builtintypes.StatusCode;
@@ -629,13 +630,13 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 		
 		SecurityPolicy policy = SecurityPolicy.getSecurityPolicy( settings.getDescription().getSecurityPolicyUri() );
 		SecurityAlgorithm algorithm = policy.getSymmetricEncryptionAlgorithm();
-		byte[] nonce = CryptoUtil.createNonce(algorithm);
+		ByteString nonce = CryptoUtil.createNonce(algorithm);
 		
 		Integer tokenLifetime = settings.getConfiguration().getSecurityTokenLifetime();
 		if (tokenLifetime==null) tokenLifetime = 3600000;
 		logger.debug("tokenLifetime: {}", tokenLifetime);
 		
-		req.setClientNonce( nonce );
+		req.setClientNonce(nonce);
 		req.setClientProtocolVersion( UnsignedInteger.valueOf(0) );
 		req.setRequestedLifetime( UnsignedInteger.valueOf( tokenLifetime ) );
 		req.setRequestType( renew ? SecurityTokenRequestType.Renew : SecurityTokenRequestType.Issue );

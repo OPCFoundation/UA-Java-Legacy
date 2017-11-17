@@ -50,10 +50,11 @@ public class AsyncSelector implements Runnable {
 	Selector							sel;
 	/** Registered keys and their handlers */
 	Map<SelectionKey, SelectListener>	map = new ConcurrentHashMap<SelectionKey, SelectListener>();
-	Map<SelectionKey, Integer>			supposedIOP = new ConcurrentHashMap<SelectionKey, Integer>();
 	/** Selector Thread */
 	Thread								thread;
 
+	Object registerLock = new Object();
+	
 	/**
 	 * Construct AsyncSelector with brand new selector
 	 *
@@ -96,20 +97,33 @@ public class AsyncSelector implements Runnable {
 			throws CancelledKeyException {
 		if (channel != null) {
 			SelectionKey key = channel.keyFor(sel);
+			
 			if (key == null)
 				throw new IllegalArgumentException(
 						"Key is not registered to channel");
+			
 			if (!key.isValid())
-				return;
-			if (ObjectUtils.objectEquals(supposedIOP.put(key, interestOps),
-					interestOps))
-				return;
-			try {
-				disable();
-				key.interestOps(interestOps);
-			} finally {
-				enable();
+				return;			
+			
+			synchronized (channel) {
+				int newOps = key.interestOps();
+				switch (interestOps) {
+				case ~SelectionKey.OP_READ:
+				case ~SelectionKey.OP_WRITE:
+				case ~SelectionKey.OP_CONNECT:
+					newOps = newOps & interestOps;
+					break;
+				default:
+					newOps = newOps | interestOps;
+					break;
+				}
+										
+				if (newOps != key.interestOps()) {
+					key.interestOps(newOps);
+					sel.wakeup();
+				}
 			}
+			
 		}
 	}
 	
@@ -143,17 +157,17 @@ public class AsyncSelector implements Runnable {
 	 */
 	public void register(SelectableChannel channel,
 			int ops, SelectListener selectEventListener) throws ClosedChannelException {
-		disable();
-		try {
-			// register blocks if any thread select()s
-			/* synchronized(sel) */ {
+		
+		synchronized(registerLock) {
+			disable();
+			try {
+				// register blocks if any thread select()s
 				SelectionKey key = channel.register(sel, ops);
-				supposedIOP.put(key, ops);
 				map.put(key, selectEventListener);
-			}
-		} finally {
-			enable();		
-		}		
+			} finally {
+				enable();		
+			}	
+		}			
 	}
 
 	/**
@@ -164,17 +178,16 @@ public class AsyncSelector implements Runnable {
 	public void unregister(SelectableChannel channel) {
 		SelectionKey key = channel.keyFor(sel);		
 		if (key == null || !map.containsKey(key)) return;
-		disable();
-		try {
-			/* synchronized(sel) */ {
+		
+		synchronized(registerLock) {
+			disable();
+			try {
 				key.cancel();
 				map.remove(key);
-				supposedIOP.remove(key);
+			} finally {
+				enable();		
 			}
-		} finally {
-			enable();		
-		}		
-			
+		}	
 	}
 	
 	/**
@@ -234,20 +247,14 @@ public class AsyncSelector implements Runnable {
 				
 				for (SelectionKey key : selectedKeys) 
 					try {
-						Integer iop = supposedIOP.get(key);
+						Integer iop = key.interestOps();
 						if (iop==null) continue;
 						int readyOps = key.readyOps() /*| (iop & SelectionKey.OP_WRITE)*/;
 						SelectListener l = map.get(key);
 						if (l != null) l.onSelected(AsyncSelector.this, key.channel(), readyOps, iop);						
 					} catch(CancelledKeyException e) {/*ignore*/}
 					
-				for (SelectionKey key : supposedIOP.keySet()) 
-					try {
-						Integer iop = supposedIOP.get(key);
-						if (iop==null) continue;
-						key.interestOps(iop);
-					} catch(CancelledKeyException e) {/*ignore*/}					
-					
+				
 				selectedKeys.clear();
 			}
 			

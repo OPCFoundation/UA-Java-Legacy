@@ -34,6 +34,7 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.EndpointDescription;
@@ -53,8 +54,8 @@ public class CreateSessionResponse extends AbstractStructure implements ServiceR
     protected NodeId SessionId;
     protected NodeId AuthenticationToken;
     protected Double RevisedSessionTimeout;
-    protected byte[] ServerNonce;
-    protected byte[] ServerCertificate;
+    protected ByteString ServerNonce;
+    protected ByteString ServerCertificate;
     protected EndpointDescription[] ServerEndpoints;
     protected SignedSoftwareCertificate[] ServerSoftwareCertificates;
     protected SignatureData ServerSignature;
@@ -62,7 +63,7 @@ public class CreateSessionResponse extends AbstractStructure implements ServiceR
     
     public CreateSessionResponse() {}
     
-    public CreateSessionResponse(ResponseHeader ResponseHeader, NodeId SessionId, NodeId AuthenticationToken, Double RevisedSessionTimeout, byte[] ServerNonce, byte[] ServerCertificate, EndpointDescription[] ServerEndpoints, SignedSoftwareCertificate[] ServerSoftwareCertificates, SignatureData ServerSignature, UnsignedInteger MaxRequestMessageSize)
+    public CreateSessionResponse(ResponseHeader ResponseHeader, NodeId SessionId, NodeId AuthenticationToken, Double RevisedSessionTimeout, ByteString ServerNonce, ByteString ServerCertificate, EndpointDescription[] ServerEndpoints, SignedSoftwareCertificate[] ServerSoftwareCertificates, SignatureData ServerSignature, UnsignedInteger MaxRequestMessageSize)
     {
         this.ResponseHeader = ResponseHeader;
         this.SessionId = SessionId;
@@ -116,22 +117,22 @@ public class CreateSessionResponse extends AbstractStructure implements ServiceR
         this.RevisedSessionTimeout = RevisedSessionTimeout;
     }
     
-    public byte[] getServerNonce()
+    public ByteString getServerNonce()
     {
         return ServerNonce;
     }
     
-    public void setServerNonce(byte[] ServerNonce)
+    public void setServerNonce(ByteString ServerNonce)
     {
         this.ServerNonce = ServerNonce;
     }
     
-    public byte[] getServerCertificate()
+    public ByteString getServerCertificate()
     {
         return ServerCertificate;
     }
     
-    public void setServerCertificate(byte[] ServerCertificate)
+    public void setServerCertificate(ByteString ServerCertificate)
     {
         this.ServerCertificate = ServerCertificate;
     }

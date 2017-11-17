@@ -12,7 +12,6 @@
 
 package org.opcfoundation.ua.builtintypes;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 import org.opcfoundation.ua.common.NamespaceTable;
@@ -71,7 +70,7 @@ public class NodeReference {
 	 *
 	 * @param serverUri server uri
 	 * @param namespaceUri namespace uri
-	 * @param value value (must be UnsignedInteger, String, UUID or byte[])
+	 * @param value value (must be UnsignedInteger, String, UUID or ByteString)
 	 */
 	public NodeReference(String serverUri, String namespaceUri, Object value)
 	{
@@ -83,11 +82,10 @@ public class NodeReference {
 		if (value instanceof UnsignedInteger) type = IdType.Numeric;
 		else if (value instanceof String) type = IdType.String;
 		else if (value instanceof UUID) type = IdType.Guid;
-		else if (value instanceof byte[]) type = IdType.Opaque;
+		else if (value instanceof ByteString) type = IdType.Opaque;
 		else throw new IllegalArgumentException("value cannot be "+value.getClass().getName());
 		
-		if (!(value instanceof byte[])) 
-			hashCode += 3*value.hashCode();
+		hashCode += 3*value.hashCode();
 		if (namespaceUri!=null) hashCode += 13*namespaceUri.hashCode();
 		if (serverUri!=null) hashCode += 17*serverUri.hashCode();		
 	}
@@ -135,8 +133,6 @@ public class NodeReference {
 	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
-		if (type==IdType.Opaque) 		
-			return hashCode + Arrays.hashCode((byte[])value);
 		return hashCode;
 	}
 
@@ -147,12 +143,9 @@ public class NodeReference {
 		NodeReference other = (NodeReference) obj;
 		if (!other.getNamespaceUri().equals( namespaceUri )) return false;
 		if (!other.getServerUri().equals( serverUri )) return false;
-		if (other.type==IdType.Opaque) { 
-			// Deep compare
-			return Arrays.equals((byte[])value, (byte[])other.value);
-		} else {
-			return other.getValue().equals(value);
-		}
+
+		return other.getValue().equals(value);
+		
 	}
 	
 }

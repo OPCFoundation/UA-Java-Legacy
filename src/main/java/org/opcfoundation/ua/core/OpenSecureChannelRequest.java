@@ -33,6 +33,7 @@ import org.opcfoundation.ua.builtintypes.ServiceRequest;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.MessageSecurityMode;
 import org.opcfoundation.ua.core.RequestHeader;
@@ -50,12 +51,12 @@ public class OpenSecureChannelRequest extends AbstractStructure implements Servi
     protected UnsignedInteger ClientProtocolVersion;
     protected SecurityTokenRequestType RequestType;
     protected MessageSecurityMode SecurityMode;
-    protected byte[] ClientNonce;
+    protected ByteString ClientNonce;
     protected UnsignedInteger RequestedLifetime;
     
     public OpenSecureChannelRequest() {}
     
-    public OpenSecureChannelRequest(RequestHeader RequestHeader, UnsignedInteger ClientProtocolVersion, SecurityTokenRequestType RequestType, MessageSecurityMode SecurityMode, byte[] ClientNonce, UnsignedInteger RequestedLifetime)
+    public OpenSecureChannelRequest(RequestHeader RequestHeader, UnsignedInteger ClientProtocolVersion, SecurityTokenRequestType RequestType, MessageSecurityMode SecurityMode, ByteString ClientNonce, UnsignedInteger RequestedLifetime)
     {
         this.RequestHeader = RequestHeader;
         this.ClientProtocolVersion = ClientProtocolVersion;
@@ -105,12 +106,12 @@ public class OpenSecureChannelRequest extends AbstractStructure implements Servi
         this.SecurityMode = SecurityMode;
     }
     
-    public byte[] getClientNonce()
+    public ByteString getClientNonce()
     {
         return ClientNonce;
     }
     
-    public void setClientNonce(byte[] ClientNonce)
+    public void setClientNonce(ByteString ClientNonce)
     {
         this.ClientNonce = ClientNonce;
     }

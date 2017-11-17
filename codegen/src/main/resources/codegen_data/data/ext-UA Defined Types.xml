@@ -10,6 +10,8 @@
       <Field Name="HistoryRead" Identifier="4" />
       <Field Name="HistoryWrite" Identifier="8" />
       <Field Name="SemanticChange" Identifier="16" />
+      <Field Name="StatusWrite" Identifier="32" />
+      <Field Name="TimestampWrite" Identifier="64" />
     </Fields>
   </DataType>
 </ModelDesign>

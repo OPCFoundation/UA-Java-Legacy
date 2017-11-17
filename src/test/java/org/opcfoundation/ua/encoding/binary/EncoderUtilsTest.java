@@ -55,7 +55,7 @@ public class EncoderUtilsTest {
 		
 		EncoderUtils.put(encoder, "Test", test, ServerStatusDataType[].class);
 
-		verify(encoder).putStructureArray("Test", test);
+		verify(encoder).putEncodeableArray("Test", ServerStatusDataType.class, test);
 	}
 	
 	@Test

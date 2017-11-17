@@ -33,6 +33,7 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.core.UserIdentityToken;
 
 
@@ -43,24 +44,24 @@ public class IssuedIdentityToken extends UserIdentityToken {
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.IssuedIdentityToken_Encoding_DefaultBinary);
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.IssuedIdentityToken_Encoding_DefaultXml);
 	
-    protected byte[] TokenData;
+    protected ByteString TokenData;
     protected String EncryptionAlgorithm;
     
     public IssuedIdentityToken() {}
     
-    public IssuedIdentityToken(String PolicyId, byte[] TokenData, String EncryptionAlgorithm)
+    public IssuedIdentityToken(String PolicyId, ByteString TokenData, String EncryptionAlgorithm)
     {
         super(PolicyId);
         this.TokenData = TokenData;
         this.EncryptionAlgorithm = EncryptionAlgorithm;
     }
     
-    public byte[] getTokenData()
+    public ByteString getTokenData()
     {
         return TokenData;
     }
     
-    public void setTokenData(byte[] TokenData)
+    public void setTokenData(ByteString TokenData)
     {
         this.TokenData = TokenData;
     }

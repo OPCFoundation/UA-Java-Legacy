@@ -47,7 +47,7 @@ public enum OpenFileMode implements Enumeration {
 
     Read(1),
     Write(2),
-    EraseExisiting(4),
+    EraseExisting(4),
     Append(8);
 	
 

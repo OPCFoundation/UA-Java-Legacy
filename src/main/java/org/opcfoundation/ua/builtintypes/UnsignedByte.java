@@ -270,6 +270,17 @@ public final class UnsignedByte extends Number implements Comparable<UnsignedByt
 	public static UnsignedByte parseUnsignedByte(String s) {
 		return valueOf(Integer.parseInt(s));
 	}
+	
+    /**
+     * Parses the string argument as an unsigned byte similar to {@link Integer#parseInt(String, int)}
+     *
+	 * @param s the   string to parse, assumed to contain a positive Integer value
+     * @param radix   the radix to be used while parsing <code>s</code>.
+	 * @return the respective UnsignedInteger
+	 */
+	public static UnsignedByte parseUnsignedByte(String s, int radix) {
+		return valueOf(Integer.parseInt(s, radix));
+	}
 
 	/**
 	 * Increase the value by one. Note that this object is not changed, but a new one is created.

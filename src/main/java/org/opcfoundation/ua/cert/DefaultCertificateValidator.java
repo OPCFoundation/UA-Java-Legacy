@@ -67,8 +67,9 @@ public class DefaultCertificateValidator implements CertificateValidator {
 	 */
 	public void setValidationListener(DefaultCertificateValidatorListener validationListener) {
 		this.validationListener = validationListener;
-	}
+	} 
 
+	@Override
 	public StatusCode validateCertificate(ApplicationDescription applicationDescription, Cert cert) {
 		try{
 			logger.debug("validateCertificate: applicationDescription={}", applicationDescription);
@@ -114,30 +115,45 @@ public class DefaultCertificateValidator implements CertificateValidator {
 			} catch (GeneralSecurityException e) {
 				// NOT self signed
 				// Is it signed by a trusted signer?
-				for(Cert c : trustedCerts){
+				boolean issuerFound = false;
+				for (Cert c : trustedCerts) {
 					try {
 						PublicKey pkey = c.getCertificate().getPublicKey();
 						certificate.verify(pkey);
-						// YES
-						// But is the Issuer certificate valid?
-						if (isRevoked(c))
-							return new StatusCode(StatusCodes.Bad_CertificateIssuerRevoked);
-						if (trustedCerts.contains(c)) {
-							Cert issuerCert = c;
-							try {
-								issuerCert.getCertificate().checkValidity();
-							} catch (GeneralSecurityException e1) {
-								return new StatusCode(StatusCodes.Bad_CertificateIssuerTimeInvalid);
-							}
-						}
-						logger.debug("signature=yes");
-						passedChecks.add(CertificateCheck.Signature);
-						passedChecks.add(CertificateCheck.Trusted);
-					}catch (GeneralSecurityException e1) {
+						issuerFound = true;
+						StatusCode issuerResult = validateCertificate(c);
+						if (issuerResult.isStatusCode(
+								StatusCodes.Bad_CertificateRevoked))
+							result = new StatusCode(
+									StatusCodes.Bad_CertificateIssuerRevoked);
+						else if (issuerResult.isStatusCode(
+								StatusCodes.Bad_CertificateTimeInvalid))
+							result = new StatusCode(
+									StatusCodes.Bad_CertificateIssuerTimeInvalid);
+						else if (issuerResult.isStatusCode(
+								StatusCodes.Bad_CertificateChainIncomplete)
+								|| issuerResult.isStatusCode(
+										StatusCodes.Bad_CertificateIssuerRevoked)
+								|| issuerResult.isStatusCode(
+										StatusCodes.Bad_CertificateIssuerTimeInvalid))
+							result = issuerResult;
+						else if (issuerResult.isNotGood())
+							result = new StatusCode(
+									StatusCodes.Bad_CertificateInvalid);
+					} catch (GeneralSecurityException e1) {
 						continue;
 					}
 				}
-	
+				if (!issuerFound)
+					result = new StatusCode(
+							StatusCodes.Bad_CertificateChainIncomplete);
+				if (result.isNotGood()) {
+					store.addCertificate(ValidationResult.Reject, cert);
+					return result;
+				}
+				logger.debug("signature=yes");
+				passedChecks.add(CertificateCheck.Signature);
+				passedChecks.add(CertificateCheck.Trusted);
 			}
 	
 			logger.debug("signature={}", passedChecks.contains(CertificateCheck.Signature));

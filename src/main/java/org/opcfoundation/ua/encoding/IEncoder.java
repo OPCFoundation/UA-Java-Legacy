@@ -15,6 +15,7 @@ package org.opcfoundation.ua.encoding;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
@@ -551,7 +552,7 @@ public interface IEncoder {
 	 * @param v an array of byte.
 	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
 	 */
-	void putByteString(String fieldName, byte[] v)
+	void putByteString(String fieldName, ByteString v)
     throws EncodingException;	
 	
 	/**
@@ -561,7 +562,7 @@ public interface IEncoder {
 	 * @param v an array of byte.
 	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
 	 */
-	void putByteStringArray(String fieldName, byte[][] v)
+	void putByteStringArray(String fieldName, ByteString[] v)
     throws EncodingException;	
 	
 	/**
@@ -571,7 +572,7 @@ public interface IEncoder {
 	 * @param v a {@link java.util.Collection} object.
 	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
 	 */
-	void putByteStringArray(String fieldName, Collection<byte[]> v)
+	void putByteStringArray(String fieldName, Collection<ByteString> v)
     throws EncodingException;	
 	
 	/**

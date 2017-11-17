@@ -13,6 +13,7 @@
 package org.opcfoundation.ua.transport;
 
 import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.common.RuntimeServiceResultException;
 import org.opcfoundation.ua.common.ServiceResultException;
@@ -108,8 +109,11 @@ public class TransportChannelSettings implements Cloneable {
 	 */
 	public Cert getServerCertificate() {
 		try {
-			return (this.description!=null && this.description.getServerCertificate()!=null && this.description.getServerCertificate().length > 0) 
-					? new Cert(this.description.getServerCertificate()) : null;
+			if(this.description!=null && this.description.getServerCertificate()!=null && this.description.getServerCertificate().getLength() > 0){
+			  return new Cert(ByteString.asByteArray(this.description.getServerCertificate()));
+			}else{
+			  return null;
+			}
 		} catch (ServiceResultException e) {
 			throw new RuntimeServiceResultException(e);
 		} 			

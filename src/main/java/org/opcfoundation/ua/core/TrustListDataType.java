@@ -34,6 +34,7 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.utils.AbstractStructure;
 
@@ -46,14 +47,14 @@ public class TrustListDataType extends AbstractStructure {
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.TrustListDataType_Encoding_DefaultXml);
 	
     protected UnsignedInteger SpecifiedLists;
-    protected byte[][] TrustedCertificates;
-    protected byte[][] TrustedCrls;
-    protected byte[][] IssuerCertificates;
-    protected byte[][] IssuerCrls;
+    protected ByteString[] TrustedCertificates;
+    protected ByteString[] TrustedCrls;
+    protected ByteString[] IssuerCertificates;
+    protected ByteString[] IssuerCrls;
     
     public TrustListDataType() {}
     
-    public TrustListDataType(UnsignedInteger SpecifiedLists, byte[][] TrustedCertificates, byte[][] TrustedCrls, byte[][] IssuerCertificates, byte[][] IssuerCrls)
+    public TrustListDataType(UnsignedInteger SpecifiedLists, ByteString[] TrustedCertificates, ByteString[] TrustedCrls, ByteString[] IssuerCertificates, ByteString[] IssuerCrls)
     {
         this.SpecifiedLists = SpecifiedLists;
         this.TrustedCertificates = TrustedCertificates;
@@ -72,42 +73,42 @@ public class TrustListDataType extends AbstractStructure {
         this.SpecifiedLists = SpecifiedLists;
     }
     
-    public byte[][] getTrustedCertificates()
+    public ByteString[] getTrustedCertificates()
     {
         return TrustedCertificates;
     }
     
-    public void setTrustedCertificates(byte[][] TrustedCertificates)
+    public void setTrustedCertificates(ByteString[] TrustedCertificates)
     {
         this.TrustedCertificates = TrustedCertificates;
     }
     
-    public byte[][] getTrustedCrls()
+    public ByteString[] getTrustedCrls()
     {
         return TrustedCrls;
     }
     
-    public void setTrustedCrls(byte[][] TrustedCrls)
+    public void setTrustedCrls(ByteString[] TrustedCrls)
     {
         this.TrustedCrls = TrustedCrls;
     }
     
-    public byte[][] getIssuerCertificates()
+    public ByteString[] getIssuerCertificates()
     {
         return IssuerCertificates;
     }
     
-    public void setIssuerCertificates(byte[][] IssuerCertificates)
+    public void setIssuerCertificates(ByteString[] IssuerCertificates)
     {
         this.IssuerCertificates = IssuerCertificates;
     }
     
-    public byte[][] getIssuerCrls()
+    public ByteString[] getIssuerCrls()
     {
         return IssuerCrls;
     }
     
-    public void setIssuerCrls(byte[][] IssuerCrls)
+    public void setIssuerCrls(ByteString[] IssuerCrls)
     {
         this.IssuerCrls = IssuerCrls;
     }

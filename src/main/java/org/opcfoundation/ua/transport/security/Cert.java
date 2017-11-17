@@ -30,6 +30,7 @@ import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.utils.CertificateUtils;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.FileUtil;
+import org.opcfoundation.ua.utils.StringUtils;
 
 import sun.security.provider.X509Factory;
 
@@ -39,11 +40,10 @@ import sun.security.provider.X509Factory;
  * Wrapper to {@link java.security.cert.Certificate}.
  * <p>
  * To Create a new certificate See {@link CertificateUtils}
- *
- * @author Mikko Salonen
- * @author Toni Kalajainen (toni.kalajainen@iki.fi)
  */
 public class Cert {
+	private static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----" + StringUtils.lineSeparator() ;
+	private static final String END_CERT = StringUtils.lineSeparator() + "-----END CERTIFICATE-----";
 
 	public final X509Certificate certificate;
 	public final byte[] encodedCertificate; 
@@ -99,11 +99,11 @@ public class Cert {
 	 */
 	public void saveToPem(File file) throws IOException
 	{
-		FileWriter fw = new FileWriter(file);
+	    FileWriter fw = new FileWriter(file);
 		try {
-			fw.append(X509Factory.BEGIN_CERT + "\n");
-			fw.append(CryptoUtil.base64Encode(getEncoded()));
-			fw.append(X509Factory.END_CERT + "\n");
+			fw.append(BEGIN_CERT);
+			fw.append(StringUtils.addLineBreaks(CryptoUtil.base64Encode(getEncoded()), 72));
+			fw.append(END_CERT);
 		} finally {
 			fw.close();
 		}		

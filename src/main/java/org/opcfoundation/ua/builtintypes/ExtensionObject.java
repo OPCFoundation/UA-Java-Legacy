@@ -150,10 +150,9 @@ public class ExtensionObject {
 		throw new EncodingException(StatusCodes.Bad_DataEncodingUnsupported);
 	}		
 	
-	Object object;
-	ExpandedNodeId typeId; // NodeId of a DataType
-	Integer hash;
-	EncodeType encodeType;
+	final Object object;
+	final ExpandedNodeId typeId; // NodeId of a DataType
+	final EncodeType encodeType;
 
 	/**
 	 * <p>Constructor for ExtensionObject.</p>
@@ -164,6 +163,8 @@ public class ExtensionObject {
 		if (typeId==null)
 			throw new IllegalArgumentException("typeId argument must not be null");
 		this.typeId = typeId;
+		this.object = null;
+		this.encodeType = null;
 	}
 	
 	/**
@@ -180,7 +181,9 @@ public class ExtensionObject {
 			this.object = object;
 			this.encodeType = EncodeType.Binary;
 		}else{
-			//throw new IllegalArgumentException("object argument must not be null");
+			this.object = null;
+			this.encodeType = null;
+		  //throw new IllegalArgumentException("object argument must not be null");
 		}
 	}
 
@@ -210,6 +213,17 @@ public class ExtensionObject {
 //		this.typeId = typeId;
 //		this.object = object;
 //		this.encodeType = EncodeType.Xml;
+	}
+	
+	/**
+	 * ExtensionObject that encodes the value later when put into a Encoder.
+	 * 
+	 * @param encodeable a Structure that should later be encoded.
+	 */
+	public ExtensionObject(Structure encodeable){
+	  this.encodeType = null;
+	  this.typeId = null;
+	  this.object = encodeable;
 	}
 	
 	/**
@@ -267,6 +281,12 @@ public class ExtensionObject {
 			}
 		}
 		
+		//an already decoded value
+		if(object instanceof Structure){
+		  T r = (T) object;
+		  return r;
+		}
+		
 		if (object instanceof XmlElement) 
 		{
 			Class<? extends IEncodeable> clazz = serializer.getClass(typeId);
@@ -314,7 +334,7 @@ public class ExtensionObject {
 	 */
 	public <T extends IEncodeable> T decode(EncoderContext ctx)
 	throws DecodingException {
-		return decode(ctx, null);
+		return decode(ctx, ctx.getNamespaceTable());
 	}
 
 	/**
@@ -333,18 +353,21 @@ public class ExtensionObject {
 		return (T) decode(ctx.getEncodeableSerializer(), ctx, namespaceTable);
 	}
 
-	/** {@inheritDoc} */
 	@Override
-	public synchronized int hashCode() {
-		if (hash==null) {
-			if (object!=null && object instanceof byte[])
-				hash = typeId.hashCode() + 13 * Arrays.hashCode((byte[])object); 
-			else if (object!=null && object instanceof XmlElement)
-				hash = typeId.hashCode() + 13 * ((XmlElement)object).hashCode();
-			else 
-				hash = typeId.hashCode();
-		}
-		return hash;
+	public int hashCode() {
+	  if(object == null){
+	    return 0;
+	  }
+	  
+	  if (object instanceof byte[]){
+	    return typeId.hashCode() + 13 * Arrays.hashCode((byte[])object); 
+	  }
+	  
+	  if (object instanceof XmlElement){
+		return typeId.hashCode() + 13 * ((XmlElement)object).hashCode();
+	  }
+	  
+	  return object.hashCode();
 	}
 
 	/** {@inheritDoc} */
@@ -372,10 +395,25 @@ public class ExtensionObject {
 			if (!(other.object instanceof XmlElement)) return false;
 			return ((XmlElement)other.object).equals((XmlElement)object);
 		}
+		
+		if (object instanceof Structure) {
+		  return object.equals(other.object);
+		}
+		
 		return false;
 	}
 
-
+	/**
+	 * Returns true, if the {@link #getObject()} is encoded value. Null is considered to be encoded value.
+	 * 
+	 * @return true if value is encoded
+	 */
+	public boolean isEncoded(){
+	  if(object == null){
+	    return true;
+	  }
+	  return !(object instanceof Structure);
+	}
 
 
 

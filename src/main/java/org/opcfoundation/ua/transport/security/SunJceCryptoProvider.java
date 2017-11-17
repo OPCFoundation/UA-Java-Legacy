@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.security.Security;
 
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.StringUtils;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -34,25 +35,33 @@ public class SunJceCryptoProvider extends JceCryptoProvider implements CryptoPro
 	}
 
 	/** {@inheritDoc} */
-	@Override
+	@SuppressWarnings("restriction")
+    @Override
 	public byte[] base64Decode(String string) {
-		// Probably better, but not available on the default jars!
-		// return javax.xml.bind.DatatypeConverter.parseBase64Binary(string);
-		BASE64Decoder bd = new BASE64Decoder();
+	    // Java6 compatible decoding, using the internal API
+        BASE64Decoder bd = new BASE64Decoder();
 		try {
-			return bd.decodeBuffer(string);
+		    String s = StringUtils.removeLineBreaks(string);
+			return bd.decodeBuffer(s);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		// Java 8 compatible decoding, using the public API
+//	    Decoder bd = Base64.getDecoder();
+//	    String s = StringUtils.removeLineBreaks(string);
+//	    return bd.decode(s);
 	}
 
 	/** {@inheritDoc} */
+    @SuppressWarnings("restriction")
 	@Override
 	public String base64Encode(byte[] bytes) {
-		// See above: base64Decode
-		// return javax.xml.bind.DatatypeConverter.printBase64Binary(bytes);
+        // Java6 compatible encoding, using the internal API
 		BASE64Encoder bd = new BASE64Encoder();
 		return bd.encode(bytes);
+		// Java 8 compatible encoding, using the public API
+//      Encoder bd = Base64.getEncoder();
+//      return bd.encodeToString(bytes);
 	}
 
 }

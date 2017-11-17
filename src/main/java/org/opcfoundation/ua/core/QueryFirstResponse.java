@@ -34,6 +34,7 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.core.ContentFilterResult;
 import org.opcfoundation.ua.core.ParsingResult;
@@ -50,14 +51,14 @@ public class QueryFirstResponse extends AbstractStructure implements ServiceResp
 	
     protected ResponseHeader ResponseHeader;
     protected QueryDataSet[] QueryDataSets;
-    protected byte[] ContinuationPoint;
+    protected ByteString ContinuationPoint;
     protected ParsingResult[] ParsingResults;
     protected DiagnosticInfo[] DiagnosticInfos;
     protected ContentFilterResult FilterResult;
     
     public QueryFirstResponse() {}
     
-    public QueryFirstResponse(ResponseHeader ResponseHeader, QueryDataSet[] QueryDataSets, byte[] ContinuationPoint, ParsingResult[] ParsingResults, DiagnosticInfo[] DiagnosticInfos, ContentFilterResult FilterResult)
+    public QueryFirstResponse(ResponseHeader ResponseHeader, QueryDataSet[] QueryDataSets, ByteString ContinuationPoint, ParsingResult[] ParsingResults, DiagnosticInfo[] DiagnosticInfos, ContentFilterResult FilterResult)
     {
         this.ResponseHeader = ResponseHeader;
         this.QueryDataSets = QueryDataSets;
@@ -87,12 +88,12 @@ public class QueryFirstResponse extends AbstractStructure implements ServiceResp
         this.QueryDataSets = QueryDataSets;
     }
     
-    public byte[] getContinuationPoint()
+    public ByteString getContinuationPoint()
     {
         return ContinuationPoint;
     }
     
-    public void setContinuationPoint(byte[] ContinuationPoint)
+    public void setContinuationPoint(ByteString ContinuationPoint)
     {
         this.ContinuationPoint = ContinuationPoint;
     }

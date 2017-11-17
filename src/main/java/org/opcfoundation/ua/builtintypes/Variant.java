@@ -12,12 +12,18 @@
 
 package org.opcfoundation.ua.builtintypes;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
+import org.opcfoundation.ua.utils.MultiDimensionArrayUtils.ArrayIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
 
 /**
  * Variant wraps an arbitrary builtin variable, an array of builtin variables or
@@ -29,16 +35,89 @@ import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
  *  e.g. new Variant( new NotificationData() );
  *
  * Encoders write a structure as an {@link ExtensionObject}.
- *
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class Variant {
-	private static Logger logger = LoggerFactory.getLogger(Variant.class);
+	
+    private static Logger logger = LoggerFactory.getLogger(Variant.class);
 
 	/** Constant <code>NULL</code> */
 	public static final Variant NULL = new Variant(null);
-	Object value;
-	Class<?> compositeClass;
+	
+	//utility to convert scalar / unknown dim Enumeration array to Integers
+	private static Object enumsToInts(Object enums){
+	  //this is called only by Variant constructor, which does not pass nulls to this
+	  
+	  Class<?> clazz = enums.getClass();
+	  
+	  // Most of the arguments are either scalar or 1-dim arrays,
+	  // therefore special handling for those situations
+	  
+	  //scalar
+	  if(Enumeration.class.isAssignableFrom(clazz)){
+	    return ((Enumeration) enums).getValue(); //autobox to Integer
+	  }
+	  
+	  //1-dim array
+	  if(Enumeration[].class.isAssignableFrom(clazz)){
+	    Enumeration[] arr = (Enumeration[]) enums;
+	    Integer[] ints = new Integer[arr.length];
+	    for(int i = 0; i < arr.length; i++){
+	      if(arr[i] == null){
+	        ints[i] = null;
+	      }else{
+	        ints[i] = arr[i].getValue();
+	      }
+	    }
+	    return ints;
+	  }
+	  
+	  //multi-dim array otherwise
+	  int[] ad = calculateArrayDimensions(enums, false);
+	  Enumeration[] enumMux = (Enumeration[])MultiDimensionArrayUtils.muxArray(enums, ad);
+	  Integer[] intMux = new Integer[enumMux.length];
+      for(int i = 0; i < enumMux.length; i++){
+        if(enumMux[i] == null){
+          intMux[i] = null;
+        }else{
+          intMux[i] = enumMux[i].getValue();
+        }
+      }
+      return MultiDimensionArrayUtils.demuxArray(intMux, ad);
+	}
+	
+	//utility to convert byte[] and arrays of them to ByteString(array)s
+	private static Object byteArraysToByteStrings(Object byteArrays){
+	  Class<?> clazz = byteArrays.getClass();
+	  
+	  //special handling for byte[] and byte[][] as they are most common
+	  
+	  //scalar
+	  if(byte[].class.isAssignableFrom(clazz)){
+	    return ByteString.valueOf((byte[])byteArrays);
+	  }
+	  
+	  //1-dim
+	  if(byte[][].class.isAssignableFrom(clazz)){
+	    byte[][] arr = (byte[][]) byteArrays;
+	    ByteString[] bss = new ByteString[arr.length];
+	    for(int i=0; i < arr.length;i++){
+	      bss[i] = ByteString.valueOf(arr[i]);
+	    }
+	    return bss;
+	  }
+	  
+	  //multidim
+	  int[] ad = calculateArrayDimensions(byteArrays, true);
+	  ArrayIterator<byte[]> iter = MultiDimensionArrayUtils.arrayIterator(byteArrays, ad);
+	  List<ByteString> tmp = new ArrayList<ByteString>();
+	  while(iter.hasNext()){
+	    tmp.add(ByteString.valueOf(iter.next()));
+	  }
+	  return MultiDimensionArrayUtils.demuxArray(tmp.toArray(), ad, ByteString.class);
+	}
+	
+	final Object value;
+	final Class<?> compositeClass;
 
 	/**
 	 * Create variant.
@@ -46,34 +125,50 @@ public class Variant {
 	 * @param value
 	 *            scalar, array or multi-dimension array
 	 */
-	public Variant(Object value) {
-		if (value instanceof Enumeration)
-			value = ((Enumeration) value).getValue();
-		this.value = value;
-		if (value != null) {
-			compositeClass = value.getClass();
-			
-			if(compositeClass == Variant.class) {
-				throw new IllegalArgumentException("Variant cannot be "
-						+ compositeClass.getCanonicalName());
-			}
-			 
-			while (compositeClass.isArray()
-					&& !compositeClass.equals(byte[].class))
-				compositeClass = compositeClass.getComponentType();
-			
-			assertValidClass(compositeClass);
-		}
+	public Variant(final Object value) {
+	  if(value == null){
+	    this.value = null;
+	    this.compositeClass = null;
+	    return;
+	  }
+	  
+	  // Find the non-array composite class of the value
+	  final Class<?> composite = MultiDimensionArrayUtils.getComponentType(value.getClass());
+	  
+	  // GH#82, if the composite is an Enumeration, convert it to equivalent
+	  // Integer array (Note! must be Integer and not int)
+	  if(Enumeration.class.isAssignableFrom(composite)){
+	    this.value = enumsToInts(value);
+	    
+	    //Enumerations are as UA Int32 which is Java Integer
+	    this.compositeClass = Integer.class;
+	    return;
+	  }
+	  
+	  // GH#81, convert byte[] and arrays of them to ByteStrings
+	  // for backwards compatibility
+	  if(byte.class.isAssignableFrom(composite)){
+	    //this should mean value is byte[] or some dim.array of them,
+	    //as the Object in the constructor autoboxes byte -> Byte
+	    
+	    this.value = byteArraysToByteStrings(value);
+	    this.compositeClass = ByteString.class;
+	    return;
+	  }
+	  
+	  //now the value should be as such that it can be used directly
+	  // OR it is of incompatible type
+	  assertValidClass(composite);
+	  this.value = value;
+	  this.compositeClass = composite;
 	}
 
 	void assertValidClass(Class<?> clazz) {
-		if (clazz.equals(byte[].class))
-			return;
 		if (clazz.equals(Boolean.class))
 			return;
 		if (clazz.equals(Byte.class))
 			return;
-		if (clazz.equals(UnsignedByte.class) && !clazz.isArray())
+		if (clazz.equals(UnsignedByte.class))
 			return;
 		if (clazz.equals(Short.class))
 			return;
@@ -117,10 +212,13 @@ public class Variant {
 			return;
 		if (clazz.equals(Variant.class))
 			return;
+	    if (ByteString.class.equals(clazz)){
+	        return;
+	    }
 		if (Structure.class.isAssignableFrom(clazz))
 			return;
-		if (Enumeration.class.isAssignableFrom(clazz))
-			return;
+
+		
 		throw new IllegalArgumentException("Variant cannot be "
 				+ clazz.getCanonicalName());
 	}
@@ -142,8 +240,7 @@ public class Variant {
 	public boolean isArray() {
 		if (value == null)
 			return false;
-		Class<?> c = value.getClass();
-		return c.isArray() && !c.equals(byte[].class);
+		return value.getClass().isArray();
 	}
 
 	/**
@@ -226,7 +323,14 @@ public class Variant {
 	 * @return an array of int.
 	 */
 	public int[] getArrayDimensions() {
-		int dim = getDimension();
+		return calculateArrayDimensions(value, false);
+	}
+
+  private static int[] calculateArrayDimensions(Object value, boolean byteArray) {
+    int dim = MultiDimensionArrayUtils.getDimension(value);
+    if(byteArray){
+      dim--;
+    }
 		int result[] = new int[dim];
 		if (dim == 0)
 			return result;
@@ -241,7 +345,7 @@ public class Variant {
 		}
 
 		return result;
-	}
+  }
 
 	/**
 	 * <p>getDimension.</p>
@@ -249,10 +353,7 @@ public class Variant {
 	 * @return a int.
 	 */
 	public int getDimension() {
-		int dim = MultiDimensionArrayUtils.getDimension(value);
-		if (compositeClass.isArray())
-			dim--;
-		return dim;
+		return MultiDimensionArrayUtils.getDimension(value);
 	}
 
 	/** {@inheritDoc} */
@@ -262,8 +363,6 @@ public class Variant {
 			return 0;
 		if (!isArray())
 			return value.hashCode();
-		if (value instanceof byte[])
-			return Arrays.hashCode((byte[]) value);
 		return Arrays.deepHashCode((Object[]) value);
 	}
 
@@ -285,10 +384,6 @@ public class Variant {
 		Class<?> c = value.getClass();
 		if (!c.equals(o.value.getClass()))
 			return false;
-
-		if (c == byte[].class)
-			return Arrays.equals((byte[]) o.value, (byte[]) value);
-
 		if (!isArray())
 			return value.equals(o.value);
 		return Arrays.deepEquals((Object[]) value, (Object[]) o.value);
@@ -310,6 +405,66 @@ public class Variant {
 		} catch (ClassCastException e) {
 			return defaultValue;
 		}
+	}
+	
+  /**
+   * Converts the value to the given Enumeration objects. NOTE! this works only if the value of this
+   * Variant is Integer or somedimensional array of them. NOTE! If there is no matching Enumeration
+   * value for internal value Integers, null is used.
+   * 
+   * @param clazz enumeration class
+   * @return equivalent scalar/X-dim array of Enumerations of given class or null if internal value
+   *         is null
+   * @throws ClassCastException if internal value is not Integer (or somedimensional array of
+   *         them)
+   */
+	public <T extends Enum<T> & Enumeration> Object asEnum(Class<T> clazz){	  
+	  if(value == null){
+	    return null;
+	  }
+	  
+	  // UA does not have a null Int32 encoding, therefore the following
+	  // check should be enough
+	  if(!Integer.class.equals(compositeClass)){
+	    throw new ClassCastException("Variant.asEnum can only be called on non-null Variants that have compositeClass of Integer, was: "+toStringWithType());
+	  }
+	  
+	  //build look-up-map
+      final T[] vals = clazz.getEnumConstants();
+      final Map<Integer, T> lookUp = new HashMap<Integer, T>();
+      for (T val : vals) {
+          lookUp.put(val.getValue(), val);
+      }
+	  
+	  // Special handling, since most often scalar or 1-dim array, 
+	  Class<?> objClass = value.getClass();
+	  
+	  //scalar
+	  if(Integer.class.equals(objClass)){
+	    Integer t = (Integer)value;
+	    return lookUp.get(t); //may be null
+	  }
+	  
+	  //1-dim
+	  if(Integer[].class.equals(objClass)){
+	    Integer[] ints = (Integer[]) value;
+	    @SuppressWarnings("unchecked")
+        T[] r = (T[]) Array.newInstance(clazz, ints.length);
+        for (int i = 0; i < ints.length; i++) {
+          r[i] = lookUp.get(ints[i]); //may be null
+        }
+        return r;
+	  }
+	  
+	  //multidim
+	   int[] ad = calculateArrayDimensions(value, false);
+	   Integer[] intMux = (Integer[])MultiDimensionArrayUtils.muxArray(value, ad);
+	   @SuppressWarnings("unchecked")
+       T[] enumMux = (T[]) Array.newInstance(clazz, intMux.length);
+	   for(int i = 0; i < enumMux.length; i++){
+	     enumMux[i] = lookUp.get(intMux[i]); //may be null
+	   }
+	   return MultiDimensionArrayUtils.demuxArray(enumMux, ad);
 	}
 
 	/**

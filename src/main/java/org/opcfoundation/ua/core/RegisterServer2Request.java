@@ -33,7 +33,9 @@ import org.opcfoundation.ua.builtintypes.ServiceRequest;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
-import org.opcfoundation.ua.core.RegisteredServer2;
+import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ExtensionObject;
+import org.opcfoundation.ua.core.RegisteredServer;
 import org.opcfoundation.ua.core.RequestHeader;
 import org.opcfoundation.ua.utils.AbstractStructure;
 
@@ -45,14 +47,16 @@ public class RegisterServer2Request extends AbstractStructure implements Service
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.RegisterServer2Request_Encoding_DefaultXml);
 	
     protected RequestHeader RequestHeader;
-    protected RegisteredServer2 Server;
+    protected RegisteredServer Server;
+    protected ExtensionObject[] DiscoveryConfiguration;
     
     public RegisterServer2Request() {}
     
-    public RegisterServer2Request(RequestHeader RequestHeader, RegisteredServer2 Server)
+    public RegisterServer2Request(RequestHeader RequestHeader, RegisteredServer Server, ExtensionObject[] DiscoveryConfiguration)
     {
         this.RequestHeader = RequestHeader;
         this.Server = Server;
+        this.DiscoveryConfiguration = DiscoveryConfiguration;
     }
     
     public RequestHeader getRequestHeader()
@@ -65,14 +69,24 @@ public class RegisterServer2Request extends AbstractStructure implements Service
         this.RequestHeader = RequestHeader;
     }
     
-    public RegisteredServer2 getServer()
+    public RegisteredServer getServer()
     {
         return Server;
     }
     
-    public void setServer(RegisteredServer2 Server)
+    public void setServer(RegisteredServer Server)
     {
         this.Server = Server;
+    }
+    
+    public ExtensionObject[] getDiscoveryConfiguration()
+    {
+        return DiscoveryConfiguration;
+    }
+    
+    public void setDiscoveryConfiguration(ExtensionObject[] DiscoveryConfiguration)
+    {
+        this.DiscoveryConfiguration = DiscoveryConfiguration;
     }
     
     /**
@@ -85,6 +99,7 @@ public class RegisterServer2Request extends AbstractStructure implements Service
         RegisterServer2Request result = (RegisterServer2Request) super.clone();
         result.RequestHeader = RequestHeader==null ? null : RequestHeader.clone();
         result.Server = Server==null ? null : Server.clone();
+        result.DiscoveryConfiguration = DiscoveryConfiguration==null ? null : DiscoveryConfiguration.clone();
         return result;
     }
     
@@ -101,6 +116,9 @@ public class RegisterServer2Request extends AbstractStructure implements Service
         if (Server==null) {
             if (other.Server != null) return false;
         } else if (!Server.equals(other.Server)) return false;
+        if (DiscoveryConfiguration==null) {
+            if (other.DiscoveryConfiguration != null) return false;
+        } else if (!Arrays.equals(DiscoveryConfiguration, other.DiscoveryConfiguration)) return false;
         return true;
     }
     
@@ -113,6 +131,8 @@ public class RegisterServer2Request extends AbstractStructure implements Service
                 + ((RequestHeader == null) ? 0 : RequestHeader.hashCode());
         result = prime * result
                 + ((Server == null) ? 0 : Server.hashCode());
+        result = prime * result
+                + ((DiscoveryConfiguration == null) ? 0 : Arrays.hashCode(DiscoveryConfiguration));
         return result;
     }
     

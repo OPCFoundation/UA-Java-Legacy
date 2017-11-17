@@ -29,62 +29,62 @@
 
 package org.opcfoundation.ua.core;
 
-import org.opcfoundation.ua.builtintypes.ServiceResponse;
+import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
-import org.opcfoundation.ua.builtintypes.Variant;
-import org.opcfoundation.ua.core.ResponseHeader;
-import org.opcfoundation.ua.utils.AbstractStructure;
+import java.util.Arrays;
+import org.opcfoundation.ua.core.DiscoveryConfiguration;
 
 
-public class TestStackResponse extends AbstractStructure implements ServiceResponse {
 
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TestStackResponse);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TestStackResponse_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.TestStackResponse_Encoding_DefaultXml);
+public class MdnsDiscoveryConfiguration extends DiscoveryConfiguration {
 	
-    protected ResponseHeader ResponseHeader;
-    protected Variant Output;
+	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.MdnsDiscoveryConfiguration);
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.MdnsDiscoveryConfiguration_Encoding_DefaultBinary);
+	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.MdnsDiscoveryConfiguration_Encoding_DefaultXml);
+	
+    protected String MdnsServerName;
+    protected String[] ServerCapabilities;
     
-    public TestStackResponse() {}
+    public MdnsDiscoveryConfiguration() {}
     
-    public TestStackResponse(ResponseHeader ResponseHeader, Variant Output)
+    public MdnsDiscoveryConfiguration(String MdnsServerName, String[] ServerCapabilities)
     {
-        this.ResponseHeader = ResponseHeader;
-        this.Output = Output;
+        this.MdnsServerName = MdnsServerName;
+        this.ServerCapabilities = ServerCapabilities;
     }
     
-    public ResponseHeader getResponseHeader()
+    public String getMdnsServerName()
     {
-        return ResponseHeader;
+        return MdnsServerName;
     }
     
-    public void setResponseHeader(ResponseHeader ResponseHeader)
+    public void setMdnsServerName(String MdnsServerName)
     {
-        this.ResponseHeader = ResponseHeader;
+        this.MdnsServerName = MdnsServerName;
     }
     
-    public Variant getOutput()
+    public String[] getServerCapabilities()
     {
-        return Output;
+        return ServerCapabilities;
     }
     
-    public void setOutput(Variant Output)
+    public void setServerCapabilities(String[] ServerCapabilities)
     {
-        this.Output = Output;
+        this.ServerCapabilities = ServerCapabilities;
     }
     
     /**
       * Deep clone
       *
-      * @return cloned TestStackResponse
+      * @return cloned MdnsDiscoveryConfiguration
       */
-    public TestStackResponse clone()
+    public MdnsDiscoveryConfiguration clone()
     {
-        TestStackResponse result = (TestStackResponse) super.clone();
-        result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
-        result.Output = Output;
+        MdnsDiscoveryConfiguration result = (MdnsDiscoveryConfiguration) super.clone();
+        result.MdnsServerName = MdnsServerName;
+        result.ServerCapabilities = ServerCapabilities==null ? null : ServerCapabilities.clone();
         return result;
     }
     
@@ -94,13 +94,13 @@ public class TestStackResponse extends AbstractStructure implements ServiceRespo
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        TestStackResponse other = (TestStackResponse) obj;
-        if (ResponseHeader==null) {
-            if (other.ResponseHeader != null) return false;
-        } else if (!ResponseHeader.equals(other.ResponseHeader)) return false;
-        if (Output==null) {
-            if (other.Output != null) return false;
-        } else if (!Output.equals(other.Output)) return false;
+        MdnsDiscoveryConfiguration other = (MdnsDiscoveryConfiguration) obj;
+        if (MdnsServerName==null) {
+            if (other.MdnsServerName != null) return false;
+        } else if (!MdnsServerName.equals(other.MdnsServerName)) return false;
+        if (ServerCapabilities==null) {
+            if (other.ServerCapabilities != null) return false;
+        } else if (!Arrays.equals(ServerCapabilities, other.ServerCapabilities)) return false;
         return true;
     }
     
@@ -110,9 +110,9 @@ public class TestStackResponse extends AbstractStructure implements ServiceRespo
         final int prime = 31;
         int result = 1;
         result = prime * result
-                + ((ResponseHeader == null) ? 0 : ResponseHeader.hashCode());
+                + ((MdnsServerName == null) ? 0 : MdnsServerName.hashCode());
         result = prime * result
-                + ((Output == null) ? 0 : Output.hashCode());
+                + ((ServerCapabilities == null) ? 0 : Arrays.hashCode(ServerCapabilities));
         return result;
     }
     
@@ -129,9 +129,9 @@ public class TestStackResponse extends AbstractStructure implements ServiceRespo
 	public ExpandedNodeId getBinaryEncodeId() {
 		return BINARY;
 	}
-
-	public String toString() {
-		return ObjectUtils.printFieldsDeep(this);
-	}
 	
+	public String toString() {
+		return "MdnsDiscoveryConfiguration: "+ObjectUtils.printFieldsDeep(this);
+	}
+
 }

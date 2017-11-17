@@ -19,6 +19,7 @@ import java.util.GregorianCalendar;
 
 import javax.crypto.Mac;
 
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.MessageSecurityMode;
 import org.opcfoundation.ua.core.StatusCodes;
@@ -39,9 +40,8 @@ public class SecurityToken {
 	private long creationTime;
 	private long lifetime;
 	
-	//TODO: Mikon lisayksia
-	private byte[] localNonce;
-	private byte[] remoteNonce;
+	private ByteString localNonce;
+	private ByteString remoteNonce;
 	private byte[] localSigningKey;
     private byte[] localEncryptingKey;
     private byte[] localInitializationVector;
@@ -57,14 +57,14 @@ public class SecurityToken {
 	 * @param tokenId a int.
 	 * @param creationTime a long.
 	 * @param lifetime a long.
-	 * @param localNonce an array of byte.
-	 * @param remoteNonce an array of byte.
+	 * @param serverNonce an array of byte.
+	 * @param clientNonce an array of byte.
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
 	public SecurityToken(SecurityConfiguration securityProfile, 
 			int secureChannelId, int tokenId, 
 			long creationTime, long lifetime,
-			byte[] localNonce, byte[] remoteNonce) 
+			ByteString serverNonce, ByteString clientNonce) 
 	throws ServiceResultException
 	{
 		if (securityProfile==null)
@@ -75,8 +75,8 @@ public class SecurityToken {
 		this.lifetime = lifetime;
 		this.creationTime = creationTime;
 		
-		this.localNonce = localNonce;
-		this.remoteNonce = remoteNonce;
+		this.localNonce = serverNonce;
+		this.remoteNonce = clientNonce;
 		
         boolean isNone = securityProfile.getMessageSecurityMode() == MessageSecurityMode.None;
        	//Calculate and set keys       
@@ -97,17 +97,17 @@ public class SecurityToken {
      * This function conforms with C#-implementation, so that keys returned 
      * from this function matches the C#-implementation keys.
      * 
-     * @param secret
+     * @param byteString
      * @param label
-     * @param data
+     * @param byteString2
      * @param offset
      * @param length
      * @return the pseudo random bytes
      */
-	private byte[] PSHA(byte[] secret, String label, byte[] data,
+	private byte[] PSHA(ByteString byteString, String label, ByteString byteString2,
 			int offset, int length) throws ServiceResultException {
         //test parameters
-    	if (secret == null) throw new IllegalArgumentException("ArgumentNullException: secret");
+    	if (byteString == null) throw new IllegalArgumentException("ArgumentNullException: secret");
         if (offset < 0)     throw new IllegalArgumentException("ArgumentOutOfRangeException: offset");
         if (length < 0)     throw new IllegalArgumentException("ArgumentOutOfRangeException: offset");
 
@@ -115,17 +115,17 @@ public class SecurityToken {
         byte[] seed = label != null && !label.isEmpty() ? label.getBytes(UTF8) : null;
 
         // append data to label.
-        if (data != null && data.length > 0){
+        if (byteString2 != null && byteString2.getLength() > 0){
             if (seed != null){
-            	ByteBuffer buf = ByteBuffer.allocate(seed.length+data.length);
+            	ByteBuffer buf = ByteBuffer.allocate(seed.length+byteString2.getLength());
             	buf.put(seed);
-            	buf.put(data);
+            	buf.put(byteString2.getValue());
             	buf.rewind();
                 seed = buf.array();
             }
             else
             {
-                seed = data;
+                seed = byteString2.getValue();
             }
         }
 
@@ -137,7 +137,7 @@ public class SecurityToken {
 
         // create the hmac.
         SecurityPolicy policy = securityConfiguration.getSecurityPolicy();
-		Mac hmac = CryptoUtil.createMac(policy.getKeyDerivationAlgorithm(), secret);
+		Mac hmac = CryptoUtil.createMac(policy.getKeyDerivationAlgorithm(), byteString.getValue());
         //update data to mac and compute it
         hmac.update(seed);
         byte[] keySeed = hmac.doFinal();
@@ -400,7 +400,7 @@ public class SecurityToken {
 	 *
 	 * @return an array of byte.
 	 */
-	public byte[] getLocalNonce() {
+	public ByteString getLocalNonce() {
 		return localNonce;
 	}
 
@@ -409,7 +409,7 @@ public class SecurityToken {
 	 *
 	 * @return an array of byte.
 	 */
-	public byte[] getRemoteNonce() {
+	public ByteString getRemoteNonce() {
 		return remoteNonce;
 	}
 

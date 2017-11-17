@@ -29,6 +29,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.opcfoundation.ua.builtintypes.BuiltinsMap;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
@@ -1341,6 +1342,30 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}			
 	
+	
+	   /**
+     * <p>putByteString.</p>
+     *
+     * @param fieldName a {@link java.lang.String} object.
+     * @param v an array of byte.
+     * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+     */
+    private void putByteString(String fieldName, byte[] v)
+    throws EncodingException    
+    {       
+        try {
+            if (v==null) out.putInt(-1);
+            else {
+                assertByteStringLength(v.length);
+                out.putInt(v.length);
+                out.put(v);
+            }
+        } catch (IOException e) {
+            throw toEncodingException(e);
+        }
+    }
+	
+	
 	/**
 	 * <p>putByteString.</p>
 	 *
@@ -1348,19 +1373,11 @@ public class BinaryEncoder implements IEncoder {
 	 * @param v an array of byte.
 	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
 	 */
-	public void putByteString(String fieldName, byte[] v)
+	@Override
+	public void putByteString(String fieldName, ByteString v)
     throws EncodingException	
 	{		
-		try {
-			if (v==null) out.putInt(-1);
-			else {
-				assertByteStringLength(v.length);
-				out.putInt(v.length);
-				out.put(v);
-			}
-		} catch (IOException e) {
-			throw toEncodingException(e);
-		}
+	  putByteString(fieldName, ByteString.asByteArray(v));
 	}
 	
 	/**
@@ -1370,7 +1387,8 @@ public class BinaryEncoder implements IEncoder {
 	 * @param v an array of byte.
 	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
 	 */
-	public void putByteStringArray(String fieldName, byte[][] v)
+	@Override
+	public void putByteStringArray(String fieldName, ByteString[] v)
     throws EncodingException	
 	{
 		try {
@@ -1381,7 +1399,7 @@ public class BinaryEncoder implements IEncoder {
 		
 			assertArrayLength(v.length);		
 			out.putInt(v.length);
-			for (byte[] o : v)
+			for (ByteString o : v)
 				putByteString(null, o);
 		} catch (IOException e) {
 			throw toEncodingException(e);
@@ -1389,7 +1407,7 @@ public class BinaryEncoder implements IEncoder {
 	}				
 	
 	/** {@inheritDoc} */
-	public void putByteStringArray(String fieldName, Collection<byte[]> v)
+	public void putByteStringArray(String fieldName, Collection<ByteString> v)
     throws EncodingException	
 	{		
 		try {
@@ -1400,7 +1418,7 @@ public class BinaryEncoder implements IEncoder {
 		
 			assertArrayLength(v.size());
 			out.putInt(v.size());
-			for (byte[] o : v)
+			for (ByteString o : v)
 				putByteString(null, o);
 		} catch (IOException e) {
 			throw toEncodingException(e);
@@ -1517,7 +1535,7 @@ public class BinaryEncoder implements IEncoder {
 			if (v.getIdType() == IdType.Opaque) {
 				out.put(NodeIdEncoding.ByteString.getBits());
 				out.putShort((short)v.getNamespaceIndex());
-				putByteString(null, (byte[]) v.getValue());
+				putByteString(null, (ByteString) v.getValue());
 			} else 
 		
 			if (v.getIdType() == IdType.Guid) {
@@ -1625,7 +1643,7 @@ public class BinaryEncoder implements IEncoder {
 			if (v.getIdType() == IdType.Opaque) {
 				putSByte( null, (NodeIdEncoding.ByteString.getBits() | upperBits));
 				out.putShort((short)v.getNamespaceIndex());
-				putByteString(null, (byte[]) v.getValue());
+				putByteString(null, (ByteString) v.getValue());
 			} else 
 			
 			if (v.getIdType() == IdType.Guid) {
@@ -1981,6 +1999,13 @@ public class BinaryEncoder implements IEncoder {
 			putSByte(null, 0);
 			return;
 		}
+		
+		//support lazy encoding
+		if(!v.isEncoded()){
+		  putExtensionObject(fieldName, ExtensionObject.binaryEncode((Structure) v.getObject(), ctx));
+		  return;
+		}
+		
 		putNodeId(null, ctx.toNodeId(v.getTypeId()));
 		Object o = v.getObject();		
 		if (o==null) {
@@ -2354,7 +2379,7 @@ public class BinaryEncoder implements IEncoder {
     throws EncodingException	
 	{
 		Integer bt = BuiltinsMap.ID_MAP.get(c);
-		boolean array = c.isArray() && !c.equals(byte[].class);
+		boolean array = c.isArray();
 		if (bt!=null) {
 			if (array) 
 				putArray(null, bt, o);
@@ -2400,7 +2425,7 @@ public class BinaryEncoder implements IEncoder {
 		case 12: putString(null, (String) o); break;
 		case 13: putDateTime(null, (DateTime) o); break;
 		case 14: putGuid(null, (UUID) o); break;
-		case 15: putByteString(null, (byte[]) o); break;
+		case 15: putByteString(null, (ByteString) o); break;
 		case 16: putXmlElement(null, (XmlElement) o); break;
 		case 17: putNodeId(null, (NodeId) o); break;
 		case 18: putExpandedNodeId(null, (ExpandedNodeId) o); break;
@@ -2440,7 +2465,7 @@ public class BinaryEncoder implements IEncoder {
 		case 12: putStringArray(null, (String[]) o); break;
 		case 13: putDateTimeArray(null, (DateTime[]) o); break;
 		case 14: putGuidArray(null, (UUID[]) o); break;
-		case 15: putByteStringArray(null, (byte[][]) o); break;
+		case 15: putByteStringArray(null, (ByteString[]) o); break;
 		case 16: putXmlElementArray(null, (XmlElement[]) o); break;
 		case 17: putNodeIdArray(null, (NodeId[]) o); break;
 		case 18: putExpandedNodeIdArray(null, (ExpandedNodeId[]) o); break;

@@ -163,9 +163,9 @@ public class ListenableSocketChannel {
 	/**
 	 * Updates interest ops if key is valid
 	 */
-	void attemptUpdateInterestOps() {
+	void attemptUpdateInterestOps(int key) {
 		try {
-			int ops = getInterestOps();
+			int ops = getInterestOps(key);
 			selector.interestOps(channel, ops);
 		} catch (CancelledKeyException e) {
 			
@@ -185,7 +185,34 @@ public class ListenableSocketChannel {
 		if (writeListener!=null && !writeHndLock.get() && channel.isConnected()) ops |= SelectionKey.OP_WRITE;
 		if (connectListener!=null && !connectHndLock.get() && !channel.isConnected()) ops |= SelectionKey.OP_CONNECT;
 		return ops;
-	}		
+	}
+	
+	/**
+	 * Determines whether to enable or disable
+	 * operation interest ops
+	 * @param interest ops key
+	 * @return
+	 */
+	int getInterestOps(int key) {
+		switch (key) {
+		case SelectionKey.OP_READ:
+			if (readListener != null && !readHndLock.get() && channel.isConnected())
+				return SelectionKey.OP_READ;
+			else
+				return ~SelectionKey.OP_READ;
+		case SelectionKey.OP_WRITE:
+			if (writeListener != null && !writeHndLock.get() && channel.isConnected())
+				return SelectionKey.OP_WRITE;
+			else
+				return ~SelectionKey.OP_WRITE;
+		case SelectionKey.OP_CONNECT:
+			if (connectListener != null && !connectHndLock.get() && !channel.isConnected())
+				return SelectionKey.OP_CONNECT;
+			else
+				return ~SelectionKey.OP_CONNECT;
+		}
+		return 0;
+	}
 		
 	/**
 	 * Connect to a remote socket.
@@ -197,7 +224,7 @@ public class ListenableSocketChannel {
 	public void connect(SocketAddress addr) 
 	throws IOException
 	{		
-		attemptUpdateInterestOps();				
+		attemptUpdateInterestOps(SelectionKey.OP_CONNECT);			
 		channel.connect(addr);
 	}
 	
@@ -295,8 +322,7 @@ public class ListenableSocketChannel {
 					}
 				}
 			} finally {
-				if (executor == CurrentThreadExecutor.INSTANCE) 
-					sender.interestOps(channel, getInterestOps());
+				sender.interestOps(channel, getInterestOps());
 			}
 		}
 	};		
@@ -308,7 +334,7 @@ public class ListenableSocketChannel {
 	 */
 	public /* synchronized */  void setConnectListener(final ConnectionListener connectListener) {
 		this.connectListener = connectListener;
-		attemptUpdateInterestOps();
+		attemptUpdateInterestOps(SelectionKey.OP_CONNECT);
 	}
 
 	Runnable connectRun = new Runnable() {
@@ -328,8 +354,10 @@ public class ListenableSocketChannel {
 			} finally {
 				// synchronized(ListenableSocketChannel.this) {
 					connectHndLock.set(false);
-					if (executor != CurrentThreadExecutor.INSTANCE)
-						attemptUpdateInterestOps();
+					if (executor != CurrentThreadExecutor.INSTANCE) {
+						attemptUpdateInterestOps(SelectionKey.OP_CONNECT);
+					}
+						
 				// }
 			}
 		}};
@@ -341,7 +369,7 @@ public class ListenableSocketChannel {
 	 */
 	public /*synchronized */ void setReadListener(final ReadableListener readListener) {
 		this.readListener = readListener;
-		attemptUpdateInterestOps();
+		attemptUpdateInterestOps(SelectionKey.OP_READ);
 	}
 
 	Runnable readRun = new Runnable() {
@@ -353,8 +381,10 @@ public class ListenableSocketChannel {
 			} finally {
 //				synchronized(ListenableSocketChannel.this) {
 					readHndLock.set(false);
-					if (executor != CurrentThreadExecutor.INSTANCE)
-						attemptUpdateInterestOps();
+					if (executor != CurrentThreadExecutor.INSTANCE) {
+						attemptUpdateInterestOps(SelectionKey.OP_READ);
+					}
+						
 //				}
 			}
 		}};
@@ -366,7 +396,7 @@ public class ListenableSocketChannel {
 	 */
 	public /* synchronized */ void setWriteListener(final WriteableListener writeListener) {
 		this.writeListener = writeListener;
-		attemptUpdateInterestOps();
+		attemptUpdateInterestOps(SelectionKey.OP_WRITE);
 	}
 	
 	Runnable writeRun = new Runnable() {
@@ -379,8 +409,10 @@ public class ListenableSocketChannel {
 			} finally {
 //				synchronized(ListenableSocketChannel.this) {
 					writeHndLock.set(false);
-					if (executor != CurrentThreadExecutor.INSTANCE)
-						attemptUpdateInterestOps();
+					if (executor != CurrentThreadExecutor.INSTANCE) {
+						attemptUpdateInterestOps(SelectionKey.OP_WRITE);
+					}
+						
 //				}
 			}
 		}};

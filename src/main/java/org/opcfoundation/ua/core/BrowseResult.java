@@ -34,6 +34,7 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.core.ReferenceDescription;
 import org.opcfoundation.ua.utils.AbstractStructure;
@@ -47,12 +48,12 @@ public class BrowseResult extends AbstractStructure {
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.BrowseResult_Encoding_DefaultXml);
 	
     protected StatusCode StatusCode;
-    protected byte[] ContinuationPoint;
+    protected ByteString ContinuationPoint;
     protected ReferenceDescription[] References;
     
     public BrowseResult() {}
     
-    public BrowseResult(StatusCode StatusCode, byte[] ContinuationPoint, ReferenceDescription[] References)
+    public BrowseResult(StatusCode StatusCode, ByteString ContinuationPoint, ReferenceDescription[] References)
     {
         this.StatusCode = StatusCode;
         this.ContinuationPoint = ContinuationPoint;
@@ -69,12 +70,12 @@ public class BrowseResult extends AbstractStructure {
         this.StatusCode = StatusCode;
     }
     
-    public byte[] getContinuationPoint()
+    public ByteString getContinuationPoint()
     {
         return ContinuationPoint;
     }
     
-    public void setContinuationPoint(byte[] ContinuationPoint)
+    public void setContinuationPoint(ByteString ContinuationPoint)
     {
         this.ContinuationPoint = ContinuationPoint;
     }

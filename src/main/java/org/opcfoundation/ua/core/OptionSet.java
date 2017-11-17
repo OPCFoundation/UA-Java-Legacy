@@ -33,59 +33,58 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
-import org.opcfoundation.ua.core.ArrayTestType;
-import org.opcfoundation.ua.core.ScalarTestType;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
-public class CompositeTestType extends AbstractStructure {
+public class OptionSet extends AbstractStructure {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.CompositeTestType);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.CompositeTestType_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.CompositeTestType_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.OptionSet);
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.OptionSet_Encoding_DefaultBinary);
+	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.OptionSet_Encoding_DefaultXml);
 	
-    protected ScalarTestType Field1;
-    protected ArrayTestType Field2;
+    protected ByteString Value;
+    protected ByteString ValidBits;
     
-    public CompositeTestType() {}
+    public OptionSet() {}
     
-    public CompositeTestType(ScalarTestType Field1, ArrayTestType Field2)
+    public OptionSet(ByteString Value, ByteString ValidBits)
     {
-        this.Field1 = Field1;
-        this.Field2 = Field2;
+        this.Value = Value;
+        this.ValidBits = ValidBits;
     }
     
-    public ScalarTestType getField1()
+    public ByteString getValue()
     {
-        return Field1;
+        return Value;
     }
     
-    public void setField1(ScalarTestType Field1)
+    public void setValue(ByteString Value)
     {
-        this.Field1 = Field1;
+        this.Value = Value;
     }
     
-    public ArrayTestType getField2()
+    public ByteString getValidBits()
     {
-        return Field2;
+        return ValidBits;
     }
     
-    public void setField2(ArrayTestType Field2)
+    public void setValidBits(ByteString ValidBits)
     {
-        this.Field2 = Field2;
+        this.ValidBits = ValidBits;
     }
     
     /**
       * Deep clone
       *
-      * @return cloned CompositeTestType
+      * @return cloned OptionSet
       */
-    public CompositeTestType clone()
+    public OptionSet clone()
     {
-        CompositeTestType result = (CompositeTestType) super.clone();
-        result.Field1 = Field1==null ? null : Field1.clone();
-        result.Field2 = Field2==null ? null : Field2.clone();
+        OptionSet result = (OptionSet) super.clone();
+        result.Value = Value;
+        result.ValidBits = ValidBits;
         return result;
     }
     
@@ -95,13 +94,13 @@ public class CompositeTestType extends AbstractStructure {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        CompositeTestType other = (CompositeTestType) obj;
-        if (Field1==null) {
-            if (other.Field1 != null) return false;
-        } else if (!Field1.equals(other.Field1)) return false;
-        if (Field2==null) {
-            if (other.Field2 != null) return false;
-        } else if (!Field2.equals(other.Field2)) return false;
+        OptionSet other = (OptionSet) obj;
+        if (Value==null) {
+            if (other.Value != null) return false;
+        } else if (!Value.equals(other.Value)) return false;
+        if (ValidBits==null) {
+            if (other.ValidBits != null) return false;
+        } else if (!ValidBits.equals(other.ValidBits)) return false;
         return true;
     }
     
@@ -111,9 +110,9 @@ public class CompositeTestType extends AbstractStructure {
         final int prime = 31;
         int result = 1;
         result = prime * result
-                + ((Field1 == null) ? 0 : Field1.hashCode());
+                + ((Value == null) ? 0 : Value.hashCode());
         result = prime * result
-                + ((Field2 == null) ? 0 : Field2.hashCode());
+                + ((ValidBits == null) ? 0 : ValidBits.hashCode());
         return result;
     }
     
@@ -132,7 +131,7 @@ public class CompositeTestType extends AbstractStructure {
 	}
 	
 	public String toString() {
-		return "CompositeTestType: "+ObjectUtils.printFieldsDeep(this);
+		return "OptionSet: "+ObjectUtils.printFieldsDeep(this);
 	}
 
 }

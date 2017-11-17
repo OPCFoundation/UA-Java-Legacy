@@ -16,6 +16,7 @@ import java.security.interfaces.RSAPrivateKey;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.ServiceRequest;
@@ -166,7 +167,7 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 				dataToSign = ByteBufferUtils.concatenate(dataToSign,
 						session.getServerNonce());
 			
-			clientSignature = new SignatureData(algorithm.getUri(), CryptoUtil.getCryptoProvider().signAsymm(signerKey, algorithm, dataToSign));
+			clientSignature = new SignatureData(algorithm.getUri(), ByteString.valueOf(CryptoUtil.getCryptoProvider().signAsymm(signerKey, algorithm, dataToSign)));
 
 		}
 		// 2. Activate Session
@@ -178,7 +179,7 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 		asreq.setUserTokenSignature( identitySignature );				
 		
 		ActivateSessionResponse asres = ActivateSession(asreq);
-		session.serverNonce = asres.getServerNonce();
+		session.serverNonce = ByteString.asByteArray(asres.getServerNonce());
 		return asres;
 	}	
 	

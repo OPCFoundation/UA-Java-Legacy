@@ -63,7 +63,7 @@ public class NamespaceTable extends UriTable {
 		}
 		if(ExpandedNodeId.isNull(n1) || ExpandedNodeId.isNull(n2)){
 			return false; //other is now null
-		}		
+		}
 		if (!n1.getValue().equals(n2.getValue()))
 			return false;
 		int i1 = n1.getNamespaceUri() == null ? n1.getNamespaceIndex() : getIndex(n1.getNamespaceUri());
@@ -86,7 +86,7 @@ public class NamespaceTable extends UriTable {
 		}
 		if(NodeId.isNull(n1) || ExpandedNodeId.isNull(n2)){
 			return false; //other is now null
-		}	
+		}
 		if (!n1.getValue().equals(n2.getValue()))
 			return false;
 		int i1 = n1.getNamespaceIndex();

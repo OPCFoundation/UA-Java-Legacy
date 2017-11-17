@@ -39,6 +39,7 @@ import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.utils.EndpointUtil;
 import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.UnsignedByte;
 import org.opcfoundation.ua.core.ApplicationDescription;
 import org.opcfoundation.ua.core.MessageSecurityMode;
@@ -60,7 +61,7 @@ public class EndpointDescription extends AbstractStructure implements Structure,
 	
     protected String EndpointUrl;
     protected ApplicationDescription Server;
-    protected byte[] ServerCertificate;
+    protected ByteString ServerCertificate;
     protected MessageSecurityMode SecurityMode;
     protected String SecurityPolicyUri;
     protected UserTokenPolicy[] UserIdentityTokens;
@@ -69,7 +70,7 @@ public class EndpointDescription extends AbstractStructure implements Structure,
     
     public EndpointDescription() {}
     
-    public EndpointDescription(String EndpointUrl, ApplicationDescription Server, byte[] ServerCertificate, MessageSecurityMode SecurityMode, String SecurityPolicyUri, UserTokenPolicy[] UserIdentityTokens, String TransportProfileUri, UnsignedByte SecurityLevel)
+    public EndpointDescription(String EndpointUrl, ApplicationDescription Server, ByteString ServerCertificate, MessageSecurityMode SecurityMode, String SecurityPolicyUri, UserTokenPolicy[] UserIdentityTokens, String TransportProfileUri, UnsignedByte SecurityLevel)
     {
         this.EndpointUrl = EndpointUrl;
         this.Server = Server;
@@ -101,12 +102,12 @@ public class EndpointDescription extends AbstractStructure implements Structure,
         this.Server = Server;
     }
     
-    public byte[] getServerCertificate()
+    public ByteString getServerCertificate()
     {
         return ServerCertificate;
     }
     
-    public void setServerCertificate(byte[] ServerCertificate)
+    public void setServerCertificate(ByteString ServerCertificate)
     {
         this.ServerCertificate = ServerCertificate;
     }

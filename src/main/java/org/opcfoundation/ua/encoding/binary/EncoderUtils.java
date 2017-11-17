@@ -13,6 +13,7 @@ package org.opcfoundation.ua.encoding.binary;
 
 import java.util.UUID;
 
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
@@ -109,8 +110,8 @@ public class EncoderUtils {
 		else if (UUID.class.isAssignableFrom(clazz)) {
 			encoder.putGuid(fieldName, (UUID) o);
 		}
-		else if (byte[].class.isAssignableFrom(clazz)) {
-			encoder.putByteString(fieldName, (byte[]) o);
+		else if (ByteString.class.isAssignableFrom(clazz)) {
+			encoder.putByteString(fieldName, (ByteString) o);
 		}
 		else if (XmlElement.class.isAssignableFrom(clazz)) {
 			encoder.putXmlElement(fieldName, (XmlElement) o);
@@ -187,8 +188,8 @@ public class EncoderUtils {
 		else if (UUID[].class.isAssignableFrom(clazz)) {
 			encoder.putGuidArray(fieldName, (UUID[]) o);
 		}
-		else if (byte[][].class.isAssignableFrom(clazz)) {
-			encoder.putByteStringArray(fieldName, (byte[][]) o);
+		else if (ByteString[].class.isAssignableFrom(clazz)) {
+			encoder.putByteStringArray(fieldName, (ByteString[]) o);
 		}
 		else if (XmlElement[].class.isAssignableFrom(clazz)) {
 			encoder.putXmlElementArray(fieldName, (XmlElement[]) o);
@@ -212,7 +213,7 @@ public class EncoderUtils {
 			encoder.putExtensionObjectArray(fieldName, (ExtensionObject[]) o);
 		}
 		else if (Structure[].class.isAssignableFrom(clazz)) {
-			encoder.putStructureArray(fieldName, (Structure[]) o);
+			encoder.putEncodeableArray(fieldName, (Class<? extends IEncodeable>) clazz.getComponentType(), (Structure[]) o);
 		}
 		else if (DataValue[].class.isAssignableFrom(clazz)) {
 			encoder.putDataValueArray(fieldName, (DataValue[]) o);

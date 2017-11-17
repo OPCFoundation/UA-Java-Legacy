@@ -39,7 +39,6 @@ import java.security.PrivateKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.Arrays;
@@ -50,7 +49,12 @@ import javax.crypto.NoSuchPaddingException;
 
 import junit.framework.TestCase;
 
+import org.opcfoundation.ua.builtintypes.ByteString;
+import org.opcfoundation.ua.builtintypes.StatusCode;
+import org.opcfoundation.ua.cert.DefaultCertificateValidator;
+import org.opcfoundation.ua.cert.PkiDirectoryCertificateStore;
 import org.opcfoundation.ua.core.SignatureData;
+import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.transport.security.BcCryptoProvider;
 import org.opcfoundation.ua.transport.security.Cert;
 import org.opcfoundation.ua.transport.security.CryptoProvider;
@@ -106,6 +110,115 @@ public class TestCertificates extends TestCase {
 		keys.getPrivateKey().save(file, null);
 		PrivKey privKey = PrivKey.load(file, null);
 		assertEquals(keys.getPrivateKey().getPrivateKey(), privKey.getPrivateKey());
+	}
+	
+	public void testCertificateChain() throws IllegalStateException,
+			IOException, GeneralSecurityException {
+
+		KeyPair rootCaKeys = CertificateUtils.createIssuerCertificate("RootCA",
+				3650, null);
+		File rootCaFile = new File("RootCA.der");
+		rootCaKeys.getCertificate().save(rootCaFile);
+		Cert rootCaCert = Cert.load(rootCaFile);
+
+		int intermediateCaAmount = 10;
+
+		KeyPair[] intermediateCaKeys = new KeyPair[intermediateCaAmount];
+		File[] intermediateCaFiles = new File[intermediateCaAmount];
+		Cert[] intermediateCaCerts = new Cert[intermediateCaAmount];
+		for (int i = 0; i < intermediateCaAmount; i++) {
+			intermediateCaKeys[i] = CertificateUtils.createIssuerCertificate(
+					"IntermediateCA" + (i + 1), 3650,
+					i == 0 ? rootCaKeys : intermediateCaKeys[i - 1]);
+			intermediateCaFiles[i] = new File(
+					"IntermediateCA" + (i + 1) + ".der");
+			intermediateCaKeys[i].getCertificate().save(intermediateCaFiles[i]);
+			intermediateCaCerts[i] = Cert.load(intermediateCaFiles[i]);
+		}
+
+		KeyPair leafKeys = CertificateUtils
+				.createApplicationInstanceCertificate("chainTest", "chainTest",
+						"urn:localhost:UA:chainTest", 365,
+						intermediateCaKeys[intermediateCaKeys.length - 1]);
+		File leafFile = new File("LeafCert.der");
+		leafKeys.getCertificate().save(leafFile);
+		Cert leafCert = Cert.load(leafFile);
+
+		final PkiDirectoryCertificateStore myCertStore = new PkiDirectoryCertificateStore(
+				"TestCertificatesPKI/CA");
+		final DefaultCertificateValidator validator = new DefaultCertificateValidator(
+				myCertStore);
+		try {
+			myCertStore.clear(true);
+		} catch (Exception e) {
+		}
+
+		// Test that none of the certs below root CA can be validated without
+		// the root CA
+		assertEquals(true, validator.validateCertificate(leafCert)
+				.isStatusCode(StatusCodes.Bad_CertificateChainIncomplete));
+		for (int i = 0; i < intermediateCaAmount; i++)
+			assertEquals(true, validator
+					.validateCertificate(intermediateCaCerts[i])
+					.isStatusCode(StatusCodes.Bad_CertificateChainIncomplete));
+
+		// Test that the chain works
+		myCertStore.addTrustedCertificate(rootCaCert);
+		for (int i = 0; i < intermediateCaAmount; i++)
+			assertEquals(StatusCode.GOOD,
+					validator.validateCertificate(intermediateCaCerts[i]));
+		assertEquals(StatusCode.GOOD, validator.validateCertificate(leafCert));
+
+		// Test that rejecting the top intermediate cert makes lower level certs
+		// invalid
+		myCertStore.addRejectedCertificate(intermediateCaCerts[0]);
+		assertEquals(true, validator.validateCertificate(leafCert)
+				.isStatusCode(StatusCodes.Bad_CertificateChainIncomplete));
+		assertEquals(true, validator
+				.validateCertificate(
+						intermediateCaCerts[intermediateCaCerts.length - 1])
+				.isStatusCode(StatusCodes.Bad_CertificateChainIncomplete));
+
+		// Test that previous statement rejected each cert in chain, thus
+		// trusting intermediateCaCerts[0] doesn't validate the lowest certs
+		assertEquals(StatusCode.GOOD,
+				validator.validateCertificate(intermediateCaCerts[0]));
+		assertEquals(true, validator
+				.validateCertificate(
+						intermediateCaCerts[intermediateCaCerts.length - 1])
+				.isStatusCode(StatusCodes.Bad_CertificateChainIncomplete));
+		assertEquals(true, validator.validateCertificate(leafCert)
+				.isStatusCode(StatusCodes.Bad_CertificateChainIncomplete));
+
+		for (int i = 1; i < intermediateCaAmount; i++)
+			assertEquals(StatusCode.GOOD,
+					validator.validateCertificate(intermediateCaCerts[i]));
+		assertEquals(StatusCode.GOOD, validator.validateCertificate(leafCert));
+
+		// Test that rejecting the lowest level intermediate cert makes leaf
+		// cert invalid
+		myCertStore.addRejectedCertificate(
+				intermediateCaCerts[intermediateCaCerts.length - 1]);
+		assertEquals(true, validator.validateCertificate(leafCert)
+				.isStatusCode(StatusCodes.Bad_CertificateChainIncomplete));
+
+		assertEquals(StatusCode.GOOD, validator.validateCertificate(
+				intermediateCaCerts[intermediateCaCerts.length - 1]));
+		assertEquals(StatusCode.GOOD, validator.validateCertificate(leafCert));
+
+		// Test that rejecting the root CA makes every cert below it invalid
+		myCertStore.addRejectedCertificate(rootCaCert);
+		assertEquals(true, validator.validateCertificate(leafCert)
+				.isStatusCode(StatusCodes.Bad_CertificateChainIncomplete));
+		for (int i = 0; i < intermediateCaAmount; i++)
+			assertEquals(true, validator
+					.validateCertificate(intermediateCaCerts[i])
+					.isStatusCode(StatusCodes.Bad_CertificateChainIncomplete));
+
+		try {
+			myCertStore.clear(true);
+		} catch (Exception e) {
+		}
 	}
 
 	public void testHttpsCert() throws IllegalStateException, IOException,
@@ -176,7 +289,7 @@ public class TestCertificates extends TestCase {
 		byte[] dataToSign = new byte[100];
 		@SuppressWarnings("deprecation")
 		SignatureData signedData = CertificateUtils.sign(privkey, algorithm , dataToSign);
-		byte[] signature = signedData.getSignature();
+		byte[] signature = ByteString.asByteArray(signedData.getSignature());
 		@SuppressWarnings("deprecation")
 		boolean isCorrect = CertificateUtils.verify(keys.certificate.certificate, algorithm, dataToSign, signature);
 		tearDown();
@@ -196,7 +309,7 @@ public class TestCertificates extends TestCase {
 		byte[] dataToSign = new byte[100];
 		@SuppressWarnings("deprecation")
 		SignatureData signedData = CertificateUtils.sign(privkey, algorithm , dataToSign);
-		byte[] signature = signedData.getSignature();
+		byte[] signature = ByteString.asByteArray(signedData.getSignature());
 		@SuppressWarnings("deprecation")
 		boolean isCorrect = CertificateUtils.verify(keys.certificate.certificate, algorithm, dataToSign, signature);
 		
@@ -216,7 +329,7 @@ public class TestCertificates extends TestCase {
 		byte[] dataToSign = new byte[100];
 		@SuppressWarnings("deprecation")
 		SignatureData signedData = CertificateUtils.sign(privkey, algorithm , dataToSign);
-		byte[] signature = signedData.getSignature();
+		byte[] signature = ByteString.asByteArray(signedData.getSignature());
 		
 		algorithm = SecurityAlgorithm.RsaSha256;
 		//now signature should not be verified
@@ -239,7 +352,7 @@ public class TestCertificates extends TestCase {
 		byte[] dataToSign = new byte[100];
 		@SuppressWarnings("deprecation")
 		SignatureData signedData = CertificateUtils.sign(privkey, algorithm , dataToSign);
-		byte[] signature = signedData.getSignature();
+		byte[] signature = ByteString.asByteArray(signedData.getSignature());
 		
 		algorithm = SecurityAlgorithm.RsaSha256;
 		//now signature should not be verified
@@ -263,8 +376,8 @@ public class TestCertificates extends TestCase {
 		RSAPrivateKey privkey = keys.getPrivateKey().getPrivateKey();
 		SecurityAlgorithm algorithm = SecurityAlgorithm.RsaSha1;
 		byte[] dataToSign = new byte[100];
-		SignatureData signedData = new SignatureData(algorithm.getUri(), CryptoUtil.getCryptoProvider().signAsymm(privkey, algorithm, dataToSign));
-		byte[] signature = signedData.getSignature();
+		SignatureData signedData = new SignatureData(algorithm.getUri(), ByteString.valueOf(CryptoUtil.getCryptoProvider().signAsymm(privkey, algorithm, dataToSign)));
+		byte[] signature = ByteString.asByteArray(signedData.getSignature());
 		boolean isCorrect = CryptoUtil.getCryptoProvider().verifyAsymm(keys.certificate.certificate.getPublicKey(), algorithm, dataToSign, signature);
 		tearDown();
 		
@@ -281,8 +394,8 @@ public class TestCertificates extends TestCase {
 		RSAPrivateKey privkey = keys.getPrivateKey().getPrivateKey();
 		SecurityAlgorithm algorithm = SecurityAlgorithm.RsaSha1;
 		byte[] dataToSign = new byte[100];
-		SignatureData signedData = new SignatureData(algorithm.getUri(), CryptoUtil.getCryptoProvider().signAsymm(privkey, algorithm, dataToSign));
-		byte[] signature = signedData.getSignature();
+		SignatureData signedData = new SignatureData(algorithm.getUri(), ByteString.valueOf(CryptoUtil.getCryptoProvider().signAsymm(privkey, algorithm, dataToSign)));
+		byte[] signature = ByteString.asByteArray(signedData.getSignature());
 		boolean isCorrect = CryptoUtil.getCryptoProvider().verifyAsymm(keys.certificate.certificate.getPublicKey(), algorithm, dataToSign, signature);
 		
 		CryptoUtil.setCryptoProvider(null);
@@ -299,8 +412,8 @@ public class TestCertificates extends TestCase {
 		RSAPrivateKey privkey = keys.getPrivateKey().getPrivateKey();
 		SecurityAlgorithm algorithm = SecurityAlgorithm.RsaSha1;
 		byte[] dataToSign = new byte[100];
-		SignatureData signedData = new SignatureData(algorithm.getUri(), CryptoUtil.getCryptoProvider().signAsymm(privkey, algorithm, dataToSign));
-		byte[] signature = signedData.getSignature();
+		SignatureData signedData = new SignatureData(algorithm.getUri(), ByteString.valueOf(CryptoUtil.getCryptoProvider().signAsymm(privkey, algorithm, dataToSign)));
+		byte[] signature = ByteString.asByteArray(signedData.getSignature());
 		
 		algorithm = SecurityAlgorithm.RsaSha256;
 		//now signature should not be verified
@@ -320,8 +433,8 @@ public class TestCertificates extends TestCase {
 		RSAPrivateKey privkey = keys.getPrivateKey().getPrivateKey();
 		SecurityAlgorithm algorithm = SecurityAlgorithm.RsaSha1;
 		byte[] dataToSign = new byte[100];
-		SignatureData signedData = new SignatureData(algorithm.getUri(), CryptoUtil.getCryptoProvider().signAsymm(privkey, algorithm, dataToSign));
-		byte[] signature = signedData.getSignature();
+		SignatureData signedData = new SignatureData(algorithm.getUri(), ByteString.valueOf(CryptoUtil.getCryptoProvider().signAsymm(privkey, algorithm, dataToSign)));
+		byte[] signature = ByteString.asByteArray(signedData.getSignature());
 		
 		algorithm = SecurityAlgorithm.RsaSha256;
 		//now signature should not be verified

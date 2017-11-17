@@ -333,6 +333,19 @@ public final class UnsignedInteger extends Number implements Comparable<Number> 
 		return valueOf(Long.parseLong(s));
 	}
 
+    /**
+     * Parses the string argument as an unsigned integer similar to {@link Integer#parseInt(String, int)}
+     *
+	 * @param s the   string to parse, assumed to contain a positive Long value
+     * @param radix   the radix to be used while parsing <code>s</code>.
+	 * @return the respective UnsignedInteger
+	 * @throws java.lang.NumberFormatException if the string cannot be parsed into an integer value
+	 * @throws java.lang.IllegalArgumentException if the parsed value does not fit in the range of UnsignedInteger
+	 */
+	public static UnsignedInteger parseUnsignedInteger(String s, int radix) throws NumberFormatException, IllegalArgumentException{
+		return valueOf(Long.parseLong(s, radix));
+	}
+
 	/**
 	 * Increase the value by one. Note that this object is not changed, but a new one is created.
 	 *

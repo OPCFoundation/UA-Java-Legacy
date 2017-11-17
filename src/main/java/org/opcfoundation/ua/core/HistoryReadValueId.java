@@ -39,6 +39,7 @@ import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.utils.NumericRange;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.builtintypes.QualifiedName;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.QualifiedName;
 import org.opcfoundation.ua.utils.AbstractStructure;
@@ -55,11 +56,11 @@ public class HistoryReadValueId extends AbstractStructure implements Structure, 
     protected NodeId NodeId;
     protected String IndexRange;
     protected QualifiedName DataEncoding;
-    protected byte[] ContinuationPoint;
+    protected ByteString ContinuationPoint;
     
     public HistoryReadValueId() {}
     
-    public HistoryReadValueId(NodeId NodeId, String IndexRange, QualifiedName DataEncoding, byte[] ContinuationPoint)
+    public HistoryReadValueId(NodeId NodeId, String IndexRange, QualifiedName DataEncoding, ByteString ContinuationPoint)
     {
         this.NodeId = NodeId;
         this.IndexRange = IndexRange;
@@ -97,12 +98,12 @@ public class HistoryReadValueId extends AbstractStructure implements Structure, 
         this.DataEncoding = DataEncoding;
     }
     
-    public byte[] getContinuationPoint()
+    public ByteString getContinuationPoint()
     {
         return ContinuationPoint;
     }
     
-    public void setContinuationPoint(byte[] ContinuationPoint)
+    public void setContinuationPoint(ByteString ContinuationPoint)
     {
         this.ContinuationPoint = ContinuationPoint;
     }

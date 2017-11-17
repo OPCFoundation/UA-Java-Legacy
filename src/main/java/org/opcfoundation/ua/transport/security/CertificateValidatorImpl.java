@@ -18,12 +18,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.opcfoundation.ua.builtintypes.StatusCode;
+import org.opcfoundation.ua.cert.DefaultCertificateValidator;
+import org.opcfoundation.ua.core.ApplicationDescription;
 import org.opcfoundation.ua.core.StatusCodes;
 
 /**
  * <p>CertificateValidatorImpl class.</p>
- *
+ * @deprecated use {@link DefaultCertificateValidator}
  */
+@Deprecated
 public class CertificateValidatorImpl implements CertificateValidator {
 
 	/** List of explicitely trusted certificates */
@@ -95,6 +98,11 @@ public class CertificateValidatorImpl implements CertificateValidator {
 			}
 		}
 		return new StatusCode(StatusCodes.Bad_SecurityChecksFailed);
+	}
+
+	@Override
+	public StatusCode validateCertificate(ApplicationDescription applicationDescription, Cert cert) {
+		return validateCertificate(cert);
 	}
 
 }

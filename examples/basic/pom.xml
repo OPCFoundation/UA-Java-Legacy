@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opcfoundation.ua</groupId>
   <artifactId>opc-ua-stack-examples</artifactId>
-  <version>1.03.340.0-SNAPSHOT</version>
+  <version>1.03.342.0-SNAPSHOT</version>
   <name>examples</name>
   <properties>
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -12,7 +12,7 @@
   	<dependency>
   		<groupId>org.opcfoundation.ua</groupId>
   		<artifactId>opc-ua-stack</artifactId>
-  		<version>1.03.340.0-SNAPSHOT</version>
+  		<version>${project.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.httpcomponents</groupId>

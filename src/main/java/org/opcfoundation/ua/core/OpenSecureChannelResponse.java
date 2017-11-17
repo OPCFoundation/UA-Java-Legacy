@@ -33,6 +33,7 @@ import org.opcfoundation.ua.builtintypes.ServiceResponse;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.ChannelSecurityToken;
 import org.opcfoundation.ua.core.ResponseHeader;
@@ -48,11 +49,11 @@ public class OpenSecureChannelResponse extends AbstractStructure implements Serv
     protected ResponseHeader ResponseHeader;
     protected UnsignedInteger ServerProtocolVersion;
     protected ChannelSecurityToken SecurityToken;
-    protected byte[] ServerNonce;
+    protected ByteString ServerNonce;
     
     public OpenSecureChannelResponse() {}
     
-    public OpenSecureChannelResponse(ResponseHeader ResponseHeader, UnsignedInteger ServerProtocolVersion, ChannelSecurityToken SecurityToken, byte[] ServerNonce)
+    public OpenSecureChannelResponse(ResponseHeader ResponseHeader, UnsignedInteger ServerProtocolVersion, ChannelSecurityToken SecurityToken, ByteString ServerNonce)
     {
         this.ResponseHeader = ResponseHeader;
         this.ServerProtocolVersion = ServerProtocolVersion;
@@ -90,12 +91,12 @@ public class OpenSecureChannelResponse extends AbstractStructure implements Serv
         this.SecurityToken = SecurityToken;
     }
     
-    public byte[] getServerNonce()
+    public ByteString getServerNonce()
     {
         return ServerNonce;
     }
     
-    public void setServerNonce(byte[] ServerNonce)
+    public void setServerNonce(ByteString ServerNonce)
     {
         this.ServerNonce = ServerNonce;
     }

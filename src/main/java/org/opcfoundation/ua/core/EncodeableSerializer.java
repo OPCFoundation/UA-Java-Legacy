@@ -65,7 +65,7 @@ public class EncodeableSerializer extends SerializerComposition {
 	
 	public EncodeableSerializer() {
 		
-		    	// TrustListDataType
+    	// TrustListDataType
     	addSerializer(
     		new AbstractSerializer(TrustListDataType.class, TrustListDataType.BINARY, TrustListDataType.XML, TrustListDataType.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
@@ -671,6 +671,40 @@ public class EncodeableSerializer extends SerializerComposition {
     			}
     		});
     
+    	// OptionSet
+    	addSerializer(
+    		new AbstractSerializer(OptionSet.class, OptionSet.BINARY, OptionSet.XML, OptionSet.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				OptionSet obj = (OptionSet) encodeable;
+    				calculator.putByteString(null,  (obj==null)?null:obj.getValue() );
+    				calculator.putByteString(null,  (obj==null)?null:obj.getValidBits() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				OptionSet obj = (OptionSet) encodeable;
+    				encoder.putByteString("Value",  (obj==null)?null:obj.getValue() );
+    				encoder.putByteString("ValidBits",  (obj==null)?null:obj.getValidBits() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				OptionSet result = new OptionSet();
+    				result.setValue( decoder.getByteString("Value") );
+    				result.setValidBits( decoder.getByteString("ValidBits") );
+    				return result;
+    			}
+    		});
+    
+    	// Union
+    	addSerializer(
+    		new AbstractSerializer(Union.class, Union.BINARY, Union.XML, Union.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				Union result = new Union();
+    				return result;
+    			}
+    		});
+    
     	// TimeZoneDataType
     	addSerializer(
     		new AbstractSerializer(TimeZoneDataType.class, TimeZoneDataType.BINARY, TimeZoneDataType.XML, TimeZoneDataType.ID) {
@@ -1137,45 +1171,34 @@ public class EncodeableSerializer extends SerializerComposition {
     			}
     		});
     
-    	// RegisteredServer2
+    	// DiscoveryConfiguration
     	addSerializer(
-    		new AbstractSerializer(RegisteredServer2.class, RegisteredServer2.BINARY, RegisteredServer2.XML, RegisteredServer2.ID) {
+    		new AbstractSerializer(DiscoveryConfiguration.class, DiscoveryConfiguration.BINARY, DiscoveryConfiguration.XML, DiscoveryConfiguration.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				RegisteredServer2 obj = (RegisteredServer2) encodeable;
-    				calculator.putString(null,  (obj==null)?null:obj.getServerUri() );
-    				calculator.putString(null,  (obj==null)?null:obj.getProductUri() );
-    				calculator.putLocalizedTextArray(null, ((obj==null)?null:obj.getServerNames()) );
-    				calculator.putEnumeration(null, null /*obj.getServerType()*/);
-    				calculator.putString(null,  (obj==null)?null:obj.getGatewayServerUri() );
-    				calculator.putStringArray(null, ((obj==null)?null:obj.getDiscoveryUrls()) );
-    				calculator.putString(null,  (obj==null)?null:obj.getSemaphoreFilePath() );
-    				calculator.putBoolean(null, null /*obj.getIsOnline()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DiscoveryConfiguration result = new DiscoveryConfiguration();
+    				return result;
+    			}
+    		});
+    
+    	// MdnsDiscoveryConfiguration
+    	addSerializer(
+    		new AbstractSerializer(MdnsDiscoveryConfiguration.class, MdnsDiscoveryConfiguration.BINARY, MdnsDiscoveryConfiguration.XML, MdnsDiscoveryConfiguration.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				MdnsDiscoveryConfiguration obj = (MdnsDiscoveryConfiguration) encodeable;
     				calculator.putString(null,  (obj==null)?null:obj.getMdnsServerName() );
     				calculator.putStringArray(null, ((obj==null)?null:obj.getServerCapabilities()) );
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				RegisteredServer2 obj = (RegisteredServer2) encodeable;
-    				encoder.putString("ServerUri",  (obj==null)?null:obj.getServerUri() );
-    				encoder.putString("ProductUri",  (obj==null)?null:obj.getProductUri() );
-    				encoder.putLocalizedTextArray("ServerNames", (obj==null)?null:obj.getServerNames() );
-    				encoder.putEnumeration("ServerType",  (obj==null)?null:obj.getServerType() );
-    				encoder.putString("GatewayServerUri",  (obj==null)?null:obj.getGatewayServerUri() );
-    				encoder.putStringArray("DiscoveryUrls", (obj==null)?null:obj.getDiscoveryUrls() );
-    				encoder.putString("SemaphoreFilePath",  (obj==null)?null:obj.getSemaphoreFilePath() );
-    				encoder.putBoolean("IsOnline",  (obj==null)?null:obj.getIsOnline() );
+    				MdnsDiscoveryConfiguration obj = (MdnsDiscoveryConfiguration) encodeable;
     				encoder.putString("MdnsServerName",  (obj==null)?null:obj.getMdnsServerName() );
     				encoder.putStringArray("ServerCapabilities", (obj==null)?null:obj.getServerCapabilities() );
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				RegisteredServer2 result = new RegisteredServer2();
-    				result.setServerUri( decoder.getString("ServerUri") );
-    				result.setProductUri( decoder.getString("ProductUri") );
-    				result.setServerNames( decoder.getLocalizedTextArray("ServerNames") );
-    				result.setServerType( decoder.getEnumeration("ServerType", ApplicationType.class) );
-    				result.setGatewayServerUri( decoder.getString("GatewayServerUri") );
-    				result.setDiscoveryUrls( decoder.getStringArray("DiscoveryUrls") );
-    				result.setSemaphoreFilePath( decoder.getString("SemaphoreFilePath") );
-    				result.setIsOnline( decoder.getBoolean("IsOnline") );
+    				MdnsDiscoveryConfiguration result = new MdnsDiscoveryConfiguration();
     				result.setMdnsServerName( decoder.getString("MdnsServerName") );
     				result.setServerCapabilities( decoder.getStringArray("ServerCapabilities") );
     				return result;
@@ -1188,17 +1211,20 @@ public class EncodeableSerializer extends SerializerComposition {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
     				RegisterServer2Request obj = (RegisterServer2Request) encodeable;
     				calculator.putEncodeable(null, RequestHeader.class, (obj==null)?null:obj.getRequestHeader());
-    				calculator.putEncodeable(null, RegisteredServer2.class, (obj==null)?null:obj.getServer());
+    				calculator.putEncodeable(null, RegisteredServer.class, (obj==null)?null:obj.getServer());
+    				calculator.putExtensionObjectArray(null, ((obj==null)?null:obj.getDiscoveryConfiguration()) );
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
     				RegisterServer2Request obj = (RegisterServer2Request) encodeable;
     				encoder.putEncodeable("RequestHeader", RequestHeader.class, (obj==null)?null:obj.getRequestHeader());
-    				encoder.putEncodeable("Server", RegisteredServer2.class, (obj==null)?null:obj.getServer());
+    				encoder.putEncodeable("Server", RegisteredServer.class, (obj==null)?null:obj.getServer());
+    				encoder.putExtensionObjectArray("DiscoveryConfiguration", (obj==null)?null:obj.getDiscoveryConfiguration() );
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
     				RegisterServer2Request result = new RegisterServer2Request();
     				result.setRequestHeader( decoder.getEncodeable("RequestHeader", RequestHeader.class) );
-    				result.setServer( decoder.getEncodeable("Server", RegisteredServer2.class) );
+    				result.setServer( decoder.getEncodeable("Server", RegisteredServer.class) );
+    				result.setDiscoveryConfiguration( decoder.getExtensionObjectArray("DiscoveryConfiguration") );
     				return result;
     			}
     		});
@@ -1209,14 +1235,20 @@ public class EncodeableSerializer extends SerializerComposition {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
     				RegisterServer2Response obj = (RegisterServer2Response) encodeable;
     				calculator.putEncodeable(null, ResponseHeader.class, (obj==null)?null:obj.getResponseHeader());
+    				calculator.putStatusCodeArray(null, ((obj==null)?null:obj.getConfigurationResults()) );
+    				calculator.putDiagnosticInfoArray(null, ((obj==null)?null:obj.getDiagnosticInfos()) );
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
     				RegisterServer2Response obj = (RegisterServer2Response) encodeable;
     				encoder.putEncodeable("ResponseHeader", ResponseHeader.class, (obj==null)?null:obj.getResponseHeader());
+    				encoder.putStatusCodeArray("ConfigurationResults", (obj==null)?null:obj.getConfigurationResults() );
+    				encoder.putDiagnosticInfoArray("DiagnosticInfos", (obj==null)?null:obj.getDiagnosticInfos() );
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
     				RegisterServer2Response result = new RegisterServer2Response();
     				result.setResponseHeader( decoder.getEncodeable("ResponseHeader", ResponseHeader.class) );
+    				result.setConfigurationResults( decoder.getStatusCodeArray("ConfigurationResults") );
+    				result.setDiagnosticInfos( decoder.getDiagnosticInfoArray("DiagnosticInfos") );
     				return result;
     			}
     		});
@@ -1553,27 +1585,6 @@ public class EncodeableSerializer extends SerializerComposition {
     				X509IdentityToken result = new X509IdentityToken();
     				result.setPolicyId( decoder.getString("PolicyId") );
     				result.setCertificateData( decoder.getByteString("CertificateData") );
-    				return result;
-    			}
-    		});
-    
-    	// KerberosIdentityToken
-    	addSerializer(
-    		new AbstractSerializer(KerberosIdentityToken.class, KerberosIdentityToken.BINARY, KerberosIdentityToken.XML, KerberosIdentityToken.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				KerberosIdentityToken obj = (KerberosIdentityToken) encodeable;
-    				calculator.putString(null,  (obj==null)?null:obj.getPolicyId() );
-    				calculator.putByteString(null,  (obj==null)?null:obj.getTicketData() );
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				KerberosIdentityToken obj = (KerberosIdentityToken) encodeable;
-    				encoder.putString("PolicyId",  (obj==null)?null:obj.getPolicyId() );
-    				encoder.putByteString("TicketData",  (obj==null)?null:obj.getTicketData() );
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				KerberosIdentityToken result = new KerberosIdentityToken();
-    				result.setPolicyId( decoder.getString("PolicyId") );
-    				result.setTicketData( decoder.getByteString("TicketData") );
     				return result;
     			}
     		});
@@ -2891,84 +2902,6 @@ public class EncodeableSerializer extends SerializerComposition {
     				result.setMaxBufferSize( decoder.getInt32("MaxBufferSize") );
     				result.setChannelLifetime( decoder.getInt32("ChannelLifetime") );
     				result.setSecurityTokenLifetime( decoder.getInt32("SecurityTokenLifetime") );
-    				return result;
-    			}
-    		});
-    
-    	// SupportedProfile
-    	addSerializer(
-    		new AbstractSerializer(SupportedProfile.class, SupportedProfile.BINARY, SupportedProfile.XML, SupportedProfile.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				SupportedProfile obj = (SupportedProfile) encodeable;
-    				calculator.putString(null,  (obj==null)?null:obj.getOrganizationUri() );
-    				calculator.putString(null,  (obj==null)?null:obj.getProfileId() );
-    				calculator.putString(null,  (obj==null)?null:obj.getComplianceTool() );
-    				calculator.putDateTime(null,  (obj==null)?null:obj.getComplianceDate() );
-    				calculator.putEnumeration(null, null /*obj.getComplianceLevel()*/);
-    				calculator.putStringArray(null, ((obj==null)?null:obj.getUnsupportedUnitIds()) );
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				SupportedProfile obj = (SupportedProfile) encodeable;
-    				encoder.putString("OrganizationUri",  (obj==null)?null:obj.getOrganizationUri() );
-    				encoder.putString("ProfileId",  (obj==null)?null:obj.getProfileId() );
-    				encoder.putString("ComplianceTool",  (obj==null)?null:obj.getComplianceTool() );
-    				encoder.putDateTime("ComplianceDate",  (obj==null)?null:obj.getComplianceDate() );
-    				encoder.putEnumeration("ComplianceLevel",  (obj==null)?null:obj.getComplianceLevel() );
-    				encoder.putStringArray("UnsupportedUnitIds", (obj==null)?null:obj.getUnsupportedUnitIds() );
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				SupportedProfile result = new SupportedProfile();
-    				result.setOrganizationUri( decoder.getString("OrganizationUri") );
-    				result.setProfileId( decoder.getString("ProfileId") );
-    				result.setComplianceTool( decoder.getString("ComplianceTool") );
-    				result.setComplianceDate( decoder.getDateTime("ComplianceDate") );
-    				result.setComplianceLevel( decoder.getEnumeration("ComplianceLevel", ComplianceLevel.class) );
-    				result.setUnsupportedUnitIds( decoder.getStringArray("UnsupportedUnitIds") );
-    				return result;
-    			}
-    		});
-    
-    	// SoftwareCertificate
-    	addSerializer(
-    		new AbstractSerializer(SoftwareCertificate.class, SoftwareCertificate.BINARY, SoftwareCertificate.XML, SoftwareCertificate.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				SoftwareCertificate obj = (SoftwareCertificate) encodeable;
-    				calculator.putString(null,  (obj==null)?null:obj.getProductName() );
-    				calculator.putString(null,  (obj==null)?null:obj.getProductUri() );
-    				calculator.putString(null,  (obj==null)?null:obj.getVendorName() );
-    				calculator.putByteString(null,  (obj==null)?null:obj.getVendorProductCertificate() );
-    				calculator.putString(null,  (obj==null)?null:obj.getSoftwareVersion() );
-    				calculator.putString(null,  (obj==null)?null:obj.getBuildNumber() );
-    				calculator.putDateTime(null,  (obj==null)?null:obj.getBuildDate() );
-    				calculator.putString(null,  (obj==null)?null:obj.getIssuedBy() );
-    				calculator.putDateTime(null,  (obj==null)?null:obj.getIssueDate() );
-    				calculator.putEncodeableArray(null, SupportedProfile.class, (obj==null)?null:obj.getSupportedProfiles());
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				SoftwareCertificate obj = (SoftwareCertificate) encodeable;
-    				encoder.putString("ProductName",  (obj==null)?null:obj.getProductName() );
-    				encoder.putString("ProductUri",  (obj==null)?null:obj.getProductUri() );
-    				encoder.putString("VendorName",  (obj==null)?null:obj.getVendorName() );
-    				encoder.putByteString("VendorProductCertificate",  (obj==null)?null:obj.getVendorProductCertificate() );
-    				encoder.putString("SoftwareVersion",  (obj==null)?null:obj.getSoftwareVersion() );
-    				encoder.putString("BuildNumber",  (obj==null)?null:obj.getBuildNumber() );
-    				encoder.putDateTime("BuildDate",  (obj==null)?null:obj.getBuildDate() );
-    				encoder.putString("IssuedBy",  (obj==null)?null:obj.getIssuedBy() );
-    				encoder.putDateTime("IssueDate",  (obj==null)?null:obj.getIssueDate() );
-    				encoder.putEncodeableArray("SupportedProfiles", SupportedProfile.class, (obj==null)?null:obj.getSupportedProfiles());
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				SoftwareCertificate result = new SoftwareCertificate();
-    				result.setProductName( decoder.getString("ProductName") );
-    				result.setProductUri( decoder.getString("ProductUri") );
-    				result.setVendorName( decoder.getString("VendorName") );
-    				result.setVendorProductCertificate( decoder.getByteString("VendorProductCertificate") );
-    				result.setSoftwareVersion( decoder.getString("SoftwareVersion") );
-    				result.setBuildNumber( decoder.getString("BuildNumber") );
-    				result.setBuildDate( decoder.getDateTime("BuildDate") );
-    				result.setIssuedBy( decoder.getString("IssuedBy") );
-    				result.setIssueDate( decoder.getDateTime("IssueDate") );
-    				result.setSupportedProfiles( decoder.getEncodeableArray("SupportedProfiles", SupportedProfile.class) );
     				return result;
     			}
     		});
@@ -5320,303 +5253,6 @@ public class EncodeableSerializer extends SerializerComposition {
     				result.setResponseHeader( decoder.getEncodeable("ResponseHeader", ResponseHeader.class) );
     				result.setResults( decoder.getStatusCodeArray("Results") );
     				result.setDiagnosticInfos( decoder.getDiagnosticInfoArray("DiagnosticInfos") );
-    				return result;
-    			}
-    		});
-    
-    	// ScalarTestType
-    	addSerializer(
-    		new AbstractSerializer(ScalarTestType.class, ScalarTestType.BINARY, ScalarTestType.XML, ScalarTestType.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				ScalarTestType obj = (ScalarTestType) encodeable;
-    				calculator.putBoolean(null, null /*obj.getBoolean()*/);
-    				calculator.putSByte(null, null /*obj.getSByte()*/);
-    				calculator.putByte(null, null /*obj.getByte()*/);
-    				calculator.putInt16(null, null /*obj.getInt16()*/);
-    				calculator.putUInt16(null, null /*obj.getUInt16()*/);
-    				calculator.putInt32(null, null /*obj.getInt32()*/);
-    				calculator.putUInt32(null, null /*obj.getUInt32()*/);
-    				calculator.putInt64(null, null /*obj.getInt64()*/);
-    				calculator.putUInt64(null, null /*obj.getUInt64()*/);
-    				calculator.putFloat(null, null /*obj.getFloat()*/);
-    				calculator.putDouble(null, null /*obj.getDouble()*/);
-    				calculator.putString(null,  (obj==null)?null:obj.getString() );
-    				calculator.putDateTime(null,  (obj==null)?null:obj.getDateTime() );
-    				calculator.putGuid(null,  (obj==null)?null:obj.getGuid() );
-    				calculator.putByteString(null,  (obj==null)?null:obj.getByteString() );
-    				calculator.putXmlElement(null,  (obj==null)?null:obj.getXmlElement() );
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putExpandedNodeId(null,  (obj==null)?null:obj.getExpandedNodeId() );
-    				calculator.putStatusCode(null,  (obj==null)?null:obj.getStatusCode() );
-    				calculator.putDiagnosticInfo(null,  (obj==null)?null:obj.getDiagnosticInfo() );
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getQualifiedName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getLocalizedText() );
-    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getExtensionObject() );
-    				calculator.putDataValue(null,  (obj==null)?null:obj.getDataValue() );
-    				calculator.putEnumeration(null, null /*obj.getEnumeratedValue()*/);
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				ScalarTestType obj = (ScalarTestType) encodeable;
-    				encoder.putBoolean("Boolean",  (obj==null)?null:obj.getBoolean() );
-    				encoder.putSByte("SByte",  (obj==null)?null:obj.getSByte() );
-    				encoder.putByte("Byte",  (obj==null)?null:obj.getByte() );
-    				encoder.putInt16("Int16",  (obj==null)?null:obj.getInt16() );
-    				encoder.putUInt16("UInt16",  (obj==null)?null:obj.getUInt16() );
-    				encoder.putInt32("Int32",  (obj==null)?null:obj.getInt32() );
-    				encoder.putUInt32("UInt32",  (obj==null)?null:obj.getUInt32() );
-    				encoder.putInt64("Int64",  (obj==null)?null:obj.getInt64() );
-    				encoder.putUInt64("UInt64",  (obj==null)?null:obj.getUInt64() );
-    				encoder.putFloat("Float",  (obj==null)?null:obj.getFloat() );
-    				encoder.putDouble("Double",  (obj==null)?null:obj.getDouble() );
-    				encoder.putString("String",  (obj==null)?null:obj.getString() );
-    				encoder.putDateTime("DateTime",  (obj==null)?null:obj.getDateTime() );
-    				encoder.putGuid("Guid",  (obj==null)?null:obj.getGuid() );
-    				encoder.putByteString("ByteString",  (obj==null)?null:obj.getByteString() );
-    				encoder.putXmlElement("XmlElement",  (obj==null)?null:obj.getXmlElement() );
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putExpandedNodeId("ExpandedNodeId",  (obj==null)?null:obj.getExpandedNodeId() );
-    				encoder.putStatusCode("StatusCode",  (obj==null)?null:obj.getStatusCode() );
-    				encoder.putDiagnosticInfo("DiagnosticInfo",  (obj==null)?null:obj.getDiagnosticInfo() );
-    				encoder.putQualifiedName("QualifiedName",  (obj==null)?null:obj.getQualifiedName() );
-    				encoder.putLocalizedText("LocalizedText",  (obj==null)?null:obj.getLocalizedText() );
-    				encoder.putExtensionObject("ExtensionObject",  (obj==null)?null:obj.getExtensionObject() );
-    				encoder.putDataValue("DataValue",  (obj==null)?null:obj.getDataValue() );
-    				encoder.putEnumeration("EnumeratedValue",  (obj==null)?null:obj.getEnumeratedValue() );
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				ScalarTestType result = new ScalarTestType();
-    				result.setBoolean( decoder.getBoolean("Boolean") );
-    				result.setSByte( decoder.getSByte("SByte") );
-    				result.setByte( decoder.getByte("Byte") );
-    				result.setInt16( decoder.getInt16("Int16") );
-    				result.setUInt16( decoder.getUInt16("UInt16") );
-    				result.setInt32( decoder.getInt32("Int32") );
-    				result.setUInt32( decoder.getUInt32("UInt32") );
-    				result.setInt64( decoder.getInt64("Int64") );
-    				result.setUInt64( decoder.getUInt64("UInt64") );
-    				result.setFloat( decoder.getFloat("Float") );
-    				result.setDouble( decoder.getDouble("Double") );
-    				result.setString( decoder.getString("String") );
-    				result.setDateTime( decoder.getDateTime("DateTime") );
-    				result.setGuid( decoder.getGuid("Guid") );
-    				result.setByteString( decoder.getByteString("ByteString") );
-    				result.setXmlElement( decoder.getXmlElement("XmlElement") );
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setExpandedNodeId( decoder.getExpandedNodeId("ExpandedNodeId") );
-    				result.setStatusCode( decoder.getStatusCode("StatusCode") );
-    				result.setDiagnosticInfo( decoder.getDiagnosticInfo("DiagnosticInfo") );
-    				result.setQualifiedName( decoder.getQualifiedName("QualifiedName") );
-    				result.setLocalizedText( decoder.getLocalizedText("LocalizedText") );
-    				result.setExtensionObject( decoder.getExtensionObject("ExtensionObject") );
-    				result.setDataValue( decoder.getDataValue("DataValue") );
-    				result.setEnumeratedValue( decoder.getEnumeration("EnumeratedValue", EnumeratedTestType.class) );
-    				return result;
-    			}
-    		});
-    
-    	// ArrayTestType
-    	addSerializer(
-    		new AbstractSerializer(ArrayTestType.class, ArrayTestType.BINARY, ArrayTestType.XML, ArrayTestType.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				ArrayTestType obj = (ArrayTestType) encodeable;
-    				calculator.putBooleanArray(null, ((obj==null)?null:obj.getBooleans()) );
-    				calculator.putSByteArray(null, ((obj==null)?null:obj.getSBytes()) );
-    				calculator.putInt16Array(null, ((obj==null)?null:obj.getInt16s()) );
-    				calculator.putUInt16Array(null, ((obj==null)?null:obj.getUInt16s()) );
-    				calculator.putInt32Array(null, ((obj==null)?null:obj.getInt32s()) );
-    				calculator.putUInt32Array(null, ((obj==null)?null:obj.getUInt32s()) );
-    				calculator.putInt64Array(null, ((obj==null)?null:obj.getInt64s()) );
-    				calculator.putUInt64Array(null, ((obj==null)?null:obj.getUInt64s()) );
-    				calculator.putFloatArray(null, ((obj==null)?null:obj.getFloats()) );
-    				calculator.putDoubleArray(null, ((obj==null)?null:obj.getDoubles()) );
-    				calculator.putStringArray(null, ((obj==null)?null:obj.getStrings()) );
-    				calculator.putDateTimeArray(null, ((obj==null)?null:obj.getDateTimes()) );
-    				calculator.putGuidArray(null, ((obj==null)?null:obj.getGuids()) );
-    				calculator.putByteStringArray(null, ((obj==null)?null:obj.getByteStrings()) );
-    				calculator.putXmlElementArray(null, ((obj==null)?null:obj.getXmlElements()) );
-    				calculator.putNodeIdArray(null, ((obj==null)?null:obj.getNodeIds()) );
-    				calculator.putExpandedNodeIdArray(null, ((obj==null)?null:obj.getExpandedNodeIds()) );
-    				calculator.putStatusCodeArray(null, ((obj==null)?null:obj.getStatusCodes()) );
-    				calculator.putDiagnosticInfoArray(null, ((obj==null)?null:obj.getDiagnosticInfos()) );
-    				calculator.putQualifiedNameArray(null, ((obj==null)?null:obj.getQualifiedNames()) );
-    				calculator.putLocalizedTextArray(null, ((obj==null)?null:obj.getLocalizedTexts()) );
-    				calculator.putExtensionObjectArray(null, ((obj==null)?null:obj.getExtensionObjects()) );
-    				calculator.putDataValueArray(null, ((obj==null)?null:obj.getDataValues()) );
-    				calculator.putVariantArray(null, ((obj==null)?null:obj.getVariants()) );
-    				calculator.putEnumerationArray(null,  (obj==null)?null:obj.getEnumeratedValues() );
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				ArrayTestType obj = (ArrayTestType) encodeable;
-    				encoder.putBooleanArray("Booleans", (obj==null)?null:obj.getBooleans() );
-    				encoder.putSByteArray("SBytes", (obj==null)?null:obj.getSBytes() );
-    				encoder.putInt16Array("Int16s", (obj==null)?null:obj.getInt16s() );
-    				encoder.putUInt16Array("UInt16s", (obj==null)?null:obj.getUInt16s() );
-    				encoder.putInt32Array("Int32s", (obj==null)?null:obj.getInt32s() );
-    				encoder.putUInt32Array("UInt32s", (obj==null)?null:obj.getUInt32s() );
-    				encoder.putInt64Array("Int64s", (obj==null)?null:obj.getInt64s() );
-    				encoder.putUInt64Array("UInt64s", (obj==null)?null:obj.getUInt64s() );
-    				encoder.putFloatArray("Floats", (obj==null)?null:obj.getFloats() );
-    				encoder.putDoubleArray("Doubles", (obj==null)?null:obj.getDoubles() );
-    				encoder.putStringArray("Strings", (obj==null)?null:obj.getStrings() );
-    				encoder.putDateTimeArray("DateTimes", (obj==null)?null:obj.getDateTimes() );
-    				encoder.putGuidArray("Guids", (obj==null)?null:obj.getGuids() );
-    				encoder.putByteStringArray("ByteStrings", (obj==null)?null:obj.getByteStrings() );
-    				encoder.putXmlElementArray("XmlElements", (obj==null)?null:obj.getXmlElements() );
-    				encoder.putNodeIdArray("NodeIds", (obj==null)?null:obj.getNodeIds() );
-    				encoder.putExpandedNodeIdArray("ExpandedNodeIds", (obj==null)?null:obj.getExpandedNodeIds() );
-    				encoder.putStatusCodeArray("StatusCodes", (obj==null)?null:obj.getStatusCodes() );
-    				encoder.putDiagnosticInfoArray("DiagnosticInfos", (obj==null)?null:obj.getDiagnosticInfos() );
-    				encoder.putQualifiedNameArray("QualifiedNames", (obj==null)?null:obj.getQualifiedNames() );
-    				encoder.putLocalizedTextArray("LocalizedTexts", (obj==null)?null:obj.getLocalizedTexts() );
-    				encoder.putExtensionObjectArray("ExtensionObjects", (obj==null)?null:obj.getExtensionObjects() );
-    				encoder.putDataValueArray("DataValues", (obj==null)?null:obj.getDataValues() );
-    				encoder.putVariantArray("Variants", (obj==null)?null:obj.getVariants() );
-    				encoder.putEnumerationArray("EnumeratedValues",  (obj==null)?null:obj.getEnumeratedValues() );
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				ArrayTestType result = new ArrayTestType();
-    				result.setBooleans( decoder.getBooleanArray("Booleans") );
-    				result.setSBytes( decoder.getSByteArray("SBytes") );
-    				result.setInt16s( decoder.getInt16Array("Int16s") );
-    				result.setUInt16s( decoder.getUInt16Array("UInt16s") );
-    				result.setInt32s( decoder.getInt32Array("Int32s") );
-    				result.setUInt32s( decoder.getUInt32Array("UInt32s") );
-    				result.setInt64s( decoder.getInt64Array("Int64s") );
-    				result.setUInt64s( decoder.getUInt64Array("UInt64s") );
-    				result.setFloats( decoder.getFloatArray("Floats") );
-    				result.setDoubles( decoder.getDoubleArray("Doubles") );
-    				result.setStrings( decoder.getStringArray("Strings") );
-    				result.setDateTimes( decoder.getDateTimeArray("DateTimes") );
-    				result.setGuids( decoder.getGuidArray("Guids") );
-    				result.setByteStrings( decoder.getByteStringArray("ByteStrings") );
-    				result.setXmlElements( decoder.getXmlElementArray("XmlElements") );
-    				result.setNodeIds( decoder.getNodeIdArray("NodeIds") );
-    				result.setExpandedNodeIds( decoder.getExpandedNodeIdArray("ExpandedNodeIds") );
-    				result.setStatusCodes( decoder.getStatusCodeArray("StatusCodes") );
-    				result.setDiagnosticInfos( decoder.getDiagnosticInfoArray("DiagnosticInfos") );
-    				result.setQualifiedNames( decoder.getQualifiedNameArray("QualifiedNames") );
-    				result.setLocalizedTexts( decoder.getLocalizedTextArray("LocalizedTexts") );
-    				result.setExtensionObjects( decoder.getExtensionObjectArray("ExtensionObjects") );
-    				result.setDataValues( decoder.getDataValueArray("DataValues") );
-    				result.setVariants( decoder.getVariantArray("Variants") );
-    				result.setEnumeratedValues( decoder.getEnumerationArray("EnumeratedValues", EnumeratedTestType.class) );
-    				return result;
-    			}
-    		});
-    
-    	// CompositeTestType
-    	addSerializer(
-    		new AbstractSerializer(CompositeTestType.class, CompositeTestType.BINARY, CompositeTestType.XML, CompositeTestType.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				CompositeTestType obj = (CompositeTestType) encodeable;
-    				calculator.putEncodeable(null, ScalarTestType.class, (obj==null)?null:obj.getField1());
-    				calculator.putEncodeable(null, ArrayTestType.class, (obj==null)?null:obj.getField2());
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				CompositeTestType obj = (CompositeTestType) encodeable;
-    				encoder.putEncodeable("Field1", ScalarTestType.class, (obj==null)?null:obj.getField1());
-    				encoder.putEncodeable("Field2", ArrayTestType.class, (obj==null)?null:obj.getField2());
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				CompositeTestType result = new CompositeTestType();
-    				result.setField1( decoder.getEncodeable("Field1", ScalarTestType.class) );
-    				result.setField2( decoder.getEncodeable("Field2", ArrayTestType.class) );
-    				return result;
-    			}
-    		});
-    
-    	// TestStackRequest
-    	addSerializer(
-    		new AbstractSerializer(TestStackRequest.class, TestStackRequest.BINARY, TestStackRequest.XML, TestStackRequest.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				TestStackRequest obj = (TestStackRequest) encodeable;
-    				calculator.putEncodeable(null, RequestHeader.class, (obj==null)?null:obj.getRequestHeader());
-    				calculator.putUInt32(null, null /*obj.getTestId()*/);
-    				calculator.putInt32(null, null /*obj.getIteration()*/);
-    				calculator.putVariant(null,  (obj==null)?null:obj.getInput() );
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				TestStackRequest obj = (TestStackRequest) encodeable;
-    				encoder.putEncodeable("RequestHeader", RequestHeader.class, (obj==null)?null:obj.getRequestHeader());
-    				encoder.putUInt32("TestId",  (obj==null)?null:obj.getTestId() );
-    				encoder.putInt32("Iteration",  (obj==null)?null:obj.getIteration() );
-    				encoder.putVariant("Input",  (obj==null)?null:obj.getInput() );
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				TestStackRequest result = new TestStackRequest();
-    				result.setRequestHeader( decoder.getEncodeable("RequestHeader", RequestHeader.class) );
-    				result.setTestId( decoder.getUInt32("TestId") );
-    				result.setIteration( decoder.getInt32("Iteration") );
-    				result.setInput( decoder.getVariant("Input") );
-    				return result;
-    			}
-    		});
-    
-    	// TestStackResponse
-    	addSerializer(
-    		new AbstractSerializer(TestStackResponse.class, TestStackResponse.BINARY, TestStackResponse.XML, TestStackResponse.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				TestStackResponse obj = (TestStackResponse) encodeable;
-    				calculator.putEncodeable(null, ResponseHeader.class, (obj==null)?null:obj.getResponseHeader());
-    				calculator.putVariant(null,  (obj==null)?null:obj.getOutput() );
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				TestStackResponse obj = (TestStackResponse) encodeable;
-    				encoder.putEncodeable("ResponseHeader", ResponseHeader.class, (obj==null)?null:obj.getResponseHeader());
-    				encoder.putVariant("Output",  (obj==null)?null:obj.getOutput() );
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				TestStackResponse result = new TestStackResponse();
-    				result.setResponseHeader( decoder.getEncodeable("ResponseHeader", ResponseHeader.class) );
-    				result.setOutput( decoder.getVariant("Output") );
-    				return result;
-    			}
-    		});
-    
-    	// TestStackExRequest
-    	addSerializer(
-    		new AbstractSerializer(TestStackExRequest.class, TestStackExRequest.BINARY, TestStackExRequest.XML, TestStackExRequest.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				TestStackExRequest obj = (TestStackExRequest) encodeable;
-    				calculator.putEncodeable(null, RequestHeader.class, (obj==null)?null:obj.getRequestHeader());
-    				calculator.putUInt32(null, null /*obj.getTestId()*/);
-    				calculator.putInt32(null, null /*obj.getIteration()*/);
-    				calculator.putEncodeable(null, CompositeTestType.class, (obj==null)?null:obj.getInput());
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				TestStackExRequest obj = (TestStackExRequest) encodeable;
-    				encoder.putEncodeable("RequestHeader", RequestHeader.class, (obj==null)?null:obj.getRequestHeader());
-    				encoder.putUInt32("TestId",  (obj==null)?null:obj.getTestId() );
-    				encoder.putInt32("Iteration",  (obj==null)?null:obj.getIteration() );
-    				encoder.putEncodeable("Input", CompositeTestType.class, (obj==null)?null:obj.getInput());
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				TestStackExRequest result = new TestStackExRequest();
-    				result.setRequestHeader( decoder.getEncodeable("RequestHeader", RequestHeader.class) );
-    				result.setTestId( decoder.getUInt32("TestId") );
-    				result.setIteration( decoder.getInt32("Iteration") );
-    				result.setInput( decoder.getEncodeable("Input", CompositeTestType.class) );
-    				return result;
-    			}
-    		});
-    
-    	// TestStackExResponse
-    	addSerializer(
-    		new AbstractSerializer(TestStackExResponse.class, TestStackExResponse.BINARY, TestStackExResponse.XML, TestStackExResponse.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				TestStackExResponse obj = (TestStackExResponse) encodeable;
-    				calculator.putEncodeable(null, ResponseHeader.class, (obj==null)?null:obj.getResponseHeader());
-    				calculator.putEncodeable(null, CompositeTestType.class, (obj==null)?null:obj.getOutput());
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				TestStackExResponse obj = (TestStackExResponse) encodeable;
-    				encoder.putEncodeable("ResponseHeader", ResponseHeader.class, (obj==null)?null:obj.getResponseHeader());
-    				encoder.putEncodeable("Output", CompositeTestType.class, (obj==null)?null:obj.getOutput());
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				TestStackExResponse result = new TestStackExResponse();
-    				result.setResponseHeader( decoder.getEncodeable("ResponseHeader", ResponseHeader.class) );
-    				result.setOutput( decoder.getEncodeable("Output", CompositeTestType.class) );
     				return result;
     			}
     		});

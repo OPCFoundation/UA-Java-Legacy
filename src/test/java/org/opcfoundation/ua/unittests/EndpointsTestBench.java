@@ -65,8 +65,8 @@ public abstract class EndpointsTestBench extends TestCase {
 		// server.addServiceHandler( new TestStackService() );
 		
 		// Add application instance certificate
-		Cert myServerCertificate = Cert.load( StackTestBench.class.getResource( "ServerCert.der" ) );
-		PrivKey myServerPrivateKey = PrivKey.loadFromKeyStore( StackTestBench.class.getResource( "UAServerCert.pfx"), "Opc.Sample.Ua.Server");
+		Cert myServerCertificate = Cert.load( EndpointsTestBench.class.getResource( "ServerCert.der" ) );
+		PrivKey myServerPrivateKey = PrivKey.loadFromKeyStore( EndpointsTestBench.class.getResource( "UAServerCert.pfx"), "Opc.Sample.Ua.Server");
 		KeyPair serverApplicationInstanceCertificate = new KeyPair(myServerCertificate, myServerPrivateKey);
 		server.getApplication().addApplicationInstanceCertificate( serverApplicationInstanceCertificate );
 		
@@ -112,8 +112,8 @@ public abstract class EndpointsTestBench extends TestCase {
 		}
 		
 		// Create client
-		Cert myClientCertificate = Cert.load( StackTestBench.class.getResource( "ClientCert.der" ) );
-		PrivKey myClientPrivateKey = PrivKey.loadFromKeyStore( StackTestBench.class.getResource( "ClientCert.pfx"), "Opc.Sample.Ua.Client");
+		Cert myClientCertificate = Cert.load( EndpointsTestBench.class.getResource( "ClientCert.der" ) );
+		PrivKey myClientPrivateKey = PrivKey.loadFromKeyStore( EndpointsTestBench.class.getResource( "ClientCert.pfx"), "Opc.Sample.Ua.Client");
 		KeyPair clientApplicationInstanceCertificate = new KeyPair(myClientCertificate, myClientPrivateKey);
 		
 		client = Client.createClientApplication( clientApplicationInstanceCertificate );

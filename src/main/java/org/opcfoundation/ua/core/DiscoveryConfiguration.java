@@ -29,62 +29,32 @@
 
 package org.opcfoundation.ua.core;
 
-import org.opcfoundation.ua.builtintypes.ServiceResponse;
+import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
-import org.opcfoundation.ua.core.CompositeTestType;
-import org.opcfoundation.ua.core.ResponseHeader;
 import org.opcfoundation.ua.utils.AbstractStructure;
 
 
-public class TestStackExResponse extends AbstractStructure implements ServiceResponse {
 
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TestStackExResponse);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TestStackExResponse_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.TestStackExResponse_Encoding_DefaultXml);
+public class DiscoveryConfiguration extends AbstractStructure {
 	
-    protected ResponseHeader ResponseHeader;
-    protected CompositeTestType Output;
+	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DiscoveryConfiguration);
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DiscoveryConfiguration_Encoding_DefaultBinary);
+	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.DiscoveryConfiguration_Encoding_DefaultXml);
+	
     
-    public TestStackExResponse() {}
+    public DiscoveryConfiguration() {}
     
-    public TestStackExResponse(ResponseHeader ResponseHeader, CompositeTestType Output)
-    {
-        this.ResponseHeader = ResponseHeader;
-        this.Output = Output;
-    }
-    
-    public ResponseHeader getResponseHeader()
-    {
-        return ResponseHeader;
-    }
-    
-    public void setResponseHeader(ResponseHeader ResponseHeader)
-    {
-        this.ResponseHeader = ResponseHeader;
-    }
-    
-    public CompositeTestType getOutput()
-    {
-        return Output;
-    }
-    
-    public void setOutput(CompositeTestType Output)
-    {
-        this.Output = Output;
-    }
     
     /**
       * Deep clone
       *
-      * @return cloned TestStackExResponse
+      * @return cloned DiscoveryConfiguration
       */
-    public TestStackExResponse clone()
+    public DiscoveryConfiguration clone()
     {
-        TestStackExResponse result = (TestStackExResponse) super.clone();
-        result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
-        result.Output = Output==null ? null : Output.clone();
+        DiscoveryConfiguration result = (DiscoveryConfiguration) super.clone();
         return result;
     }
     
@@ -94,13 +64,7 @@ public class TestStackExResponse extends AbstractStructure implements ServiceRes
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        TestStackExResponse other = (TestStackExResponse) obj;
-        if (ResponseHeader==null) {
-            if (other.ResponseHeader != null) return false;
-        } else if (!ResponseHeader.equals(other.ResponseHeader)) return false;
-        if (Output==null) {
-            if (other.Output != null) return false;
-        } else if (!Output.equals(other.Output)) return false;
+        DiscoveryConfiguration other = (DiscoveryConfiguration) obj;
         return true;
     }
     
@@ -109,10 +73,6 @@ public class TestStackExResponse extends AbstractStructure implements ServiceRes
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((ResponseHeader == null) ? 0 : ResponseHeader.hashCode());
-        result = prime * result
-                + ((Output == null) ? 0 : Output.hashCode());
         return result;
     }
     
@@ -129,9 +89,9 @@ public class TestStackExResponse extends AbstractStructure implements ServiceRes
 	public ExpandedNodeId getBinaryEncodeId() {
 		return BINARY;
 	}
-
-	public String toString() {
-		return ObjectUtils.printFieldsDeep(this);
-	}
 	
+	public String toString() {
+		return "DiscoveryConfiguration: "+ObjectUtils.printFieldsDeep(this);
+	}
+
 }

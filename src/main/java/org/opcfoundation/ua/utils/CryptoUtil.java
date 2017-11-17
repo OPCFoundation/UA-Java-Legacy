@@ -41,6 +41,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.Mac;
 import javax.crypto.NoSuchPaddingException;
 
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.SignatureData;
 import org.opcfoundation.ua.core.StatusCodes;
@@ -67,6 +68,7 @@ public class CryptoUtil {
 	 * with ERROR level.
 	 */
 	static Logger LOGGER = LoggerFactory.getLogger(CryptoUtil.class);
+
 	private final static SecureRandom random;
 
 	static {
@@ -87,9 +89,9 @@ public class CryptoUtil {
 	/** Hex chars for makeHexString-method **/
 	private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 
-	private static CryptoProvider cryptoProvider;
+	private volatile static CryptoProvider cryptoProvider;
 
-	private static String securityProviderName;
+	private volatile static String securityProviderName;
 
 	/**
 	 * Convenience method for {@link CryptoProvider#encryptAsymm}. Deprecated: Use
@@ -126,15 +128,15 @@ public class CryptoUtil {
 	}
 
 	/**
-	 * <p>base64Encode.</p>
+	 * <p>base64Encode a byte array to string</p>
 	 *
-	 * @param bytes an array of byte.
-	 * @return a {@link java.lang.String} object.
+	 * @param bytes the array of byte to convert.
+	 * @return a {@link java.lang.String} representing the byte array in base64 encoded string. 
 	 */
 	public static String base64Encode(byte[] bytes) {
 		return getCryptoProvider().base64Encode(bytes);
 	}
-
+	
 	/**
 	 * Create Message Authentication Code (MAC)
 	 *
@@ -157,12 +159,11 @@ public class CryptoUtil {
 	 *            number of byte
 	 * @return nonce
 	 */
-	public static byte[] createNonce(int bytes) {
+	public static ByteString createNonce(int bytes) {
 		LOGGER.debug("createNonce: bytes={}", bytes);
 		byte[] nonce = new byte[bytes];
 		random.nextBytes(nonce);
-		// LOGGER.debug("createNonce: nonce=" + nonce);
-		return nonce;
+		return ByteString.valueOf(nonce);
 	}
 
 	/**
@@ -172,7 +173,7 @@ public class CryptoUtil {
 	 * @return an array of byte.
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
-	public static byte[] createNonce(SecurityAlgorithm algorithm)
+	public static ByteString createNonce(SecurityAlgorithm algorithm)
 			throws ServiceResultException {
 		return createNonce(getNonceLength(algorithm));
 	}
@@ -510,8 +511,6 @@ public class CryptoUtil {
 	 * Android) or Bouncy Castle provider is already available or if such can be
 	 * initialized from the respective class.
 	 * <p>
-	 * If none of these is available will default to SunJCE or the first
-	 * initialized provider, if SunJCE is not available either.
 	 *
 	 * @return the provider name to use for specific crypto tasks
 	 * @throws java.lang.RuntimeException
@@ -543,13 +542,10 @@ public class CryptoUtil {
 				}
 				if (provider == null) {
 					provider = hasClass("com.sun.crypto.provider.SunJCE");
-				}
-				if (provider == null) {
-					Provider[] providers = Security.getProviders();
-					if (providers == null || providers.length == 0)
-						throw new RuntimeException(
-								"No security providers available!");
-					provider = providers[0];
+					if (provider != null)
+					{
+	                    throw new RuntimeException("BouncyCastle Security Provider not available! Not recommended SunJCE Security Provider is found, use it with CryptoUtil.setSecurityProviderName.");                      
+					}
 				}
 				if (provider != null)
 					securityProviderName = provider.getName();
@@ -658,15 +654,18 @@ public class CryptoUtil {
 
 	/**
 	 * Define the preferred SecurityProvider. Usually this is determined
-	 * automatically, but you may define the provider name that you wish to use
-	 * yourself.
+	 * automatically if SpongyCastle (on Android) or BouncyCastle is found,
+	 * but you may define the provider name that you wish to use yourself.
 	 *
 	 * @param securityProviderName
 	 *            the securityProviderName to set, e.g. "BC" for
 	 *            BouncyCastleProvider
 	 */
 	public static void setSecurityProviderName(String securityProviderName) {
+	  if (!StringUtils.equals(securityProviderName, CryptoUtil.securityProviderName)) {
 		CryptoUtil.securityProviderName = securityProviderName;
+        CryptoUtil.cryptoProvider = null;
+	  }
 	}
 
 	/**
@@ -688,8 +687,8 @@ public class CryptoUtil {
 			throws ServiceResultException {
 		if (algorithm == null)
 			return new SignatureData(null, null);
-		return new SignatureData(algorithm.getUri(), getCryptoProvider()
-				.signAsymm(signerKey, algorithm, dataToSign));
+		return new SignatureData(algorithm.getUri(), ByteString.valueOf(getCryptoProvider()
+				.signAsymm(signerKey, algorithm, dataToSign)));
 	}
 
 	/**
@@ -726,7 +725,7 @@ public class CryptoUtil {
 		int i = 0;
 		while (i < bytes.length) {
 			if (bytesPerRow > 0 && i % bytesPerRow == 0)
-				sb.append("\n");
+				sb.append(StringUtils.lineSeparator());
 			sb.append(HEX_CHARS[(bytes[i] >> 4) & 0x0F]);
 			sb.append(HEX_CHARS[bytes[i] & 0x0F]);
 			i++;

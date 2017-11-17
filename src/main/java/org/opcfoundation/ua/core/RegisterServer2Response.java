@@ -33,6 +33,9 @@ import org.opcfoundation.ua.builtintypes.ServiceResponse;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
+import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.core.ResponseHeader;
 import org.opcfoundation.ua.utils.AbstractStructure;
 
@@ -44,12 +47,16 @@ public class RegisterServer2Response extends AbstractStructure implements Servic
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.RegisterServer2Response_Encoding_DefaultXml);
 	
     protected ResponseHeader ResponseHeader;
+    protected StatusCode[] ConfigurationResults;
+    protected DiagnosticInfo[] DiagnosticInfos;
     
     public RegisterServer2Response() {}
     
-    public RegisterServer2Response(ResponseHeader ResponseHeader)
+    public RegisterServer2Response(ResponseHeader ResponseHeader, StatusCode[] ConfigurationResults, DiagnosticInfo[] DiagnosticInfos)
     {
         this.ResponseHeader = ResponseHeader;
+        this.ConfigurationResults = ConfigurationResults;
+        this.DiagnosticInfos = DiagnosticInfos;
     }
     
     public ResponseHeader getResponseHeader()
@@ -62,6 +69,26 @@ public class RegisterServer2Response extends AbstractStructure implements Servic
         this.ResponseHeader = ResponseHeader;
     }
     
+    public StatusCode[] getConfigurationResults()
+    {
+        return ConfigurationResults;
+    }
+    
+    public void setConfigurationResults(StatusCode[] ConfigurationResults)
+    {
+        this.ConfigurationResults = ConfigurationResults;
+    }
+    
+    public DiagnosticInfo[] getDiagnosticInfos()
+    {
+        return DiagnosticInfos;
+    }
+    
+    public void setDiagnosticInfos(DiagnosticInfo[] DiagnosticInfos)
+    {
+        this.DiagnosticInfos = DiagnosticInfos;
+    }
+    
     /**
       * Deep clone
       *
@@ -71,6 +98,8 @@ public class RegisterServer2Response extends AbstractStructure implements Servic
     {
         RegisterServer2Response result = (RegisterServer2Response) super.clone();
         result.ResponseHeader = ResponseHeader==null ? null : ResponseHeader.clone();
+        result.ConfigurationResults = ConfigurationResults==null ? null : ConfigurationResults.clone();
+        result.DiagnosticInfos = DiagnosticInfos==null ? null : DiagnosticInfos.clone();
         return result;
     }
     
@@ -84,6 +113,12 @@ public class RegisterServer2Response extends AbstractStructure implements Servic
         if (ResponseHeader==null) {
             if (other.ResponseHeader != null) return false;
         } else if (!ResponseHeader.equals(other.ResponseHeader)) return false;
+        if (ConfigurationResults==null) {
+            if (other.ConfigurationResults != null) return false;
+        } else if (!Arrays.equals(ConfigurationResults, other.ConfigurationResults)) return false;
+        if (DiagnosticInfos==null) {
+            if (other.DiagnosticInfos != null) return false;
+        } else if (!Arrays.equals(DiagnosticInfos, other.DiagnosticInfos)) return false;
         return true;
     }
     
@@ -94,6 +129,10 @@ public class RegisterServer2Response extends AbstractStructure implements Servic
         int result = 1;
         result = prime * result
                 + ((ResponseHeader == null) ? 0 : ResponseHeader.hashCode());
+        result = prime * result
+                + ((ConfigurationResults == null) ? 0 : Arrays.hashCode(ConfigurationResults));
+        result = prime * result
+                + ((DiagnosticInfos == null) ? 0 : Arrays.hashCode(DiagnosticInfos));
         return result;
     }
     

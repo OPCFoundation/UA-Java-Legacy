@@ -34,6 +34,7 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.core.QueryDataSet;
 import org.opcfoundation.ua.core.ResponseHeader;
 import org.opcfoundation.ua.utils.AbstractStructure;
@@ -47,11 +48,11 @@ public class QueryNextResponse extends AbstractStructure implements ServiceRespo
 	
     protected ResponseHeader ResponseHeader;
     protected QueryDataSet[] QueryDataSets;
-    protected byte[] RevisedContinuationPoint;
+    protected ByteString RevisedContinuationPoint;
     
     public QueryNextResponse() {}
     
-    public QueryNextResponse(ResponseHeader ResponseHeader, QueryDataSet[] QueryDataSets, byte[] RevisedContinuationPoint)
+    public QueryNextResponse(ResponseHeader ResponseHeader, QueryDataSet[] QueryDataSets, ByteString RevisedContinuationPoint)
     {
         this.ResponseHeader = ResponseHeader;
         this.QueryDataSets = QueryDataSets;
@@ -78,12 +79,12 @@ public class QueryNextResponse extends AbstractStructure implements ServiceRespo
         this.QueryDataSets = QueryDataSets;
     }
     
-    public byte[] getRevisedContinuationPoint()
+    public ByteString getRevisedContinuationPoint()
     {
         return RevisedContinuationPoint;
     }
     
-    public void setRevisedContinuationPoint(byte[] RevisedContinuationPoint)
+    public void setRevisedContinuationPoint(ByteString RevisedContinuationPoint)
     {
         this.RevisedContinuationPoint = RevisedContinuationPoint;
     }

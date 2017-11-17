@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import org.opcfoundation.ua.builtintypes.BuiltinsMap;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
@@ -48,8 +49,6 @@ import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
 
 /**
  * Calculates length in bytes of an encodeable if it were encoded with binary encoder.
- *
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class EncoderCalc implements IEncoder {
 		
@@ -709,18 +708,29 @@ public class EncoderCalc implements IEncoder {
 	}			
 	
 	/**
+     * <p>putByteString.</p>
+     *
+     * @param fieldName a {@link java.lang.String} object.
+     * @param v an array of byte.
+     */
+    private void putByteString(String fieldName, byte[] v)
+    {
+        if (v==null) 
+            length += 4;
+        else {
+            length += 4 + v.length;
+        }       
+    }
+	
+	/**
 	 * <p>putByteString.</p>
 	 *
 	 * @param fieldName a {@link java.lang.String} object.
 	 * @param v an array of byte.
 	 */
-	public void putByteString(String fieldName, byte[] v)
+	public void putByteString(String fieldName, ByteString v)
 	{
-		if (v==null) 
-			length += 4;
-		else {
-			length += 4 + v.length;
-		}		
+	  putByteString(fieldName, ByteString.asByteArray(v));
 	}
 	
 	/**
@@ -729,7 +739,7 @@ public class EncoderCalc implements IEncoder {
 	 * @param fieldName a {@link java.lang.String} object.
 	 * @param v an array of byte.
 	 */
-	public void putByteStringArray(String fieldName, byte[][] v)
+	public void putByteStringArray(String fieldName, ByteString[] v)
 	{
 		if (v==null) {
 			length += 4;
@@ -742,7 +752,7 @@ public class EncoderCalc implements IEncoder {
 	}				
 	
 	/** {@inheritDoc} */
-	public void putByteStringArray(String fieldName, Collection<byte[]> v)
+	public void putByteStringArray(String fieldName, Collection<ByteString> v)
 	{
 		if (v==null) {
 			length += 4;
@@ -750,7 +760,7 @@ public class EncoderCalc implements IEncoder {
 		}
 		
 		length += 4;
-		for (byte[] o : v)
+		for (ByteString o : v)
 			putByteString(null, o);
 	}				
 	
@@ -821,7 +831,7 @@ public class EncoderCalc implements IEncoder {
 			
 		if (v.getIdType() == IdType.Opaque) {
 			length += 3;
-			putByteString(null, (byte[]) v.getValue());
+			putByteString(null, (ByteString) v.getValue());
 		} else 
 			
 		if (v.getIdType() == IdType.Guid) {
@@ -896,7 +906,7 @@ public class EncoderCalc implements IEncoder {
 			
 		if (v.getIdType() == IdType.Opaque) {
 			length += 3;
-			putByteString(null, (byte[]) v.getValue());
+			putByteString(null, (ByteString) v.getValue());
 		} else 
 			
 		if (v.getIdType() == IdType.Guid) {
@@ -1145,6 +1155,13 @@ public class EncoderCalc implements IEncoder {
 			length += 1;
 			return;
 		}
+		
+	      //support lazy encoding
+        if(!v.isEncoded()){
+          putExtensionObject(fieldName, ExtensionObject.binaryEncode((Structure) v.getObject(), ctx));
+          return;
+        }
+		
 		putNodeId(null, ctx.toNodeId(v.getTypeId()));
 		Object o = v.getObject();
 		if (o==null) {
@@ -1449,7 +1466,7 @@ public class EncoderCalc implements IEncoder {
 	public void putObject(String fieldName, Class<?> c, Object o) throws EncodingException
 	{
 		Integer bt = BuiltinsMap.ID_MAP.get(c);
-		boolean array = c.isArray() && !c.equals(byte[].class);
+		boolean array = c.isArray();
 		if (bt!=null) {
 			if (array) 
 				putArray(null, bt, o);
@@ -1519,7 +1536,7 @@ public class EncoderCalc implements IEncoder {
 		case 12: putString(null, (String) o); break;
 		case 13: putDateTime(null, (DateTime) o); break;
 		case 14: putGuid(null, (UUID) o); break;
-		case 15: putByteString(null, (byte[]) o); break;
+		case 15: putByteString(null, (ByteString) o); break;
 		case 16: putXmlElement(null, (XmlElement) o); break;
 		case 17: putNodeId(null, (NodeId) o); break;
 		case 18: putExpandedNodeId(null, (ExpandedNodeId) o); break;
@@ -1560,7 +1577,7 @@ public class EncoderCalc implements IEncoder {
 		case 12: putStringArray(null, (String[]) o); break;
 		case 13: putDateTimeArray(null, (DateTime[]) o); break;
 		case 14: putGuidArray(null, (UUID[]) o); break;
-		case 15: putByteStringArray(null, (byte[][]) o); break;
+		case 15: putByteStringArray(null, (ByteString[]) o); break;
 		case 16: putXmlElementArray(null, (XmlElement[]) o); break;
 		case 17: putNodeIdArray(null, (NodeId[]) o); break;
 		case 18: putExpandedNodeIdArray(null, (ExpandedNodeId[]) o); break;

@@ -42,7 +42,8 @@ public enum BrowseDirection implements Enumeration {
 
     Forward,
     Inverse,
-    Both;
+    Both,
+    Invalid;
 	
 	public static final NodeId ID = Identifiers.BrowseDirection;
 	public static EnumSet<BrowseDirection> NONE = EnumSet.noneOf( BrowseDirection.class );

@@ -34,6 +34,7 @@ import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import java.util.Arrays;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.HistoryUpdateDetails;
 
@@ -45,22 +46,22 @@ public class DeleteEventDetails extends HistoryUpdateDetails {
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteEventDetails_Encoding_DefaultBinary);
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.DeleteEventDetails_Encoding_DefaultXml);
 	
-    protected byte[][] EventIds;
+    protected ByteString[] EventIds;
     
     public DeleteEventDetails() {}
     
-    public DeleteEventDetails(NodeId NodeId, byte[][] EventIds)
+    public DeleteEventDetails(NodeId NodeId, ByteString[] EventIds)
     {
         super(NodeId);
         this.EventIds = EventIds;
     }
     
-    public byte[][] getEventIds()
+    public ByteString[] getEventIds()
     {
         return EventIds;
     }
     
-    public void setEventIds(byte[][] EventIds)
+    public void setEventIds(ByteString[] EventIds)
     {
         this.EventIds = EventIds;
     }

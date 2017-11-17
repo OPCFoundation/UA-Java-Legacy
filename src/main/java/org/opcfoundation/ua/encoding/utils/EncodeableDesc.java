@@ -69,7 +69,7 @@ public final class EncodeableDesc {
 		Class<?> clazz			= f.getType();
 		Integer builtinType		= BuiltinsMap.ID_MAP.get(clazz);
 		int bt					= builtinType == null ? -1 : builtinType;
-		boolean isArray			= clazz.isArray() && !clazz.equals(byte[].class);
+		boolean isArray			= clazz.isArray();
 		return new FieldInfo(bt, f, isArray, clazz);
 	}	
 	

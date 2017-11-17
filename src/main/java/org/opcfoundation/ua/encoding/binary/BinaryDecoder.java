@@ -12,6 +12,21 @@
 
 package org.opcfoundation.ua.encoding.binary;
 
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.ConnectException;
+import java.net.SocketException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.ClosedChannelException;
+import java.nio.charset.Charset;
+import java.util.UUID;
+
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
@@ -40,20 +55,6 @@ import org.opcfoundation.ua.utils.bytebuffer.IBinaryReadable;
 import org.opcfoundation.ua.utils.bytebuffer.InputStreamReadable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.ConnectException;
-import java.net.SocketException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.channels.ClosedChannelException;
-import java.nio.charset.Charset;
-import java.util.UUID;
 
 /**
  * Decodes builtinTypes, structures, enumerations and messages from byte buffer.
@@ -188,7 +189,7 @@ public class BinaryDecoder implements IDecoder {
 		if (clazz.equals(UUID.class)) {
 			return (T) getGuid(fieldName);
 		}
-		if (clazz.equals(byte[].class)) {
+		if (clazz.equals(ByteString.class)) {
 			return (T) getByteString(fieldName);
 		}
 		if (clazz.equals(XmlElement.class)) {
@@ -269,7 +270,7 @@ public class BinaryDecoder implements IDecoder {
 		if (clazz.equals(UUID[].class)) {
 			return (T) getGuidArray(fieldName);
 		}
-		if (clazz.equals(byte[][].class)) {
+		if (clazz.equals(ByteString[].class)) {
 			return (T) getByteStringArray(fieldName);
 		}
 		if (clazz.equals(XmlElement[].class)) {
@@ -419,16 +420,16 @@ public class BinaryDecoder implements IDecoder {
 
 	/** {@inheritDoc} */
 	@Override
-	public byte[] getByteString(String fieldName)
+	public ByteString getByteString(String fieldName)
 			throws DecodingException
 	{
 		try {
 			int len = in.getInt();
 			if (len==-1) return null;
 			assertByteStringLength(len);
-			byte dada[] = new byte[len];
-			in.get(dada);
-			return dada;
+			byte data[] = new byte[len];
+			in.get(data);
+			return ByteString.valueOf(data);
 		} catch (IOException e) {
 			throw toDecodingException(e);
 		}
@@ -436,14 +437,14 @@ public class BinaryDecoder implements IDecoder {
 
 	/** {@inheritDoc} */
 	@Override
-	public byte[][] getByteStringArray(String fieldName)
+	public ByteString[] getByteStringArray(String fieldName)
 			throws DecodingException
 	{
 		try {
 			int len = in.getInt();
 			if (len==-1) return null;
 			assertArrayLength(len, 4);
-			byte[][] result = new byte[len][];
+			ByteString[] result = new ByteString[len];
 			for (int i=0; i<len; i++)
 				result[i] = getByteString(null);
 			return result;
@@ -730,6 +731,9 @@ public class BinaryDecoder implements IDecoder {
 			{
 				namespaceIndex = in.getShort() & 0xffff;
 				id = getByteString(null);
+				if(id != null){
+				  id = ((ByteString)id).getValue();
+				}
 			}
 
 			if (encoding == NodeIdEncoding.Guid)
@@ -782,9 +786,23 @@ public class BinaryDecoder implements IDecoder {
 				if ((typeId == null) || typeId.equals(NodeId.NULL)) return null;
 				return new ExtensionObject(expandedNodeId);
 			}
-			if (encodingByte==1) return new ExtensionObject(expandedNodeId, getByteString(null));
-			if (encodingByte==2) return new ExtensionObject(expandedNodeId, getXmlElement(null));
-			throw new DecodingException("Unexpected encoding byte ("+encodingByte+") in ExtensionObject");
+			
+			final ExtensionObject tmp;
+			if (encodingByte==1){
+			  tmp = new ExtensionObject(expandedNodeId, ByteString.asByteArray(getByteString(null)));
+			}else if (encodingByte==2){
+			  tmp = new ExtensionObject(expandedNodeId, getXmlElement(null));
+			}else{
+			  throw new DecodingException("Unexpected encoding byte ("+encodingByte+") in ExtensionObject");
+			}
+			
+			//try decoding, but failing is allowed (might be e.g. unknown Structure)
+			try{
+			  Structure decoded = tmp.decode(getEncoderContext());
+			  return new ExtensionObject(decoded);
+			}catch(DecodingException e){
+			  return tmp;
+			}			
 		} catch (IOException e) {
 			throw toDecodingException(e);
 		}
@@ -1089,8 +1107,8 @@ public class BinaryDecoder implements IDecoder {
 							if (encoding == NodeIdEncoding.ByteString)
 							{
 								namespaceIndex = in.getShort() & 0xffff;
-								byte[] id = getByteString(null);
-								result = new NodeId(namespaceIndex, id);
+								ByteString id = getByteString(null);
+								result = new NodeId(namespaceIndex, ByteString.asByteArray(id));
 							}
 							else
 								if (encoding == NodeIdEncoding.Guid)
@@ -1510,9 +1528,9 @@ public class BinaryDecoder implements IDecoder {
 	public XmlElement getXmlElement(String fieldName)
 			throws DecodingException
 	{
-		byte[] data = getByteString(fieldName);
+		ByteString data = getByteString(fieldName);
 		if ( data == null ) return null;
-		return new XmlElement( data );
+		return new XmlElement( ByteString.asByteArray(data));
 		//		String str = getString(null);
 		//		if (str==null) return null;
 		//		return new XmlElement(str);

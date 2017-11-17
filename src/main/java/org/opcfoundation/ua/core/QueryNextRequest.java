@@ -33,6 +33,7 @@ import org.opcfoundation.ua.builtintypes.ServiceRequest;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.core.RequestHeader;
 import org.opcfoundation.ua.utils.AbstractStructure;
 
@@ -45,11 +46,11 @@ public class QueryNextRequest extends AbstractStructure implements ServiceReques
 	
     protected RequestHeader RequestHeader;
     protected Boolean ReleaseContinuationPoint;
-    protected byte[] ContinuationPoint;
+    protected ByteString ContinuationPoint;
     
     public QueryNextRequest() {}
     
-    public QueryNextRequest(RequestHeader RequestHeader, Boolean ReleaseContinuationPoint, byte[] ContinuationPoint)
+    public QueryNextRequest(RequestHeader RequestHeader, Boolean ReleaseContinuationPoint, ByteString ContinuationPoint)
     {
         this.RequestHeader = RequestHeader;
         this.ReleaseContinuationPoint = ReleaseContinuationPoint;
@@ -76,12 +77,12 @@ public class QueryNextRequest extends AbstractStructure implements ServiceReques
         this.ReleaseContinuationPoint = ReleaseContinuationPoint;
     }
     
-    public byte[] getContinuationPoint()
+    public ByteString getContinuationPoint()
     {
         return ContinuationPoint;
     }
     
-    public void setContinuationPoint(byte[] ContinuationPoint)
+    public void setContinuationPoint(ByteString ContinuationPoint)
     {
         this.ContinuationPoint = ContinuationPoint;
     }

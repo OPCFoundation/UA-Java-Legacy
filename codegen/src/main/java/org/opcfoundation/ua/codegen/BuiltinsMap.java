@@ -64,7 +64,7 @@ public class BuiltinsMap {
 		MAP.put("http://opcfoundation.org/UA/String", "java.lang.String");
 		MAP.put("http://opcfoundation.org/UA/DateTime", prefix+"DateTime");
 		MAP.put("http://opcfoundation.org/UA/Guid", "java.util.UUID");
-		MAP.put("http://opcfoundation.org/UA/ByteString", "java.lang.byte[]");
+		MAP.put("http://opcfoundation.org/UA/ByteString", prefix+ "ByteString");
 		MAP.put("http://opcfoundation.org/UA/XmlElement", prefix+"XmlElement");
 		MAP.put("http://opcfoundation.org/UA/NodeId", prefix+"NodeId");
 		MAP.put("http://opcfoundation.org/UA/ExpandedNodeId", prefix+"ExpandedNodeId");

@@ -33,6 +33,7 @@ import org.opcfoundation.ua.builtintypes.ServiceRequest;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.ApplicationDescription;
 import org.opcfoundation.ua.core.RequestHeader;
@@ -50,14 +51,14 @@ public class CreateSessionRequest extends AbstractStructure implements ServiceRe
     protected String ServerUri;
     protected String EndpointUrl;
     protected String SessionName;
-    protected byte[] ClientNonce;
-    protected byte[] ClientCertificate;
+    protected ByteString ClientNonce;
+    protected ByteString ClientCertificate;
     protected Double RequestedSessionTimeout;
     protected UnsignedInteger MaxResponseMessageSize;
     
     public CreateSessionRequest() {}
     
-    public CreateSessionRequest(RequestHeader RequestHeader, ApplicationDescription ClientDescription, String ServerUri, String EndpointUrl, String SessionName, byte[] ClientNonce, byte[] ClientCertificate, Double RequestedSessionTimeout, UnsignedInteger MaxResponseMessageSize)
+    public CreateSessionRequest(RequestHeader RequestHeader, ApplicationDescription ClientDescription, String ServerUri, String EndpointUrl, String SessionName, ByteString ClientNonce, ByteString ClientCertificate, Double RequestedSessionTimeout, UnsignedInteger MaxResponseMessageSize)
     {
         this.RequestHeader = RequestHeader;
         this.ClientDescription = ClientDescription;
@@ -120,22 +121,22 @@ public class CreateSessionRequest extends AbstractStructure implements ServiceRe
         this.SessionName = SessionName;
     }
     
-    public byte[] getClientNonce()
+    public ByteString getClientNonce()
     {
         return ClientNonce;
     }
     
-    public void setClientNonce(byte[] ClientNonce)
+    public void setClientNonce(ByteString ClientNonce)
     {
         this.ClientNonce = ClientNonce;
     }
     
-    public byte[] getClientCertificate()
+    public ByteString getClientCertificate()
     {
         return ClientCertificate;
     }
     
-    public void setClientCertificate(byte[] ClientCertificate)
+    public void setClientCertificate(ByteString ClientCertificate)
     {
         this.ClientCertificate = ClientCertificate;
     }

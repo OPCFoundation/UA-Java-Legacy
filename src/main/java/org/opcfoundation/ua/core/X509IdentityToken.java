@@ -33,6 +33,7 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.core.UserIdentityToken;
 
 
@@ -43,22 +44,22 @@ public class X509IdentityToken extends UserIdentityToken {
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.X509IdentityToken_Encoding_DefaultBinary);
 	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.X509IdentityToken_Encoding_DefaultXml);
 	
-    protected byte[] CertificateData;
+    protected ByteString CertificateData;
     
     public X509IdentityToken() {}
     
-    public X509IdentityToken(String PolicyId, byte[] CertificateData)
+    public X509IdentityToken(String PolicyId, ByteString CertificateData)
     {
         super(PolicyId);
         this.CertificateData = CertificateData;
     }
     
-    public byte[] getCertificateData()
+    public ByteString getCertificateData()
     {
         return CertificateData;
     }
     
-    public void setCertificateData(byte[] CertificateData)
+    public void setCertificateData(ByteString CertificateData)
     {
         this.CertificateData = CertificateData;
     }

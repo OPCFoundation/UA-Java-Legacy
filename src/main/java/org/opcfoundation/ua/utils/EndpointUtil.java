@@ -43,6 +43,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.AnonymousIdentityToken;
 import org.opcfoundation.ua.core.EndpointDescription;
@@ -114,7 +115,7 @@ public class EndpointUtil {
 		exit: {
 			EndpointDescription[] tcpEndpoints = EndpointUtil.selectByProtocol(endpoints, "opc.tcp");
 			// Filter out all but Signed & Encrypted endpoints
-			tcpEndpoints = EndpointUtil.selectByMessageSecurityMode(tcpEndpoints, MessageSecurityMode.SignAndEncrypt);
+			//tcpEndpoints = EndpointUtil.selectByMessageSecurityMode(tcpEndpoints, MessageSecurityMode.SignAndEncrypt);
 			// No suitable endpoint was found
 			if ( tcpEndpoints.length == 0 ) break exit;
 			// Sort endpoints by security level. The lowest level at the beginning, the highest at the end of the array
@@ -156,7 +157,7 @@ public class EndpointUtil {
 			if (url!=null && !ObjectUtils.objectEquals(endpointUrl, url.toLowerCase())) continue;
 			if (mode!=null && !ObjectUtils.objectEquals(d.getSecurityMode(), mode)) continue;
 			if (policy!=null && !ObjectUtils.objectEquals(d.getSecurityPolicyUri(), policy.getPolicyUri())) continue;
-			if (serverCertificate!=null && !Arrays.equals(serverCertificate, d.getServerCertificate())) continue;
+			if (serverCertificate!=null && !Arrays.equals(serverCertificate, ByteString.asByteArray(d.getServerCertificate()))) continue;
 			result.add(d);
 		}
 		return result.toArray(new EndpointDescription[result.size()]);		
@@ -175,7 +176,7 @@ public class EndpointUtil {
 		List<EndpointDescription> result = new ArrayList<EndpointDescription>();
 		for (EndpointDescription d : searchSet) {
 			try {
-				Cert cert = new Cert( d.getServerCertificate() );
+				Cert cert = new Cert(ByteString.asByteArray(d.getServerCertificate()) );
 				int keySize = cert.getKeySize();
 				if ( keySize<minKeySize || keySize>maxKeySize ) continue;
 				result.add(d);
@@ -339,10 +340,10 @@ public class EndpointUtil {
 		logger.debug("createUserNameIdentityToken: algorithm={}", algorithm);
 		byte[] pw = password.getBytes(BinaryEncoder.UTF8);
 		if (algorithm == null)
-			token.setPassword(pw);
+			token.setPassword(ByteString.valueOf(pw));
 		else {
 			try {
-				byte[] c = ep.getServerCertificate();
+				byte[] c = ByteString.asByteArray(ep.getServerCertificate());
 				Cert serverCert = (c == null || c.length == 0) ? null : new Cert(c);
 				if (senderNonce != null)
 					pw = ByteBufferUtils.concatenate(toArray(pw.length
@@ -351,7 +352,7 @@ public class EndpointUtil {
 					pw = ByteBufferUtils.concatenate(toArray(pw.length), pw);
 				pw = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
 						.getPublicKey(), algorithm);
-				token.setPassword(pw);
+				token.setPassword(ByteString.valueOf(pw));
 
 			} catch (InvalidKeyException e) {
 				// Server certificate does not have encrypt usage
@@ -397,14 +398,14 @@ public class EndpointUtil {
 		SecurityPolicy securityPolicy = SecurityPolicy.getSecurityPolicy( securityPolicyUri );
 		if (securityPolicy==null) securityPolicy = SecurityPolicy.NONE;
 		IssuedIdentityToken token = new IssuedIdentityToken();		
-		token.setTokenData( issuedIdentityToken );
+		token.setTokenData(ByteString.valueOf(issuedIdentityToken ));
 		
 		// Encrypt the token
 		SecurityAlgorithm algorithmUri = securityPolicy.getAsymmetricEncryptionAlgorithm();
 		if (algorithmUri==null) algorithmUri = SecurityAlgorithm.RsaOaep;
 		try {
 			Cipher cipher = Cipher.getInstance(algorithmUri.getStandardName());
-			Cert serverCert = new Cert(ep.getServerCertificate());
+			Cert serverCert = new Cert(ByteString.asByteArray(ep.getServerCertificate()));
 			cipher.init(Cipher.ENCRYPT_MODE, serverCert.getCertificate());
 			byte[] tokenData = issuedIdentityToken;
 			if (senderNonce != null)
@@ -412,7 +413,7 @@ public class EndpointUtil {
 						.concatenate(toArray(issuedIdentityToken.length
 								+ senderNonce.length), issuedIdentityToken,
 								senderNonce);
-			token.setTokenData( cipher.doFinal(tokenData) );
+			token.setTokenData(ByteString.valueOf(cipher.doFinal(tokenData)));
 			token.setEncryptionAlgorithm(algorithmUri.getUri());
 			
 		} catch (InvalidKeyException e) {
@@ -664,12 +665,12 @@ public class EndpointUtil {
 		if (policy==null) throw new ServiceResultException(StatusCodes.Bad_IdentityTokenRejected,
 				"Certificate UserTokenType is not supported");
 
-		X509IdentityToken token = new X509IdentityToken( policy.getPolicyId(), certificate.getEncoded() );		
+		X509IdentityToken token = new X509IdentityToken( policy.getPolicyId(), ByteString.valueOf(certificate.getEncoded()) );		
 		
 		String securityPolicyUri = policy.getSecurityPolicyUri();
 		if (securityPolicyUri==null) securityPolicyUri = ep.getSecurityPolicyUri();
 		SecurityPolicy securityPolicy = SecurityPolicy.getSecurityPolicy( securityPolicyUri );
-		Cert serverCert = new Cert(ep.getServerCertificate());
+		Cert serverCert = new Cert(ByteString.asByteArray(ep.getServerCertificate()));
 		if ((securityPolicy!=null) && (serverCert != null))
 			try {
 				// Create a Signature object and initialize it with the private
@@ -681,7 +682,7 @@ public class EndpointUtil {
 				signature.update(serverCert.getEncoded());
 				signature.update(serverNonce);
 
-				signatureData.setSignature(signature.sign());
+				signatureData.setSignature(ByteString.valueOf(signature.sign()));
 				signatureData.setAlgorithm(securityPolicy
 						.getAsymmetricSignatureAlgorithm().getUri());
 

@@ -19,6 +19,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.opcfoundation.ua.application.Server;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.ServiceRequest;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
@@ -151,11 +152,11 @@ public class OpcTcpServerSecureChannel extends AbstractServerSecureChannel {
 
 	private SecurityToken createToken(OpenSecureChannelRequest req, InputMessage mb) throws ServiceResultException
 	{
-		byte[] clientNonce					= req.getClientNonce();
-		int tokenId							= tokenIdCounter.incrementAndGet();				
+		ByteString clientNonce = req.getClientNonce();
+		int tokenId = tokenIdCounter.incrementAndGet();
 
 		SecurityAlgorithm algo = securityConfiguration.getSecurityPolicy().getSymmetricEncryptionAlgorithm();
-		byte[] serverNonce = CryptoUtil.createNonce( algo );
+		ByteString serverNonce = CryptoUtil.createNonce( algo );
 		
 		final UnsignedInteger tokenLifetime = 
 			req.getRequestedLifetime() != null && req.getRequestedLifetime().intValue() > 0 
