@@ -6,6 +6,7 @@ Fixed (#9): StringUtils.addLineBreaks is now used when storing Cert and PrivKey 
 Fixed (#13): Fixed a problem where server socket goes to unrecoverable CLOSE_WAIT state
 Fixed (#23): Cert chain is now validated until a root CA is found
 Fixed (#44): Sun JCE Crypto/Certificate fallback is now by default disabled 
+Fixed (#77): EncoderUtils: Array of Structures is serialized correctly
 Fixed (#82): Variant accepts any dimension (+scalar) Enumeration arrays and converts it to equivalent integer array. For Variants containing Integer arrays (or scalar), can be converted to Enumerations via asEnum method
 Fixed (#87): SunJCECryptoProvider.base64Decode handles line breaks (Fixed as part of #9)
 Fixed (#97): Fixed BinaryDecoder.getVariant ArrayDimensions handling (via pull request #101)
