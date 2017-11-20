@@ -30,21 +30,22 @@
  
 package samples.com.microsoft.azure.iothub;
 
+import static org.opcfoundation.ua.utils.EndpointUtil.selectByMessageSecurityMode;
+import static org.opcfoundation.ua.utils.EndpointUtil.selectByProtocol;
+import static org.opcfoundation.ua.utils.EndpointUtil.selectBySecurityPolicy;
+import static org.opcfoundation.ua.utils.EndpointUtil.sortBySecurityLevel;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.util.Arrays;
-import org.json.simple.JSONObject;
 
+import org.json.simple.JSONObject;
 import org.opcfoundation.ua.application.Client;
 import org.opcfoundation.ua.application.SessionChannel;
 import org.opcfoundation.ua.builtintypes.NodeId;
-import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.Attributes;
 import org.opcfoundation.ua.core.BrowseDescription;
@@ -57,19 +58,19 @@ import org.opcfoundation.ua.core.MessageSecurityMode;
 import org.opcfoundation.ua.core.NodeClass;
 import org.opcfoundation.ua.core.ReadResponse;
 import org.opcfoundation.ua.core.ReadValueId;
-import org.opcfoundation.ua.core.TestStackRequest;
-import org.opcfoundation.ua.core.TestStackResponse;
 import org.opcfoundation.ua.core.TimestampsToReturn;
-import org.opcfoundation.ua.transport.ServiceChannel;
 import org.opcfoundation.ua.transport.security.Cert;
 import org.opcfoundation.ua.transport.security.KeyPair;
 import org.opcfoundation.ua.transport.security.PrivKey;
 import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.opcfoundation.ua.utils.CertificateUtils;
 
-import static org.opcfoundation.ua.utils.EndpointUtil.*;
-
-import com.microsoft.azure.iothub.*;
+import com.microsoft.azure.iothub.DeviceClient;
+import com.microsoft.azure.iothub.IotHubClientProtocol;
+import com.microsoft.azure.iothub.IotHubEventCallback;
+import com.microsoft.azure.iothub.IotHubMessageResult;
+import com.microsoft.azure.iothub.IotHubStatusCode;
+import com.microsoft.azure.iothub.Message;
 
 
 /**
