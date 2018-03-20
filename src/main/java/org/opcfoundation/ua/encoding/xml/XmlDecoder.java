@@ -17,6 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,6 +53,7 @@ import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.encoding.IDecoder;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
 import org.opcfoundation.ua.utils.XMLFactoryCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -894,6 +896,7 @@ public class XmlDecoder implements IDecoder {
 			String      fieldName,
 			Class<? extends T> encodeableClass) throws DecodingException
 	{
+		beginField(fieldName, true);
 		@SuppressWarnings("unchecked")
 		T encodeable = (T) encoderContext.getEncodeableSerializer().getEncodeable(encodeableClass, this);
 		endField(fieldName);
@@ -958,7 +961,7 @@ public class XmlDecoder implements IDecoder {
 		if (beginFieldSafe(fieldName, true))
 		{
 			//			QName xmlName = EncodeableFactory.GetXmlName(encodeableClass);
-			String name = encodeableClass.getName(); // TODO this may not work
+			String name = encodeableClass.getSimpleName();
 			//StackUtils.getDefaultSerializer().//
 			//			m_context.getEncodeableSerializer().
 			//pushNamespace(xmlName.getNamespaceURI());
@@ -1639,7 +1642,7 @@ public class XmlDecoder implements IDecoder {
 
 			// Create array
 			int[] array = new int[values.size()];
-			for(int i : values)
+			for (int i = 0; i < values.size(); i++)
 				array[i] = values.get(i);
 			return array;
 		}
@@ -1777,6 +1780,103 @@ public class XmlDecoder implements IDecoder {
 		}
 
 		return values.toArray(new LocalizedText[0]);
+	}
+
+	public Object getMatrix(String fieldName) throws DecodingException {
+		if (beginFieldSafe(fieldName, true)) {
+			List<Object> list = new ArrayList<Object>();
+			int[] dims = getInt32Array_("Dimensions");
+
+			if (beginFieldSafe("Elements", true)) {
+				try {
+					reader.next();
+				} catch (XMLStreamException e) {
+					logger.error(e.getMessage());
+				}
+
+				while (reader.getEventType() != XMLStreamConstants.END_ELEMENT) {
+					Object value = null;
+					String typeName = reader.getLocalName();
+					if (typeName.equals("Boolean")) {
+						value = getBoolean(typeName);
+					} else if (typeName.equals("SByte")) {
+						value = getSByte(typeName);
+					} else if (typeName.equals("Byte")) {
+						value = getByte(typeName);
+					} else if (typeName.equals("Int16")) {
+						value = getInt16(typeName);
+					} else if (typeName.equals("UInt16")) {
+						value = getUInt16(typeName);
+					} else if (typeName.equals("Int32")) {
+						value = getInt32(typeName);
+					} else if (typeName.equals("UInt32")) {
+						value = getUInt32(typeName);
+					} else if (typeName.equals("Int64")) {
+						value = getInt64(typeName);
+					} else if (typeName.equals("UInt64")) {
+						value = getUInt64(typeName);
+					} else if (typeName.equals("Float")) {
+						value = getFloat(typeName);
+					} else if (typeName.equals("Double")) {
+						value = getDouble(typeName);
+					} else if (typeName.equals("String")) {
+						value = getString(typeName);
+					} else if (typeName.equals("DateTime")) {
+						value = getDateTime(typeName);
+					} else if (typeName.equals("Guid")) {
+						value = getGuid(typeName);
+					} else if (typeName.equals("ByteString")) {
+						value = getByteString(typeName);
+					} else if (typeName.equals("XmlElement")) {
+						value = getXmlElement(typeName);
+					} else if (typeName.equals("NodeId")) {
+						value = getNodeId(typeName);
+					} else if (typeName.equals("ExpandedNodeId")) {
+						value = getExpandedNodeId(typeName);
+					} else if (typeName.equals("StatusCode")) {
+						value = getStatusCode(typeName);
+					} else if (typeName.equals("DiagnosticInfo")) {
+						value = getDiagnosticInfo(typeName);
+					} else if (typeName.equals("QualifiedName")) {
+						value = getQualifiedName(typeName);
+					} else if (typeName.equals("LocalizedText")) {
+						value = getLocalizedText(typeName);
+					} else if (typeName.equals("ExtensionObject")) {
+						ExtensionObject extensionObject = getExtensionObject(typeName);
+						try {
+							value = decode(extensionObject);
+						} catch (DecodingException e) {
+							logger.info("Failed to decode ExtensionObject: " + e.getMessage());
+							value = extensionObject;
+						}
+					} else if (typeName.equals("DataValue")) {
+						value = getDataValue(typeName);
+					} else if (typeName.equals("Variant")) {
+						value = getVariant(typeName);
+					}
+
+					list.add(value);
+
+					try {
+						reader.next();
+					} catch (XMLStreamException e) {
+						logger.error(e.getMessage());
+					}
+
+				}
+
+				endField("Elements");
+			}
+
+			endField(fieldName);
+
+			if (MultiDimensionArrayUtils.getLength(dims) != list.size()) {
+				throw new DecodingException(StatusCodes.Bad_DecodingError);
+			}
+			return MultiDimensionArrayUtils.demuxArray(list.toArray(), dims, list.get(0).getClass());
+		}
+
+		return null;
 	}
 
 
@@ -2567,6 +2667,8 @@ public class XmlDecoder implements IDecoder {
 			//					return matrix;
 			//				}
 			//				}
+			
+			else if (typeName.equals("Matrix")){ return getMatrix(typeName); }
 		}
 
 		throw new DecodingException(
@@ -3079,7 +3181,7 @@ public class XmlDecoder implements IDecoder {
 			return true;
 		}
 
-		return (reader.getLocalName() == elementName);// && m_reader.getNamespaceURI() == m_namespaces.peek());
+		return reader.getLocalName().equals(elementName);
 	}
 
 	private void moveToEnd() {

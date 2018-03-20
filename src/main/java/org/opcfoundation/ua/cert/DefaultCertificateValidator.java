@@ -48,6 +48,13 @@ public class DefaultCertificateValidator implements CertificateValidator {
 	}
 	
 	/**
+	 * @return the certificateStore
+	 */
+	public CertificateStore getCertificateStore() {
+		return store;
+	}
+
+	/**
 	 *
 	 * @return the validationListener
 	 */

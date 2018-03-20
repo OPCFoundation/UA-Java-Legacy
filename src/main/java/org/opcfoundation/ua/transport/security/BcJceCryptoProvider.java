@@ -16,6 +16,7 @@ import java.security.Security;
 
 import org.bouncycastle.util.encoders.Base64;
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.StringUtils;
 
 /**
  * <p>BcJceCryptoProvider class.</p>
@@ -35,7 +36,7 @@ public class BcJceCryptoProvider extends JceCryptoProvider implements CryptoProv
 	/** {@inheritDoc} */
 	@Override
 	public byte[] base64Decode(String string) {
-		return Base64.decode(string);
+		return Base64.decode(StringUtils.removeWhitespace(string));
 	}
 
 	/** {@inheritDoc} */

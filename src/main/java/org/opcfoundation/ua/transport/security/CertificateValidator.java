@@ -16,10 +16,10 @@ import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.core.ApplicationDescription;
 
 /**
- * Certificate Validator estimates the validity of an certificate.
+ * Certificate Validator estimates the validity of a certificate.
  *
- * @see AllowAllCertificatesValidator allow all certificates
- * @see CertificateValidatorImpl basic implementation
+ * @see AllowAllCertificatesValidator
+ * @see DefaultCertificateValidator 
  */
 public interface CertificateValidator {
 	

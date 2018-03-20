@@ -69,7 +69,7 @@ public class DateTime implements Serializable, Comparable<DateTime> {
 	 * Constructs a new DateTime value, initializing it with the current UTC time.
 	 */
 	public DateTime() {
-		this(GregorianCalendar.getInstance());
+	    this(System.currentTimeMillis() * 10000 + OffsetToGregorianCalendarZero);
 	}
 
 	/**

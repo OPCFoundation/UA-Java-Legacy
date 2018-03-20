@@ -387,10 +387,10 @@ public class MultiDimensionArrayUtils {
 			return dstIndex + len;
 		}
 		
-		for (int i=0; i<dims[lvl]; i++)
-			dstIndex += _fillMux(lvl+1, dims, Array.get(src, i), dst, dstIndex);
-		
-		return 0;
+		for (int i = 0; i < dims[lvl]; i++)
+			dstIndex = _fillMux(lvl + 1, dims, Array.get(src, i), dst, dstIndex);
+
+		return dstIndex;
 	}
 	
 	/**

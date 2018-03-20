@@ -25,14 +25,13 @@ import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
+
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.utils.CertificateUtils;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.FileUtil;
 import org.opcfoundation.ua.utils.StringUtils;
-
-import sun.security.provider.X509Factory;
 
 /**
  * Cert is a X509 certificate that contains a public key.

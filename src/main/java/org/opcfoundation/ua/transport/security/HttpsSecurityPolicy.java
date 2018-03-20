@@ -131,9 +131,24 @@ public final class HttpsSecurityPolicy {
 					TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,
 					TLS_DHE_RSA_WITH_AES_256_CBC_SHA256});
 
-	// TLS_1_2 does not work, so we will leave out of the default policies list
-	/** Constant <code>ALL</code> */
-	public static final HttpsSecurityPolicy[] ALL = new HttpsSecurityPolicy[] {TLS_1_0, TLS_1_1};  
+	/**
+     * All usable HTTPS Security Policies. Includes {@link #TLS_1_1} and {@link #TLS_1_2_PFS}. These are the
+     * ones that work in Java 8. Only {@link #TLS_1_0} and {@link #TLS_1_1} work in Java 6, but
+     * TLS_1_0 is not considered safe any more. {@link #TLS_1_2} does not work with any Java implementation.
+     */
+	public static final HttpsSecurityPolicy[] ALL = new HttpsSecurityPolicy[] {TLS_1_1, TLS_1_2_PFS};  
+
+    /**
+     * All HTTPS Security Policies defined in OPC UA 1.02. Includes {@link #TLS_1_0} and {@link #TLS_1_1}. This works with Java 6-8.
+     * {@link #TLS_1_2} is also included in the specification, but it does not work with any Java implementation.
+     */
+    public static final HttpsSecurityPolicy[] ALL_102 = new HttpsSecurityPolicy[] {TLS_1_0, TLS_1_1};  
+
+    /**
+     * All HTTPS Security Policies defined in OPC UA 1.03. Includes only {@link #TLS_1_2_PFS}. This requires Java 8.
+     * {@link #TLS_1_2} is also included in the specification, but it does not work with any Java implementation.
+     */
+	public static final HttpsSecurityPolicy[] ALL_103 = new HttpsSecurityPolicy[] {TLS_1_2_PFS};  
 
 	/** Security policy map */
 	private static Map<String, HttpsSecurityPolicy> availablePolicies = new ConcurrentHashMap<String, HttpsSecurityPolicy>();

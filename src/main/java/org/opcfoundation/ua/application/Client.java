@@ -1017,8 +1017,8 @@ public class Client {
 		for(EndpointDescription e : dedl){
 			if(!edl.contains(e)){
 				logger.error("The endpoint received from GetEndpoints is not in the endpoints of CreateSessionResponse. Endpoint={}",e);
-				logger.debug("GetEndpoints returned endpoints={}", dedl);
-				logger.debug("CreateSessionResponse endpoints={}", edl);
+				logger.error("GetEndpoints returned endpoints={}", dedl);
+				logger.error("CreateSessionResponse endpoints={}", edl);
 				
 				throw new ServiceResultException(StatusCodes.Bad_UnexpectedError,
 						"The endpoint received from GetEndpoints is not in the endpoints of CreateSessionResponse");

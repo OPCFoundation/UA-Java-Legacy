@@ -54,6 +54,14 @@ public class StringUtils {
 	public static String removeLineBreaks(String string) {
 	    return string.replaceAll("[\n\r]", "");
 	}
+	
+	/**
+	 * Returns a string which has all whitespace characters removed from the given string.
+	 */
+	public static String removeWhitespace(String string){
+		return string.replaceAll("\\s", "");
+	}
+	
   /**
    * Make a null safe equals comparison of strings.
    * 

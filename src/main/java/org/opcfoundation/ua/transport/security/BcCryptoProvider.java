@@ -48,6 +48,7 @@ import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.transport.tcp.impl.SecurityToken;
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +70,7 @@ public class BcCryptoProvider implements CryptoProvider {
 	/** {@inheritDoc} */
 	@Override
 	public byte[] base64Decode(String string) {
-		return Base64.decode(string);
+		return Base64.decode(StringUtils.removeWhitespace(string));
 	}
 
 	/** {@inheritDoc} */

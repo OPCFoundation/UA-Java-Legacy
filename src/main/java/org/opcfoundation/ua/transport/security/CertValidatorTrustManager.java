@@ -22,6 +22,7 @@ import javax.net.ssl.X509TrustManager;
 import javax.security.auth.x500.X500Principal;
 
 import org.opcfoundation.ua.builtintypes.StatusCode;
+import org.opcfoundation.ua.common.StatusCodeDescriptions;
 
 /**
  * This class adapts cert validator to trust manager.
@@ -63,19 +64,14 @@ public class CertValidatorTrustManager implements X509TrustManager {
 		}	
 		
 		// Check validity (only once)
-		StatusCode code = validator.validateCertificate(cert);
-		boolean valid = code == null || code.isGood();
-		if ( valid ) {
-			acceptedCertificates.add( cert );
-		}else{
-			throw new CertificateException("Certificate is not valid");
-		}
-		
-		X500Principal issuer = c.getIssuerX500Principal();
-		X500Principal subject = c.getSubjectX500Principal();
-		if ( !subject.equals(issuer) && valid ) {
-			acceptedIssuers.add(cert);
-			acceptedIssuersArray = null;
+		if (!acceptedCertificates.contains(cert)) {
+			StatusCode code = validator.validateCertificate(cert);
+			boolean valid = code == null || code.isGood();
+			if (valid) {
+				acceptedCertificates.add(cert);
+			} else {
+				throw new CertificateException("Certificate is not valid: " + code);
+			}
 		}
 	}
 	

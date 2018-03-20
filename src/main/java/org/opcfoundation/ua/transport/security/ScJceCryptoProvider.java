@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.Security;
 
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.StringUtils;
 import org.spongycastle.util.encoders.Base64;
 
 /**
@@ -35,7 +36,7 @@ public class ScJceCryptoProvider extends JceCryptoProvider implements CryptoProv
 	/** {@inheritDoc} */
 	@Override
 	public byte[] base64Decode(String string) {
-		return Base64.decode(string);
+		return Base64.decode(StringUtils.removeWhitespace(string));
 	}
 
 	/** {@inheritDoc} */

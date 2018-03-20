@@ -41,7 +41,7 @@ public class SunJceCryptoProvider extends JceCryptoProvider implements CryptoPro
 	    // Java6 compatible decoding, using the internal API
         BASE64Decoder bd = new BASE64Decoder();
 		try {
-		    String s = StringUtils.removeLineBreaks(string);
+		    String s = StringUtils.removeWhitespace(string);
 			return bd.decodeBuffer(s);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

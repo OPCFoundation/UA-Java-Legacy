@@ -375,6 +375,8 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 					public void verify(IOSession iosession, SSLSession sslsession) throws SSLException {
 					}
 					public void initalize(SSLEngine sslengine) throws SSLException {
+						//Enforce client cert validation
+						sslengine.setNeedClientAuth(true);
 						//sslengine.setEnabledCipherSuites( calcCipherSuites() );
 					}
 			    };
