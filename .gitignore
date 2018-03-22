@@ -3,11 +3,10 @@ tmp/
 javadoc/
 bin/
 /test-output
-/target/
+target
 
-/TestCA_https.der
-/TestCA.der
-/TestCert_https.der
-/TestCert.der
-/TestKey_https.pem
-/TestKey.pem
+*.der
+*.pem
+.settings
+.classpath
+.project
