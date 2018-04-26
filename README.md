@@ -17,6 +17,17 @@ OPC UA, empowering the Industrial Internet of Things (IIOT) and Industrie 4.0.
 
 Please make sure that your changes do work with java 6 if you are using newer JDK to compile. In most cases running 'mvn clean package' is enough to ensure this (as the build checks that only java 6 supported API is used). 
 
+## Branches and Releases
+
+Releases are done to the GitHub Releases section of this repository, latest: https://github.com/OPCFoundation/UA-Java/releases/latest. Alternatively you can build the stack yourself by following the instructions given in this README.
+
+This repository has 3 main branches:
+* master, should point to the latest release (or sometimes to a stable SNAPSHOT, previously also development was done in master)
+* develop, main development branch, feature branches can be branched and merged back
+* gh-pages, used for the project website (http://opcfoundation.github.io/UA-Java/)
+
+Pull requests in general should target 'develop', unless it is a hotfix for a release. If more advanced workflows are needed, look e.g. http://nvie.com/posts/a-successful-git-branching-model/.
+
 ## Recommended Development Environment
 Note these are recommended, earlier versions might work.
 
