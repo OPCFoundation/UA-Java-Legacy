@@ -6,6 +6,8 @@
   xmlns:opc="http://opcfoundation.org/UA/TypeDictionary/"
   xmlns="http://opcfoundation.org/UA/StatusCodes/"
   TargetNamespace="http://opcfoundation.org/UA/StatusCodes/"
+  TargetPublicationDate="2018-02-09T00:00:00Z"
+  TargetVersion="1.04"
 >
   <opc:Constant Name="NodeId">
     <opc:Documentation>The canonical identifier for the node.</opc:Documentation>
@@ -72,5 +74,20 @@
   </opc:Constant>
   <opc:Constant Name="UserExecutable">
     <opc:Documentation>Whether the method can be called by the current user.</opc:Documentation>
+  </opc:Constant>
+  <opc:Constant Name="DataTypeDefinition">
+    <opc:Documentation>Provides the metadata and encoding information for custom DataTypes.</opc:Documentation>
+  </opc:Constant>
+  <opc:Constant Name="RolePermissions">
+    <opc:Documentation>The permissions for the node granted to roles.</opc:Documentation>
+  </opc:Constant>
+  <opc:Constant Name="UserRolePermissions">
+    <opc:Documentation>The subset of permissions available for the roles available to the current session.</opc:Documentation>
+  </opc:Constant>
+  <opc:Constant Name="AccessRestrictions">
+    <opc:Documentation>The access restrictions assigned to the node.</opc:Documentation>
+  </opc:Constant>
+  <opc:Constant Name="AccessLevelEx">
+    <opc:Documentation>How a variable may be accessed.</opc:Documentation>
   </opc:Constant>
 </opc:TypeDictionary>

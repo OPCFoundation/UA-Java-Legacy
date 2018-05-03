@@ -228,3 +228,8 @@ Bad_CertificateChainIncomplete,269
 Bad_LicenseExpired,270
 Bad_LicenseLimitsExceeded,271
 Bad_LicenseNotAvailable,272
+Bad_NotExecutable,273
+Bad_NumericOverflow,274
+Bad_RequestNotComplete,275
+Bad_CertificatePolicyCheckFailed,276
+Bad_AlreadyExists,277
