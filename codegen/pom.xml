@@ -30,5 +30,10 @@
   		<artifactId>commons-lang3</artifactId>
   		<version>3.5</version>
   	</dependency>
+  	<dependency>
+  		<groupId>com.google.guava</groupId>
+  		<artifactId>guava</artifactId>
+  		<version>20.0</version>
+  	</dependency>
   </dependencies>
 </project>
