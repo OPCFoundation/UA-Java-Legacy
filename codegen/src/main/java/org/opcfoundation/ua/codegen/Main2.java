@@ -47,7 +47,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.opcfoundation.ua.codegen.DictionaryTypes.TypeDictionary.Constant;
 import org.opcfoundation.ua.codegen.DictionaryTypes2.AbstractDictionary.FieldType;
@@ -56,8 +55,12 @@ import org.opcfoundation.ua.codegen.EngineeringUnitsUtil.EUnit;
 import org.opcfoundation.ua.codegen.IdentifiersUtil.Identifier;
 import org.xml.sax.SAXException;
 
-public class Main2 {
+import com.google.common.collect.Lists;
 
+public class Main2 {
+	
+	private static final int MAX_IDENTIFIERS_PER_FILE = 4000;
+	
 	public static final File DEST = new File("../src/main/java");
 	
 	public static void main(String[] args) 
@@ -143,44 +146,56 @@ public class Main2 {
 		Template identifiersTemplate = Template.load("src/main/resources/codegen_data/templates/IdentifiersTemplate.java");		
 		String className = getClassName(fullClassName);
 		File file = toFile(DEST, fullClassName);
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		List<String> content = new ArrayList<String>();
+		HashMap<String, Object> combinedMap = new HashMap<String, Object>();
+		List<String> combinedContent = new ArrayList<String>();
 		List<String> imports = new ArrayList<String>();
 		
-		map.put(Template.KEY_PACKAGE_NAME, getPackageName(fullClassName));
-		map.put(Template.KEY_CLASSNAME, className);
-		map.put(Template.KEY_CONTENT, content);
-		map.put(Template.KEY_IMPORTS, imports);		
+		combinedMap.put(Template.KEY_PACKAGE_NAME, getPackageName(fullClassName));
+		combinedMap.put(Template.KEY_CLASSNAME, className);
+		combinedMap.put(Template.KEY_CONTENT, combinedContent);
+		combinedMap.put(Template.KEY_IMPORTS, imports);		
 		
-		// Sort by type
-		TreeMap<String, List<IdentifiersUtil.Identifier>> sorted = new TreeMap<String, List<IdentifiersUtil.Identifier>>();
-		for (IdentifiersUtil.Identifier id : identifiers)
-		{
-			List<IdentifiersUtil.Identifier> typeList = sorted.get(id.type);
-			if (typeList==null) {
-				typeList = new ArrayList<IdentifiersUtil.Identifier>();
-				sorted.put(id.type, typeList);
+		//Sort by name
+		List<IdentifiersUtil.Identifier> sorted = new ArrayList<IdentifiersUtil.Identifier>();
+		sorted.addAll(identifiers);
+		Collections.sort(sorted, IdentifiersUtil.NAME_COMPARATOR);
+		
+		/*
+		 * Split identifier initialization to multiple files. 
+		 * The number of identifiers is too large to be initialized in one java class.
+		 * Please see GH#136 for more information
+		 */
+		List<List<Identifier>> parts = Lists.partition(sorted, MAX_IDENTIFIERS_PER_FILE);
+		int partCounter = 0;
+		for(List<Identifier> part : parts){
+			final Template partial = Template.load("src/main/resources/codegen_data/templates/InternalIdentifiersTemplate.java");
+			final Map<String, Object> partialMap = new HashMap<String, Object>();
+			final String partialClassName = "InternalIdentifiers"+partCounter;
+			final List<String> partialContents = new ArrayList<String>();
+			
+			partialMap.put(Template.KEY_PACKAGE_NAME, combinedMap.get(Template.KEY_PACKAGE_NAME));
+			partialMap.put(Template.KEY_CLASSNAME, partialClassName);			
+			partialMap.put(Template.KEY_CONTENT, partialContents);
+			partialMap.put(Template.KEY_IMPORTS, imports);
+			
+			for(Identifier id : part){			
+				//Add the initialization to the Partial
+				partialContents.add("public static final NodeId "+id.name+" = init("+id.id+");");
+				
+				//Add reference to the part in the combined Identifiers class
+				combinedContent.add("public static final NodeId "+id.name+" = "+partialClassName+"."+id.name+";");
 			}
-			typeList.add(id);
+			
+			//Partial to file
+			File filePartial = toFile(DEST, combinedMap.get(Template.KEY_PACKAGE_NAME)+"."+partialClassName);
+			partial.buildToFile(partialMap, filePartial);
+			
+			partCounter++;
 		}
 		
-		// sort lists, sort by name		
-		for (List<IdentifiersUtil.Identifier> list : sorted.values())		
-			Collections.sort(list, IdentifiersUtil.NAME_COMPARATOR);
-		
-		
-		for (String type : sorted.keySet())
-		{
-			content.add("// "+type);
-			for (IdentifiersUtil.Identifier id : sorted.get(type))
-			{
-				content.add("public static final NodeId "+id.name+" = init("+id.id+");");
-			}
-			content.add("");
-		}
-		
-		identifiersTemplate.buildToFile(map, file);		
-	}	
+		//combination Identifiers to file
+		identifiersTemplate.buildToFile(combinedMap, file);	
+	}
 	
 	public static void buildChannelService(DictionaryTypes2.ModelDesign dom ) 
 	throws IOException
