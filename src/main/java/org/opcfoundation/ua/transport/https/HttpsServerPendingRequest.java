@@ -194,6 +194,9 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 		} catch (DecodingException e) {
 			sendError(400, StatusCodes.Bad_RequestTypeInvalid, e.getMessage());
 			return;
+		} catch (StackOverflowError e){
+			sendError(400, StatusCodes.Bad_DecodingError, e.getMessage());
+			return;
 		}
 
 		// Handle request

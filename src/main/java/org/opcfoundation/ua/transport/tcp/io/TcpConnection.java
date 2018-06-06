@@ -1006,7 +1006,7 @@ public class TcpConnection implements IConnection {
 				closeError = new ServiceResultException(StatusCodes.Bad_InternalError, e);
 				logger.error("Error in ReadThread", closeError);
 			} catch (StackOverflowError e){
-				closeError = new ServiceResultException(StatusCodes.Bad_InternalError, e);
+				closeError = new ServiceResultException(StatusCodes.Bad_DecodingError, e);
 				logger.error("Error in ReadThread", closeError);
 			}
 
