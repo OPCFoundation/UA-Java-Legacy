@@ -23,6 +23,7 @@ import static org.opcfoundation.ua.core.StatusCodes.Bad_TcpInternalError;
 import static org.opcfoundation.ua.core.StatusCodes.Bad_TcpMessageTooLarge;
 import static org.opcfoundation.ua.core.StatusCodes.Bad_TcpMessageTypeInvalid;
 
+import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -443,7 +444,7 @@ public class TcpConnection implements IConnection {
 
 			// Handshake
 			try {
-				OutputStreamWriteable out = new OutputStreamWriteable(s.getOutputStream());
+				OutputStreamWriteable out = new OutputStreamWriteable(new BufferedOutputStream(s.getOutputStream()));
 				out.order(ByteOrder.LITTLE_ENDIAN);
 
 				InputStreamReadable in = new InputStreamReadable(s.getInputStream(), Long.MAX_VALUE);
