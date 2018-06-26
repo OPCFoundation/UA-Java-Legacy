@@ -13,6 +13,7 @@ package org.opcfoundation.ua.transport.https;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Arrays;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
 
@@ -218,6 +219,11 @@ class HttpsClientPendingRequest implements Runnable {
 		} catch (RuntimeException rte) {
 			// http-client seems to be throwing these, IllegalArgumentException for one
 			result.setError( new ServiceResultException( rte ) );
+		} catch(StackOverflowError e){
+			// Payloads of high nesting levels may cause stack overflow. Structure, VariantArray and DiagnosticInfo at least may cause this.
+			// JVM setting -Xss influences possible level of nesting. At least 100 levels of nesting must be supported, this should not be a problem with normal thread stack sizes. 
+			// Inform receiving side that error has happened.
+			result.setError(new ServiceResultException(StatusCodes.Bad_DecodingError, "Stack overflow: " + Arrays.toString(Arrays.copyOf(e.getStackTrace(), 30)) + "..."));
 		} finally {
 			httpsClient.requests.remove( requestId );
 		}
