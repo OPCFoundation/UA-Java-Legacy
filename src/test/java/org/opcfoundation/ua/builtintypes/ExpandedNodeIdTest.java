@@ -17,7 +17,7 @@ public class ExpandedNodeIdTest {
 		ExpandedNodeId nullUri = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, UnsignedInteger.valueOf(0));
 		Assert.assertTrue(nullUri.isNullNodeId());
 	}
-	
+
 	@Test
 	public void parseServerIndexWithtoutNamespaceComponent() {
 		final int intValue = 0;
@@ -48,6 +48,12 @@ public class ExpandedNodeIdTest {
 		ExpandedNodeId parsed = ExpandedNodeId.parseExpandedNodeId(serverNsIndex.toString());
 		assertEquals(serverNsIndex, parsed);
 	}
+	
+	@Test
+	public void parseValueOnly() {
+		ExpandedNodeId parsed = ExpandedNodeId.parseExpandedNodeId("i=0");
+		assertEquals(new ExpandedNodeId(UnsignedInteger.valueOf(0), 0, 0), parsed);
+	}
 
 	@Test
 	public void parseNamespaceUri() {
@@ -58,6 +64,14 @@ public class ExpandedNodeIdTest {
 		String stringComposition = "nsu=" + namespaceURI + ";i=" + intValue;
 		ExpandedNodeId parsedComposition = ExpandedNodeId.parseExpandedNodeId(stringComposition);
 		assertEquals(serverUri, parsedComposition);
+	}
+
+	@Test
+	public void parseNamespaceUriFromToString() {
+		ExpandedNodeId serverUri = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, 0);
+		// toString
+		ExpandedNodeId parsed = ExpandedNodeId.parseExpandedNodeId(serverUri.toString());
+		assertEquals(serverUri, parsed);
 	}
 
 	@Test

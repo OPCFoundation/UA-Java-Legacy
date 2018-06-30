@@ -13,6 +13,7 @@
 package org.opcfoundation.ua.builtintypes;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.UUID;
 
@@ -52,6 +53,8 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 
 	/** Identifier of "NodeId" in UA AddressSpace */
 	public static final NodeId ID = Identifiers.ExpandedNodeId;
+	
+	private static final String XML_ENCODING = "ISO8859-1";
 
 	/**
 	 * Check if nodeId is null or a NullNodeId.
@@ -100,6 +103,16 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 		}
 		return returnable;
 	}
+	
+	public static ExpandedNodeId parseXmlEncodedExpandedNodeId(String s) throws UnsupportedEncodingException {
+		final ExpandedNodeId parsed = parseExpandedNodeId(s);
+		if(parsed.getNamespaceUri() != null) {
+			String decoded = URLDecoder.decode(parsed.namespaceUri, XML_ENCODING);
+			return new ExpandedNodeId(parsed.serverIndex, decoded, parsed.value);
+		}
+		return parsed;
+	}
+	
 	/**
 	 * @param s
 	 * @param parts
@@ -426,18 +439,30 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		try {
-			String svrPart = !isLocal() ? "svr="+serverIndex+";" : "";
-			String nsPart = namespaceUri!=null ? "nsu="+URLEncoder.encode(namespaceUri, "ISO8859-1")+";" : namespaceIndex>0 ? "ns="+namespaceIndex+";" : "";
-			if (type == IdType.Numeric) return svrPart+nsPart+"i="+value;
-			if (type == IdType.String) return svrPart+nsPart+"s="+value;
-			if (type == IdType.Guid) return svrPart+nsPart+"g="+value;
-			if (type == IdType.Opaque) {
-				if (value==null) return svrPart+nsPart+"b=null";
-				return svrPart+nsPart+"b="+new String( CryptoUtil.base64Encode(((ByteString)value).getValue()) );
+			String svrPart = !isLocal() ? "svr=" + serverIndex + ";" : "";
+			String nsPart = namespaceUri != null ? "nsu=" + namespaceUri + ";"
+					: namespaceIndex > 0 ? "ns=" + namespaceIndex + ";" : "";
+			switch (type) {
+			case Guid:
+				return svrPart + nsPart + "g=" + value;
+			case Numeric:
+				return svrPart + nsPart + "i=" + value;
+			case Opaque:
+				if (value == null)
+					return svrPart + nsPart + "b=null";
+				return svrPart + nsPart + "b=" + new String(CryptoUtil.base64Encode(((ByteString) value).getValue()));
+			case String:
+				return svrPart + nsPart + "s=" + value;
+			default:
+				return "error";
 			}
-		} catch (UnsupportedEncodingException e) {
+	}
+
+	public String getXMLEncodedString() throws UnsupportedEncodingException {
+		String plain = toString();
+		if (namespaceUri != null) {
+			return plain.replace(namespaceUri, URLEncoder.encode(namespaceUri, XML_ENCODING));
 		}
-		return "error";
+		return plain;
 	}
 }
