@@ -1,11 +1,11 @@
 package org.opcfoundation.ua.builtintypes;
 
-import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.opcfoundation.ua.common.NamespaceTable;
-
 
 public class ExpandedNodeIdTest {
 
@@ -18,12 +18,54 @@ public class ExpandedNodeIdTest {
 		Assert.assertTrue(nullUri.isNullNodeId());
 	}
 
-	@Before
-	public void setUp() throws Exception {
+	@Test
+	public void parseServerIndex() {
+		final int namespaceIndex = 1;
+		final int intValue = 0;
+		final UnsignedInteger serverIndex = UnsignedInteger.valueOf(1);
+		// toString
+		ExpandedNodeId serverNsIndex = new ExpandedNodeId(serverIndex, namespaceIndex, intValue);
+		ExpandedNodeId parsed = ExpandedNodeId.parseExpandedNodeId(serverNsIndex.toString());
+		assertEquals(serverNsIndex, parsed);
+		// string composed
+		String stringComposition = "svr=" + serverIndex + ";" + "ns=" + namespaceIndex + ";i=" + intValue;
+		ExpandedNodeId parsedComposition = ExpandedNodeId.parseExpandedNodeId(stringComposition);
+		assertEquals(serverNsIndex, parsedComposition);
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@Test
+	public void parseNamespaceUri() {
+		final String namespaceURI = NamespaceTable.OPCUA_NAMESPACE;
+		final int intValue = 0;
+		ExpandedNodeId serverUri = new ExpandedNodeId(namespaceURI, intValue);
+		// string composed
+		String stringComposition = "nsu=" + namespaceURI + ";i=" + intValue;
+		ExpandedNodeId parsedComposition = ExpandedNodeId.parseExpandedNodeId(stringComposition);
+		assertEquals(serverUri, parsedComposition);
 	}
 
+	@Test
+	public void equalsServerIndexes() {
+		ExpandedNodeId pivotServerIndex1 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 0, 0);
+		//
+		ExpandedNodeId serverIndex1 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 0, 0);
+		assertEquals(pivotServerIndex1, serverIndex1);
+		//
+		ExpandedNodeId serverIndex2 = new ExpandedNodeId(UnsignedInteger.valueOf(2), 0, 0);
+		assertNotEquals(pivotServerIndex1, serverIndex2);
+	}
+
+	@Test
+	public void equalsNamespaceIndixes() {
+		ExpandedNodeId pivotNsIndex1 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 1, 0);
+		// equal namespaces
+		ExpandedNodeId nsIndex1 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 1, 0);
+		assertEquals(pivotNsIndex1, nsIndex1);
+		// different ns
+		ExpandedNodeId nsIndex2 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 2, 0);
+		assertNotEquals(pivotNsIndex1, nsIndex2);
+		// ns to uri
+		ExpandedNodeId uri = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, 0);
+		assertNotEquals(pivotNsIndex1, uri);
+	}
 }
