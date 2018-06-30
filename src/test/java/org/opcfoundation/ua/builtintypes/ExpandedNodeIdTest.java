@@ -17,6 +17,17 @@ public class ExpandedNodeIdTest {
 		ExpandedNodeId nullUri = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, UnsignedInteger.valueOf(0));
 		Assert.assertTrue(nullUri.isNullNodeId());
 	}
+	
+	@Test
+	public void parseServerIndexWithtoutNamespaceComponent() {
+		final int intValue = 0;
+		final UnsignedInteger serverIndex = UnsignedInteger.valueOf(1);
+		// parse without nsu and ns
+		ExpandedNodeId namespaceIndex0 = new ExpandedNodeId(serverIndex, 0, intValue);
+		String stringWithoutMiddlePart = "svr=" + serverIndex + ";i=" + intValue;
+		ExpandedNodeId parsedWithoutMiddlePart = ExpandedNodeId.parseExpandedNodeId(stringWithoutMiddlePart);
+		assertEquals(namespaceIndex0, parsedWithoutMiddlePart);
+	}
 
 	@Test
 	public void parseServerIndexByStringComposition() {
