@@ -423,14 +423,14 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 	@Override
 	public String toString() {
 		try {
-			String srvPart = !isLocal() ? "srv="+serverIndex+";" : "";
+			String svrPart = !isLocal() ? "svr="+serverIndex+";" : "";
 			String nsPart = namespaceUri!=null ? "nsu="+URLEncoder.encode(namespaceUri, "ISO8859-1")+";" : namespaceIndex>0 ? "ns="+namespaceIndex+";" : "";
-			if (type == IdType.Numeric) return srvPart+nsPart+"i="+value;
-			if (type == IdType.String) return srvPart+nsPart+"s="+value;
-			if (type == IdType.Guid) return srvPart+nsPart+"g="+value;
+			if (type == IdType.Numeric) return svrPart+nsPart+"i="+value;
+			if (type == IdType.String) return svrPart+nsPart+"s="+value;
+			if (type == IdType.Guid) return svrPart+nsPart+"g="+value;
 			if (type == IdType.Opaque) {
-				if (value==null) return srvPart+nsPart+"b=null";
-				return srvPart+nsPart+"b="+new String( CryptoUtil.base64Encode(((ByteString)value).getValue()) );
+				if (value==null) return svrPart+nsPart+"b=null";
+				return svrPart+nsPart+"b="+new String( CryptoUtil.base64Encode(((ByteString)value).getValue()) );
 			}
 		} catch (UnsupportedEncodingException e) {
 		}
