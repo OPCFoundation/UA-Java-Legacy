@@ -94,6 +94,10 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 			} else
 				throwExpandedNodeIdCastException(s);
 		}
+		//ns and nsu skipped
+		if(returnable == null) {
+			returnable = new ExpandedNodeId(UnsignedInteger.valueOf(svrIndex), nsIndex, nodeIdValue.getValue());
+		}
 		return returnable;
 	}
 	/**
