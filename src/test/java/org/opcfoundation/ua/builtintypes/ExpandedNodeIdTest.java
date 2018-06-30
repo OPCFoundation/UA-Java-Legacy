@@ -19,18 +19,23 @@ public class ExpandedNodeIdTest {
 	}
 
 	@Test
-	public void parseServerIndex() {
+	public void parseServerIndexByStringComposition() {
 		final int namespaceIndex = 1;
 		final int intValue = 0;
 		final UnsignedInteger serverIndex = UnsignedInteger.valueOf(1);
-		// toString
 		ExpandedNodeId serverNsIndex = new ExpandedNodeId(serverIndex, namespaceIndex, intValue);
-		ExpandedNodeId parsed = ExpandedNodeId.parseExpandedNodeId(serverNsIndex.toString());
-		assertEquals(serverNsIndex, parsed);
-		// string composed
+		// composition
 		String stringComposition = "svr=" + serverIndex + ";" + "ns=" + namespaceIndex + ";i=" + intValue;
 		ExpandedNodeId parsedComposition = ExpandedNodeId.parseExpandedNodeId(stringComposition);
 		assertEquals(serverNsIndex, parsedComposition);
+	}
+
+	@Test
+	public void parseServerIndexByToString() {
+		ExpandedNodeId serverNsIndex = new ExpandedNodeId(UnsignedInteger.valueOf(1), 1, 0);
+		// toString
+		ExpandedNodeId parsed = ExpandedNodeId.parseExpandedNodeId(serverNsIndex.toString());
+		assertEquals(serverNsIndex, parsed);
 	}
 
 	@Test
@@ -45,27 +50,45 @@ public class ExpandedNodeIdTest {
 	}
 
 	@Test
-	public void equalsServerIndexes() {
+	public void equalsSameServerIndex() {
 		ExpandedNodeId pivotServerIndex1 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 0, 0);
-		//
 		ExpandedNodeId serverIndex1 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 0, 0);
 		assertEquals(pivotServerIndex1, serverIndex1);
-		//
+	}
+
+	@Test
+	public void equalsDifferentServerIndex() {
+		ExpandedNodeId pivotServerIndex1 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 0, 0);
 		ExpandedNodeId serverIndex2 = new ExpandedNodeId(UnsignedInteger.valueOf(2), 0, 0);
 		assertNotEquals(pivotServerIndex1, serverIndex2);
 	}
 
 	@Test
-	public void equalsNamespaceIndixes() {
-		ExpandedNodeId pivotNsIndex1 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 1, 0);
-		// equal namespaces
+	public void equalsSameNamespaceIndex() {
+		ExpandedNodeId nsIndex1a = new ExpandedNodeId(UnsignedInteger.valueOf(1), 1, 0);
 		ExpandedNodeId nsIndex1 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 1, 0);
-		assertEquals(pivotNsIndex1, nsIndex1);
-		// different ns
+		assertEquals(nsIndex1a, nsIndex1);
+	}
+
+	@Test
+	public void equalsDifferentNamespaceIndex() {
+		ExpandedNodeId nsIndex1 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 1, 0);
 		ExpandedNodeId nsIndex2 = new ExpandedNodeId(UnsignedInteger.valueOf(1), 2, 0);
-		assertNotEquals(pivotNsIndex1, nsIndex2);
-		// ns to uri
+		assertNotEquals(nsIndex1, nsIndex2);
+	}
+
+	@Test
+	public void equalsNamespaceIndexToURI() {
+		ExpandedNodeId index = new ExpandedNodeId(UnsignedInteger.valueOf(1), 1, 0);
 		ExpandedNodeId uri = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, 0);
-		assertNotEquals(pivotNsIndex1, uri);
+		assertNotEquals(index, uri);
+	}
+
+	@Test
+	public void equalsDifferentNamespaceURI() {
+		ExpandedNodeId uriDI = new ExpandedNodeId("http://opcfoundation.org/UA/DI/", 0);
+		ExpandedNodeId uriUA = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, 0);
+		assertNotEquals(uriUA, uriDI);
+
 	}
 }
