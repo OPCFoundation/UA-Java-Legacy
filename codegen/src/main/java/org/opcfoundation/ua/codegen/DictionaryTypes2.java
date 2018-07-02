@@ -102,6 +102,7 @@ public class DictionaryTypes2 {
 		public abstract class BaseType extends AbstractType {
 			public Boolean AllowArray = false;
 			public Boolean NotInAddressSpace = false;
+			public boolean isOptionSet = false;
 			public QName SymbolicName;			
 			public QName SymbolicId;
 			public QName BaseType;
@@ -111,6 +112,7 @@ public class DictionaryTypes2 {
 				NotInAddressSpace = DOMUtils.getBooleanAttribute(n,
 						"NotInAddressSpace");
 				AllowArray = DOMUtils.getBooleanAttribute(n, "AllowArray");
+				isOptionSet = Boolean.TRUE.equals(DOMUtils.getBooleanAttribute(n, "IsOptionSet"));
 				
 				NamedNodeMap nm = n.getAttributes();
 				Node idNode = nm.getNamedItem("SymbolicId");

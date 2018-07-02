@@ -505,6 +505,10 @@ public class Main2 {
 		for (FieldType f : allFieldTypes)
 		{
 			DictionaryTypes2.ModelDesign.DataType ft = dom.getDataType( f.getDataType() );
+			if(ft.isOptionSet){
+				ft = ft.getSuperType();
+			}
+			
 			ft = fixWrapper(ft);
 			boolean isArray = f.ValueRank!=null;
 			String dataTypeURL = ft.SymbolicName;
@@ -722,6 +726,7 @@ public class Main2 {
 			if (isPrimitive(dt)) continue;
 			if (isPrimitiveWrapper(dt)) continue;
 			if (dt.getSuperType()==enumeration) continue;
+			if (dt.isOptionSet) continue;
 			result.add(dt);
 		}		
 		return result;
@@ -840,6 +845,9 @@ public class Main2 {
 				content.add("\t\t\t\t"+t.Name+" obj = ("+t.Name+") encodeable;");			
 			for (FieldType f : t.getAllFields()) {	
 				DictionaryTypes2.ModelDesign.DataType fieldType = dom.getDataType( f.getDataType() ); 
+				if(fieldType.isOptionSet){
+					fieldType = fieldType.getSuperType();
+				}
 				fieldType = fixWrapper(fieldType);
 				boolean isArray = f.ValueRank!=null;
 				boolean isEnum = isEnumeration(fieldType);
@@ -881,6 +889,10 @@ public class Main2 {
 				content.add("\t\t\t\t"+t.Name+" obj = ("+t.Name+") encodeable;");
 			for (FieldType f : t.getAllFields()) {				
 				DictionaryTypes2.ModelDesign.DataType fieldType = dom.getDataType( f.getDataType() ); 
+				if(fieldType.isOptionSet){
+					fieldType = fieldType.getSuperType();
+				}
+				
 				String fieldTypeName = fieldType.SymbolicName;
 //				if (fieldTypeName.equals("http://opcfoundation.org/UA/ExtensionObject")) 
 //					fieldTypeName = "http://opcfoundation.org/UA/Structure";
@@ -919,6 +931,9 @@ public class Main2 {
 			content.add("\t\t\t\t"+t.Name+" result = new "+t.Name+"();");
 			for (FieldType f : t.getAllFields()) {				
 				DictionaryTypes2.ModelDesign.DataType fieldType = dom.getDataType( f.getDataType() ); 
+				if(fieldType.isOptionSet){
+					fieldType = fieldType.getSuperType();
+				}
 				fieldType = fixWrapper(fieldType);
 				boolean isArray = f.ValueRank!=null;
 				boolean isEnum = isEnumeration(fieldType);
