@@ -1,5 +1,3 @@
-TestStack,0,TestServiceSet
-TestStackEx,0,TestServiceSet
 FindServers,1,DiscoveryServiceSet
 GetEndpoints,1,DiscoveryServiceSet
 RegisterServer,1,DiscoveryServiceSet
