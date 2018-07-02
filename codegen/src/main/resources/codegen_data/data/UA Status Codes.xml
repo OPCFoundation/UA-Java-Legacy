@@ -252,7 +252,7 @@
     <opc:Documentation>The content filter is not valid.</opc:Documentation>
   </opc:Constant>
   <opc:Constant Name="Bad_FilterOperatorInvalid">
-    <opc:Documentation>An unregognized operator was provided in a filter.</opc:Documentation>
+    <opc:Documentation>An unrecognized operator was provided in a filter.</opc:Documentation>
   </opc:Constant>
   <opc:Constant Name="Bad_FilterOperatorUnsupported">
     <opc:Documentation>A valid operator was provided, but the server does not provide support for this filter operator.</opc:Documentation>
@@ -276,7 +276,7 @@
     <opc:Documentation>The operation could not be processed because all continuation points have been allocated.</opc:Documentation>
   </opc:Constant>
   <opc:Constant Name="Bad_ReferenceTypeIdInvalid">
-    <opc:Documentation>The operation could not be processed because all continuation points have been allocated.</opc:Documentation>
+    <opc:Documentation>The reference type id does not refer to a valid reference type node.</opc:Documentation>
   </opc:Constant>
   <opc:Constant Name="Bad_BrowseDirectionInvalid">
     <opc:Documentation>The browse direction is not valid.</opc:Documentation>
@@ -476,7 +476,7 @@
   
   <!-- CreateSubscription -->
   <opc:Constant Name="Bad_TooManySubscriptions">
-    <opc:Documentation>The server has reached its  maximum number of subscriptions.</opc:Documentation>
+    <opc:Documentation>The server has reached its maximum number of subscriptions.</opc:Documentation>
   </opc:Constant>
 
   <!-- Publish -->
@@ -687,7 +687,7 @@
     <opc:Documentation>The aggregate configuration is not valid for specified node.</opc:Documentation>
   </opc:Constant>
   <opc:Constant Name="Good_DataIgnored">
-    <opc:Documentation>The request pecifies fields which are not valid for the EventType or cannot be saved by the historian.</opc:Documentation>
+    <opc:Documentation>The request specifies fields which are not valid for the EventType or cannot be saved by the historian.</opc:Documentation>
   </opc:Constant>
 
   <!-- Part 12 -->
