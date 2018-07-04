@@ -48,13 +48,15 @@ public enum _ClassName_ implements Enumeration {
 
 _Content_	
 	
-	public static EnumSet<AccessLevel> NONE = EnumSet.noneOf( AccessLevel.class );
-	public static EnumSet<AccessLevel> READONLY = EnumSet.of( CurrentRead );
-	public static EnumSet<AccessLevel> READWRITE = EnumSet.of( CurrentRead, CurrentWrite );
-	public static EnumSet<AccessLevel> WRITEONLY = EnumSet.of( CurrentWrite );
-	public static EnumSet<AccessLevel> HISTORYREAD = EnumSet.of( HistoryRead );
-	public static EnumSet<AccessLevel> HISTORYREADWRITE = EnumSet.of( HistoryRead, HistoryWrite );
-	public static EnumSet<AccessLevel> ALL = EnumSet.allOf( AccessLevel.class );
+	public static final EnumSet<AccessLevel> NONE = EnumSet.noneOf( AccessLevel.class );
+	public static final EnumSet<AccessLevel> READONLY = EnumSet.of( CurrentRead );
+	public static final EnumSet<AccessLevel> READWRITE = EnumSet.of( CurrentRead, CurrentWrite );
+	public static final EnumSet<AccessLevel> READWRITE_STATUS = EnumSet.of( CurrentRead, CurrentWrite, StatusWrite );
+	public static final EnumSet<AccessLevel> READWRITE_STATUS_TIMESTAMP = EnumSet.of( CurrentRead, CurrentWrite, StatusWrite, TimestampWrite );
+	public static final EnumSet<AccessLevel> WRITEONLY = EnumSet.of( CurrentWrite );
+	public static final EnumSet<AccessLevel> HISTORYREAD = EnumSet.of( HistoryRead );
+	public static final EnumSet<AccessLevel> HISTORYREADWRITE = EnumSet.of( HistoryRead, HistoryWrite );
+	public static final EnumSet<AccessLevel> ALL = EnumSet.allOf( AccessLevel.class );
 
 	private final int value;
 	_ClassName_(int value) {
