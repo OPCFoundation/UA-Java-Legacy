@@ -93,31 +93,31 @@ public class StatusCodes {
     @Description("An error occurred verifying security.")
     public final static UnsignedInteger Bad_SecurityChecksFailed = new UnsignedInteger(0x80130000L);
     
-    @Description("The Certificate has expired or is not yet valid.")
+    @Description("The certificate has expired or is not yet valid.")
     public final static UnsignedInteger Bad_CertificateTimeInvalid = new UnsignedInteger(0x80140000L);
     
-    @Description("An Issuer Certificate has expired or is not yet valid.")
+    @Description("An issuer certificate has expired or is not yet valid.")
     public final static UnsignedInteger Bad_CertificateIssuerTimeInvalid = new UnsignedInteger(0x80150000L);
     
-    @Description("The HostName used to connect to a Server does not match a HostName in the Certificate.")
+    @Description("The HostName used to connect to a server does not match a HostName in the certificate.")
     public final static UnsignedInteger Bad_CertificateHostNameInvalid = new UnsignedInteger(0x80160000L);
     
-    @Description("The URI specified in the ApplicationDescription does not match the URI in the Certificate.")
+    @Description("The URI specified in the ApplicationDescription does not match the URI in the certificate.")
     public final static UnsignedInteger Bad_CertificateUriInvalid = new UnsignedInteger(0x80170000L);
     
-    @Description("The Certificate may not be used for the requested operation.")
+    @Description("The certificate may not be used for the requested operation.")
     public final static UnsignedInteger Bad_CertificateUseNotAllowed = new UnsignedInteger(0x80180000L);
     
-    @Description("The Issuer Certificate may not be used for the requested operation.")
+    @Description("The issuer certificate may not be used for the requested operation.")
     public final static UnsignedInteger Bad_CertificateIssuerUseNotAllowed = new UnsignedInteger(0x80190000L);
     
-    @Description("The Certificate is not trusted.")
+    @Description("The certificate is not trusted.")
     public final static UnsignedInteger Bad_CertificateUntrusted = new UnsignedInteger(0x801A0000L);
     
-    @Description("It was not possible to determine if the Certificate has been revoked.")
+    @Description("It was not possible to determine if the certificate has been revoked.")
     public final static UnsignedInteger Bad_CertificateRevocationUnknown = new UnsignedInteger(0x801B0000L);
     
-    @Description("It was not possible to determine if the Issuer Certificate has been revoked.")
+    @Description("It was not possible to determine if the issuer certificate has been revoked.")
     public final static UnsignedInteger Bad_CertificateIssuerRevocationUnknown = new UnsignedInteger(0x801C0000L);
     
     @Description("The certificate has been revoked.")
@@ -258,7 +258,7 @@ public class StatusCodes {
     @Description("The operation could not be processed because all continuation points have been allocated.")
     public final static UnsignedInteger Bad_NoContinuationPoints = new UnsignedInteger(0x804B0000L);
     
-    @Description("The operation could not be processed because all continuation points have been allocated.")
+    @Description("The reference type id does not refer to a valid reference type node.")
     public final static UnsignedInteger Bad_ReferenceTypeIdInvalid = new UnsignedInteger(0x804C0000L);
     
     @Description("The browse direction is not valid.")
@@ -282,10 +282,10 @@ public class StatusCodes {
     @Description("The security token request type is not valid.")
     public final static UnsignedInteger Bad_RequestTypeInvalid = new UnsignedInteger(0x80530000L);
     
-    @Description("The security mode does not meet the requirements set by the Server.")
+    @Description("The security mode does not meet the requirements set by the server.")
     public final static UnsignedInteger Bad_SecurityModeRejected = new UnsignedInteger(0x80540000L);
     
-    @Description("The security policy does not meet the requirements set by the Server.")
+    @Description("The security policy does not meet the requirements set by the server.")
     public final static UnsignedInteger Bad_SecurityPolicyRejected = new UnsignedInteger(0x80550000L);
     
     @Description("The server has reached its maximum number of sessions.")
@@ -375,7 +375,7 @@ public class StatusCodes {
     @Description("The server does not support the requested operation.")
     public final static UnsignedInteger Bad_HistoryOperationUnsupported = new UnsignedInteger(0x80720000L);
     
-    @Description("The server not does support writing the combination of value, status and timestamps provided.")
+    @Description("The server does not support writing the combination of value, status and timestamps provided.")
     public final static UnsignedInteger Bad_WriteNotSupported = new UnsignedInteger(0x80730000L);
     
     @Description("The value supplied for the attribute is not of the same type as the attribute's value.")
@@ -387,7 +387,7 @@ public class StatusCodes {
     @Description("The client did not specify all of the input arguments for the method.")
     public final static UnsignedInteger Bad_ArgumentsMissing = new UnsignedInteger(0x80760000L);
     
-    @Description("The server has reached its  maximum number of subscriptions.")
+    @Description("The server has reached its maximum number of subscriptions.")
     public final static UnsignedInteger Bad_TooManySubscriptions = new UnsignedInteger(0x80770000L);
     
     @Description("The server has reached the maximum number of queued publish requests.")
@@ -402,7 +402,7 @@ public class StatusCodes {
     @Description("The requested notification message is no longer available.")
     public final static UnsignedInteger Bad_MessageNotAvailable = new UnsignedInteger(0x807B0000L);
     
-    @Description("The Client of the current Session does not support one or more Profiles that are necessary for the Subscription.")
+    @Description("The client of the current session does not support one or more Profiles that are necessary for the subscription.")
     public final static UnsignedInteger Bad_InsufficientClientProfile = new UnsignedInteger(0x807C0000L);
     
     @Description("The server cannot process the request because it is too busy.")
@@ -423,7 +423,7 @@ public class StatusCodes {
     @Description("An internal error occurred.")
     public final static UnsignedInteger Bad_TcpInternalError = new UnsignedInteger(0x80820000L);
     
-    @Description("The Server does not recognize the QueryString specified.")
+    @Description("The server does not recognize the QueryString specified.")
     public final static UnsignedInteger Bad_TcpEndpointUrlInvalid = new UnsignedInteger(0x80830000L);
     
     @Description("The request could not be sent because of a network interruption.")
@@ -606,7 +606,7 @@ public class StatusCodes {
     @Description("The list of references may not be complete because the underlying system is not available.")
     public final static UnsignedInteger Uncertain_NotAllNodesAvailable = new UnsignedInteger(0x40C00000L);
     
-    @Description("An unregognized operator was provided in a filter.")
+    @Description("An unrecognized operator was provided in a filter.")
     public final static UnsignedInteger Bad_FilterOperatorInvalid = new UnsignedInteger(0x80C10000L);
     
     @Description("A valid operator was provided, but the server does not provide support for this filter operator.")
@@ -621,7 +621,7 @@ public class StatusCodes {
     @Description("The referenced literal is not a valid value.")
     public final static UnsignedInteger Bad_FilterLiteralInvalid = new UnsignedInteger(0x80C50000L);
     
-    @Description("The Server does not support changing the user identity assigned to the session.")
+    @Description("The server does not support changing the user identity assigned to the session.")
     public final static UnsignedInteger Bad_IdentityChangeNotSupported = new UnsignedInteger(0x80C60000L);
     
     @Description("The provided Nodeid was not a type definition nodeid.")
@@ -675,7 +675,7 @@ public class StatusCodes {
     @Description("The server cannot retrieve a bound for the variable.")
     public final static UnsignedInteger Bad_BoundNotSupported = new UnsignedInteger(0x80D80000L);
     
-    @Description("The request pecifies fields which are not valid for the EventType or cannot be saved by the historian.")
+    @Description("The request specifies fields which are not valid for the EventType or cannot be saved by the historian.")
     public final static UnsignedInteger Good_DataIgnored = new UnsignedInteger(0x00D90000L);
     
     @Description("The aggregate configuration is not valid for specified node.")
@@ -717,14 +717,29 @@ public class StatusCodes {
     @Description("The certificate chain is incomplete.")
     public final static UnsignedInteger Bad_CertificateChainIncomplete = new UnsignedInteger(0x810D0000L);
     
-    @Description("The UA Server requires a license to operate in general or to perform a service or operation, but existing license is expired.")
+    @Description("The server requires a license to operate in general or to perform a service or operation, but existing license is expired.")
     public final static UnsignedInteger Bad_LicenseExpired = new UnsignedInteger(0x810E0000L);
     
-    @Description("The UA Server has limits on number of allowed operations / objects, based on installed licenses, and these limits where exceeded.")
+    @Description("The server has limits on number of allowed operations / objects, based on installed licenses, and these limits where exceeded.")
     public final static UnsignedInteger Bad_LicenseLimitsExceeded = new UnsignedInteger(0x810F0000L);
     
-    @Description("The UA Server does not have a license which is required to operate in general or to perform a service or operation.")
+    @Description("The server does not have a license which is required to operate in general or to perform a service or operation.")
     public final static UnsignedInteger Bad_LicenseNotAvailable = new UnsignedInteger(0x81100000L);
+    
+    @Description("The executable attribute does not allow the execution of the method.")
+    public final static UnsignedInteger Bad_NotExecutable = new UnsignedInteger(0x81110000L);
+    
+    @Description("The number was not accepted because of a numeric overflow.")
+    public final static UnsignedInteger Bad_NumericOverflow = new UnsignedInteger(0x81120000L);
+    
+    @Description("The request has not been processed by the server yet.")
+    public final static UnsignedInteger Bad_RequestNotComplete = new UnsignedInteger(0x81130000L);
+    
+    @Description("The certificate does not meet the requirements of the security policy.")
+    public final static UnsignedInteger Bad_CertificatePolicyCheckFailed = new UnsignedInteger(0x81140000L);
+    
+    @Description("An equivalent rule already exists.")
+    public final static UnsignedInteger Bad_AlreadyExists = new UnsignedInteger(0x81150000L);
     
  
 

@@ -102,6 +102,21 @@ public class Attributes {
     @Description("Whether the method can be called by the current user.")
     public final static UnsignedInteger UserExecutable = UnsignedInteger.valueOf(22);
     
+    @Description("Provides the metadata and encoding information for custom DataTypes.")
+    public final static UnsignedInteger DataTypeDefinition = UnsignedInteger.valueOf(23);
+    
+    @Description("The permissions for the node granted to roles.")
+    public final static UnsignedInteger RolePermissions = UnsignedInteger.valueOf(24);
+    
+    @Description("The subset of permissions available for the roles available to the current session.")
+    public final static UnsignedInteger UserRolePermissions = UnsignedInteger.valueOf(25);
+    
+    @Description("The access restrictions assigned to the node.")
+    public final static UnsignedInteger AccessRestrictions = UnsignedInteger.valueOf(26);
+    
+    @Description("How a variable may be accessed.")
+    public final static UnsignedInteger AccessLevelEx = UnsignedInteger.valueOf(27);
+    
  
 
 }

@@ -65,6 +65,75 @@ public class EncodeableSerializer extends SerializerComposition {
 	
 	public EncodeableSerializer() {
 		
+    	// KeyValuePair
+    	addSerializer(
+    		new AbstractSerializer(KeyValuePair.class, KeyValuePair.BINARY, KeyValuePair.XML, KeyValuePair.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				KeyValuePair obj = (KeyValuePair) encodeable;
+    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getKey() );
+    				calculator.putVariant(null,  (obj==null)?null:obj.getValue() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				KeyValuePair obj = (KeyValuePair) encodeable;
+    				encoder.putQualifiedName("Key",  (obj==null)?null:obj.getKey() );
+    				encoder.putVariant("Value",  (obj==null)?null:obj.getValue() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				KeyValuePair result = new KeyValuePair();
+    				result.setKey( decoder.getQualifiedName("Key") );
+    				result.setValue( decoder.getVariant("Value") );
+    				return result;
+    			}
+    		});
+    
+    	// EndpointType
+    	addSerializer(
+    		new AbstractSerializer(EndpointType.class, EndpointType.BINARY, EndpointType.XML, EndpointType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				EndpointType obj = (EndpointType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getEndpointUrl() );
+    				calculator.putEnumeration(null, null /*obj.getSecurityMode()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getSecurityPolicyUri() );
+    				calculator.putString(null,  (obj==null)?null:obj.getTransportProfileUri() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				EndpointType obj = (EndpointType) encodeable;
+    				encoder.putString("EndpointUrl",  (obj==null)?null:obj.getEndpointUrl() );
+    				encoder.putEnumeration("SecurityMode",  (obj==null)?null:obj.getSecurityMode() );
+    				encoder.putString("SecurityPolicyUri",  (obj==null)?null:obj.getSecurityPolicyUri() );
+    				encoder.putString("TransportProfileUri",  (obj==null)?null:obj.getTransportProfileUri() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				EndpointType result = new EndpointType();
+    				result.setEndpointUrl( decoder.getString("EndpointUrl") );
+    				result.setSecurityMode( decoder.getEnumeration("SecurityMode", MessageSecurityMode.class) );
+    				result.setSecurityPolicyUri( decoder.getString("SecurityPolicyUri") );
+    				result.setTransportProfileUri( decoder.getString("TransportProfileUri") );
+    				return result;
+    			}
+    		});
+    
+    	// IdentityMappingRuleType
+    	addSerializer(
+    		new AbstractSerializer(IdentityMappingRuleType.class, IdentityMappingRuleType.BINARY, IdentityMappingRuleType.XML, IdentityMappingRuleType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				IdentityMappingRuleType obj = (IdentityMappingRuleType) encodeable;
+    				calculator.putEnumeration(null, null /*obj.getCriteriaType()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getCriteria() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				IdentityMappingRuleType obj = (IdentityMappingRuleType) encodeable;
+    				encoder.putEnumeration("CriteriaType",  (obj==null)?null:obj.getCriteriaType() );
+    				encoder.putString("Criteria",  (obj==null)?null:obj.getCriteria() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				IdentityMappingRuleType result = new IdentityMappingRuleType();
+    				result.setCriteriaType( decoder.getEnumeration("CriteriaType", IdentityCriteriaType.class) );
+    				result.setCriteria( decoder.getString("Criteria") );
+    				return result;
+    			}
+    		});
+    
     	// TrustListDataType
     	addSerializer(
     		new AbstractSerializer(TrustListDataType.class, TrustListDataType.BINARY, TrustListDataType.XML, TrustListDataType.ID) {
@@ -95,500 +164,1367 @@ public class EncodeableSerializer extends SerializerComposition {
     			}
     		});
     
-    	// Node
+    	// DataTypeSchemaHeader
     	addSerializer(
-    		new AbstractSerializer(Node.class, Node.BINARY, Node.XML, Node.ID) {
+    		new AbstractSerializer(DataTypeSchemaHeader.class, DataTypeSchemaHeader.BINARY, DataTypeSchemaHeader.XML, DataTypeSchemaHeader.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				Node obj = (Node) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
+    				DataTypeSchemaHeader obj = (DataTypeSchemaHeader) encodeable;
+    				calculator.putStringArray(null, ((obj==null)?null:obj.getNamespaces()) );
+    				calculator.putEncodeableArray(null, StructureDescription.class, (obj==null)?null:obj.getStructureDataTypes());
+    				calculator.putEncodeableArray(null, EnumDescription.class, (obj==null)?null:obj.getEnumDataTypes());
+    				calculator.putEncodeableArray(null, SimpleTypeDescription.class, (obj==null)?null:obj.getSimpleDataTypes());
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				Node obj = (Node) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
-    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
+    				DataTypeSchemaHeader obj = (DataTypeSchemaHeader) encodeable;
+    				encoder.putStringArray("Namespaces", (obj==null)?null:obj.getNamespaces() );
+    				encoder.putEncodeableArray("StructureDataTypes", StructureDescription.class, (obj==null)?null:obj.getStructureDataTypes());
+    				encoder.putEncodeableArray("EnumDataTypes", EnumDescription.class, (obj==null)?null:obj.getEnumDataTypes());
+    				encoder.putEncodeableArray("SimpleDataTypes", SimpleTypeDescription.class, (obj==null)?null:obj.getSimpleDataTypes());
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				Node result = new Node();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
-    				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
+    				DataTypeSchemaHeader result = new DataTypeSchemaHeader();
+    				result.setNamespaces( decoder.getStringArray("Namespaces") );
+    				result.setStructureDataTypes( decoder.getEncodeableArray("StructureDataTypes", StructureDescription.class) );
+    				result.setEnumDataTypes( decoder.getEncodeableArray("EnumDataTypes", EnumDescription.class) );
+    				result.setSimpleDataTypes( decoder.getEncodeableArray("SimpleDataTypes", SimpleTypeDescription.class) );
     				return result;
     			}
     		});
     
-    	// InstanceNode
+    	// DataTypeDescription
     	addSerializer(
-    		new AbstractSerializer(InstanceNode.class, InstanceNode.BINARY, InstanceNode.XML, InstanceNode.ID) {
+    		new AbstractSerializer(DataTypeDescription.class, DataTypeDescription.BINARY, DataTypeDescription.XML, DataTypeDescription.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				InstanceNode obj = (InstanceNode) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
+    				DataTypeDescription obj = (DataTypeDescription) encodeable;
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getDataTypeId() );
+    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getName() );
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				InstanceNode obj = (InstanceNode) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
-    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
+    				DataTypeDescription obj = (DataTypeDescription) encodeable;
+    				encoder.putNodeId("DataTypeId",  (obj==null)?null:obj.getDataTypeId() );
+    				encoder.putQualifiedName("Name",  (obj==null)?null:obj.getName() );
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				InstanceNode result = new InstanceNode();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
-    				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
+    				DataTypeDescription result = new DataTypeDescription();
+    				result.setDataTypeId( decoder.getNodeId("DataTypeId") );
+    				result.setName( decoder.getQualifiedName("Name") );
     				return result;
     			}
     		});
     
-    	// TypeNode
+    	// StructureDescription
     	addSerializer(
-    		new AbstractSerializer(TypeNode.class, TypeNode.BINARY, TypeNode.XML, TypeNode.ID) {
+    		new AbstractSerializer(StructureDescription.class, StructureDescription.BINARY, StructureDescription.XML, StructureDescription.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				TypeNode obj = (TypeNode) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
+    				StructureDescription obj = (StructureDescription) encodeable;
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getDataTypeId() );
+    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getName() );
+    				calculator.putEncodeable(null, StructureDefinition.class, (obj==null)?null:obj.getStructureDefinition());
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				TypeNode obj = (TypeNode) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
-    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
+    				StructureDescription obj = (StructureDescription) encodeable;
+    				encoder.putNodeId("DataTypeId",  (obj==null)?null:obj.getDataTypeId() );
+    				encoder.putQualifiedName("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putEncodeable("StructureDefinition", StructureDefinition.class, (obj==null)?null:obj.getStructureDefinition());
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				TypeNode result = new TypeNode();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
-    				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
+    				StructureDescription result = new StructureDescription();
+    				result.setDataTypeId( decoder.getNodeId("DataTypeId") );
+    				result.setName( decoder.getQualifiedName("Name") );
+    				result.setStructureDefinition( decoder.getEncodeable("StructureDefinition", StructureDefinition.class) );
     				return result;
     			}
     		});
     
-    	// ObjectNode
+    	// EnumDescription
     	addSerializer(
-    		new AbstractSerializer(ObjectNode.class, ObjectNode.BINARY, ObjectNode.XML, ObjectNode.ID) {
+    		new AbstractSerializer(EnumDescription.class, EnumDescription.BINARY, EnumDescription.XML, EnumDescription.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				ObjectNode obj = (ObjectNode) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				calculator.putByte(null, null /*obj.getEventNotifier()*/);
+    				EnumDescription obj = (EnumDescription) encodeable;
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getDataTypeId() );
+    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getName() );
+    				calculator.putEncodeable(null, EnumDefinition.class, (obj==null)?null:obj.getEnumDefinition());
+    				calculator.putByte(null, null /*obj.getBuiltInType()*/);
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				ObjectNode obj = (ObjectNode) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
-    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				encoder.putByte("EventNotifier",  (obj==null)?null:obj.getEventNotifier() );
+    				EnumDescription obj = (EnumDescription) encodeable;
+    				encoder.putNodeId("DataTypeId",  (obj==null)?null:obj.getDataTypeId() );
+    				encoder.putQualifiedName("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putEncodeable("EnumDefinition", EnumDefinition.class, (obj==null)?null:obj.getEnumDefinition());
+    				encoder.putByte("BuiltInType",  (obj==null)?null:obj.getBuiltInType() );
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				ObjectNode result = new ObjectNode();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
-    				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
-    				result.setEventNotifier( decoder.getByte("EventNotifier") );
+    				EnumDescription result = new EnumDescription();
+    				result.setDataTypeId( decoder.getNodeId("DataTypeId") );
+    				result.setName( decoder.getQualifiedName("Name") );
+    				result.setEnumDefinition( decoder.getEncodeable("EnumDefinition", EnumDefinition.class) );
+    				result.setBuiltInType( decoder.getByte("BuiltInType") );
     				return result;
     			}
     		});
     
-    	// ObjectTypeNode
+    	// SimpleTypeDescription
     	addSerializer(
-    		new AbstractSerializer(ObjectTypeNode.class, ObjectTypeNode.BINARY, ObjectTypeNode.XML, ObjectTypeNode.ID) {
+    		new AbstractSerializer(SimpleTypeDescription.class, SimpleTypeDescription.BINARY, SimpleTypeDescription.XML, SimpleTypeDescription.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				ObjectTypeNode obj = (ObjectTypeNode) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				calculator.putBoolean(null, null /*obj.getIsAbstract()*/);
+    				SimpleTypeDescription obj = (SimpleTypeDescription) encodeable;
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getDataTypeId() );
+    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getName() );
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getBaseDataType() );
+    				calculator.putByte(null, null /*obj.getBuiltInType()*/);
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				ObjectTypeNode obj = (ObjectTypeNode) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
-    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				encoder.putBoolean("IsAbstract",  (obj==null)?null:obj.getIsAbstract() );
+    				SimpleTypeDescription obj = (SimpleTypeDescription) encodeable;
+    				encoder.putNodeId("DataTypeId",  (obj==null)?null:obj.getDataTypeId() );
+    				encoder.putQualifiedName("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putNodeId("BaseDataType",  (obj==null)?null:obj.getBaseDataType() );
+    				encoder.putByte("BuiltInType",  (obj==null)?null:obj.getBuiltInType() );
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				ObjectTypeNode result = new ObjectTypeNode();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
-    				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
-    				result.setIsAbstract( decoder.getBoolean("IsAbstract") );
+    				SimpleTypeDescription result = new SimpleTypeDescription();
+    				result.setDataTypeId( decoder.getNodeId("DataTypeId") );
+    				result.setName( decoder.getQualifiedName("Name") );
+    				result.setBaseDataType( decoder.getNodeId("BaseDataType") );
+    				result.setBuiltInType( decoder.getByte("BuiltInType") );
     				return result;
     			}
     		});
     
-    	// VariableNode
+    	// UABinaryFileDataType
     	addSerializer(
-    		new AbstractSerializer(VariableNode.class, VariableNode.BINARY, VariableNode.XML, VariableNode.ID) {
+    		new AbstractSerializer(UABinaryFileDataType.class, UABinaryFileDataType.BINARY, UABinaryFileDataType.XML, UABinaryFileDataType.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				VariableNode obj = (VariableNode) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
+    				UABinaryFileDataType obj = (UABinaryFileDataType) encodeable;
+    				calculator.putStringArray(null, ((obj==null)?null:obj.getNamespaces()) );
+    				calculator.putEncodeableArray(null, StructureDescription.class, (obj==null)?null:obj.getStructureDataTypes());
+    				calculator.putEncodeableArray(null, EnumDescription.class, (obj==null)?null:obj.getEnumDataTypes());
+    				calculator.putEncodeableArray(null, SimpleTypeDescription.class, (obj==null)?null:obj.getSimpleDataTypes());
+    				calculator.putString(null,  (obj==null)?null:obj.getSchemaLocation() );
+    				calculator.putEncodeableArray(null, KeyValuePair.class, (obj==null)?null:obj.getFileHeader());
+    				calculator.putVariant(null,  (obj==null)?null:obj.getBody() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				UABinaryFileDataType obj = (UABinaryFileDataType) encodeable;
+    				encoder.putStringArray("Namespaces", (obj==null)?null:obj.getNamespaces() );
+    				encoder.putEncodeableArray("StructureDataTypes", StructureDescription.class, (obj==null)?null:obj.getStructureDataTypes());
+    				encoder.putEncodeableArray("EnumDataTypes", EnumDescription.class, (obj==null)?null:obj.getEnumDataTypes());
+    				encoder.putEncodeableArray("SimpleDataTypes", SimpleTypeDescription.class, (obj==null)?null:obj.getSimpleDataTypes());
+    				encoder.putString("SchemaLocation",  (obj==null)?null:obj.getSchemaLocation() );
+    				encoder.putEncodeableArray("FileHeader", KeyValuePair.class, (obj==null)?null:obj.getFileHeader());
+    				encoder.putVariant("Body",  (obj==null)?null:obj.getBody() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				UABinaryFileDataType result = new UABinaryFileDataType();
+    				result.setNamespaces( decoder.getStringArray("Namespaces") );
+    				result.setStructureDataTypes( decoder.getEncodeableArray("StructureDataTypes", StructureDescription.class) );
+    				result.setEnumDataTypes( decoder.getEncodeableArray("EnumDataTypes", EnumDescription.class) );
+    				result.setSimpleDataTypes( decoder.getEncodeableArray("SimpleDataTypes", SimpleTypeDescription.class) );
+    				result.setSchemaLocation( decoder.getString("SchemaLocation") );
+    				result.setFileHeader( decoder.getEncodeableArray("FileHeader", KeyValuePair.class) );
+    				result.setBody( decoder.getVariant("Body") );
+    				return result;
+    			}
+    		});
+    
+    	// DataSetMetaDataType
+    	addSerializer(
+    		new AbstractSerializer(DataSetMetaDataType.class, DataSetMetaDataType.BINARY, DataSetMetaDataType.XML, DataSetMetaDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				DataSetMetaDataType obj = (DataSetMetaDataType) encodeable;
+    				calculator.putStringArray(null, ((obj==null)?null:obj.getNamespaces()) );
+    				calculator.putEncodeableArray(null, StructureDescription.class, (obj==null)?null:obj.getStructureDataTypes());
+    				calculator.putEncodeableArray(null, EnumDescription.class, (obj==null)?null:obj.getEnumDataTypes());
+    				calculator.putEncodeableArray(null, SimpleTypeDescription.class, (obj==null)?null:obj.getSimpleDataTypes());
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
     				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				calculator.putVariant(null,  (obj==null)?null:obj.getValue() );
+    				calculator.putEncodeableArray(null, FieldMetaData.class, (obj==null)?null:obj.getFields());
+    				calculator.putGuid(null,  (obj==null)?null:obj.getDataSetClassId() );
+    				calculator.putEncodeable(null, ConfigurationVersionDataType.class, (obj==null)?null:obj.getConfigurationVersion());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				DataSetMetaDataType obj = (DataSetMetaDataType) encodeable;
+    				encoder.putStringArray("Namespaces", (obj==null)?null:obj.getNamespaces() );
+    				encoder.putEncodeableArray("StructureDataTypes", StructureDescription.class, (obj==null)?null:obj.getStructureDataTypes());
+    				encoder.putEncodeableArray("EnumDataTypes", EnumDescription.class, (obj==null)?null:obj.getEnumDataTypes());
+    				encoder.putEncodeableArray("SimpleDataTypes", SimpleTypeDescription.class, (obj==null)?null:obj.getSimpleDataTypes());
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
+    				encoder.putEncodeableArray("Fields", FieldMetaData.class, (obj==null)?null:obj.getFields());
+    				encoder.putGuid("DataSetClassId",  (obj==null)?null:obj.getDataSetClassId() );
+    				encoder.putEncodeable("ConfigurationVersion", ConfigurationVersionDataType.class, (obj==null)?null:obj.getConfigurationVersion());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DataSetMetaDataType result = new DataSetMetaDataType();
+    				result.setNamespaces( decoder.getStringArray("Namespaces") );
+    				result.setStructureDataTypes( decoder.getEncodeableArray("StructureDataTypes", StructureDescription.class) );
+    				result.setEnumDataTypes( decoder.getEncodeableArray("EnumDataTypes", EnumDescription.class) );
+    				result.setSimpleDataTypes( decoder.getEncodeableArray("SimpleDataTypes", SimpleTypeDescription.class) );
+    				result.setName( decoder.getString("Name") );
+    				result.setDescription( decoder.getLocalizedText("Description") );
+    				result.setFields( decoder.getEncodeableArray("Fields", FieldMetaData.class) );
+    				result.setDataSetClassId( decoder.getGuid("DataSetClassId") );
+    				result.setConfigurationVersion( decoder.getEncodeable("ConfigurationVersion", ConfigurationVersionDataType.class) );
+    				return result;
+    			}
+    		});
+    
+    	// FieldMetaData
+    	addSerializer(
+    		new AbstractSerializer(FieldMetaData.class, FieldMetaData.BINARY, FieldMetaData.XML, FieldMetaData.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				FieldMetaData obj = (FieldMetaData) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
+    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
+    				calculator.putUInt16(null, null /*obj.getFieldFlags()*/);
+    				calculator.putByte(null, null /*obj.getBuiltInType()*/);
     				calculator.putNodeId(null,  (obj==null)?null:obj.getDataType() );
     				calculator.putInt32(null, null /*obj.getValueRank()*/);
     				calculator.putUInt32Array(null, ((obj==null)?null:obj.getArrayDimensions()) );
-    				calculator.putByte(null, null /*obj.getAccessLevel()*/);
-    				calculator.putByte(null, null /*obj.getUserAccessLevel()*/);
-    				calculator.putDouble(null, null /*obj.getMinimumSamplingInterval()*/);
-    				calculator.putBoolean(null, null /*obj.getHistorizing()*/);
+    				calculator.putUInt32(null, null /*obj.getMaxStringLength()*/);
+    				calculator.putGuid(null,  (obj==null)?null:obj.getDataSetFieldId() );
+    				calculator.putEncodeableArray(null, KeyValuePair.class, (obj==null)?null:obj.getProperties());
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				VariableNode obj = (VariableNode) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
+    				FieldMetaData obj = (FieldMetaData) encodeable;
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
     				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				encoder.putVariant("Value",  (obj==null)?null:obj.getValue() );
+    				encoder.putUInt16("FieldFlags",  (obj==null)?null:obj.getFieldFlags() );
+    				encoder.putByte("BuiltInType",  (obj==null)?null:obj.getBuiltInType() );
     				encoder.putNodeId("DataType",  (obj==null)?null:obj.getDataType() );
     				encoder.putInt32("ValueRank",  (obj==null)?null:obj.getValueRank() );
     				encoder.putUInt32Array("ArrayDimensions", (obj==null)?null:obj.getArrayDimensions() );
-    				encoder.putByte("AccessLevel",  (obj==null)?null:obj.getAccessLevel() );
-    				encoder.putByte("UserAccessLevel",  (obj==null)?null:obj.getUserAccessLevel() );
-    				encoder.putDouble("MinimumSamplingInterval",  (obj==null)?null:obj.getMinimumSamplingInterval() );
-    				encoder.putBoolean("Historizing",  (obj==null)?null:obj.getHistorizing() );
+    				encoder.putUInt32("MaxStringLength",  (obj==null)?null:obj.getMaxStringLength() );
+    				encoder.putGuid("DataSetFieldId",  (obj==null)?null:obj.getDataSetFieldId() );
+    				encoder.putEncodeableArray("Properties", KeyValuePair.class, (obj==null)?null:obj.getProperties());
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				VariableNode result = new VariableNode();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
+    				FieldMetaData result = new FieldMetaData();
+    				result.setName( decoder.getString("Name") );
     				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
-    				result.setValue( decoder.getVariant("Value") );
+    				result.setFieldFlags( decoder.getUInt16("FieldFlags") );
+    				result.setBuiltInType( decoder.getByte("BuiltInType") );
     				result.setDataType( decoder.getNodeId("DataType") );
     				result.setValueRank( decoder.getInt32("ValueRank") );
     				result.setArrayDimensions( decoder.getUInt32Array("ArrayDimensions") );
-    				result.setAccessLevel( decoder.getByte("AccessLevel") );
-    				result.setUserAccessLevel( decoder.getByte("UserAccessLevel") );
-    				result.setMinimumSamplingInterval( decoder.getDouble("MinimumSamplingInterval") );
-    				result.setHistorizing( decoder.getBoolean("Historizing") );
+    				result.setMaxStringLength( decoder.getUInt32("MaxStringLength") );
+    				result.setDataSetFieldId( decoder.getGuid("DataSetFieldId") );
+    				result.setProperties( decoder.getEncodeableArray("Properties", KeyValuePair.class) );
     				return result;
     			}
     		});
     
-    	// VariableTypeNode
+    	// ConfigurationVersionDataType
     	addSerializer(
-    		new AbstractSerializer(VariableTypeNode.class, VariableTypeNode.BINARY, VariableTypeNode.XML, VariableTypeNode.ID) {
+    		new AbstractSerializer(ConfigurationVersionDataType.class, ConfigurationVersionDataType.BINARY, ConfigurationVersionDataType.XML, ConfigurationVersionDataType.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				VariableTypeNode obj = (VariableTypeNode) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
+    				ConfigurationVersionDataType obj = (ConfigurationVersionDataType) encodeable;
+    				calculator.putUInt32(null, null /*obj.getMajorVersion()*/);
+    				calculator.putUInt32(null, null /*obj.getMinorVersion()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				ConfigurationVersionDataType obj = (ConfigurationVersionDataType) encodeable;
+    				encoder.putUInt32("MajorVersion",  (obj==null)?null:obj.getMajorVersion() );
+    				encoder.putUInt32("MinorVersion",  (obj==null)?null:obj.getMinorVersion() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				ConfigurationVersionDataType result = new ConfigurationVersionDataType();
+    				result.setMajorVersion( decoder.getUInt32("MajorVersion") );
+    				result.setMinorVersion( decoder.getUInt32("MinorVersion") );
+    				return result;
+    			}
+    		});
+    
+    	// PublishedDataSetDataType
+    	addSerializer(
+    		new AbstractSerializer(PublishedDataSetDataType.class, PublishedDataSetDataType.BINARY, PublishedDataSetDataType.XML, PublishedDataSetDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				PublishedDataSetDataType obj = (PublishedDataSetDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
+    				calculator.putStringArray(null, ((obj==null)?null:obj.getDataSetFolder()) );
+    				calculator.putEncodeable(null, DataSetMetaDataType.class, (obj==null)?null:obj.getDataSetMetaData());
+    				calculator.putEncodeableArray(null, KeyValuePair.class, (obj==null)?null:obj.getExtensionFields());
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getDataSetSource() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				PublishedDataSetDataType obj = (PublishedDataSetDataType) encodeable;
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putStringArray("DataSetFolder", (obj==null)?null:obj.getDataSetFolder() );
+    				encoder.putEncodeable("DataSetMetaData", DataSetMetaDataType.class, (obj==null)?null:obj.getDataSetMetaData());
+    				encoder.putEncodeableArray("ExtensionFields", KeyValuePair.class, (obj==null)?null:obj.getExtensionFields());
+    				encoder.putExtensionObject("DataSetSource",  (obj==null)?null:obj.getDataSetSource() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				PublishedDataSetDataType result = new PublishedDataSetDataType();
+    				result.setName( decoder.getString("Name") );
+    				result.setDataSetFolder( decoder.getStringArray("DataSetFolder") );
+    				result.setDataSetMetaData( decoder.getEncodeable("DataSetMetaData", DataSetMetaDataType.class) );
+    				result.setExtensionFields( decoder.getEncodeableArray("ExtensionFields", KeyValuePair.class) );
+    				result.setDataSetSource( decoder.getExtensionObject("DataSetSource") );
+    				return result;
+    			}
+    		});
+    
+    	// PublishedDataSetSourceDataType
+    	addSerializer(
+    		new AbstractSerializer(PublishedDataSetSourceDataType.class, PublishedDataSetSourceDataType.BINARY, PublishedDataSetSourceDataType.XML, PublishedDataSetSourceDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				PublishedDataSetSourceDataType result = new PublishedDataSetSourceDataType();
+    				return result;
+    			}
+    		});
+    
+    	// PublishedVariableDataType
+    	addSerializer(
+    		new AbstractSerializer(PublishedVariableDataType.class, PublishedVariableDataType.BINARY, PublishedVariableDataType.XML, PublishedVariableDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				PublishedVariableDataType obj = (PublishedVariableDataType) encodeable;
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getPublishedVariable() );
+    				calculator.putUInt32(null, null /*obj.getAttributeId()*/);
+    				calculator.putDouble(null, null /*obj.getSamplingIntervalHint()*/);
+    				calculator.putUInt32(null, null /*obj.getDeadbandType()*/);
+    				calculator.putDouble(null, null /*obj.getDeadbandValue()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getIndexRange() );
+    				calculator.putVariant(null,  (obj==null)?null:obj.getSubstituteValue() );
+    				calculator.putQualifiedNameArray(null, ((obj==null)?null:obj.getMetaDataProperties()) );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				PublishedVariableDataType obj = (PublishedVariableDataType) encodeable;
+    				encoder.putNodeId("PublishedVariable",  (obj==null)?null:obj.getPublishedVariable() );
+    				encoder.putUInt32("AttributeId",  (obj==null)?null:obj.getAttributeId() );
+    				encoder.putDouble("SamplingIntervalHint",  (obj==null)?null:obj.getSamplingIntervalHint() );
+    				encoder.putUInt32("DeadbandType",  (obj==null)?null:obj.getDeadbandType() );
+    				encoder.putDouble("DeadbandValue",  (obj==null)?null:obj.getDeadbandValue() );
+    				encoder.putString("IndexRange",  (obj==null)?null:obj.getIndexRange() );
+    				encoder.putVariant("SubstituteValue",  (obj==null)?null:obj.getSubstituteValue() );
+    				encoder.putQualifiedNameArray("MetaDataProperties", (obj==null)?null:obj.getMetaDataProperties() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				PublishedVariableDataType result = new PublishedVariableDataType();
+    				result.setPublishedVariable( decoder.getNodeId("PublishedVariable") );
+    				result.setAttributeId( decoder.getUInt32("AttributeId") );
+    				result.setSamplingIntervalHint( decoder.getDouble("SamplingIntervalHint") );
+    				result.setDeadbandType( decoder.getUInt32("DeadbandType") );
+    				result.setDeadbandValue( decoder.getDouble("DeadbandValue") );
+    				result.setIndexRange( decoder.getString("IndexRange") );
+    				result.setSubstituteValue( decoder.getVariant("SubstituteValue") );
+    				result.setMetaDataProperties( decoder.getQualifiedNameArray("MetaDataProperties") );
+    				return result;
+    			}
+    		});
+    
+    	// PublishedDataItemsDataType
+    	addSerializer(
+    		new AbstractSerializer(PublishedDataItemsDataType.class, PublishedDataItemsDataType.BINARY, PublishedDataItemsDataType.XML, PublishedDataItemsDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				PublishedDataItemsDataType obj = (PublishedDataItemsDataType) encodeable;
+    				calculator.putEncodeableArray(null, PublishedVariableDataType.class, (obj==null)?null:obj.getPublishedData());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				PublishedDataItemsDataType obj = (PublishedDataItemsDataType) encodeable;
+    				encoder.putEncodeableArray("PublishedData", PublishedVariableDataType.class, (obj==null)?null:obj.getPublishedData());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				PublishedDataItemsDataType result = new PublishedDataItemsDataType();
+    				result.setPublishedData( decoder.getEncodeableArray("PublishedData", PublishedVariableDataType.class) );
+    				return result;
+    			}
+    		});
+    
+    	// PublishedEventsDataType
+    	addSerializer(
+    		new AbstractSerializer(PublishedEventsDataType.class, PublishedEventsDataType.BINARY, PublishedEventsDataType.XML, PublishedEventsDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				PublishedEventsDataType obj = (PublishedEventsDataType) encodeable;
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getEventNotifier() );
+    				calculator.putEncodeableArray(null, SimpleAttributeOperand.class, (obj==null)?null:obj.getSelectedFields());
+    				calculator.putEncodeable(null, ContentFilter.class, (obj==null)?null:obj.getFilter());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				PublishedEventsDataType obj = (PublishedEventsDataType) encodeable;
+    				encoder.putNodeId("EventNotifier",  (obj==null)?null:obj.getEventNotifier() );
+    				encoder.putEncodeableArray("SelectedFields", SimpleAttributeOperand.class, (obj==null)?null:obj.getSelectedFields());
+    				encoder.putEncodeable("Filter", ContentFilter.class, (obj==null)?null:obj.getFilter());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				PublishedEventsDataType result = new PublishedEventsDataType();
+    				result.setEventNotifier( decoder.getNodeId("EventNotifier") );
+    				result.setSelectedFields( decoder.getEncodeableArray("SelectedFields", SimpleAttributeOperand.class) );
+    				result.setFilter( decoder.getEncodeable("Filter", ContentFilter.class) );
+    				return result;
+    			}
+    		});
+    
+    	// DataSetWriterDataType
+    	addSerializer(
+    		new AbstractSerializer(DataSetWriterDataType.class, DataSetWriterDataType.BINARY, DataSetWriterDataType.XML, DataSetWriterDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				DataSetWriterDataType obj = (DataSetWriterDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
+    				calculator.putBoolean(null, null /*obj.getEnabled()*/);
+    				calculator.putUInt16(null, null /*obj.getDataSetWriterId()*/);
+    				calculator.putUInt32(null, null /*obj.getDataSetFieldContentMask()*/);
+    				calculator.putUInt32(null, null /*obj.getKeyFrameCount()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getDataSetName() );
+    				calculator.putEncodeableArray(null, KeyValuePair.class, (obj==null)?null:obj.getDataSetWriterProperties());
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getTransportSettings() );
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getMessageSettings() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				DataSetWriterDataType obj = (DataSetWriterDataType) encodeable;
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putBoolean("Enabled",  (obj==null)?null:obj.getEnabled() );
+    				encoder.putUInt16("DataSetWriterId",  (obj==null)?null:obj.getDataSetWriterId() );
+    				encoder.putUInt32("DataSetFieldContentMask",  (obj==null)?null:obj.getDataSetFieldContentMask() );
+    				encoder.putUInt32("KeyFrameCount",  (obj==null)?null:obj.getKeyFrameCount() );
+    				encoder.putString("DataSetName",  (obj==null)?null:obj.getDataSetName() );
+    				encoder.putEncodeableArray("DataSetWriterProperties", KeyValuePair.class, (obj==null)?null:obj.getDataSetWriterProperties());
+    				encoder.putExtensionObject("TransportSettings",  (obj==null)?null:obj.getTransportSettings() );
+    				encoder.putExtensionObject("MessageSettings",  (obj==null)?null:obj.getMessageSettings() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DataSetWriterDataType result = new DataSetWriterDataType();
+    				result.setName( decoder.getString("Name") );
+    				result.setEnabled( decoder.getBoolean("Enabled") );
+    				result.setDataSetWriterId( decoder.getUInt16("DataSetWriterId") );
+    				result.setDataSetFieldContentMask( decoder.getUInt32("DataSetFieldContentMask") );
+    				result.setKeyFrameCount( decoder.getUInt32("KeyFrameCount") );
+    				result.setDataSetName( decoder.getString("DataSetName") );
+    				result.setDataSetWriterProperties( decoder.getEncodeableArray("DataSetWriterProperties", KeyValuePair.class) );
+    				result.setTransportSettings( decoder.getExtensionObject("TransportSettings") );
+    				result.setMessageSettings( decoder.getExtensionObject("MessageSettings") );
+    				return result;
+    			}
+    		});
+    
+    	// DataSetWriterTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(DataSetWriterTransportDataType.class, DataSetWriterTransportDataType.BINARY, DataSetWriterTransportDataType.XML, DataSetWriterTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DataSetWriterTransportDataType result = new DataSetWriterTransportDataType();
+    				return result;
+    			}
+    		});
+    
+    	// DataSetWriterMessageDataType
+    	addSerializer(
+    		new AbstractSerializer(DataSetWriterMessageDataType.class, DataSetWriterMessageDataType.BINARY, DataSetWriterMessageDataType.XML, DataSetWriterMessageDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DataSetWriterMessageDataType result = new DataSetWriterMessageDataType();
+    				return result;
+    			}
+    		});
+    
+    	// PubSubGroupDataType
+    	addSerializer(
+    		new AbstractSerializer(PubSubGroupDataType.class, PubSubGroupDataType.BINARY, PubSubGroupDataType.XML, PubSubGroupDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				PubSubGroupDataType obj = (PubSubGroupDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
+    				calculator.putBoolean(null, null /*obj.getEnabled()*/);
+    				calculator.putEnumeration(null, null /*obj.getSecurityMode()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getSecurityGroupId() );
+    				calculator.putEncodeableArray(null, EndpointDescription.class, (obj==null)?null:obj.getSecurityKeyServices());
+    				calculator.putUInt32(null, null /*obj.getMaxNetworkMessageSize()*/);
+    				calculator.putEncodeableArray(null, KeyValuePair.class, (obj==null)?null:obj.getGroupProperties());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				PubSubGroupDataType obj = (PubSubGroupDataType) encodeable;
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putBoolean("Enabled",  (obj==null)?null:obj.getEnabled() );
+    				encoder.putEnumeration("SecurityMode",  (obj==null)?null:obj.getSecurityMode() );
+    				encoder.putString("SecurityGroupId",  (obj==null)?null:obj.getSecurityGroupId() );
+    				encoder.putEncodeableArray("SecurityKeyServices", EndpointDescription.class, (obj==null)?null:obj.getSecurityKeyServices());
+    				encoder.putUInt32("MaxNetworkMessageSize",  (obj==null)?null:obj.getMaxNetworkMessageSize() );
+    				encoder.putEncodeableArray("GroupProperties", KeyValuePair.class, (obj==null)?null:obj.getGroupProperties());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				PubSubGroupDataType result = new PubSubGroupDataType();
+    				result.setName( decoder.getString("Name") );
+    				result.setEnabled( decoder.getBoolean("Enabled") );
+    				result.setSecurityMode( decoder.getEnumeration("SecurityMode", MessageSecurityMode.class) );
+    				result.setSecurityGroupId( decoder.getString("SecurityGroupId") );
+    				result.setSecurityKeyServices( decoder.getEncodeableArray("SecurityKeyServices", EndpointDescription.class) );
+    				result.setMaxNetworkMessageSize( decoder.getUInt32("MaxNetworkMessageSize") );
+    				result.setGroupProperties( decoder.getEncodeableArray("GroupProperties", KeyValuePair.class) );
+    				return result;
+    			}
+    		});
+    
+    	// WriterGroupDataType
+    	addSerializer(
+    		new AbstractSerializer(WriterGroupDataType.class, WriterGroupDataType.BINARY, WriterGroupDataType.XML, WriterGroupDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				WriterGroupDataType obj = (WriterGroupDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
+    				calculator.putBoolean(null, null /*obj.getEnabled()*/);
+    				calculator.putEnumeration(null, null /*obj.getSecurityMode()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getSecurityGroupId() );
+    				calculator.putEncodeableArray(null, EndpointDescription.class, (obj==null)?null:obj.getSecurityKeyServices());
+    				calculator.putUInt32(null, null /*obj.getMaxNetworkMessageSize()*/);
+    				calculator.putEncodeableArray(null, KeyValuePair.class, (obj==null)?null:obj.getGroupProperties());
+    				calculator.putUInt16(null, null /*obj.getWriterGroupId()*/);
+    				calculator.putDouble(null, null /*obj.getPublishingInterval()*/);
+    				calculator.putDouble(null, null /*obj.getKeepAliveTime()*/);
+    				calculator.putByte(null, null /*obj.getPriority()*/);
+    				calculator.putStringArray(null, ((obj==null)?null:obj.getLocaleIds()) );
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getTransportSettings() );
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getMessageSettings() );
+    				calculator.putEncodeableArray(null, DataSetWriterDataType.class, (obj==null)?null:obj.getDataSetWriters());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				WriterGroupDataType obj = (WriterGroupDataType) encodeable;
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putBoolean("Enabled",  (obj==null)?null:obj.getEnabled() );
+    				encoder.putEnumeration("SecurityMode",  (obj==null)?null:obj.getSecurityMode() );
+    				encoder.putString("SecurityGroupId",  (obj==null)?null:obj.getSecurityGroupId() );
+    				encoder.putEncodeableArray("SecurityKeyServices", EndpointDescription.class, (obj==null)?null:obj.getSecurityKeyServices());
+    				encoder.putUInt32("MaxNetworkMessageSize",  (obj==null)?null:obj.getMaxNetworkMessageSize() );
+    				encoder.putEncodeableArray("GroupProperties", KeyValuePair.class, (obj==null)?null:obj.getGroupProperties());
+    				encoder.putUInt16("WriterGroupId",  (obj==null)?null:obj.getWriterGroupId() );
+    				encoder.putDouble("PublishingInterval",  (obj==null)?null:obj.getPublishingInterval() );
+    				encoder.putDouble("KeepAliveTime",  (obj==null)?null:obj.getKeepAliveTime() );
+    				encoder.putByte("Priority",  (obj==null)?null:obj.getPriority() );
+    				encoder.putStringArray("LocaleIds", (obj==null)?null:obj.getLocaleIds() );
+    				encoder.putExtensionObject("TransportSettings",  (obj==null)?null:obj.getTransportSettings() );
+    				encoder.putExtensionObject("MessageSettings",  (obj==null)?null:obj.getMessageSettings() );
+    				encoder.putEncodeableArray("DataSetWriters", DataSetWriterDataType.class, (obj==null)?null:obj.getDataSetWriters());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				WriterGroupDataType result = new WriterGroupDataType();
+    				result.setName( decoder.getString("Name") );
+    				result.setEnabled( decoder.getBoolean("Enabled") );
+    				result.setSecurityMode( decoder.getEnumeration("SecurityMode", MessageSecurityMode.class) );
+    				result.setSecurityGroupId( decoder.getString("SecurityGroupId") );
+    				result.setSecurityKeyServices( decoder.getEncodeableArray("SecurityKeyServices", EndpointDescription.class) );
+    				result.setMaxNetworkMessageSize( decoder.getUInt32("MaxNetworkMessageSize") );
+    				result.setGroupProperties( decoder.getEncodeableArray("GroupProperties", KeyValuePair.class) );
+    				result.setWriterGroupId( decoder.getUInt16("WriterGroupId") );
+    				result.setPublishingInterval( decoder.getDouble("PublishingInterval") );
+    				result.setKeepAliveTime( decoder.getDouble("KeepAliveTime") );
+    				result.setPriority( decoder.getByte("Priority") );
+    				result.setLocaleIds( decoder.getStringArray("LocaleIds") );
+    				result.setTransportSettings( decoder.getExtensionObject("TransportSettings") );
+    				result.setMessageSettings( decoder.getExtensionObject("MessageSettings") );
+    				result.setDataSetWriters( decoder.getEncodeableArray("DataSetWriters", DataSetWriterDataType.class) );
+    				return result;
+    			}
+    		});
+    
+    	// WriterGroupTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(WriterGroupTransportDataType.class, WriterGroupTransportDataType.BINARY, WriterGroupTransportDataType.XML, WriterGroupTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				WriterGroupTransportDataType result = new WriterGroupTransportDataType();
+    				return result;
+    			}
+    		});
+    
+    	// WriterGroupMessageDataType
+    	addSerializer(
+    		new AbstractSerializer(WriterGroupMessageDataType.class, WriterGroupMessageDataType.BINARY, WriterGroupMessageDataType.XML, WriterGroupMessageDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				WriterGroupMessageDataType result = new WriterGroupMessageDataType();
+    				return result;
+    			}
+    		});
+    
+    	// PubSubConnectionDataType
+    	addSerializer(
+    		new AbstractSerializer(PubSubConnectionDataType.class, PubSubConnectionDataType.BINARY, PubSubConnectionDataType.XML, PubSubConnectionDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				PubSubConnectionDataType obj = (PubSubConnectionDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
+    				calculator.putBoolean(null, null /*obj.getEnabled()*/);
+    				calculator.putVariant(null,  (obj==null)?null:obj.getPublisherId() );
+    				calculator.putString(null,  (obj==null)?null:obj.getTransportProfileUri() );
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getAddress() );
+    				calculator.putEncodeableArray(null, KeyValuePair.class, (obj==null)?null:obj.getConnectionProperties());
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getTransportSettings() );
+    				calculator.putEncodeableArray(null, WriterGroupDataType.class, (obj==null)?null:obj.getWriterGroups());
+    				calculator.putEncodeableArray(null, ReaderGroupDataType.class, (obj==null)?null:obj.getReaderGroups());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				PubSubConnectionDataType obj = (PubSubConnectionDataType) encodeable;
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putBoolean("Enabled",  (obj==null)?null:obj.getEnabled() );
+    				encoder.putVariant("PublisherId",  (obj==null)?null:obj.getPublisherId() );
+    				encoder.putString("TransportProfileUri",  (obj==null)?null:obj.getTransportProfileUri() );
+    				encoder.putExtensionObject("Address",  (obj==null)?null:obj.getAddress() );
+    				encoder.putEncodeableArray("ConnectionProperties", KeyValuePair.class, (obj==null)?null:obj.getConnectionProperties());
+    				encoder.putExtensionObject("TransportSettings",  (obj==null)?null:obj.getTransportSettings() );
+    				encoder.putEncodeableArray("WriterGroups", WriterGroupDataType.class, (obj==null)?null:obj.getWriterGroups());
+    				encoder.putEncodeableArray("ReaderGroups", ReaderGroupDataType.class, (obj==null)?null:obj.getReaderGroups());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				PubSubConnectionDataType result = new PubSubConnectionDataType();
+    				result.setName( decoder.getString("Name") );
+    				result.setEnabled( decoder.getBoolean("Enabled") );
+    				result.setPublisherId( decoder.getVariant("PublisherId") );
+    				result.setTransportProfileUri( decoder.getString("TransportProfileUri") );
+    				result.setAddress( decoder.getExtensionObject("Address") );
+    				result.setConnectionProperties( decoder.getEncodeableArray("ConnectionProperties", KeyValuePair.class) );
+    				result.setTransportSettings( decoder.getExtensionObject("TransportSettings") );
+    				result.setWriterGroups( decoder.getEncodeableArray("WriterGroups", WriterGroupDataType.class) );
+    				result.setReaderGroups( decoder.getEncodeableArray("ReaderGroups", ReaderGroupDataType.class) );
+    				return result;
+    			}
+    		});
+    
+    	// ConnectionTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(ConnectionTransportDataType.class, ConnectionTransportDataType.BINARY, ConnectionTransportDataType.XML, ConnectionTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				ConnectionTransportDataType result = new ConnectionTransportDataType();
+    				return result;
+    			}
+    		});
+    
+    	// NetworkAddressDataType
+    	addSerializer(
+    		new AbstractSerializer(NetworkAddressDataType.class, NetworkAddressDataType.BINARY, NetworkAddressDataType.XML, NetworkAddressDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				NetworkAddressDataType obj = (NetworkAddressDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getNetworkInterface() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				NetworkAddressDataType obj = (NetworkAddressDataType) encodeable;
+    				encoder.putString("NetworkInterface",  (obj==null)?null:obj.getNetworkInterface() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				NetworkAddressDataType result = new NetworkAddressDataType();
+    				result.setNetworkInterface( decoder.getString("NetworkInterface") );
+    				return result;
+    			}
+    		});
+    
+    	// NetworkAddressUrlDataType
+    	addSerializer(
+    		new AbstractSerializer(NetworkAddressUrlDataType.class, NetworkAddressUrlDataType.BINARY, NetworkAddressUrlDataType.XML, NetworkAddressUrlDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				NetworkAddressUrlDataType obj = (NetworkAddressUrlDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getNetworkInterface() );
+    				calculator.putString(null,  (obj==null)?null:obj.getUrl() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				NetworkAddressUrlDataType obj = (NetworkAddressUrlDataType) encodeable;
+    				encoder.putString("NetworkInterface",  (obj==null)?null:obj.getNetworkInterface() );
+    				encoder.putString("Url",  (obj==null)?null:obj.getUrl() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				NetworkAddressUrlDataType result = new NetworkAddressUrlDataType();
+    				result.setNetworkInterface( decoder.getString("NetworkInterface") );
+    				result.setUrl( decoder.getString("Url") );
+    				return result;
+    			}
+    		});
+    
+    	// ReaderGroupDataType
+    	addSerializer(
+    		new AbstractSerializer(ReaderGroupDataType.class, ReaderGroupDataType.BINARY, ReaderGroupDataType.XML, ReaderGroupDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				ReaderGroupDataType obj = (ReaderGroupDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
+    				calculator.putBoolean(null, null /*obj.getEnabled()*/);
+    				calculator.putEnumeration(null, null /*obj.getSecurityMode()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getSecurityGroupId() );
+    				calculator.putEncodeableArray(null, EndpointDescription.class, (obj==null)?null:obj.getSecurityKeyServices());
+    				calculator.putUInt32(null, null /*obj.getMaxNetworkMessageSize()*/);
+    				calculator.putEncodeableArray(null, KeyValuePair.class, (obj==null)?null:obj.getGroupProperties());
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getTransportSettings() );
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getMessageSettings() );
+    				calculator.putEncodeableArray(null, DataSetReaderDataType.class, (obj==null)?null:obj.getDataSetReaders());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				ReaderGroupDataType obj = (ReaderGroupDataType) encodeable;
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putBoolean("Enabled",  (obj==null)?null:obj.getEnabled() );
+    				encoder.putEnumeration("SecurityMode",  (obj==null)?null:obj.getSecurityMode() );
+    				encoder.putString("SecurityGroupId",  (obj==null)?null:obj.getSecurityGroupId() );
+    				encoder.putEncodeableArray("SecurityKeyServices", EndpointDescription.class, (obj==null)?null:obj.getSecurityKeyServices());
+    				encoder.putUInt32("MaxNetworkMessageSize",  (obj==null)?null:obj.getMaxNetworkMessageSize() );
+    				encoder.putEncodeableArray("GroupProperties", KeyValuePair.class, (obj==null)?null:obj.getGroupProperties());
+    				encoder.putExtensionObject("TransportSettings",  (obj==null)?null:obj.getTransportSettings() );
+    				encoder.putExtensionObject("MessageSettings",  (obj==null)?null:obj.getMessageSettings() );
+    				encoder.putEncodeableArray("DataSetReaders", DataSetReaderDataType.class, (obj==null)?null:obj.getDataSetReaders());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				ReaderGroupDataType result = new ReaderGroupDataType();
+    				result.setName( decoder.getString("Name") );
+    				result.setEnabled( decoder.getBoolean("Enabled") );
+    				result.setSecurityMode( decoder.getEnumeration("SecurityMode", MessageSecurityMode.class) );
+    				result.setSecurityGroupId( decoder.getString("SecurityGroupId") );
+    				result.setSecurityKeyServices( decoder.getEncodeableArray("SecurityKeyServices", EndpointDescription.class) );
+    				result.setMaxNetworkMessageSize( decoder.getUInt32("MaxNetworkMessageSize") );
+    				result.setGroupProperties( decoder.getEncodeableArray("GroupProperties", KeyValuePair.class) );
+    				result.setTransportSettings( decoder.getExtensionObject("TransportSettings") );
+    				result.setMessageSettings( decoder.getExtensionObject("MessageSettings") );
+    				result.setDataSetReaders( decoder.getEncodeableArray("DataSetReaders", DataSetReaderDataType.class) );
+    				return result;
+    			}
+    		});
+    
+    	// ReaderGroupTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(ReaderGroupTransportDataType.class, ReaderGroupTransportDataType.BINARY, ReaderGroupTransportDataType.XML, ReaderGroupTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				ReaderGroupTransportDataType result = new ReaderGroupTransportDataType();
+    				return result;
+    			}
+    		});
+    
+    	// ReaderGroupMessageDataType
+    	addSerializer(
+    		new AbstractSerializer(ReaderGroupMessageDataType.class, ReaderGroupMessageDataType.BINARY, ReaderGroupMessageDataType.XML, ReaderGroupMessageDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				ReaderGroupMessageDataType result = new ReaderGroupMessageDataType();
+    				return result;
+    			}
+    		});
+    
+    	// DataSetReaderDataType
+    	addSerializer(
+    		new AbstractSerializer(DataSetReaderDataType.class, DataSetReaderDataType.BINARY, DataSetReaderDataType.XML, DataSetReaderDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				DataSetReaderDataType obj = (DataSetReaderDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
+    				calculator.putBoolean(null, null /*obj.getEnabled()*/);
+    				calculator.putVariant(null,  (obj==null)?null:obj.getPublisherId() );
+    				calculator.putUInt16(null, null /*obj.getWriterGroupId()*/);
+    				calculator.putUInt16(null, null /*obj.getDataSetWriterId()*/);
+    				calculator.putEncodeable(null, DataSetMetaDataType.class, (obj==null)?null:obj.getDataSetMetaData());
+    				calculator.putUInt32(null, null /*obj.getDataSetFieldContentMask()*/);
+    				calculator.putDouble(null, null /*obj.getMessageReceiveTimeout()*/);
+    				calculator.putEnumeration(null, null /*obj.getSecurityMode()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getSecurityGroupId() );
+    				calculator.putEncodeableArray(null, EndpointDescription.class, (obj==null)?null:obj.getSecurityKeyServices());
+    				calculator.putEncodeableArray(null, KeyValuePair.class, (obj==null)?null:obj.getDataSetReaderProperties());
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getTransportSettings() );
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getMessageSettings() );
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getSubscribedDataSet() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				DataSetReaderDataType obj = (DataSetReaderDataType) encodeable;
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
+    				encoder.putBoolean("Enabled",  (obj==null)?null:obj.getEnabled() );
+    				encoder.putVariant("PublisherId",  (obj==null)?null:obj.getPublisherId() );
+    				encoder.putUInt16("WriterGroupId",  (obj==null)?null:obj.getWriterGroupId() );
+    				encoder.putUInt16("DataSetWriterId",  (obj==null)?null:obj.getDataSetWriterId() );
+    				encoder.putEncodeable("DataSetMetaData", DataSetMetaDataType.class, (obj==null)?null:obj.getDataSetMetaData());
+    				encoder.putUInt32("DataSetFieldContentMask",  (obj==null)?null:obj.getDataSetFieldContentMask() );
+    				encoder.putDouble("MessageReceiveTimeout",  (obj==null)?null:obj.getMessageReceiveTimeout() );
+    				encoder.putEnumeration("SecurityMode",  (obj==null)?null:obj.getSecurityMode() );
+    				encoder.putString("SecurityGroupId",  (obj==null)?null:obj.getSecurityGroupId() );
+    				encoder.putEncodeableArray("SecurityKeyServices", EndpointDescription.class, (obj==null)?null:obj.getSecurityKeyServices());
+    				encoder.putEncodeableArray("DataSetReaderProperties", KeyValuePair.class, (obj==null)?null:obj.getDataSetReaderProperties());
+    				encoder.putExtensionObject("TransportSettings",  (obj==null)?null:obj.getTransportSettings() );
+    				encoder.putExtensionObject("MessageSettings",  (obj==null)?null:obj.getMessageSettings() );
+    				encoder.putExtensionObject("SubscribedDataSet",  (obj==null)?null:obj.getSubscribedDataSet() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DataSetReaderDataType result = new DataSetReaderDataType();
+    				result.setName( decoder.getString("Name") );
+    				result.setEnabled( decoder.getBoolean("Enabled") );
+    				result.setPublisherId( decoder.getVariant("PublisherId") );
+    				result.setWriterGroupId( decoder.getUInt16("WriterGroupId") );
+    				result.setDataSetWriterId( decoder.getUInt16("DataSetWriterId") );
+    				result.setDataSetMetaData( decoder.getEncodeable("DataSetMetaData", DataSetMetaDataType.class) );
+    				result.setDataSetFieldContentMask( decoder.getUInt32("DataSetFieldContentMask") );
+    				result.setMessageReceiveTimeout( decoder.getDouble("MessageReceiveTimeout") );
+    				result.setSecurityMode( decoder.getEnumeration("SecurityMode", MessageSecurityMode.class) );
+    				result.setSecurityGroupId( decoder.getString("SecurityGroupId") );
+    				result.setSecurityKeyServices( decoder.getEncodeableArray("SecurityKeyServices", EndpointDescription.class) );
+    				result.setDataSetReaderProperties( decoder.getEncodeableArray("DataSetReaderProperties", KeyValuePair.class) );
+    				result.setTransportSettings( decoder.getExtensionObject("TransportSettings") );
+    				result.setMessageSettings( decoder.getExtensionObject("MessageSettings") );
+    				result.setSubscribedDataSet( decoder.getExtensionObject("SubscribedDataSet") );
+    				return result;
+    			}
+    		});
+    
+    	// DataSetReaderTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(DataSetReaderTransportDataType.class, DataSetReaderTransportDataType.BINARY, DataSetReaderTransportDataType.XML, DataSetReaderTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DataSetReaderTransportDataType result = new DataSetReaderTransportDataType();
+    				return result;
+    			}
+    		});
+    
+    	// DataSetReaderMessageDataType
+    	addSerializer(
+    		new AbstractSerializer(DataSetReaderMessageDataType.class, DataSetReaderMessageDataType.BINARY, DataSetReaderMessageDataType.XML, DataSetReaderMessageDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DataSetReaderMessageDataType result = new DataSetReaderMessageDataType();
+    				return result;
+    			}
+    		});
+    
+    	// SubscribedDataSetDataType
+    	addSerializer(
+    		new AbstractSerializer(SubscribedDataSetDataType.class, SubscribedDataSetDataType.BINARY, SubscribedDataSetDataType.XML, SubscribedDataSetDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				SubscribedDataSetDataType result = new SubscribedDataSetDataType();
+    				return result;
+    			}
+    		});
+    
+    	// TargetVariablesDataType
+    	addSerializer(
+    		new AbstractSerializer(TargetVariablesDataType.class, TargetVariablesDataType.BINARY, TargetVariablesDataType.XML, TargetVariablesDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				TargetVariablesDataType obj = (TargetVariablesDataType) encodeable;
+    				calculator.putEncodeableArray(null, FieldTargetDataType.class, (obj==null)?null:obj.getTargetVariables());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				TargetVariablesDataType obj = (TargetVariablesDataType) encodeable;
+    				encoder.putEncodeableArray("TargetVariables", FieldTargetDataType.class, (obj==null)?null:obj.getTargetVariables());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				TargetVariablesDataType result = new TargetVariablesDataType();
+    				result.setTargetVariables( decoder.getEncodeableArray("TargetVariables", FieldTargetDataType.class) );
+    				return result;
+    			}
+    		});
+    
+    	// FieldTargetDataType
+    	addSerializer(
+    		new AbstractSerializer(FieldTargetDataType.class, FieldTargetDataType.BINARY, FieldTargetDataType.XML, FieldTargetDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				FieldTargetDataType obj = (FieldTargetDataType) encodeable;
+    				calculator.putGuid(null,  (obj==null)?null:obj.getDataSetFieldId() );
+    				calculator.putString(null,  (obj==null)?null:obj.getReceiverIndexRange() );
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getTargetNodeId() );
+    				calculator.putUInt32(null, null /*obj.getAttributeId()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getWriteIndexRange() );
+    				calculator.putEnumeration(null, null /*obj.getOverrideValueHandling()*/);
+    				calculator.putVariant(null,  (obj==null)?null:obj.getOverrideValue() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				FieldTargetDataType obj = (FieldTargetDataType) encodeable;
+    				encoder.putGuid("DataSetFieldId",  (obj==null)?null:obj.getDataSetFieldId() );
+    				encoder.putString("ReceiverIndexRange",  (obj==null)?null:obj.getReceiverIndexRange() );
+    				encoder.putNodeId("TargetNodeId",  (obj==null)?null:obj.getTargetNodeId() );
+    				encoder.putUInt32("AttributeId",  (obj==null)?null:obj.getAttributeId() );
+    				encoder.putString("WriteIndexRange",  (obj==null)?null:obj.getWriteIndexRange() );
+    				encoder.putEnumeration("OverrideValueHandling",  (obj==null)?null:obj.getOverrideValueHandling() );
+    				encoder.putVariant("OverrideValue",  (obj==null)?null:obj.getOverrideValue() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				FieldTargetDataType result = new FieldTargetDataType();
+    				result.setDataSetFieldId( decoder.getGuid("DataSetFieldId") );
+    				result.setReceiverIndexRange( decoder.getString("ReceiverIndexRange") );
+    				result.setTargetNodeId( decoder.getNodeId("TargetNodeId") );
+    				result.setAttributeId( decoder.getUInt32("AttributeId") );
+    				result.setWriteIndexRange( decoder.getString("WriteIndexRange") );
+    				result.setOverrideValueHandling( decoder.getEnumeration("OverrideValueHandling", OverrideValueHandling.class) );
+    				result.setOverrideValue( decoder.getVariant("OverrideValue") );
+    				return result;
+    			}
+    		});
+    
+    	// SubscribedDataSetMirrorDataType
+    	addSerializer(
+    		new AbstractSerializer(SubscribedDataSetMirrorDataType.class, SubscribedDataSetMirrorDataType.BINARY, SubscribedDataSetMirrorDataType.XML, SubscribedDataSetMirrorDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				SubscribedDataSetMirrorDataType obj = (SubscribedDataSetMirrorDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getParentNodeName() );
+    				calculator.putEncodeableArray(null, RolePermissionType.class, (obj==null)?null:obj.getRolePermissions());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				SubscribedDataSetMirrorDataType obj = (SubscribedDataSetMirrorDataType) encodeable;
+    				encoder.putString("ParentNodeName",  (obj==null)?null:obj.getParentNodeName() );
+    				encoder.putEncodeableArray("RolePermissions", RolePermissionType.class, (obj==null)?null:obj.getRolePermissions());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				SubscribedDataSetMirrorDataType result = new SubscribedDataSetMirrorDataType();
+    				result.setParentNodeName( decoder.getString("ParentNodeName") );
+    				result.setRolePermissions( decoder.getEncodeableArray("RolePermissions", RolePermissionType.class) );
+    				return result;
+    			}
+    		});
+    
+    	// PubSubConfigurationDataType
+    	addSerializer(
+    		new AbstractSerializer(PubSubConfigurationDataType.class, PubSubConfigurationDataType.BINARY, PubSubConfigurationDataType.XML, PubSubConfigurationDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				PubSubConfigurationDataType obj = (PubSubConfigurationDataType) encodeable;
+    				calculator.putEncodeableArray(null, PublishedDataSetDataType.class, (obj==null)?null:obj.getPublishedDataSets());
+    				calculator.putEncodeableArray(null, PubSubConnectionDataType.class, (obj==null)?null:obj.getConnections());
+    				calculator.putBoolean(null, null /*obj.getEnabled()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				PubSubConfigurationDataType obj = (PubSubConfigurationDataType) encodeable;
+    				encoder.putEncodeableArray("PublishedDataSets", PublishedDataSetDataType.class, (obj==null)?null:obj.getPublishedDataSets());
+    				encoder.putEncodeableArray("Connections", PubSubConnectionDataType.class, (obj==null)?null:obj.getConnections());
+    				encoder.putBoolean("Enabled",  (obj==null)?null:obj.getEnabled() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				PubSubConfigurationDataType result = new PubSubConfigurationDataType();
+    				result.setPublishedDataSets( decoder.getEncodeableArray("PublishedDataSets", PublishedDataSetDataType.class) );
+    				result.setConnections( decoder.getEncodeableArray("Connections", PubSubConnectionDataType.class) );
+    				result.setEnabled( decoder.getBoolean("Enabled") );
+    				return result;
+    			}
+    		});
+    
+    	// UadpWriterGroupMessageDataType
+    	addSerializer(
+    		new AbstractSerializer(UadpWriterGroupMessageDataType.class, UadpWriterGroupMessageDataType.BINARY, UadpWriterGroupMessageDataType.XML, UadpWriterGroupMessageDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				UadpWriterGroupMessageDataType obj = (UadpWriterGroupMessageDataType) encodeable;
+    				calculator.putUInt32(null, null /*obj.getGroupVersion()*/);
+    				calculator.putEnumeration(null, null /*obj.getDataSetOrdering()*/);
+    				calculator.putUInt32(null, null /*obj.getNetworkMessageContentMask()*/);
+    				calculator.putDouble(null, null /*obj.getSamplingOffset()*/);
+    				calculator.putDoubleArray(null, ((obj==null)?null:obj.getPublishingOffset()) );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				UadpWriterGroupMessageDataType obj = (UadpWriterGroupMessageDataType) encodeable;
+    				encoder.putUInt32("GroupVersion",  (obj==null)?null:obj.getGroupVersion() );
+    				encoder.putEnumeration("DataSetOrdering",  (obj==null)?null:obj.getDataSetOrdering() );
+    				encoder.putUInt32("NetworkMessageContentMask",  (obj==null)?null:obj.getNetworkMessageContentMask() );
+    				encoder.putDouble("SamplingOffset",  (obj==null)?null:obj.getSamplingOffset() );
+    				encoder.putDoubleArray("PublishingOffset", (obj==null)?null:obj.getPublishingOffset() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				UadpWriterGroupMessageDataType result = new UadpWriterGroupMessageDataType();
+    				result.setGroupVersion( decoder.getUInt32("GroupVersion") );
+    				result.setDataSetOrdering( decoder.getEnumeration("DataSetOrdering", DataSetOrderingType.class) );
+    				result.setNetworkMessageContentMask( decoder.getUInt32("NetworkMessageContentMask") );
+    				result.setSamplingOffset( decoder.getDouble("SamplingOffset") );
+    				result.setPublishingOffset( decoder.getDoubleArray("PublishingOffset") );
+    				return result;
+    			}
+    		});
+    
+    	// UadpDataSetWriterMessageDataType
+    	addSerializer(
+    		new AbstractSerializer(UadpDataSetWriterMessageDataType.class, UadpDataSetWriterMessageDataType.BINARY, UadpDataSetWriterMessageDataType.XML, UadpDataSetWriterMessageDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				UadpDataSetWriterMessageDataType obj = (UadpDataSetWriterMessageDataType) encodeable;
+    				calculator.putUInt32(null, null /*obj.getDataSetMessageContentMask()*/);
+    				calculator.putUInt16(null, null /*obj.getConfiguredSize()*/);
+    				calculator.putUInt16(null, null /*obj.getNetworkMessageNumber()*/);
+    				calculator.putUInt16(null, null /*obj.getDataSetOffset()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				UadpDataSetWriterMessageDataType obj = (UadpDataSetWriterMessageDataType) encodeable;
+    				encoder.putUInt32("DataSetMessageContentMask",  (obj==null)?null:obj.getDataSetMessageContentMask() );
+    				encoder.putUInt16("ConfiguredSize",  (obj==null)?null:obj.getConfiguredSize() );
+    				encoder.putUInt16("NetworkMessageNumber",  (obj==null)?null:obj.getNetworkMessageNumber() );
+    				encoder.putUInt16("DataSetOffset",  (obj==null)?null:obj.getDataSetOffset() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				UadpDataSetWriterMessageDataType result = new UadpDataSetWriterMessageDataType();
+    				result.setDataSetMessageContentMask( decoder.getUInt32("DataSetMessageContentMask") );
+    				result.setConfiguredSize( decoder.getUInt16("ConfiguredSize") );
+    				result.setNetworkMessageNumber( decoder.getUInt16("NetworkMessageNumber") );
+    				result.setDataSetOffset( decoder.getUInt16("DataSetOffset") );
+    				return result;
+    			}
+    		});
+    
+    	// UadpDataSetReaderMessageDataType
+    	addSerializer(
+    		new AbstractSerializer(UadpDataSetReaderMessageDataType.class, UadpDataSetReaderMessageDataType.BINARY, UadpDataSetReaderMessageDataType.XML, UadpDataSetReaderMessageDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				UadpDataSetReaderMessageDataType obj = (UadpDataSetReaderMessageDataType) encodeable;
+    				calculator.putUInt32(null, null /*obj.getGroupVersion()*/);
+    				calculator.putUInt16(null, null /*obj.getNetworkMessageNumber()*/);
+    				calculator.putUInt16(null, null /*obj.getDataSetOffset()*/);
+    				calculator.putGuid(null,  (obj==null)?null:obj.getDataSetClassId() );
+    				calculator.putUInt32(null, null /*obj.getNetworkMessageContentMask()*/);
+    				calculator.putUInt32(null, null /*obj.getDataSetMessageContentMask()*/);
+    				calculator.putDouble(null, null /*obj.getPublishingInterval()*/);
+    				calculator.putDouble(null, null /*obj.getReceiveOffset()*/);
+    				calculator.putDouble(null, null /*obj.getProcessingOffset()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				UadpDataSetReaderMessageDataType obj = (UadpDataSetReaderMessageDataType) encodeable;
+    				encoder.putUInt32("GroupVersion",  (obj==null)?null:obj.getGroupVersion() );
+    				encoder.putUInt16("NetworkMessageNumber",  (obj==null)?null:obj.getNetworkMessageNumber() );
+    				encoder.putUInt16("DataSetOffset",  (obj==null)?null:obj.getDataSetOffset() );
+    				encoder.putGuid("DataSetClassId",  (obj==null)?null:obj.getDataSetClassId() );
+    				encoder.putUInt32("NetworkMessageContentMask",  (obj==null)?null:obj.getNetworkMessageContentMask() );
+    				encoder.putUInt32("DataSetMessageContentMask",  (obj==null)?null:obj.getDataSetMessageContentMask() );
+    				encoder.putDouble("PublishingInterval",  (obj==null)?null:obj.getPublishingInterval() );
+    				encoder.putDouble("ReceiveOffset",  (obj==null)?null:obj.getReceiveOffset() );
+    				encoder.putDouble("ProcessingOffset",  (obj==null)?null:obj.getProcessingOffset() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				UadpDataSetReaderMessageDataType result = new UadpDataSetReaderMessageDataType();
+    				result.setGroupVersion( decoder.getUInt32("GroupVersion") );
+    				result.setNetworkMessageNumber( decoder.getUInt16("NetworkMessageNumber") );
+    				result.setDataSetOffset( decoder.getUInt16("DataSetOffset") );
+    				result.setDataSetClassId( decoder.getGuid("DataSetClassId") );
+    				result.setNetworkMessageContentMask( decoder.getUInt32("NetworkMessageContentMask") );
+    				result.setDataSetMessageContentMask( decoder.getUInt32("DataSetMessageContentMask") );
+    				result.setPublishingInterval( decoder.getDouble("PublishingInterval") );
+    				result.setReceiveOffset( decoder.getDouble("ReceiveOffset") );
+    				result.setProcessingOffset( decoder.getDouble("ProcessingOffset") );
+    				return result;
+    			}
+    		});
+    
+    	// JsonWriterGroupMessageDataType
+    	addSerializer(
+    		new AbstractSerializer(JsonWriterGroupMessageDataType.class, JsonWriterGroupMessageDataType.BINARY, JsonWriterGroupMessageDataType.XML, JsonWriterGroupMessageDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				JsonWriterGroupMessageDataType obj = (JsonWriterGroupMessageDataType) encodeable;
+    				calculator.putUInt32(null, null /*obj.getNetworkMessageContentMask()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				JsonWriterGroupMessageDataType obj = (JsonWriterGroupMessageDataType) encodeable;
+    				encoder.putUInt32("NetworkMessageContentMask",  (obj==null)?null:obj.getNetworkMessageContentMask() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				JsonWriterGroupMessageDataType result = new JsonWriterGroupMessageDataType();
+    				result.setNetworkMessageContentMask( decoder.getUInt32("NetworkMessageContentMask") );
+    				return result;
+    			}
+    		});
+    
+    	// JsonDataSetWriterMessageDataType
+    	addSerializer(
+    		new AbstractSerializer(JsonDataSetWriterMessageDataType.class, JsonDataSetWriterMessageDataType.BINARY, JsonDataSetWriterMessageDataType.XML, JsonDataSetWriterMessageDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				JsonDataSetWriterMessageDataType obj = (JsonDataSetWriterMessageDataType) encodeable;
+    				calculator.putUInt32(null, null /*obj.getDataSetMessageContentMask()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				JsonDataSetWriterMessageDataType obj = (JsonDataSetWriterMessageDataType) encodeable;
+    				encoder.putUInt32("DataSetMessageContentMask",  (obj==null)?null:obj.getDataSetMessageContentMask() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				JsonDataSetWriterMessageDataType result = new JsonDataSetWriterMessageDataType();
+    				result.setDataSetMessageContentMask( decoder.getUInt32("DataSetMessageContentMask") );
+    				return result;
+    			}
+    		});
+    
+    	// JsonDataSetReaderMessageDataType
+    	addSerializer(
+    		new AbstractSerializer(JsonDataSetReaderMessageDataType.class, JsonDataSetReaderMessageDataType.BINARY, JsonDataSetReaderMessageDataType.XML, JsonDataSetReaderMessageDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				JsonDataSetReaderMessageDataType obj = (JsonDataSetReaderMessageDataType) encodeable;
+    				calculator.putUInt32(null, null /*obj.getNetworkMessageContentMask()*/);
+    				calculator.putUInt32(null, null /*obj.getDataSetMessageContentMask()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				JsonDataSetReaderMessageDataType obj = (JsonDataSetReaderMessageDataType) encodeable;
+    				encoder.putUInt32("NetworkMessageContentMask",  (obj==null)?null:obj.getNetworkMessageContentMask() );
+    				encoder.putUInt32("DataSetMessageContentMask",  (obj==null)?null:obj.getDataSetMessageContentMask() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				JsonDataSetReaderMessageDataType result = new JsonDataSetReaderMessageDataType();
+    				result.setNetworkMessageContentMask( decoder.getUInt32("NetworkMessageContentMask") );
+    				result.setDataSetMessageContentMask( decoder.getUInt32("DataSetMessageContentMask") );
+    				return result;
+    			}
+    		});
+    
+    	// DatagramConnectionTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(DatagramConnectionTransportDataType.class, DatagramConnectionTransportDataType.BINARY, DatagramConnectionTransportDataType.XML, DatagramConnectionTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				DatagramConnectionTransportDataType obj = (DatagramConnectionTransportDataType) encodeable;
+    				calculator.putExtensionObject(null,  (obj==null)?null:obj.getDiscoveryAddress() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				DatagramConnectionTransportDataType obj = (DatagramConnectionTransportDataType) encodeable;
+    				encoder.putExtensionObject("DiscoveryAddress",  (obj==null)?null:obj.getDiscoveryAddress() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DatagramConnectionTransportDataType result = new DatagramConnectionTransportDataType();
+    				result.setDiscoveryAddress( decoder.getExtensionObject("DiscoveryAddress") );
+    				return result;
+    			}
+    		});
+    
+    	// DatagramWriterGroupTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(DatagramWriterGroupTransportDataType.class, DatagramWriterGroupTransportDataType.BINARY, DatagramWriterGroupTransportDataType.XML, DatagramWriterGroupTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				DatagramWriterGroupTransportDataType obj = (DatagramWriterGroupTransportDataType) encodeable;
+    				calculator.putByte(null, null /*obj.getMessageRepeatCount()*/);
+    				calculator.putDouble(null, null /*obj.getMessageRepeatDelay()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				DatagramWriterGroupTransportDataType obj = (DatagramWriterGroupTransportDataType) encodeable;
+    				encoder.putByte("MessageRepeatCount",  (obj==null)?null:obj.getMessageRepeatCount() );
+    				encoder.putDouble("MessageRepeatDelay",  (obj==null)?null:obj.getMessageRepeatDelay() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DatagramWriterGroupTransportDataType result = new DatagramWriterGroupTransportDataType();
+    				result.setMessageRepeatCount( decoder.getByte("MessageRepeatCount") );
+    				result.setMessageRepeatDelay( decoder.getDouble("MessageRepeatDelay") );
+    				return result;
+    			}
+    		});
+    
+    	// BrokerConnectionTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(BrokerConnectionTransportDataType.class, BrokerConnectionTransportDataType.BINARY, BrokerConnectionTransportDataType.XML, BrokerConnectionTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				BrokerConnectionTransportDataType obj = (BrokerConnectionTransportDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getResourceUri() );
+    				calculator.putString(null,  (obj==null)?null:obj.getAuthenticationProfileUri() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				BrokerConnectionTransportDataType obj = (BrokerConnectionTransportDataType) encodeable;
+    				encoder.putString("ResourceUri",  (obj==null)?null:obj.getResourceUri() );
+    				encoder.putString("AuthenticationProfileUri",  (obj==null)?null:obj.getAuthenticationProfileUri() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				BrokerConnectionTransportDataType result = new BrokerConnectionTransportDataType();
+    				result.setResourceUri( decoder.getString("ResourceUri") );
+    				result.setAuthenticationProfileUri( decoder.getString("AuthenticationProfileUri") );
+    				return result;
+    			}
+    		});
+    
+    	// BrokerWriterGroupTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(BrokerWriterGroupTransportDataType.class, BrokerWriterGroupTransportDataType.BINARY, BrokerWriterGroupTransportDataType.XML, BrokerWriterGroupTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				BrokerWriterGroupTransportDataType obj = (BrokerWriterGroupTransportDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getQueueName() );
+    				calculator.putString(null,  (obj==null)?null:obj.getResourceUri() );
+    				calculator.putString(null,  (obj==null)?null:obj.getAuthenticationProfileUri() );
+    				calculator.putEnumeration(null, null /*obj.getRequestedDeliveryGuarantee()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				BrokerWriterGroupTransportDataType obj = (BrokerWriterGroupTransportDataType) encodeable;
+    				encoder.putString("QueueName",  (obj==null)?null:obj.getQueueName() );
+    				encoder.putString("ResourceUri",  (obj==null)?null:obj.getResourceUri() );
+    				encoder.putString("AuthenticationProfileUri",  (obj==null)?null:obj.getAuthenticationProfileUri() );
+    				encoder.putEnumeration("RequestedDeliveryGuarantee",  (obj==null)?null:obj.getRequestedDeliveryGuarantee() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				BrokerWriterGroupTransportDataType result = new BrokerWriterGroupTransportDataType();
+    				result.setQueueName( decoder.getString("QueueName") );
+    				result.setResourceUri( decoder.getString("ResourceUri") );
+    				result.setAuthenticationProfileUri( decoder.getString("AuthenticationProfileUri") );
+    				result.setRequestedDeliveryGuarantee( decoder.getEnumeration("RequestedDeliveryGuarantee", BrokerTransportQualityOfService.class) );
+    				return result;
+    			}
+    		});
+    
+    	// BrokerDataSetWriterTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(BrokerDataSetWriterTransportDataType.class, BrokerDataSetWriterTransportDataType.BINARY, BrokerDataSetWriterTransportDataType.XML, BrokerDataSetWriterTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				BrokerDataSetWriterTransportDataType obj = (BrokerDataSetWriterTransportDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getQueueName() );
+    				calculator.putString(null,  (obj==null)?null:obj.getResourceUri() );
+    				calculator.putString(null,  (obj==null)?null:obj.getAuthenticationProfileUri() );
+    				calculator.putString(null,  (obj==null)?null:obj.getMetaDataQueueName() );
+    				calculator.putDouble(null, null /*obj.getMetaDataUpdateTime()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				BrokerDataSetWriterTransportDataType obj = (BrokerDataSetWriterTransportDataType) encodeable;
+    				encoder.putString("QueueName",  (obj==null)?null:obj.getQueueName() );
+    				encoder.putString("ResourceUri",  (obj==null)?null:obj.getResourceUri() );
+    				encoder.putString("AuthenticationProfileUri",  (obj==null)?null:obj.getAuthenticationProfileUri() );
+    				encoder.putString("MetaDataQueueName",  (obj==null)?null:obj.getMetaDataQueueName() );
+    				encoder.putDouble("MetaDataUpdateTime",  (obj==null)?null:obj.getMetaDataUpdateTime() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				BrokerDataSetWriterTransportDataType result = new BrokerDataSetWriterTransportDataType();
+    				result.setQueueName( decoder.getString("QueueName") );
+    				result.setResourceUri( decoder.getString("ResourceUri") );
+    				result.setAuthenticationProfileUri( decoder.getString("AuthenticationProfileUri") );
+    				result.setMetaDataQueueName( decoder.getString("MetaDataQueueName") );
+    				result.setMetaDataUpdateTime( decoder.getDouble("MetaDataUpdateTime") );
+    				return result;
+    			}
+    		});
+    
+    	// BrokerDataSetReaderTransportDataType
+    	addSerializer(
+    		new AbstractSerializer(BrokerDataSetReaderTransportDataType.class, BrokerDataSetReaderTransportDataType.BINARY, BrokerDataSetReaderTransportDataType.XML, BrokerDataSetReaderTransportDataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				BrokerDataSetReaderTransportDataType obj = (BrokerDataSetReaderTransportDataType) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getQueueName() );
+    				calculator.putString(null,  (obj==null)?null:obj.getResourceUri() );
+    				calculator.putString(null,  (obj==null)?null:obj.getAuthenticationProfileUri() );
+    				calculator.putEnumeration(null, null /*obj.getRequestedDeliveryGuarantee()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getMetaDataQueueName() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				BrokerDataSetReaderTransportDataType obj = (BrokerDataSetReaderTransportDataType) encodeable;
+    				encoder.putString("QueueName",  (obj==null)?null:obj.getQueueName() );
+    				encoder.putString("ResourceUri",  (obj==null)?null:obj.getResourceUri() );
+    				encoder.putString("AuthenticationProfileUri",  (obj==null)?null:obj.getAuthenticationProfileUri() );
+    				encoder.putEnumeration("RequestedDeliveryGuarantee",  (obj==null)?null:obj.getRequestedDeliveryGuarantee() );
+    				encoder.putString("MetaDataQueueName",  (obj==null)?null:obj.getMetaDataQueueName() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				BrokerDataSetReaderTransportDataType result = new BrokerDataSetReaderTransportDataType();
+    				result.setQueueName( decoder.getString("QueueName") );
+    				result.setResourceUri( decoder.getString("ResourceUri") );
+    				result.setAuthenticationProfileUri( decoder.getString("AuthenticationProfileUri") );
+    				result.setRequestedDeliveryGuarantee( decoder.getEnumeration("RequestedDeliveryGuarantee", BrokerTransportQualityOfService.class) );
+    				result.setMetaDataQueueName( decoder.getString("MetaDataQueueName") );
+    				return result;
+    			}
+    		});
+    
+    	// RolePermissionType
+    	addSerializer(
+    		new AbstractSerializer(RolePermissionType.class, RolePermissionType.BINARY, RolePermissionType.XML, RolePermissionType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				RolePermissionType obj = (RolePermissionType) encodeable;
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getRoleId() );
+    				calculator.putUInt32(null, null /*obj.getPermissions()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				RolePermissionType obj = (RolePermissionType) encodeable;
+    				encoder.putNodeId("RoleId",  (obj==null)?null:obj.getRoleId() );
+    				encoder.putUInt32("Permissions",  (obj==null)?null:obj.getPermissions() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				RolePermissionType result = new RolePermissionType();
+    				result.setRoleId( decoder.getNodeId("RoleId") );
+    				result.setPermissions( decoder.getUInt32("Permissions") );
+    				return result;
+    			}
+    		});
+    
+    	// DataTypeDefinition
+    	addSerializer(
+    		new AbstractSerializer(DataTypeDefinition.class, DataTypeDefinition.BINARY, DataTypeDefinition.XML, DataTypeDefinition.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				DataTypeDefinition result = new DataTypeDefinition();
+    				return result;
+    			}
+    		});
+    
+    	// StructureField
+    	addSerializer(
+    		new AbstractSerializer(StructureField.class, StructureField.BINARY, StructureField.XML, StructureField.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				StructureField obj = (StructureField) encodeable;
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
     				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				calculator.putVariant(null,  (obj==null)?null:obj.getValue() );
     				calculator.putNodeId(null,  (obj==null)?null:obj.getDataType() );
     				calculator.putInt32(null, null /*obj.getValueRank()*/);
     				calculator.putUInt32Array(null, ((obj==null)?null:obj.getArrayDimensions()) );
-    				calculator.putBoolean(null, null /*obj.getIsAbstract()*/);
+    				calculator.putUInt32(null, null /*obj.getMaxStringLength()*/);
+    				calculator.putBoolean(null, null /*obj.getIsOptional()*/);
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				VariableTypeNode obj = (VariableTypeNode) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
+    				StructureField obj = (StructureField) encodeable;
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
     				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				encoder.putVariant("Value",  (obj==null)?null:obj.getValue() );
     				encoder.putNodeId("DataType",  (obj==null)?null:obj.getDataType() );
     				encoder.putInt32("ValueRank",  (obj==null)?null:obj.getValueRank() );
     				encoder.putUInt32Array("ArrayDimensions", (obj==null)?null:obj.getArrayDimensions() );
-    				encoder.putBoolean("IsAbstract",  (obj==null)?null:obj.getIsAbstract() );
+    				encoder.putUInt32("MaxStringLength",  (obj==null)?null:obj.getMaxStringLength() );
+    				encoder.putBoolean("IsOptional",  (obj==null)?null:obj.getIsOptional() );
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				VariableTypeNode result = new VariableTypeNode();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
+    				StructureField result = new StructureField();
+    				result.setName( decoder.getString("Name") );
     				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
-    				result.setValue( decoder.getVariant("Value") );
     				result.setDataType( decoder.getNodeId("DataType") );
     				result.setValueRank( decoder.getInt32("ValueRank") );
     				result.setArrayDimensions( decoder.getUInt32Array("ArrayDimensions") );
-    				result.setIsAbstract( decoder.getBoolean("IsAbstract") );
+    				result.setMaxStringLength( decoder.getUInt32("MaxStringLength") );
+    				result.setIsOptional( decoder.getBoolean("IsOptional") );
     				return result;
     			}
     		});
     
-    	// ReferenceTypeNode
+    	// StructureDefinition
     	addSerializer(
-    		new AbstractSerializer(ReferenceTypeNode.class, ReferenceTypeNode.BINARY, ReferenceTypeNode.XML, ReferenceTypeNode.ID) {
+    		new AbstractSerializer(StructureDefinition.class, StructureDefinition.BINARY, StructureDefinition.XML, StructureDefinition.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				ReferenceTypeNode obj = (ReferenceTypeNode) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				calculator.putBoolean(null, null /*obj.getIsAbstract()*/);
-    				calculator.putBoolean(null, null /*obj.getSymmetric()*/);
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getInverseName() );
+    				StructureDefinition obj = (StructureDefinition) encodeable;
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getDefaultEncodingId() );
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getBaseDataType() );
+    				calculator.putEnumeration(null, null /*obj.getStructureType()*/);
+    				calculator.putEncodeableArray(null, StructureField.class, (obj==null)?null:obj.getFields());
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				ReferenceTypeNode obj = (ReferenceTypeNode) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
-    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				encoder.putBoolean("IsAbstract",  (obj==null)?null:obj.getIsAbstract() );
-    				encoder.putBoolean("Symmetric",  (obj==null)?null:obj.getSymmetric() );
-    				encoder.putLocalizedText("InverseName",  (obj==null)?null:obj.getInverseName() );
+    				StructureDefinition obj = (StructureDefinition) encodeable;
+    				encoder.putNodeId("DefaultEncodingId",  (obj==null)?null:obj.getDefaultEncodingId() );
+    				encoder.putNodeId("BaseDataType",  (obj==null)?null:obj.getBaseDataType() );
+    				encoder.putEnumeration("StructureType",  (obj==null)?null:obj.getStructureType() );
+    				encoder.putEncodeableArray("Fields", StructureField.class, (obj==null)?null:obj.getFields());
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				ReferenceTypeNode result = new ReferenceTypeNode();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
-    				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
-    				result.setIsAbstract( decoder.getBoolean("IsAbstract") );
-    				result.setSymmetric( decoder.getBoolean("Symmetric") );
-    				result.setInverseName( decoder.getLocalizedText("InverseName") );
+    				StructureDefinition result = new StructureDefinition();
+    				result.setDefaultEncodingId( decoder.getNodeId("DefaultEncodingId") );
+    				result.setBaseDataType( decoder.getNodeId("BaseDataType") );
+    				result.setStructureType( decoder.getEnumeration("StructureType", StructureType.class) );
+    				result.setFields( decoder.getEncodeableArray("Fields", StructureField.class) );
     				return result;
     			}
     		});
     
-    	// MethodNode
+    	// EnumDefinition
     	addSerializer(
-    		new AbstractSerializer(MethodNode.class, MethodNode.BINARY, MethodNode.XML, MethodNode.ID) {
+    		new AbstractSerializer(EnumDefinition.class, EnumDefinition.BINARY, EnumDefinition.XML, EnumDefinition.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				MethodNode obj = (MethodNode) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				calculator.putBoolean(null, null /*obj.getExecutable()*/);
-    				calculator.putBoolean(null, null /*obj.getUserExecutable()*/);
+    				EnumDefinition obj = (EnumDefinition) encodeable;
+    				calculator.putEncodeableArray(null, EnumField.class, (obj==null)?null:obj.getFields());
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				MethodNode obj = (MethodNode) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
-    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				encoder.putBoolean("Executable",  (obj==null)?null:obj.getExecutable() );
-    				encoder.putBoolean("UserExecutable",  (obj==null)?null:obj.getUserExecutable() );
+    				EnumDefinition obj = (EnumDefinition) encodeable;
+    				encoder.putEncodeableArray("Fields", EnumField.class, (obj==null)?null:obj.getFields());
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				MethodNode result = new MethodNode();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
-    				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
-    				result.setExecutable( decoder.getBoolean("Executable") );
-    				result.setUserExecutable( decoder.getBoolean("UserExecutable") );
-    				return result;
-    			}
-    		});
-    
-    	// ViewNode
-    	addSerializer(
-    		new AbstractSerializer(ViewNode.class, ViewNode.BINARY, ViewNode.XML, ViewNode.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				ViewNode obj = (ViewNode) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				calculator.putBoolean(null, null /*obj.getContainsNoLoops()*/);
-    				calculator.putByte(null, null /*obj.getEventNotifier()*/);
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				ViewNode obj = (ViewNode) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
-    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				encoder.putBoolean("ContainsNoLoops",  (obj==null)?null:obj.getContainsNoLoops() );
-    				encoder.putByte("EventNotifier",  (obj==null)?null:obj.getEventNotifier() );
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				ViewNode result = new ViewNode();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
-    				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
-    				result.setContainsNoLoops( decoder.getBoolean("ContainsNoLoops") );
-    				result.setEventNotifier( decoder.getByte("EventNotifier") );
-    				return result;
-    			}
-    		});
-    
-    	// DataTypeNode
-    	addSerializer(
-    		new AbstractSerializer(DataTypeNode.class, DataTypeNode.BINARY, DataTypeNode.XML, DataTypeNode.ID) {
-    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
-    				DataTypeNode obj = (DataTypeNode) encodeable;
-    				calculator.putNodeId(null,  (obj==null)?null:obj.getNodeId() );
-    				calculator.putEnumeration(null, null /*obj.getNodeClass()*/);
-    				calculator.putQualifiedName(null,  (obj==null)?null:obj.getBrowseName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
-    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
-    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
-    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
-    				calculator.putEncodeableArray(null, ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				calculator.putBoolean(null, null /*obj.getIsAbstract()*/);
-    			}
-    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
-    				DataTypeNode obj = (DataTypeNode) encodeable;
-    				encoder.putNodeId("NodeId",  (obj==null)?null:obj.getNodeId() );
-    				encoder.putEnumeration("NodeClass",  (obj==null)?null:obj.getNodeClass() );
-    				encoder.putQualifiedName("BrowseName",  (obj==null)?null:obj.getBrowseName() );
-    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
-    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
-    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
-    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
-    				encoder.putEncodeableArray("References", ReferenceNode.class, (obj==null)?null:obj.getReferences());
-    				encoder.putBoolean("IsAbstract",  (obj==null)?null:obj.getIsAbstract() );
-    			}
-    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
-    				DataTypeNode result = new DataTypeNode();
-    				result.setNodeId( decoder.getNodeId("NodeId") );
-    				result.setNodeClass( decoder.getEnumeration("NodeClass", NodeClass.class) );
-    				result.setBrowseName( decoder.getQualifiedName("BrowseName") );
-    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
-    				result.setDescription( decoder.getLocalizedText("Description") );
-    				result.setWriteMask( decoder.getUInt32("WriteMask") );
-    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
-    				result.setReferences( decoder.getEncodeableArray("References", ReferenceNode.class) );
-    				result.setIsAbstract( decoder.getBoolean("IsAbstract") );
+    				EnumDefinition result = new EnumDefinition();
+    				result.setFields( decoder.getEncodeableArray("Fields", EnumField.class) );
     				return result;
     			}
     		});
@@ -667,6 +1603,33 @@ public class EncodeableSerializer extends SerializerComposition {
     				result.setValue( decoder.getInt64("Value") );
     				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
     				result.setDescription( decoder.getLocalizedText("Description") );
+    				return result;
+    			}
+    		});
+    
+    	// EnumField
+    	addSerializer(
+    		new AbstractSerializer(EnumField.class, EnumField.BINARY, EnumField.XML, EnumField.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				EnumField obj = (EnumField) encodeable;
+    				calculator.putInt64(null, null /*obj.getValue()*/);
+    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
+    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
+    				calculator.putString(null,  (obj==null)?null:obj.getName() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				EnumField obj = (EnumField) encodeable;
+    				encoder.putInt64("Value",  (obj==null)?null:obj.getValue() );
+    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
+    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
+    				encoder.putString("Name",  (obj==null)?null:obj.getName() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				EnumField result = new EnumField();
+    				result.setValue( decoder.getInt64("Value") );
+    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
+    				result.setDescription( decoder.getLocalizedText("Description") );
+    				result.setName( decoder.getString("Name") );
     				return result;
     			}
     		});
@@ -846,6 +1809,60 @@ public class EncodeableSerializer extends SerializerComposition {
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
     				ServiceFault result = new ServiceFault();
     				result.setResponseHeader( decoder.getEncodeable("ResponseHeader", ResponseHeader.class) );
+    				return result;
+    			}
+    		});
+    
+    	// SessionlessInvokeRequestType
+    	addSerializer(
+    		new AbstractSerializer(SessionlessInvokeRequestType.class, SessionlessInvokeRequestType.BINARY, SessionlessInvokeRequestType.XML, SessionlessInvokeRequestType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				SessionlessInvokeRequestType obj = (SessionlessInvokeRequestType) encodeable;
+    				calculator.putUInt32Array(null, ((obj==null)?null:obj.getUrisVersion()) );
+    				calculator.putStringArray(null, ((obj==null)?null:obj.getNamespaceUris()) );
+    				calculator.putStringArray(null, ((obj==null)?null:obj.getServerUris()) );
+    				calculator.putStringArray(null, ((obj==null)?null:obj.getLocaleIds()) );
+    				calculator.putUInt32(null, null /*obj.getServiceId()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				SessionlessInvokeRequestType obj = (SessionlessInvokeRequestType) encodeable;
+    				encoder.putUInt32Array("UrisVersion", (obj==null)?null:obj.getUrisVersion() );
+    				encoder.putStringArray("NamespaceUris", (obj==null)?null:obj.getNamespaceUris() );
+    				encoder.putStringArray("ServerUris", (obj==null)?null:obj.getServerUris() );
+    				encoder.putStringArray("LocaleIds", (obj==null)?null:obj.getLocaleIds() );
+    				encoder.putUInt32("ServiceId",  (obj==null)?null:obj.getServiceId() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				SessionlessInvokeRequestType result = new SessionlessInvokeRequestType();
+    				result.setUrisVersion( decoder.getUInt32Array("UrisVersion") );
+    				result.setNamespaceUris( decoder.getStringArray("NamespaceUris") );
+    				result.setServerUris( decoder.getStringArray("ServerUris") );
+    				result.setLocaleIds( decoder.getStringArray("LocaleIds") );
+    				result.setServiceId( decoder.getUInt32("ServiceId") );
+    				return result;
+    			}
+    		});
+    
+    	// SessionlessInvokeResponseType
+    	addSerializer(
+    		new AbstractSerializer(SessionlessInvokeResponseType.class, SessionlessInvokeResponseType.BINARY, SessionlessInvokeResponseType.XML, SessionlessInvokeResponseType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				SessionlessInvokeResponseType obj = (SessionlessInvokeResponseType) encodeable;
+    				calculator.putStringArray(null, ((obj==null)?null:obj.getNamespaceUris()) );
+    				calculator.putStringArray(null, ((obj==null)?null:obj.getServerUris()) );
+    				calculator.putUInt32(null, null /*obj.getServiceId()*/);
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				SessionlessInvokeResponseType obj = (SessionlessInvokeResponseType) encodeable;
+    				encoder.putStringArray("NamespaceUris", (obj==null)?null:obj.getNamespaceUris() );
+    				encoder.putStringArray("ServerUris", (obj==null)?null:obj.getServerUris() );
+    				encoder.putUInt32("ServiceId",  (obj==null)?null:obj.getServiceId() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				SessionlessInvokeResponseType result = new SessionlessInvokeResponseType();
+    				result.setNamespaceUris( decoder.getStringArray("NamespaceUris") );
+    				result.setServerUris( decoder.getStringArray("ServerUris") );
+    				result.setServiceId( decoder.getUInt32("ServiceId") );
     				return result;
     			}
     		});
@@ -2089,6 +3106,60 @@ public class EncodeableSerializer extends SerializerComposition {
     				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
     				result.setContainsNoLoops( decoder.getBoolean("ContainsNoLoops") );
     				result.setEventNotifier( decoder.getByte("EventNotifier") );
+    				return result;
+    			}
+    		});
+    
+    	// GenericAttributeValue
+    	addSerializer(
+    		new AbstractSerializer(GenericAttributeValue.class, GenericAttributeValue.BINARY, GenericAttributeValue.XML, GenericAttributeValue.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				GenericAttributeValue obj = (GenericAttributeValue) encodeable;
+    				calculator.putUInt32(null, null /*obj.getAttributeId()*/);
+    				calculator.putVariant(null,  (obj==null)?null:obj.getValue() );
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				GenericAttributeValue obj = (GenericAttributeValue) encodeable;
+    				encoder.putUInt32("AttributeId",  (obj==null)?null:obj.getAttributeId() );
+    				encoder.putVariant("Value",  (obj==null)?null:obj.getValue() );
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				GenericAttributeValue result = new GenericAttributeValue();
+    				result.setAttributeId( decoder.getUInt32("AttributeId") );
+    				result.setValue( decoder.getVariant("Value") );
+    				return result;
+    			}
+    		});
+    
+    	// GenericAttributes
+    	addSerializer(
+    		new AbstractSerializer(GenericAttributes.class, GenericAttributes.BINARY, GenericAttributes.XML, GenericAttributes.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				GenericAttributes obj = (GenericAttributes) encodeable;
+    				calculator.putUInt32(null, null /*obj.getSpecifiedAttributes()*/);
+    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDisplayName() );
+    				calculator.putLocalizedText(null,  (obj==null)?null:obj.getDescription() );
+    				calculator.putUInt32(null, null /*obj.getWriteMask()*/);
+    				calculator.putUInt32(null, null /*obj.getUserWriteMask()*/);
+    				calculator.putEncodeableArray(null, GenericAttributeValue.class, (obj==null)?null:obj.getAttributeValues());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				GenericAttributes obj = (GenericAttributes) encodeable;
+    				encoder.putUInt32("SpecifiedAttributes",  (obj==null)?null:obj.getSpecifiedAttributes() );
+    				encoder.putLocalizedText("DisplayName",  (obj==null)?null:obj.getDisplayName() );
+    				encoder.putLocalizedText("Description",  (obj==null)?null:obj.getDescription() );
+    				encoder.putUInt32("WriteMask",  (obj==null)?null:obj.getWriteMask() );
+    				encoder.putUInt32("UserWriteMask",  (obj==null)?null:obj.getUserWriteMask() );
+    				encoder.putEncodeableArray("AttributeValues", GenericAttributeValue.class, (obj==null)?null:obj.getAttributeValues());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				GenericAttributes result = new GenericAttributes();
+    				result.setSpecifiedAttributes( decoder.getUInt32("SpecifiedAttributes") );
+    				result.setDisplayName( decoder.getLocalizedText("DisplayName") );
+    				result.setDescription( decoder.getLocalizedText("Description") );
+    				result.setWriteMask( decoder.getUInt32("WriteMask") );
+    				result.setUserWriteMask( decoder.getUInt32("UserWriteMask") );
+    				result.setAttributeValues( decoder.getEncodeableArray("AttributeValues", GenericAttributeValue.class) );
     				return result;
     			}
     		});
@@ -6025,6 +7096,57 @@ public class EncodeableSerializer extends SerializerComposition {
     				result.setLastMethodSessionId( decoder.getNodeId("LastMethodSessionId") );
     				result.setLastMethodInputArguments( decoder.getEncodeableArray("LastMethodInputArguments", Argument.class) );
     				result.setLastMethodOutputArguments( decoder.getEncodeableArray("LastMethodOutputArguments", Argument.class) );
+    				result.setLastMethodCallTime( decoder.getDateTime("LastMethodCallTime") );
+    				result.setLastMethodReturnStatus( decoder.getEncodeable("LastMethodReturnStatus", StatusResult.class) );
+    				return result;
+    			}
+    		});
+    
+    	// ProgramDiagnostic2DataType
+    	addSerializer(
+    		new AbstractSerializer(ProgramDiagnostic2DataType.class, ProgramDiagnostic2DataType.BINARY, ProgramDiagnostic2DataType.XML, ProgramDiagnostic2DataType.ID) {
+    			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
+    				ProgramDiagnostic2DataType obj = (ProgramDiagnostic2DataType) encodeable;
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getCreateSessionId() );
+    				calculator.putString(null,  (obj==null)?null:obj.getCreateClientName() );
+    				calculator.putDateTime(null,  (obj==null)?null:obj.getInvocationCreationTime() );
+    				calculator.putDateTime(null,  (obj==null)?null:obj.getLastTransitionTime() );
+    				calculator.putString(null,  (obj==null)?null:obj.getLastMethodCall() );
+    				calculator.putNodeId(null,  (obj==null)?null:obj.getLastMethodSessionId() );
+    				calculator.putEncodeableArray(null, Argument.class, (obj==null)?null:obj.getLastMethodInputArguments());
+    				calculator.putEncodeableArray(null, Argument.class, (obj==null)?null:obj.getLastMethodOutputArguments());
+    				calculator.putVariantArray(null, ((obj==null)?null:obj.getLastMethodInputValues()) );
+    				calculator.putVariantArray(null, ((obj==null)?null:obj.getLastMethodOutputValues()) );
+    				calculator.putDateTime(null,  (obj==null)?null:obj.getLastMethodCallTime() );
+    				calculator.putEncodeable(null, StatusResult.class, (obj==null)?null:obj.getLastMethodReturnStatus());
+    			}
+    			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
+    				ProgramDiagnostic2DataType obj = (ProgramDiagnostic2DataType) encodeable;
+    				encoder.putNodeId("CreateSessionId",  (obj==null)?null:obj.getCreateSessionId() );
+    				encoder.putString("CreateClientName",  (obj==null)?null:obj.getCreateClientName() );
+    				encoder.putDateTime("InvocationCreationTime",  (obj==null)?null:obj.getInvocationCreationTime() );
+    				encoder.putDateTime("LastTransitionTime",  (obj==null)?null:obj.getLastTransitionTime() );
+    				encoder.putString("LastMethodCall",  (obj==null)?null:obj.getLastMethodCall() );
+    				encoder.putNodeId("LastMethodSessionId",  (obj==null)?null:obj.getLastMethodSessionId() );
+    				encoder.putEncodeableArray("LastMethodInputArguments", Argument.class, (obj==null)?null:obj.getLastMethodInputArguments());
+    				encoder.putEncodeableArray("LastMethodOutputArguments", Argument.class, (obj==null)?null:obj.getLastMethodOutputArguments());
+    				encoder.putVariantArray("LastMethodInputValues", (obj==null)?null:obj.getLastMethodInputValues() );
+    				encoder.putVariantArray("LastMethodOutputValues", (obj==null)?null:obj.getLastMethodOutputValues() );
+    				encoder.putDateTime("LastMethodCallTime",  (obj==null)?null:obj.getLastMethodCallTime() );
+    				encoder.putEncodeable("LastMethodReturnStatus", StatusResult.class, (obj==null)?null:obj.getLastMethodReturnStatus());
+    			}
+    			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
+    				ProgramDiagnostic2DataType result = new ProgramDiagnostic2DataType();
+    				result.setCreateSessionId( decoder.getNodeId("CreateSessionId") );
+    				result.setCreateClientName( decoder.getString("CreateClientName") );
+    				result.setInvocationCreationTime( decoder.getDateTime("InvocationCreationTime") );
+    				result.setLastTransitionTime( decoder.getDateTime("LastTransitionTime") );
+    				result.setLastMethodCall( decoder.getString("LastMethodCall") );
+    				result.setLastMethodSessionId( decoder.getNodeId("LastMethodSessionId") );
+    				result.setLastMethodInputArguments( decoder.getEncodeableArray("LastMethodInputArguments", Argument.class) );
+    				result.setLastMethodOutputArguments( decoder.getEncodeableArray("LastMethodOutputArguments", Argument.class) );
+    				result.setLastMethodInputValues( decoder.getVariantArray("LastMethodInputValues") );
+    				result.setLastMethodOutputValues( decoder.getVariantArray("LastMethodOutputValues") );
     				result.setLastMethodCallTime( decoder.getDateTime("LastMethodCallTime") );
     				result.setLastMethodReturnStatus( decoder.getEncodeable("LastMethodReturnStatus", StatusResult.class) );
     				return result;
