@@ -12,6 +12,7 @@
 package org.opcfoundation.ua.encoding.xml;
 
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -52,6 +53,7 @@ import org.opcfoundation.ua.encoding.DecodingException;
 import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.encoding.IDecoder;
 import org.opcfoundation.ua.encoding.IEncodeable;
+import org.opcfoundation.ua.encoding.xml.helpers.XmlExpandedNodeId;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
 import org.opcfoundation.ua.utils.XMLFactoryCache;
@@ -997,7 +999,7 @@ public class XmlDecoder implements IDecoder {
 		//			return null;
 		//		}
 
-		return (T[]) encodeables.toArray((T[])Array.newInstance(encodeableClass, encodeables.size()));
+		return encodeables.toArray((T[])Array.newInstance(encodeableClass, encodeables.size()));
 	}
 
 	/**
@@ -1151,8 +1153,11 @@ public class XmlDecoder implements IDecoder {
 
 		if (beginFieldSafe(fieldName, true))
 		{
-			value = ExpandedNodeId.parseExpandedNodeId(getString("Identifier"));
-
+			try {
+				value = XmlExpandedNodeId.parse(getString("Identifier"));	
+			}catch(UnsupportedEncodingException e) {
+				throw new DecodingException(e.getMessage()+" encoding is not supported but required for decoding");
+			}
 			endField(fieldName);
 		}
 
@@ -1177,6 +1182,8 @@ public class XmlDecoder implements IDecoder {
 
 		return value;
 	}
+	
+	
 
 	/// <summary>
 	/// Reads an ExpandedNodeId array from the stream.
