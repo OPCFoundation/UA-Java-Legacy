@@ -12,14 +12,11 @@
 
 package org.opcfoundation.ua.builtintypes;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.UUID;
 
 import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.core.IdType;
 import org.opcfoundation.ua.core.Identifiers;
-import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.ObjectUtils;
 
 
@@ -62,60 +59,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 	public static boolean isNull(ExpandedNodeId nodeId) {
 		return (nodeId == null) || nodeId.isNullNodeId();
 	}
-	/**
-	 * <p>parseExpandedNodeId.</p>
-	 *
-	 * @param s a {@link java.lang.String} object.
-	 * @return a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
-	 */
-	public static ExpandedNodeId parseExpandedNodeId(String s) {
-		String[] parts = s.split(";");
-		assertExpandedNodeIdParts(s, parts, 1);
-
-		int svrIndex = 0;
-		int nsIndex = 0;
-		NodeId nodeIdValue = NodeId.parseNodeId(parts[parts.length - 1]);
-		ExpandedNodeId returnable = null;
-		for (int i = 0; i < parts.length - 1; i++) {
-			String[] subParts = parts[i].split("=");
-			assertExpandedNodeIdParts(s, subParts, 2);
-			if (subParts[0].equalsIgnoreCase("svr"))
-				svrIndex = Integer.parseInt(subParts[1]);
-			else if (subParts[0].equalsIgnoreCase("ns")) {
-				nsIndex = Integer.parseInt(subParts[1]);
-				returnable = new ExpandedNodeId(
-						UnsignedInteger.valueOf(svrIndex), nsIndex,
-						nodeIdValue.getValue());
-			} else if (subParts[0].equalsIgnoreCase("nsu")) {
-				String ns = subParts[1];
-				returnable = new ExpandedNodeId(
-						UnsignedInteger.valueOf(svrIndex), ns,
-						nodeIdValue.getValue());
-			} else
-				throwExpandedNodeIdCastException(s);
-		}
-		return returnable;
-	}
-	/**
-	 * @param s
-	 * @param parts
-	 * @param n
-	 * @throws ClassCastException
-	 */
-	private static void assertExpandedNodeIdParts(String s, String[] parts, final int n)
-			throws ClassCastException {
-		if (parts.length < n)
-			throwExpandedNodeIdCastException(s);
-	}
-	/**
-	 * @param s
-	 * @throws ClassCastException
-	 */
-	private static void throwExpandedNodeIdCastException(String s)
-			throws ClassCastException {
-		throw new ClassCastException("String is not a valid ExpandedNodeId: "
-				+ s);
-	}
+	
 	final IdType type;
 
 	final int namespaceIndex;
@@ -417,23 +361,5 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 			nsIdx = namespaceIndex;
 		}
 		return NodeId.get(type, nsIdx, value).isNullNodeId();
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		try {
-			String srvPart = !isLocal() ? "srv="+serverIndex+";" : "";
-			String nsPart = namespaceUri!=null ? "nsu="+URLEncoder.encode(namespaceUri, "ISO8859-1")+";" : namespaceIndex>0 ? "ns="+namespaceIndex+";" : "";
-			if (type == IdType.Numeric) return srvPart+nsPart+"i="+value;
-			if (type == IdType.String) return srvPart+nsPart+"s="+value;
-			if (type == IdType.Guid) return srvPart+nsPart+"g="+value;
-			if (type == IdType.Opaque) {
-				if (value==null) return srvPart+nsPart+"b=null";
-				return srvPart+nsPart+"b="+new String( CryptoUtil.base64Encode(((ByteString)value).getValue()) );
-			}
-		} catch (UnsupportedEncodingException e) {
-		}
-		return "error";
 	}
 }
