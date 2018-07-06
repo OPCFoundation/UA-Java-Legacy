@@ -18,7 +18,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -1272,12 +1271,19 @@ public class XmlDecoder implements IDecoder {
 			tmp = new ExtensionObject(absoluteId, (byte[])body);
 		
 		//try decoding, but failing is allowed (might be e.g. unknown Structure)
-        try{
-          Structure decoded = tmp.decode(getEncoderContext());
-          return new ExtensionObject(decoded);
-        }catch(DecodingException e){
-          return tmp;
-        }
+		try {
+			// GH#146, must pass NamespaceTable if set
+			// so that the ExtensionObject created XmlDecoder gets it
+			if (namespaceTable == null) {
+				Structure decoded = tmp.decode(getEncoderContext());
+				return new ExtensionObject(decoded);
+			} else {
+				Structure decoded = tmp.decode(getEncoderContext(), namespaceTable);
+				return new ExtensionObject(decoded);
+			}
+		} catch (DecodingException e) {
+			return tmp;
+		}
 		
 	}
 

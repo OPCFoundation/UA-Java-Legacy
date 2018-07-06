@@ -122,17 +122,15 @@ public class Cert {
 	}
 	
 	/**
-	 * Create Certificate
+	 * Create Certificate from encoded data, if the data contains more than one certificate, only the first one is read.
 	 *
 	 * @param data encoded Certificate
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
-	public Cert(byte[] data) 
-	throws ServiceResultException
-	{
+	public Cert(byte[] data) throws ServiceResultException {
 		try {
-			encodedCertificate = data;
 			certificate = CertificateUtils.decodeX509Certificate(data);
+			encodedCertificate = certificate.getEncoded();
 			encodedCertificateThumbprint = CertificateUtils.createThumbprint(encodedCertificate);
 		} catch (CertificateNotYetValidException ce) {
 			throw new ServiceResultException(StatusCodes.Bad_CertificateTimeInvalid, ce);
@@ -144,18 +142,17 @@ public class Cert {
 			throw new ServiceResultException(StatusCodes.Bad_CertificateInvalid, ce);
 		}
 	}
-	
+
 	/**
-	 * <p>Constructor for Cert.</p>
+	 * Create Certificate from a X509Certificate certificate
 	 *
-	 * @param certificate a {@link java.security.cert.X509Certificate} object.
+	 * @param certificate a X509Certificate certificate
 	 * @throws java.security.cert.CertificateEncodingException if any.
 	 */
-	public Cert(X509Certificate certificate) throws CertificateEncodingException
-	{
-		encodedCertificate = certificate.getEncoded();
+	public Cert(X509Certificate certificate) throws CertificateEncodingException {
 		this.certificate = certificate;
-		encodedCertificateThumbprint = CertificateUtils.createThumbprint(encodedCertificate);
+		this.encodedCertificate = certificate.getEncoded();
+		this.encodedCertificateThumbprint = CertificateUtils.createThumbprint(encodedCertificate);
 	}
 
 	/** {@inheritDoc} */

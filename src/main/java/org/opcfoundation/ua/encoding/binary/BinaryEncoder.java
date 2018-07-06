@@ -2083,11 +2083,12 @@ public class BinaryEncoder implements IEncoder {
 		if (v.getServerPicoseconds()!=null && !v.getServerPicoseconds().equals(UnsignedShort.MIN_VALUE)) mask |= 0x20;
 		
 		putSByte(null, mask);
+		// NOTE!! The order of fields differ from the "order" of the mask, see spec 1.04 Part 6 section 5.2.2.17 for DataValue encoding
 		if ((mask & 1) == 1) putVariant(null, v.getValue());
 		if ((mask & 2) == 2) putStatusCode(null, v.getStatusCode());
 		if ((mask & 4) == 4) putDateTime(null, v.getSourceTimestamp());
-		if ((mask & 8) == 8) putDateTime(null, v.getServerTimestamp());
 		if ((mask & 0x10) == 0x10) putUInt16(null, v.getSourcePicoseconds());
+		if ((mask & 8) == 8) putDateTime(null, v.getServerTimestamp());
 		if ((mask & 0x20) == 0x20) putUInt16(null, v.getServerPicoseconds());
 	}
 	

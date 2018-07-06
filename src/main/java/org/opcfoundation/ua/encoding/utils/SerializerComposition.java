@@ -57,7 +57,6 @@ public class SerializerComposition implements IEncodeableSerializer {
 		serializer.getSupportedClasses(classes);
 		for (Class<? extends IEncodeable> clazz : classes)
 		{
-			assert(classToBinId.get(clazz)==null);
 			ExpandedNodeId binId = serializer.getNodeId(clazz, EncodeType.Binary);
 			classToBinId.put(clazz, binId);
 			ExpandedNodeId xmlId = serializer.getNodeId(clazz, EncodeType.Xml);

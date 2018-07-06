@@ -19,9 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.opcfoundation.ua.common.ServiceFaultException;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.EncoderContext;
@@ -37,6 +34,8 @@ import org.opcfoundation.ua.transport.tcp.impl.TcpMessageType;
 import org.opcfoundation.ua.utils.StackUtils;
 import org.opcfoundation.ua.utils.bytebuffer.IncubationBuffer;
 import org.opcfoundation.ua.utils.bytebuffer.InputStreamReadable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * SecureInputMessageBuilder deciphers and decodes chunks into messages.
