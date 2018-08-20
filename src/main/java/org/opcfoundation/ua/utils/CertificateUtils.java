@@ -71,6 +71,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CertificateUtils {
 
+	public static final int DEFAULT_KEY_SIZE = 2048;
 	private static final int NAME_URI = 6;
 	private static Logger logger = LoggerFactory.getLogger(CertificateUtils.class);
 
@@ -423,7 +424,7 @@ public class CertificateUtils {
 		return renewApplicationInstanceCertificate(commonName, organisation, applicationUri, validityTime, oldKeys, null, hostNames);
 	}
 
-	private static int keySize = 2048;
+	private static int keySize = DEFAULT_KEY_SIZE;
 	private static String certificateSignatureAlgorithm = "SHA256WithRSA";
 
 	/**
