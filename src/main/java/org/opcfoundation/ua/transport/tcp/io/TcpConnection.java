@@ -188,7 +188,7 @@ public class TcpConnection implements IConnection {
 	TcpConnectionLimits limits;
 	TcpQuotas quotas = TcpQuotas.DEFAULT_CLIENT_QUOTA;
 	EnumSet<OpcTcpSettings.Flag> flags = EnumSet.noneOf(OpcTcpSettings.Flag.class);
-	int handshakeTimeout = 60000;
+	int handshakeTimeout = defaultHandshakeTimeout;
 	SecurityConfiguration securityConfiguration;
 
 	/**
@@ -311,6 +311,24 @@ public class TcpConnection implements IConnection {
 	 */
 	public static void setReceiveBufferSize(int receiveBufferSize) {
 		TcpConnection.receiveBufferSize = receiveBufferSize;
+	}
+
+	private static int defaultHandshakeTimeout = 60000;
+	
+	/**
+	 * See {@link #setDefaultHandshakeTimeout(int)}
+	 */
+	public static int getDefaultHandshakeTimeout() {
+		return defaultHandshakeTimeout;
+	}
+
+	/**
+	 * Set the default timeout (in milliseconds) for making the initial connection handshake.
+	 * Default value is 60000. It should be noted that the actual value used by
+	 * the Operating System can be lower, usually the max timeout is around 20 seconds.
+	 */
+	public static void setDefaultHandshakeTimeout(int defaultHandshakeTimeout) {
+		TcpConnection.defaultHandshakeTimeout = defaultHandshakeTimeout;
 	}
 
 	private static int sendBufferSize = 0;
