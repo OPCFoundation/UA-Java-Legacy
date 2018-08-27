@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.opcfoundation.ua</groupId>
     <artifactId>azure-client-publisher-sample</artifactId>
-<version>1.3.345-SNAPSHOT</version>
+<version>1.3.346-SNAPSHOT</version>
     <name>Azure IotHub Client Publisher Sample</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
