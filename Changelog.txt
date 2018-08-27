@@ -1,3 +1,14 @@
+1.3.345
+Fixed (#83): Fixed NPE if equals was called for lazily encoded ExtensionObject
+Fixed (#150): First tcp message "UA Hello" was segmented, added buffering to avoid tcp fragments of one byte
+Fixed (#154): ErrorMessage was sent twice during forming secure channel if there was errors, caused problems vs. Foundation C-stack
+Fixed (#155): BinaryDecoder.getExpandedNodeId failed for standard numeric ids in range 128-255
+
+Fixed: ExpandedNodeId.toString uses 'svr' instead of 'srv' for server index output. This is expected by ExpandedNodeId.parseExpandedNodeId and is also the specified as such in the XML encoding for ExpandedNodeId.
+Improved: logging and allowing override for logic added in 1.3.344 for disabling the DTD processing in XML
+New: static `TcpConnection.setDefaultHandshakeTimeout` which can be used to set a lower timeout default for the initial connection from the default 60000 (milliseconds). Operating System settings influences the maximum possible value, in practice it would see to be at max 20 seconds on e.g. Windows defaults.
+
+
 1.03.342.0
 API Change (#81): Create ByteString class, mapping UA ByteString to ByteString instead of byte[], affects API, request/responses and e.g. NodeId opaque value type. 
 
