@@ -23,13 +23,28 @@ public class XMLFactoryCache {
 	private static final TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance();
 	private static final XMLInputFactory XML_INPUT_FACTORY = XMLInputFactory.newInstance();
 
+	private static boolean ignoreErrorsOnDefaultInitialization = false;
+
+	/**
+	 * Set this to true to suppress error logs if DTD processing cannot be disabled (CVE-2018-12585). 
+	 * This should be only used if custom XML parser framework is in use and the equivalent of default
+	 * initialization has been done to the static factories available.
+	 * 
+	 * @see <a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet#Java">https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet#Java</a>
+	 * 
+	 */
+	public static void setIgnoreErrorsOnDefaultInitialization(
+			boolean ignoreErrorsOnDefaultInitialization) {
+		XMLFactoryCache.ignoreErrorsOnDefaultInitialization = ignoreErrorsOnDefaultInitialization;
+	}
+
 	static{
-		//Disable DTD processing
-		
-		XML_INPUT_FACTORY.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-		XML_INPUT_FACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
-		
+		// Disable DTD processing - CVE-2018-12585
+		// Based on https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet#Java
 		try {
+			XML_INPUT_FACTORY.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+			XML_INPUT_FACTORY.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
+			
 			String dtd = (String) XMLConstants.class.getDeclaredField("ACCESS_EXTERNAL_DTD").get(null);
 			String schema = (String) XMLConstants.class.getDeclaredField("ACCESS_EXTERNAL_SCHEMA").get(null);
 			String stylesheet = (String) XMLConstants.class.getDeclaredField("ACCESS_EXTERNAL_STYLESHEET").get(null);
@@ -47,19 +62,32 @@ public class XMLFactoryCache {
 			DOCUMENT_BUILDER_FACTORY.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 			DOCUMENT_BUILDER_FACTORY.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 			
-			DOCUMENT_BUILDER_FACTORY.setFeature("http://xerces.apache.org/xerces-j/features.html#external-general-entities", false);
-			DOCUMENT_BUILDER_FACTORY.setFeature("http://xerces.apache.org/xerces2-j/features.html#external-general-entities", false);
-			DOCUMENT_BUILDER_FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
-			
-			DOCUMENT_BUILDER_FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-			DOCUMENT_BUILDER_FACTORY.setFeature("http://xerces.apache.org/xerces-j/features.html#external-parameter-entities", false);
-			DOCUMENT_BUILDER_FACTORY.setFeature("http://xerces.apache.org/xerces2-j/features.html#external-parameter-entities", false);
+			// try in order JDK 7+, Xerces 2, Xerces 1
+			try{
+				DOCUMENT_BUILDER_FACTORY.setFeature("http://xml.org/sax/features/external-general-entities", false);
+			}catch(Exception e1){
+				try{
+					DOCUMENT_BUILDER_FACTORY.setFeature("http://xerces.apache.org/xerces2-j/features.html#external-general-entities", false);
+				}catch(Exception e2){
+					DOCUMENT_BUILDER_FACTORY.setFeature("http://xerces.apache.org/xerces-j/features.html#external-general-entities", false);
+				}
+			}
+			try{
+				DOCUMENT_BUILDER_FACTORY.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+			}catch(Exception e1){
+				try{
+					DOCUMENT_BUILDER_FACTORY.setFeature("http://xerces.apache.org/xerces2-j/features.html#external-parameter-entities", false);
+				}catch(Exception e2){
+					DOCUMENT_BUILDER_FACTORY.setFeature("http://xerces.apache.org/xerces-j/features.html#external-parameter-entities", false);
+				}
+			}
 			
 			DOCUMENT_BUILDER_FACTORY.setXIncludeAware(false);
 			DOCUMENT_BUILDER_FACTORY.setExpandEntityReferences(false);
-			
 		} catch (Exception e) {
-			logger.warn("Cannot initialize XML factories to ignore DTD processing, please update java to newer version");
+			if(!ignoreErrorsOnDefaultInitialization){
+				logger.warn("Cannot initialize XML factories to ignore DTD processing (CVE-2018-12585), please update java to newer version or configure manually if custom XML parser framework is in use");
+			}
 		}
 
 	}

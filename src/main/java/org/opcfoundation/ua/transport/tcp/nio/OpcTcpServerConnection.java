@@ -192,12 +192,7 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 
 				if (chunkSize > ctx.maxRecvChunkSize)
 				{
-					if (!hasError())
-						try {
-							sendError(new ErrorMessage(StatusCodes.Bad_CommunicationError, "Chunk size ("+chunkSize+") exceeded maximum ("+ctx.maxRecvChunkSize+")"));
-						} catch (Exception e) {
-						}
-					setError(StatusCodes.Bad_TcpMessageTooLarge);
+					setError(new ServiceResultException(StatusCodes.Bad_TcpMessageTooLarge, "Chunk size ("+chunkSize+") exceeded maximum ("+ctx.maxRecvChunkSize+")"));
 					if (secureMessageBuilder!=null)
 						secureMessageBuilder.close();
 					return;
@@ -216,11 +211,6 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 						}
 					} catch (ServiceResultException se) {
 						logger.info("Error in handleChunk", se);
-						try {
-							sendError(new ErrorMessage(se.getStatusCode(), se.getMessage()));
-						} catch (ServiceResultException e1) {
-							logger.warn("Could not send ErrorMessage:",e1);
-						}
 						setError(se);
 					}
 					// Wait for next chunk header
@@ -263,12 +253,6 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 						handleOpenSecureChannelRequest(sender);
 					}
 				} catch (ServiceResultException e) {
-					// Handle message failed. Disconnect.
-					//				logger.logger(Level.INFO, e.getMessage());
-					try {
-						sendError(new ErrorMessage(e.getStatusCode(), e.getMessage()));
-					} catch (ServiceResultException e1) {
-					}
 					setError(e);
 				}
 			}};

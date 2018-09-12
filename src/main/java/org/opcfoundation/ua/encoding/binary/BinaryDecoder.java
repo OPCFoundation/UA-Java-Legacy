@@ -706,13 +706,13 @@ public class BinaryDecoder implements IDecoder {
 			if (encoding == NodeIdEncoding.TwoByte)
 			{
 				namespaceIndex = 0;
-				id = new UnsignedInteger( in.get() );
+				id = UnsignedInteger.getFromBits( in.get() & 0xff );
 			}
 
 			if (encoding == NodeIdEncoding.FourByte)
 			{
 				namespaceIndex = in.get() & 0xff;
-				id = new UnsignedInteger( in.getShort() & 0xffff );
+				id = UnsignedInteger.getFromBits( in.getShort() & 0xffff);
 			}
 
 			if (encoding == NodeIdEncoding.Numeric)

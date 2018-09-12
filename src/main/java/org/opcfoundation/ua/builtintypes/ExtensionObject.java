@@ -27,6 +27,7 @@ import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
 import org.opcfoundation.ua.encoding.binary.EncoderCalc;
 import org.opcfoundation.ua.encoding.binary.IEncodeableSerializer;
 import org.opcfoundation.ua.encoding.xml.XmlDecoder;
+import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.utils.StackUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -380,7 +381,12 @@ public class ExtensionObject {
 		if (!(obj instanceof ExtensionObject))
 			return false;
 		ExtensionObject other = (ExtensionObject) obj;
-		if (!other.typeId.equals(typeId)) return false;
+		
+		//typeId can be null if lazy-encoding
+		//this will return true if both are null
+		if(!ObjectUtils.equals(typeId, other.typeId)) {
+			return false;
+		}
 		
 		if (object==null) {
 			return other.object==null;

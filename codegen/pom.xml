@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>opc-ua-stack-codegen</artifactId>
-  <version>1.03.342.0-SNAPSHOT</version>
+  <version>1.3.346-SNAPSHOT</version>
   <groupId>org.opcfoundation.ua</groupId>
   <build>
   	<plugins>
