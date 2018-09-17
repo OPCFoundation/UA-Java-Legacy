@@ -326,6 +326,9 @@ public class BinaryDecoder implements IDecoder {
 		if(clazz.equals(BigDecimal.class)) {
 			return (T) getDecimal(fieldName);
 		}
+		if(clazz.equals(BigDecimal[].class)) {
+			return (T) getDecimalArray(fieldName);
+		}
 		
 		throw new DecodingException("Cannot decode "+clazz);
 	}
@@ -1693,6 +1696,20 @@ public class BinaryDecoder implements IDecoder {
 		}
 	}
 
+	private BigDecimal[] getDecimalArray(String fieldName) throws DecodingException{
+		try {
+			int len = in.getInt();
+			if (len==-1) return null;
+			assertArrayLength(len, 3);
+			BigDecimal[] result = new BigDecimal[len];
+			for (int i=0; i<len; i++)
+				result[i] = getDecimal(null);
+			return result;
+		} catch (IOException e) {
+			throw toDecodingException(e);
+		}
+	}
+	
 	/**
 	 * <p>remaining.</p>
 	 *

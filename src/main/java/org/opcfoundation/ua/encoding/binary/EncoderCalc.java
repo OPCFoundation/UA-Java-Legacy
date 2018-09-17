@@ -1693,6 +1693,10 @@ public class EncoderCalc implements IEncoder {
 			put(fieldName, o, BigDecimal.class);
 			return;
 		}
+		if(o instanceof BigDecimal[]) {
+			put(fieldName, o, BigDecimal[].class);
+			return;
+		}
 		EncoderUtils.put(this, fieldName, o);
 	}
 	
@@ -1709,7 +1713,23 @@ public class EncoderCalc implements IEncoder {
 			putDecimal(fieldName, (BigDecimal) o);
 			return;
 		}
+		if(BigDecimal[].class.isAssignableFrom(clazz)) {
+			putDecimalArray(fieldName, (BigDecimal[]) o);
+			return;
+		}
 		EncoderUtils.put(this, fieldName, o, clazz);
+	}
+	
+	private void putDecimalArray(String fieldName, BigDecimal[] bds) throws EncodingException{
+		if (bds==null) {
+			length += 4;
+			return;
+		}
+		
+		length += 4;
+		for (int i=0; i<bds.length; i++) {
+			putDecimal(null, bds[i]);
+		}
 	}
 
 	private void putDecimal(String fieldName, BigDecimal bd) throws EncodingException{

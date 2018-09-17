@@ -252,6 +252,21 @@ public class BinaryEncoder implements IEncoder {
 		putExtensionObject(fieldName, eo);
 	}
 	
+	private void putDecimalArray(String fieldName, BigDecimal[] bds) throws EncodingException{
+		try {
+			if (bds==null) {
+				out.putInt(-1);
+				return;
+			}
+		
+			assertArrayLength(bds.length);
+			out.putInt(bds.length);
+			for (BigDecimal o : bds)
+				putDecimal(null, o);
+		} catch (IOException e) {
+			throw toEncodingException(e);
+		}
+	}
 	
 	/**
 	 * Assert array length is within restrictions
@@ -2600,6 +2615,10 @@ public class BinaryEncoder implements IEncoder {
 			put(fieldName, o, BigDecimal.class);
 			return;
 		}
+		if(o instanceof BigDecimal[]) {
+			put(fieldName, o, BigDecimal[].class);
+			return;
+		}
 		EncoderUtils.put(this, fieldName, o);
 	}
 
@@ -2610,7 +2629,10 @@ public class BinaryEncoder implements IEncoder {
 			putDecimal(fieldName, (BigDecimal) o);
 			return;
 		}
-		
+		if(BigDecimal[].class.isAssignableFrom(clazz)) {
+			putDecimalArray(fieldName, (BigDecimal[]) o);
+			return;
+		}		
 		EncoderUtils.put(this, fieldName, o, clazz);
 	}
 

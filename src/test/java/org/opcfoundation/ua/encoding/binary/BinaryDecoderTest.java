@@ -1,9 +1,9 @@
 package org.opcfoundation.ua.encoding.binary;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import org.junit.Test;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
@@ -133,6 +133,32 @@ public class BinaryDecoderTest {
 		BigDecimal bd = sut.get(null, BigDecimal.class);
 		BigDecimal expected = BigDecimal.valueOf(value, scale);
 		assertEquals(expected, bd);
+	}
+	
+	@Test
+	public void decimalArrayDecoding() throws Exception {
+		long value = 1518632738243L;
+		ExpandedNodeId id = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());
+		ArrayList<ExtensionObject> eos = new ArrayList<ExtensionObject>();
+		ArrayList<BigDecimal> expecteds = new ArrayList<BigDecimal>();
+		for(short i=0;i<10;i++) {
+			eos.add(new ExtensionObject(id, createDecimalAsEncodedBytes(value, i)));
+			expecteds.add(BigDecimal.valueOf(value, i));
+		}
+		ExtensionObject[] eosarr = eos.toArray(new ExtensionObject[0]);
+		byte[] datainput = binaryEncode(eosarr);
+		
+		//Decoding
+		BinaryDecoder sut = new BinaryDecoder(datainput);
+		sut.setEncoderContext(EncoderContext.getDefaultInstance());
+		BigDecimal[] output = sut.get(null, BigDecimal[].class);
+		assertArrayEquals(expecteds.toArray(), output);
+	}
+	
+	private byte[] createDecimalAsEncodedBytes(long valueraw, short scale) throws Exception{
+		byte[] scalebytes = binaryEncode(scale);
+		byte[] valuebytes = binaryEncode(valueraw);
+		return EncoderUtils.concat(scalebytes, valuebytes);
 	}
 
 	

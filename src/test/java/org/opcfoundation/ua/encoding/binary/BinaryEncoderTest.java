@@ -1,8 +1,10 @@
 package org.opcfoundation.ua.encoding.binary;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import org.junit.Test;
 import org.opcfoundation.ua.builtintypes.DataValue;
@@ -52,6 +54,23 @@ public class BinaryEncoderTest {
 		// Java BigInteger only has enough bytes needed, it is less than 8 in this case vs. Int64
 		byte[] expected = CryptoUtil.hexToBytes("003201080000000400c39d90956101");
 		assertArrayEquals(expected, data);
+	}
+	
+	@Test
+	public void decimalArrayEncoding() throws Exception {
+		long value = 1518632738243L;
+		ArrayList<BigDecimal> data = new ArrayList<BigDecimal>();
+		for(short i=0;i<10;i++) {
+			data.add(BigDecimal.valueOf(value, i));
+		}
+		BigDecimal[] datain = data.toArray(new BigDecimal[0]);
+		byte[] dataout = binaryEncode(datain);
+		
+		//validate by decoding
+		BinaryDecoder dec = new BinaryDecoder(dataout);
+		dec.setEncoderContext(EncoderContext.getDefaultInstance());
+		BigDecimal[] decoded = dec.get(null, BigDecimal[].class);
+		assertArrayEquals(data.toArray(), decoded);
 	}
 	
 	private byte[] binaryEncode(Object o) throws Exception{
