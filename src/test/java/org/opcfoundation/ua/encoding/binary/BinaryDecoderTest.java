@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.NodeId;
+import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.encoding.EncoderContext;
@@ -133,6 +134,45 @@ public class BinaryDecoderTest {
 		BigDecimal bd = sut.get(null, BigDecimal.class);
 		BigDecimal expected = BigDecimal.valueOf(value, scale);
 		assertEquals(expected, bd);
+	}
+	
+	@Test
+	public void decimalWithinVariantDecoding() throws Exception {
+		long value = 1518632738243L;
+		short scale = 5;
+		BigDecimal expected = BigDecimal.valueOf(value, scale);
+		ExpandedNodeId id = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());
+		ExtensionObject eo = new ExtensionObject(id, createDecimalAsEncodedBytes(value, scale));
+		Variant veo = new Variant(eo);
+		byte[] datainput = binaryEncode(veo);
+		
+		//Decoding
+		BinaryDecoder sut = new BinaryDecoder(datainput);
+		sut.setEncoderContext(EncoderContext.getDefaultInstance());
+		Variant v = sut.get(null, Variant.class);
+		BigDecimal actual = (BigDecimal) v.getValue();
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void decimalArrayWithinVariantDecoding() throws Exception {
+		long value = 1518632738243L;
+		ExpandedNodeId id = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());
+		ArrayList<ExtensionObject> eos = new ArrayList<ExtensionObject>();
+		ArrayList<BigDecimal> expecteds = new ArrayList<BigDecimal>();
+		for(short i=0;i<10;i++) {
+			eos.add((new ExtensionObject(id, createDecimalAsEncodedBytes(value, i))));
+			expecteds.add(BigDecimal.valueOf(value, i));
+		}
+		ExtensionObject[] eoarr = eos.toArray(new ExtensionObject[0]);
+		byte[] datainput = binaryEncode(new Variant(eoarr));
+		
+		//Decoding
+		BinaryDecoder sut = new BinaryDecoder(datainput);
+		sut.setEncoderContext(EncoderContext.getDefaultInstance());
+		Variant output = sut.get(null, Variant.class);
+		Variant expected = new Variant(expecteds.toArray(new BigDecimal[0]));
+		assertEquals(expected, output);
 	}
 	
 	@Test

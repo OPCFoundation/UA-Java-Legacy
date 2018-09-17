@@ -1,7 +1,6 @@
 package org.opcfoundation.ua.encoding.binary;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -57,6 +56,21 @@ public class BinaryEncoderTest {
 	}
 	
 	@Test
+	public void decimalEncodingWithinVariant() throws Exception {
+		long value = 1518632738243L; //random number
+		short scale = 4;
+		BigDecimal bd = BigDecimal.valueOf(value, scale);
+		Variant v = new Variant(bd);
+		byte[] data = binaryEncode(v);
+		
+		//Verify via decoding
+		BinaryDecoder dec = new BinaryDecoder(data);
+		dec.setEncoderContext(EncoderContext.getDefaultInstance());
+		Variant actual = dec.get(null, Variant.class);
+		assertEquals(v, actual);
+	}
+	
+	@Test
 	public void decimalArrayEncoding() throws Exception {
 		long value = 1518632738243L;
 		ArrayList<BigDecimal> data = new ArrayList<BigDecimal>();
@@ -71,6 +85,25 @@ public class BinaryEncoderTest {
 		dec.setEncoderContext(EncoderContext.getDefaultInstance());
 		BigDecimal[] decoded = dec.get(null, BigDecimal[].class);
 		assertArrayEquals(data.toArray(), decoded);
+	}
+	
+	@Test
+	public void decimalArrayWithinVariantEncoding() throws Exception {
+		long value = 1518632738243L;
+		ArrayList<BigDecimal> data = new ArrayList<BigDecimal>();
+		for(short i=0;i<10;i++) {
+			data.add(BigDecimal.valueOf(value, i));
+		}
+		BigDecimal[] decimals = data.toArray(new BigDecimal[0]);
+		Variant expected = new Variant(decimals);
+		
+		byte[] dataout = binaryEncode(expected);
+		
+		//validate by decoding
+		BinaryDecoder dec = new BinaryDecoder(dataout);
+		dec.setEncoderContext(EncoderContext.getDefaultInstance());
+		Variant actual = dec.get(null, Variant.class);
+		assertEquals(expected, actual);
 	}
 	
 	private byte[] binaryEncode(Object o) throws Exception{

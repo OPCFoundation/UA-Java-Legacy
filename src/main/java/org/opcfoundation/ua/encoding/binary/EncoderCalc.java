@@ -15,8 +15,6 @@ package org.opcfoundation.ua.encoding.binary;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
@@ -40,10 +38,8 @@ import org.opcfoundation.ua.builtintypes.UnsignedLong;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.builtintypes.XmlElement;
-import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.IdType;
-import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.encoding.EncodeType;
 import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.encoding.EncodingException;
@@ -1285,16 +1281,26 @@ public class EncoderCalc implements IEncoder {
 		}		
 
 		Class<?> compositeClass			= v.getCompositeClass();
-		int builtinType;
-		if (Structure.class.isAssignableFrom(compositeClass)
-				|| Enumeration.class.isAssignableFrom(compositeClass))
+		final int builtinType;
+		final boolean isDecimal;
+		if(BigDecimal.class.isAssignableFrom(compositeClass)) {
 			builtinType = 22;
-		else
-			builtinType = BuiltinsMap.ID_MAP.get(compositeClass);
+			isDecimal = true;
+		}else {
+			isDecimal = false;
+			if (Structure.class.isAssignableFrom(compositeClass)
+					|| Enumeration.class.isAssignableFrom(compositeClass))
+				builtinType = 22;
+			else
+				builtinType = BuiltinsMap.ID_MAP.get(compositeClass);
+		}
 		
 		// Scalar
 		if (!v.isArray()) {
 			putSByte(null, builtinType);
+			if(isDecimal) {
+				o = EncoderUtils.decimalToExtensionObject((BigDecimal) o);
+			}
 			putScalar(null, builtinType, o);
 			return;
 		} 
@@ -1303,6 +1309,9 @@ public class EncoderCalc implements IEncoder {
 		int dim = v.getDimension();
 		if (dim==1) {
 			putSByte(null,  (builtinType | 0x80));
+			if(isDecimal) {
+				o = EncoderUtils.decimalArraytoExtensionObjectArray((BigDecimal[]) o);
+			}
 			putArray(null, builtinType, o);
 			return;
 		}
@@ -1317,10 +1326,14 @@ public class EncoderCalc implements IEncoder {
 			length += 4;
 			if (scalarLen > 0) { 
 				length += scalarLen * len;
-			} else 
-			{
-				while (i.hasNext()) 
+			} else {
+				while (i.hasNext()) {
+					Object elem = i.next();
+					if(isDecimal) {
+						elem = EncoderUtils.decimalToExtensionObject((BigDecimal) elem);
+					}
 					putScalar(null, builtinType, i.next());
+				}
 			}
 			putInt32Array(null, dims);
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -1733,26 +1746,7 @@ public class EncoderCalc implements IEncoder {
 	}
 
 	private void putDecimal(String fieldName, BigDecimal bd) throws EncodingException{
-		int scaleInt = bd.scale();
-		if(scaleInt > Short.MAX_VALUE) {
-			throw new EncodingException("Decimal scale overflow Short max value: "+scaleInt);
-		}
-		if(scaleInt < Short.MIN_VALUE) {
-			throw new EncodingException("Decimal scale underflow Short min value: "+scaleInt);
-		}
-		short scale = (short)scaleInt;
-		ByteBuffer bb = ByteBuffer.allocate(2);
-		bb.order(ByteOrder.LITTLE_ENDIAN);
-		bb.putShort(scale);
-		bb.rewind();
-		byte[] scalebytes = bb.array();
-		
-		//NOTE BigInteger uses big-endian, and UA Decimal encoding uses little-endian
-		byte[] valuebytes = EncoderUtils.reverse(bd.unscaledValue().toByteArray());
-		byte[] combined = EncoderUtils.concat(scalebytes, valuebytes);
-		
-		ExpandedNodeId id = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());
-		ExtensionObject eo = new ExtensionObject(id, combined);
+		ExtensionObject eo = EncoderUtils.decimalToExtensionObject(bd);
 		putExtensionObject(fieldName, eo);
 	}
 	

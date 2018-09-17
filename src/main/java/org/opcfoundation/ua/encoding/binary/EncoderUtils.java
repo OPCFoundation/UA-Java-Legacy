@@ -12,6 +12,9 @@
 package org.opcfoundation.ua.encoding.binary;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.UUID;
 
 import org.opcfoundation.ua.builtintypes.ByteString;
@@ -32,6 +35,8 @@ import org.opcfoundation.ua.builtintypes.UnsignedLong;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.builtintypes.XmlElement;
+import org.opcfoundation.ua.common.NamespaceTable;
+import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.IEncoder;
@@ -252,4 +257,38 @@ public class EncoderUtils {
 		r.write(second, 0, second.length);
 		return r.toByteArray();
 	}
+	
+	static ExtensionObject[] decimalArraytoExtensionObjectArray(BigDecimal[] bds) throws EncodingException{
+		if(bds == null) {
+			return null;
+		}
+		ExtensionObject[] r = new ExtensionObject[bds.length];
+		for(int i = 0; i<bds.length;i++) {
+			r[i] = decimalToExtensionObject(bds[i]);
+		}
+		return r;
+	}
+	
+	static ExtensionObject decimalToExtensionObject(BigDecimal bd) throws EncodingException {
+		int scaleInt = bd.scale();
+		if(scaleInt > Short.MAX_VALUE) {
+			throw new EncodingException("Decimal scale overflow Short max value: "+scaleInt);
+		}
+		if(scaleInt < Short.MIN_VALUE) {
+			throw new EncodingException("Decimal scale underflow Short min value: "+scaleInt);
+		}
+		short scale = (short)scaleInt;
+		ByteBuffer bb = ByteBuffer.allocate(2);
+		bb.order(ByteOrder.LITTLE_ENDIAN);
+		bb.putShort(scale);
+		byte[] scalebytes = bb.array();
+		
+		//NOTE BigInteger uses big-endian, and UA Decimal encoding uses little-endian
+		byte[] valuebytes = EncoderUtils.reverse(bd.unscaledValue().toByteArray());
+		byte[] combined = EncoderUtils.concat(scalebytes, valuebytes);
+		
+		ExpandedNodeId id = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());
+		return new ExtensionObject(id, combined);
+	}
+	
 }

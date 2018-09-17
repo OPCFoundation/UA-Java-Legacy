@@ -47,6 +47,7 @@ import org.opcfoundation.ua.builtintypes.UnsignedLong;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.builtintypes.XmlElement;
+import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.DecodingException;
 import org.opcfoundation.ua.encoding.EncoderContext;
@@ -1482,38 +1483,57 @@ public class BinaryDecoder implements IDecoder {
 					throw new DecodingException("The ArrayDimensions do not match the ArrayLength in total size");
 				}
 			}
-
 			
-			if (value instanceof ExtensionObject) {
-				ExtensionObject extobj = (ExtensionObject) value;
+			//Handle Decimals
+			if(value instanceof ExtensionObject && isDecimal((ExtensionObject)value)) {
 				try {
-					value = extobj.decode(ctx);
-				} catch (DecodingException e) {
-					logger.info("Failed to decode ExtensionObject: " + e);
-					value = extobj;
+					value = bytesToDecimal((byte[]) ((ExtensionObject)value).getObject());
+				}catch(ClassCastException e) {
+					throw new DecodingException("Did not get an ExtensionObject with ByteString data for Decimal type", e);
+				}
+			}else {
+				if (value instanceof ExtensionObject) {
+					ExtensionObject extobj = (ExtensionObject) value;
+					try {
+						value = extobj.decode(ctx);
+					} catch (DecodingException e) {
+						value = extobj;
+					}
 				}
 			}
 
-			if (isArray)
-				try {
-					if (multiDimension)
-						// Build multi-dimension
-						value = MultiDimensionArrayUtils.demuxArray(value, dims);
-					if (value instanceof ExtensionObject[]) {
-						ExtensionObject[] values = (ExtensionObject[]) value;
-						try {
-							value = ctx.decode(values);
-						} catch (Exception e) {
-							value = values;
-						}
-					}
-				} catch (IllegalArgumentException e) {
-					throw new DecodingException("The length of ArrayDimensions-field does not match Value-field");
+			if (isArray) {
+				//Handle Decimals
+				if (value instanceof ExtensionObject[]) {
+					value = tryDecimalConversion((ExtensionObject[]) value);
 				}
+				//If still ExtensionObject[], it was not Decimals
+				if (value instanceof ExtensionObject[]) {
+					ExtensionObject[] values = (ExtensionObject[]) value;
+					try {
+						value = ctx.decode(values);
+					} catch (Exception e) {
+						value = values;
+					}
+				}
+				
+				if(multiDimension) {
+					try {
+						// Build multidimensional array
+						value = MultiDimensionArrayUtils.demuxArray(value, dims);
+					} catch (IllegalArgumentException e) {
+						throw new DecodingException("The length of ArrayDimensions-field does not match Value-field");
+					}
+				}
+			}
 			return new Variant( value );
 		} catch (IOException e) {
 			throw toDecodingException(e);
 		}
+	}
+
+	private boolean isDecimal(ExtensionObject value) {
+		return ctx.getNamespaceTable().nodeIdEquals(Identifiers.Decimal, value.getTypeId());
 	}
 
 	/** {@inheritDoc} */
@@ -1676,24 +1696,42 @@ public class BinaryDecoder implements IDecoder {
 		ExtensionObject eo = getExtensionObject(fieldName);
 		try {
 			byte[] data = (byte[]) eo.getObject();
-			
-			//scale is first 2 bytes from the data as little-endian
-			ByteBuffer tmp = ByteBuffer.allocate(2);
-			tmp.order(ByteOrder.LITTLE_ENDIAN);
-			tmp.put(data[0]);
-			tmp.put(data[1]);
-			tmp.rewind();
-			short scale = tmp.getShort();
-			
-			// value is rest of the bytes, as little-endian
-			// NOTE! BigInteger wants big-endian input
-			byte[] valueData = Arrays.copyOfRange(data, 2, data.length);
-			valueData = EncoderUtils.reverse(valueData);
-			BigInteger value = new BigInteger(valueData);
-			return new BigDecimal(value, scale);
+			return bytesToDecimal(data);
 		}catch(ClassCastException e) {
 			throw new DecodingException("Did not get an ExtensionObject with ByteString data for Decimal type", e);
 		}
+	}
+	
+	private Object tryDecimalConversion(ExtensionObject[] eos) {
+		//if all inputted are Decimals, convert, otherwise ignore
+		BigDecimal[] r = new BigDecimal[eos.length];
+		for(int i = 0; i<eos.length;i++) {
+			ExtensionObject elem = eos[i];
+			if(isDecimal(elem)) {
+				r[i] = bytesToDecimal((byte[]) elem.getObject());
+			}else {
+				//at least one non-decimal
+				return eos;
+			}
+		}
+		return r;
+	}
+	
+	private BigDecimal bytesToDecimal(byte[] data) {
+		//scale is first 2 bytes from the data as little-endian
+		ByteBuffer tmp = ByteBuffer.allocate(2);
+		tmp.order(ByteOrder.LITTLE_ENDIAN);
+		tmp.put(data[0]);
+		tmp.put(data[1]);
+		tmp.rewind();
+		short scale = tmp.getShort();
+		
+		// value is rest of the bytes, as little-endian
+		// NOTE! BigInteger wants big-endian input
+		byte[] valueData = Arrays.copyOfRange(data, 2, data.length);
+		valueData = EncoderUtils.reverse(valueData);
+		BigInteger value = new BigInteger(valueData);
+		return new BigDecimal(value, scale);
 	}
 
 	private BigDecimal[] getDecimalArray(String fieldName) throws DecodingException{

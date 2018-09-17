@@ -13,6 +13,7 @@
 package org.opcfoundation.ua.builtintypes;
 
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -217,7 +218,9 @@ public class Variant {
 	    }
 		if (Structure.class.isAssignableFrom(clazz))
 			return;
-
+		if(BigDecimal.class.isAssignableFrom(clazz)) {
+			return;
+		}
 		
 		throw new IllegalArgumentException("Variant cannot be "
 				+ clazz.getCanonicalName());
