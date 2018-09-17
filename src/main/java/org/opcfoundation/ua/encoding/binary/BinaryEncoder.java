@@ -16,6 +16,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
@@ -28,6 +29,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.opcfoundation.ua.builtintypes.BuiltinsMap;
 import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DataValue;
@@ -47,8 +49,10 @@ import org.opcfoundation.ua.builtintypes.UnsignedLong;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.builtintypes.XmlElement;
+import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.IdType;
+import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.EncodeType;
 import org.opcfoundation.ua.encoding.EncoderContext;
@@ -223,6 +227,29 @@ public class BinaryEncoder implements IEncoder {
 		if (v!=null) return;
 		if (mode == EncoderMode.Strict)
 			throw new EncodingException("Cannot encode null value");
+	}
+	
+	private void putDecimal(String fieldName, BigDecimal bd) throws EncodingException{
+		int scaleInt = bd.scale();
+		if(scaleInt > Short.MAX_VALUE) {
+			throw new EncodingException("Decimal scale overflow Short max value: "+scaleInt);
+		}
+		if(scaleInt < Short.MIN_VALUE) {
+			throw new EncodingException("Decimal scale underflow Short min value: "+scaleInt);
+		}
+		short scale = (short)scaleInt;
+		ByteBuffer bb = ByteBuffer.allocate(2);
+		bb.order(ByteOrder.LITTLE_ENDIAN);
+		bb.putShort(scale);
+		byte[] scalebytes = bb.array();
+		
+		//NOTE BigInteger uses big-endian, and UA Decimal encoding uses little-endian
+		byte[] valuebytes = EncoderUtils.reverse(bd.unscaledValue().toByteArray());
+		byte[] combined = EncoderUtils.concat(scalebytes, valuebytes);
+		
+		ExpandedNodeId id = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());
+		ExtensionObject eo = new ExtensionObject(id, combined);
+		putExtensionObject(fieldName, eo);
 	}
 	
 	
@@ -2569,12 +2596,21 @@ public class BinaryEncoder implements IEncoder {
 	/** {@inheritDoc} */
 	@Override
 	public void put(String fieldName, Object o) throws EncodingException {
+		if(o instanceof BigDecimal) {
+			put(fieldName, o, BigDecimal.class);
+			return;
+		}
 		EncoderUtils.put(this, fieldName, o);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void put(String fieldName, Object o, Class<?> clazz) throws EncodingException {
+		if(BigDecimal.class.isAssignableFrom(clazz)) {
+			putDecimal(fieldName, (BigDecimal) o);
+			return;
+		}
+		
 		EncoderUtils.put(this, fieldName, o, clazz);
 	}
 

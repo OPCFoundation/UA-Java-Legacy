@@ -14,6 +14,9 @@ package org.opcfoundation.ua.encoding.binary;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
@@ -37,8 +40,10 @@ import org.opcfoundation.ua.builtintypes.UnsignedLong;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.builtintypes.XmlElement;
+import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.IdType;
+import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.encoding.EncodeType;
 import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.encoding.EncodingException;
@@ -1684,6 +1689,10 @@ public class EncoderCalc implements IEncoder {
 	/** {@inheritDoc} */
 	@Override
 	public void put(String fieldName, Object o) throws EncodingException {
+		if(o instanceof BigDecimal) {
+			put(fieldName, o, BigDecimal.class);
+			return;
+		}
 		EncoderUtils.put(this, fieldName, o);
 	}
 	
@@ -1696,9 +1705,36 @@ public class EncoderCalc implements IEncoder {
 	/** {@inheritDoc} */
 	@Override
 	public void put(String fieldName, Object o, Class<?> clazz) throws EncodingException {
+		if(BigDecimal.class.isAssignableFrom(clazz)) {
+			putDecimal(fieldName, (BigDecimal) o);
+			return;
+		}
 		EncoderUtils.put(this, fieldName, o, clazz);
-		
 	}
 
+	private void putDecimal(String fieldName, BigDecimal bd) throws EncodingException{
+		int scaleInt = bd.scale();
+		if(scaleInt > Short.MAX_VALUE) {
+			throw new EncodingException("Decimal scale overflow Short max value: "+scaleInt);
+		}
+		if(scaleInt < Short.MIN_VALUE) {
+			throw new EncodingException("Decimal scale underflow Short min value: "+scaleInt);
+		}
+		short scale = (short)scaleInt;
+		ByteBuffer bb = ByteBuffer.allocate(2);
+		bb.order(ByteOrder.LITTLE_ENDIAN);
+		bb.putShort(scale);
+		bb.rewind();
+		byte[] scalebytes = bb.array();
+		
+		//NOTE BigInteger uses big-endian, and UA Decimal encoding uses little-endian
+		byte[] valuebytes = EncoderUtils.reverse(bd.unscaledValue().toByteArray());
+		byte[] combined = EncoderUtils.concat(scalebytes, valuebytes);
+		
+		ExpandedNodeId id = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());
+		ExtensionObject eo = new ExtensionObject(id, combined);
+		putExtensionObject(fieldName, eo);
+	}
+	
 	
 }

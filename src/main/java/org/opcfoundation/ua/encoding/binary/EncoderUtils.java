@@ -11,6 +11,7 @@
 */
 package org.opcfoundation.ua.encoding.binary;
 
+import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
 import org.opcfoundation.ua.builtintypes.ByteString;
@@ -232,4 +233,23 @@ public class EncoderUtils {
 		}
 		else throw new EncodingException("Cannot encode "+o);
 	}	
+	
+	static byte[] reverse(byte[] data) {
+		if(data == null || data.length == 0) {
+			return data;
+		}
+		
+		byte[] r = new byte[data.length];
+		for(int i = 0;i<data.length;i++) {
+			r[i] = data[data.length-1-i];
+		}
+		return r;
+	}
+	
+	static byte[] concat(byte[] first, byte[] second) {
+		ByteArrayOutputStream r = new ByteArrayOutputStream();
+		r.write(first, 0, first.length);
+		r.write(second, 0, second.length);
+		return r.toByteArray();
+	}
 }

@@ -1,6 +1,8 @@
 package org.opcfoundation.ua.encoding.binary;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
+import java.math.BigDecimal;
 
 import org.junit.Test;
 import org.opcfoundation.ua.builtintypes.DataValue;
@@ -8,6 +10,8 @@ import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
+import org.opcfoundation.ua.encoding.EncoderContext;
+import org.opcfoundation.ua.utils.CryptoUtil;
 
 public class BinaryEncoderTest {
 
@@ -36,7 +40,30 @@ public class BinaryEncoderTest {
 		//System.out.println(dv);
 		//System.out.println(dv2);
 		assertEquals(dv, dv2);
+	}
+	
+	@Test
+	public void decimalEncoding() throws Exception {
+		long value = 1518632738243L; //random number
+		short scale = 4;
+		BigDecimal bd = BigDecimal.valueOf(value, scale);
+		byte[] data = binaryEncode(bd);
 		
+		// Java BigInteger only has enough bytes needed, it is less than 8 in this case vs. Int64
+		byte[] expected = CryptoUtil.hexToBytes("003201080000000400c39d90956101");
+		assertArrayEquals(expected, data);
+	}
+	
+	private byte[] binaryEncode(Object o) throws Exception{
+		EncoderCalc calc = new EncoderCalc();
+		calc.setEncoderContext(EncoderContext.getDefaultInstance());
+		calc.put(null, o);
+		int len = calc.length;
+		byte[] buf = new byte[len];
+		BinaryEncoder enc = new BinaryEncoder(buf);
+		enc.setEncoderContext(EncoderContext.getDefaultInstance());
+		enc.put(null, o);
+		return buf;
 	}
 	
 }

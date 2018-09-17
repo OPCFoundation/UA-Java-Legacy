@@ -18,12 +18,15 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.ClosedChannelException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.opcfoundation.ua.builtintypes.ByteString;
@@ -319,6 +322,11 @@ public class BinaryDecoder implements IDecoder {
 		if (clazz.getComponentType() != null && Enumeration.class.isAssignableFrom(clazz.getComponentType())) {
 			return (T) getEnumerationArray(fieldName, (Class<? extends Enumeration>) clazz);
 		}
+		
+		if(clazz.equals(BigDecimal.class)) {
+			return (T) getDecimal(fieldName);
+		}
+		
 		throw new DecodingException("Cannot decode "+clazz);
 	}
 
@@ -1656,6 +1664,32 @@ public class BinaryDecoder implements IDecoder {
 
 		if (len>remaining()){
 			throw new DecodingException(StatusCodes.Bad_EndOfStream, "Buffer underflow");
+		}
+	}
+	
+
+	private BigDecimal getDecimal(String fieldName) throws DecodingException {
+		//Decimals are encoded as fake Structures
+		ExtensionObject eo = getExtensionObject(fieldName);
+		try {
+			byte[] data = (byte[]) eo.getObject();
+			
+			//scale is first 2 bytes from the data as little-endian
+			ByteBuffer tmp = ByteBuffer.allocate(2);
+			tmp.order(ByteOrder.LITTLE_ENDIAN);
+			tmp.put(data[0]);
+			tmp.put(data[1]);
+			tmp.rewind();
+			short scale = tmp.getShort();
+			
+			// value is rest of the bytes, as little-endian
+			// NOTE! BigInteger wants big-endian input
+			byte[] valueData = Arrays.copyOfRange(data, 2, data.length);
+			valueData = EncoderUtils.reverse(valueData);
+			BigInteger value = new BigInteger(valueData);
+			return new BigDecimal(value, scale);
+		}catch(ClassCastException e) {
+			throw new DecodingException("Did not get an ExtensionObject with ByteString data for Decimal type", e);
 		}
 	}
 
