@@ -15,6 +15,8 @@ import java.io.StringReader;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,7 @@ import org.opcfoundation.ua.builtintypes.XmlElement;
 import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.common.ServerTable;
 import org.opcfoundation.ua.common.UriTable;
+import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.DecodingException;
 import org.opcfoundation.ua.encoding.EncoderContext;
@@ -346,6 +349,12 @@ public class XmlDecoder implements IDecoder {
 		}
 		if (clazz.getComponentType() != null && Enumeration.class.isAssignableFrom(clazz.getComponentType())) {
 			return (T) getEnumerationArray(fieldName, (Class<? extends Enumeration>) clazz);
+		}
+		if(clazz.equals(BigDecimal.class)) {
+			return (T) getDecimal(fieldName);
+		}
+		if(clazz.equals(BigDecimal[].class)) {
+			return (T) getDecimalArray(fieldName);
 		}
 		throw new DecodingException("Cannot decode " + clazz);
 	}
@@ -2975,12 +2984,40 @@ public class XmlDecoder implements IDecoder {
 	}
 
 	private Object decode(ExtensionObject extensionObject) throws DecodingException {
+		if(isDecimal(extensionObject)) {
+			return parseDecimalFromExtensionObjectXMLElementData((XmlElement) extensionObject.getObject());
+		}
+		
 		return extensionObject.decode(getEncoderContext(), namespaceTable);
 	}
 
 
 	private Object decode(ExtensionObject[] extensionObjectArray) throws DecodingException {
-		return getEncoderContext().decode(extensionObjectArray, namespaceTable);
+		Object r = tryDecimalConversion(extensionObjectArray);
+		if(r instanceof ExtensionObject[]) {
+			//was not array of Decimals
+			return getEncoderContext().decode(extensionObjectArray, namespaceTable);
+		}
+		return r;
+	}
+	
+	private Object tryDecimalConversion(ExtensionObject[] eos) throws DecodingException {
+		//if all inputted are Decimals, convert, otherwise ignore
+		BigDecimal[] r = new BigDecimal[eos.length];
+		for(int i = 0; i<eos.length;i++) {
+			ExtensionObject elem = eos[i];
+			if(isDecimal(elem)) {
+				r[i] = parseDecimalFromExtensionObjectXMLElementData((XmlElement) elem.getObject());
+			}else {
+				//at least one non-decimal
+				return eos;
+			}
+		}
+		return r;
+	}
+	
+	private boolean isDecimal(ExtensionObject value) {
+		return getEncoderContext().getNamespaceTable().nodeIdEquals(Identifiers.Decimal, value.getTypeId());
 	}
 
 	/// <summary>
@@ -3058,6 +3095,44 @@ public class XmlDecoder implements IDecoder {
 		return sb.toString();
 	}
 
+	private BigDecimal getDecimal(String fieldName) throws DecodingException{
+		ExtensionObject eo = getExtensionObject(fieldName);
+		XmlElement xml = (XmlElement) eo.getObject();
+		return parseDecimalFromExtensionObjectXMLElementData(xml);
+	}
+	
+	private BigDecimal[] getDecimalArray(String fieldName) throws DecodingException{
+		List<BigDecimal> values = new ArrayList<BigDecimal>();
+		if (beginFieldSafe(fieldName, true)){
+			while (moveToElement("ExtensionObject")){
+				ExtensionObject eo = getExtensionObject("ExtensionObject");
+				values.add(parseDecimalFromExtensionObjectXMLElementData((XmlElement) eo.getObject()));
+			}
+			// check the length.
+			if (encoderContext.getMaxArrayLength() > 0 && encoderContext.getMaxArrayLength() < values.size()) {
+				throw new DecodingException(StatusCodes.Bad_EncodingLimitsExceeded);
+			}
+			endField(fieldName);
+		}
+		return values.toArray(new BigDecimal[0]);
+	}
+	
+	private BigDecimal parseDecimalFromExtensionObjectXMLElementData(XmlElement data) throws DecodingException{
+		XmlDecoder tmp = new XmlDecoder(data, getEncoderContext());
+		tmp.beginFieldSafe("Decimal", false);
+		
+		/*
+		 * NOTE! The spec 1.04 Part 6 section 5.3.2 defines scale as unsigned short. 
+		 * Other places define it as signed. Assuming it is signed as that makes more sense,
+		 * as it allows arbitrary large numbers as well by defining negative scaling.
+		 */
+
+		Short scale = tmp.get("Scale", Short.class);
+		String value = tmp.get("Value", String.class).trim();
+		tmp.close();
+		return new BigDecimal(new BigInteger(value), scale);
+	}
+	
 	private String getInnerXml(String fieldName) throws DecodingException {
 		String innerXml=""; // TODO refine and fix implementation
 		boolean isGetme=true;

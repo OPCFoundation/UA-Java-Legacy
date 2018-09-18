@@ -1,6 +1,8 @@
 package org.opcfoundation.ua.encoding.binary;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
+import java.math.BigDecimal;
 
 import org.junit.Test;
 import org.opcfoundation.ua.builtintypes.NodeId;
@@ -80,4 +82,130 @@ public class XmlDecoderTest {
 		assertEquals(new NodeId(1, 1000), a2.getDataType());
 
 	}
+	
+	
+	@Test
+	public void decimalDecoding() throws Exception {
+		String data = "<ExtensionObject xmlns=\"http://opcfoundation.org/UA/2011/03/UANodeSet.xsd\">\r\n" + 
+				"		<TypeId>\r\n" + 
+				"			<Identifier>i=50</Identifier>\r\n" + 
+				"		</TypeId>\r\n" + 
+				"		<Body>\r\n" + 
+				"			<Decimal xmlns=\"http://opcfoundation.org/UA/2008/02/Types.xsd\">\r\n" + 
+				"				<Scale>5</Scale>\r\n" + 
+				"				<Value>342742334224</Value>\r\n" + 
+				"			</Decimal>\r\n" + 
+				"		</Body>\r\n" + 
+				"	</ExtensionObject>";
+		
+		XmlElement xml = new XmlElement(data);
+		EncoderContext ctx = new EncoderContext(new NamespaceTable(),
+				new ServerTable(), StackUtils.getDefaultSerializer());
+		XmlDecoder sut = new XmlDecoder(xml, ctx);
+		BigDecimal actual = sut.get("ExtensionObject", BigDecimal.class);
+		BigDecimal expected =  BigDecimal.valueOf(342742334224L, 5);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void decimalArrayDecoding() throws Exception {
+		String data = "	<ListOfExtensionObject xmlns=\"http://opcfoundation.org/UA/2008/02/Types.xsd\">"+ 
+				"<ExtensionObject>\r\n" + 
+				"		<TypeId>\r\n" + 
+				"			<Identifier>i=50</Identifier>\r\n" + 
+				"		</TypeId>\r\n" + 
+				"		<Body>\r\n" + 
+				"			<Decimal xmlns=\"http://opcfoundation.org/UA/2008/02/Types.xsd\">\r\n" + 
+				"				<Scale>1</Scale>\r\n" + 
+				"				<Value>342742334224</Value>\r\n" + 
+				"			</Decimal>\r\n" + 
+				"		</Body>\r\n" + 
+				"	</ExtensionObject>\r\n" + 
+				"<ExtensionObject>\r\n" + 
+				"		<TypeId>\r\n" + 
+				"			<Identifier>i=50</Identifier>\r\n" + 
+				"		</TypeId>\r\n" + 
+				"		<Body>\r\n" + 
+				"			<Decimal xmlns=\"http://opcfoundation.org/UA/2008/02/Types.xsd\">\r\n" + 
+				"				<Scale>2</Scale>\r\n" + 
+				"				<Value>342742334224</Value>\r\n" + 
+				"			</Decimal>\r\n" + 
+				"		</Body>\r\n" + 
+				"	</ExtensionObject>\r\n" + 
+				"</ListOfExtensionObject>";
+		
+		XmlElement xml = new XmlElement(data);
+		EncoderContext ctx = new EncoderContext(new NamespaceTable(),
+				new ServerTable(), StackUtils.getDefaultSerializer());
+		XmlDecoder sut = new XmlDecoder(xml, ctx);
+		BigDecimal[] actual = sut.get("ListOfExtensionObject", BigDecimal[].class);
+		BigDecimal[] expected = new BigDecimal[] {BigDecimal.valueOf(342742334224L, 1), BigDecimal.valueOf(342742334224L, 2)};
+		assertArrayEquals(expected, actual);
+	}
+	
+	@Test
+	public void decimalInVariantDecoding() throws Exception {
+		String data = "<Value xmlns=\"http://opcfoundation.org/UA/2011/03/UANodeSet.xsd\">\r\n" + 
+				"	<ExtensionObject>\r\n" + 
+				"		<TypeId>\r\n" + 
+				"			<Identifier>i=50</Identifier>\r\n" + 
+				"		</TypeId>\r\n" + 
+				"		<Body>\r\n" + 
+				"			<Decimal xmlns=\"http://opcfoundation.org/UA/2008/02/Types.xsd\">\r\n" + 
+				"				<Scale>5</Scale>\r\n" + 
+				"				<Value>342742334224</Value>\r\n" + 
+				"			</Decimal>\r\n" + 
+				"		</Body>\r\n" + 
+				"	</ExtensionObject>\r\n" + 
+				"</Value>";
+		
+		XmlElement xml = new XmlElement(data);
+		EncoderContext ctx = new EncoderContext(new NamespaceTable(),
+				new ServerTable(), StackUtils.getDefaultSerializer());
+		XmlDecoder sut = new XmlDecoder(xml, ctx);
+		Variant v = sut.get("", Variant.class);
+		BigDecimal actual = (BigDecimal) v.getValue();
+		BigDecimal expected = BigDecimal.valueOf(342742334224L, 5);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void decimalArrayInVariantDecoding() throws Exception {
+		String data = "<Value xmlns=\"http://opcfoundation.org/UA/2011/03/UANodeSet.xsd\">\r\n" + 
+				"	<ListOfExtensionObject xmlns=\"http://opcfoundation.org/UA/2008/02/Types.xsd\">"+ 
+				"<ExtensionObject>\r\n" + 
+				"		<TypeId>\r\n" + 
+				"			<Identifier>i=50</Identifier>\r\n" + 
+				"		</TypeId>\r\n" + 
+				"		<Body>\r\n" + 
+				"			<Decimal xmlns=\"http://opcfoundation.org/UA/2008/02/Types.xsd\">\r\n" + 
+				"				<Scale>1</Scale>\r\n" + 
+				"				<Value>342742334224</Value>\r\n" + 
+				"			</Decimal>\r\n" + 
+				"		</Body>\r\n" + 
+				"	</ExtensionObject>\r\n" + 
+				"<ExtensionObject>\r\n" + 
+				"		<TypeId>\r\n" + 
+				"			<Identifier>i=50</Identifier>\r\n" + 
+				"		</TypeId>\r\n" + 
+				"		<Body>\r\n" + 
+				"			<Decimal xmlns=\"http://opcfoundation.org/UA/2008/02/Types.xsd\">\r\n" + 
+				"				<Scale>2</Scale>\r\n" + 
+				"				<Value>342742334224</Value>\r\n" + 
+				"			</Decimal>\r\n" + 
+				"		</Body>\r\n" + 
+				"	</ExtensionObject>\r\n" + 
+				"</ListOfExtensionObject>"+
+				"</Value>";
+		
+		XmlElement xml = new XmlElement(data);
+		EncoderContext ctx = new EncoderContext(new NamespaceTable(),
+				new ServerTable(), StackUtils.getDefaultSerializer());
+		XmlDecoder sut = new XmlDecoder(xml, ctx);
+		Variant v = sut.get("", Variant.class);
+		BigDecimal[] actual = (BigDecimal[]) v.getValue();
+		BigDecimal[] expected = new BigDecimal[] {BigDecimal.valueOf(342742334224L, 1), BigDecimal.valueOf(342742334224L, 2)};
+		assertArrayEquals(expected, actual);
+	}
+	
 }
