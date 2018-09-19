@@ -26,38 +26,24 @@ import org.opcfoundation.ua.core.MessageSecurityMode;
 public final class SecurityMode {
 		
 	// Secure Security Modes
-	/** Constant <code>BASIC128RSA15_SIGN_ENCRYPT</code> */
 	public final static SecurityMode BASIC128RSA15_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.BASIC128RSA15, MessageSecurityMode.SignAndEncrypt);
-	/** Constant <code>BASIC128RSA15_SIGN</code> */
 	public final static SecurityMode BASIC128RSA15_SIGN = new SecurityMode(SecurityPolicy.BASIC128RSA15, MessageSecurityMode.Sign);
-	/** Constant <code>BASIC256_SIGN_ENCRYPT</code> */
 	public final static SecurityMode BASIC256_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.BASIC256, MessageSecurityMode.SignAndEncrypt);
-	/** Constant <code>BASIC256_SIGN</code> */
 	public final static SecurityMode BASIC256_SIGN = new SecurityMode(SecurityPolicy.BASIC256, MessageSecurityMode.Sign);
-	/** Constant <code>BASIC256SHA256_SIGN_ENCRYPT</code> */
 	public final static SecurityMode BASIC256SHA256_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.BASIC256SHA256, MessageSecurityMode.SignAndEncrypt);
-	/** Constant <code>BASIC256SHA256_SIGN</code> */
 	public final static SecurityMode BASIC256SHA256_SIGN = new SecurityMode(SecurityPolicy.BASIC256SHA256, MessageSecurityMode.Sign);
 
 	// Unsecure Security Mode
-	/** Constant <code>NONE</code> */
 	public final static SecurityMode NONE = new SecurityMode(SecurityPolicy.NONE, MessageSecurityMode.None);
 	
 	// Security Mode Sets
 	// The 101-modes are the default for the time being, until all stacks add support for BASIC256SHA256
-	/** Constant <code>ALL_102</code> */
 	public final static SecurityMode[] ALL_102 = new SecurityMode[] {NONE, BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT, BASIC256SHA256_SIGN, BASIC256SHA256_SIGN_ENCRYPT}; 
-	/** Constant <code>ALL_101</code> */
 	public final static SecurityMode[] ALL_101 = new SecurityMode[] {NONE, BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT}; 
-	/** Constant <code>ALL</code> */
 	public final static SecurityMode[] ALL = ALL_101; 
-	/** Constant <code>SECURE_102</code> */
 	public final static SecurityMode[] SECURE_102 = new SecurityMode[] {BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT, BASIC256SHA256_SIGN, BASIC256SHA256_SIGN_ENCRYPT}; 
-	/** Constant <code>SECURE_101</code> */
 	public final static SecurityMode[] SECURE_101 = new SecurityMode[] {BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT}; 
-	/** Constant <code>SECURE</code> */
 	public final static SecurityMode[] SECURE = SECURE_101; 
-	/** Constant <code>NON_SECURE</code> */
 	public final static SecurityMode[] NON_SECURE = new SecurityMode[] {NONE}; 	
 
 	private final SecurityPolicy securityPolicy;
