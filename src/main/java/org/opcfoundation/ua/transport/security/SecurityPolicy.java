@@ -34,14 +34,21 @@ public final class SecurityPolicy {
 	public static final String URI_BINARY_BASIC128RSA15 = "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15";
 	public static final String URI_BINARY_BASIC256 = "http://opcfoundation.org/UA/SecurityPolicy#Basic256";
 	public static final String URI_BINARY_BASIC256SHA256 = "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256";
+	public static final String URI_BINARY_AES128_SHA256_RSAOAEP = "http://opcfoundation.org/UA/SecurityPolicy#Aes128_Sha256_RsaOaep";
+	public static final String URI_BINARY_AES256_SHA256_RSAPSS = "http://opcfoundation.org/UA/SecurityPolicy#Aes256_Sha256_RsaPss";
+	public static final String URI_BINARY_PUBSUB_AES128_CTR = "http://opcfoundation.org/UA/SecurityPolicy#PubSub_Aes128_CTR";
+	public static final String URI_BINARY_PUBSUB_AES256_CTR = "http://opcfoundation.org/UA/SecurityPolicy#PubSub_Aes256_CTR";
+
 	public static final String URI_XML_NONE = "http://opcfoundation.org/UA-Profile/Securitypolicy/None";
 	public static final String URI_XML_BASIC128RSA15 = "http://opcfoundation.org/UA-Profile/Securitypolicy/Basic128Rsa15";
 	public static final String URI_XML_BASIC256 = "http://opcfoundation.org/UA-Profile/Securitypolicy/Basic256";
+	public static final String URI_XML_PUBSUBAES128CTR = "http://opcfoundation.org/UA-Profile/Securitypolicy/PubSubAes128Ctr";
+	public static final String URI_XML_PUBSUBAES256CTR = "http://opcfoundation.org/UA-Profile/Securitypolicy/PubSubAes256Ctr";
 
 	// Global Well known Security policies //
 	public static final SecurityPolicy NONE = new SecurityPolicy(
 			SecurityPolicy.URI_BINARY_NONE,  null, null,
-			null, null, null, null, 0, 0, 0, 1, 1024, 2048);
+			null, null, null, null, 0, 0, 0, 1, 1024, 2048, 0);
 
 	public static final SecurityPolicy BASIC128RSA15 = new SecurityPolicy(
 			SecurityPolicy.URI_BINARY_BASIC128RSA15, 
@@ -51,7 +58,7 @@ public final class SecurityPolicy {
 			SecurityAlgorithm.KwRsa15, // Asymmetric keywrap
 			SecurityAlgorithm.Rsa15, // Asymmetric encryption
 			SecurityAlgorithm.PSha1, // key derivation
-			20, 16, 16, 16, 1024, 2048);
+			20, 16, 16, 16, 1024, 2048, 0);
 
 	public static final SecurityPolicy BASIC256 = new SecurityPolicy(
 			SecurityPolicy.URI_BINARY_BASIC256, 
@@ -61,7 +68,7 @@ public final class SecurityPolicy {
 			SecurityAlgorithm.KwRsaOaep,// Asymmetric keywrap
 			SecurityAlgorithm.RsaOaep, // Asymmetric encryption
 			SecurityAlgorithm.PSha1, // key derivation
-			20, 24, 32, 16, 1024, 2048);
+			20, 24, 32, 16, 1024, 2048, 0);
 
 	public static final SecurityPolicy BASIC256SHA256 = new SecurityPolicy(
 			SecurityPolicy.URI_BINARY_BASIC256SHA256, 
@@ -71,8 +78,49 @@ public final class SecurityPolicy {
 			SecurityAlgorithm.KwRsaOaep,// Asymmetric keywrap
 			SecurityAlgorithm.RsaOaep, // Asymmetric encryption
 			SecurityAlgorithm.PSha256, // key derivation
-			32, 32, 32, 16, 2048, 4096);
+			32, 32, 32, 16, 2048, 4096, 0);
 
+	public static final SecurityPolicy AES128_SHA256_RSAOAEP = new SecurityPolicy(
+			SecurityPolicy.URI_BINARY_AES128_SHA256_RSAOAEP, 
+			SecurityAlgorithm.HmacSha256, // Symmetric signature
+			SecurityAlgorithm.Aes256, // Symmetric encryption
+			SecurityAlgorithm.RsaSha256, // Asymmetric signature
+			SecurityAlgorithm.KwRsaOaep,// Asymmetric keywrap
+			SecurityAlgorithm.RsaOaep, // Asymmetric encryption
+			SecurityAlgorithm.PSha256, // key derivation
+			32, 32, 16, 16, 2048, 4096, 0);
+	
+	public static final SecurityPolicy AES256_SHA256_RSAPSS = new SecurityPolicy(
+			SecurityPolicy.URI_BINARY_AES256_SHA256_RSAPSS, 
+			SecurityAlgorithm.HmacSha256, // Symmetric signature
+			SecurityAlgorithm.Aes256, // Symmetric encryption
+			SecurityAlgorithm.RsaPssSha256, // Asymmetric signature
+			SecurityAlgorithm.KwRsaOaep,// Asymmetric keywrap
+			SecurityAlgorithm.RsaOaep256, // Asymmetric encryption
+			SecurityAlgorithm.PSha256, // key derivation
+			32, 32, 32, 16, 2048, 4096, 0);
+
+	public static final SecurityPolicy PUBSUB_AES128_CTR = new SecurityPolicy(
+			SecurityPolicy.URI_BINARY_PUBSUB_AES128_CTR, 
+			SecurityAlgorithm.HmacSha256, // Symmetric signature
+			SecurityAlgorithm.Aes128Ctr, // Symmetric encryption
+			null, // Asymmetric signature
+			null,// Asymmetric keywrap
+			null, // Asymmetric encryption
+			SecurityAlgorithm.PSha256, // key derivation
+			32, 32, 16, 16, 0, 0, 4);
+
+	public static final SecurityPolicy PUBSUB_AES256_CTR = new SecurityPolicy(
+			SecurityPolicy.URI_BINARY_PUBSUB_AES256_CTR, 
+			SecurityAlgorithm.HmacSha256, // Symmetric signature
+			SecurityAlgorithm.Aes256Ctr, // Symmetric encryption
+			null, // Asymmetric signature
+			null,// Asymmetric keywrap
+			null, // Asymmetric encryption
+			SecurityAlgorithm.PSha256, // key derivation
+			32, 32, 32, 16, 0, 0, 4);
+	
+	
 	private static Map<String, SecurityPolicy> policies = new ConcurrentHashMap<String, SecurityPolicy>();
 
 	static {
@@ -80,6 +128,10 @@ public final class SecurityPolicy {
 		addSecurityPolicy(BASIC128RSA15);
 		addSecurityPolicy(BASIC256);
 		addSecurityPolicy(BASIC256SHA256);
+		addSecurityPolicy(AES128_SHA256_RSAOAEP);
+		addSecurityPolicy(AES256_SHA256_RSAPSS);
+		addSecurityPolicy(PUBSUB_AES128_CTR);
+		addSecurityPolicy(PUBSUB_AES256_CTR);
 	}
 
 	/**
@@ -144,6 +196,9 @@ public final class SecurityPolicy {
 	private final SecurityAlgorithm symmetricEncryptionAlgorithm;
 	private final SecurityAlgorithm symmetricSignatureAlgorithm;
 	private final int symmetricSignatureSize;
+	
+	private final int symmetricEncryptionNonceLength;
+	
 	SecurityPolicy(String policyUri, 
 			SecurityAlgorithm symmetricSignatureAlgorithmUri,
 			SecurityAlgorithm symmetricEncryptionAlgorithmUri,
@@ -154,7 +209,7 @@ public final class SecurityPolicy {
 			int hmacHashSize,
 			int signatureKeySize, int encryptionKeySize,
 			int encryptionBlockSize, int minAsymmetricKeyLength,
-			int maxAsymmetricKeyLength) {
+			int maxAsymmetricKeyLength, int symmetricEncryptionNonceLength) {
 		this.asymmetricEncryptionAlgorithm = asymmetricEncryptionAlgorithmUri;
 		this.asymmetricKeyWrapAlgorithm = asymmetricKeyWrapAlgorithmUri;
 		this.asymmetricSignatureAlgorithm = asymmetricSignatureAlgorithmUri;
@@ -171,6 +226,8 @@ public final class SecurityPolicy {
 
 		this.minAsymmetricKeyLength = minAsymmetricKeyLength;
 		this.maxAsymmetricKeyLength = maxAsymmetricKeyLength;
+		
+		this.symmetricEncryptionNonceLength = symmetricEncryptionNonceLength;
 	}
 	/** {@inheritDoc} */
 	@Override
@@ -307,6 +364,10 @@ public final class SecurityPolicy {
 		return symmetricEncryptionAlgorithm;
 	}
 
+	public int getSymmetricEncryptionNonceLength() {
+		return symmetricEncryptionNonceLength;
+	}
+	
 	/**
 	 * <p>Getter for the field <code>symmetricSignatureAlgorithm</code>.</p>
 	 *

@@ -44,6 +44,7 @@ import org.spongycastle.crypto.engines.RSAEngine;
 import org.spongycastle.crypto.engines.RijndaelEngine;
 import org.spongycastle.crypto.macs.HMac;
 import org.spongycastle.crypto.modes.CBCBlockCipher;
+import org.spongycastle.crypto.modes.SICBlockCipher;
 import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.crypto.params.ParametersWithIV;
 import org.spongycastle.crypto.params.RSAKeyParameters;
@@ -146,12 +147,14 @@ public class ScCryptoProvider implements CryptoProvider {
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
 					throws ServiceResultException {
 
-		BufferedBlockCipher cipher = new BufferedBlockCipher(
-				new CBCBlockCipher(new AESEngine()));
+		final BufferedBlockCipher cipher;
+		if(SecurityPolicy.PUBSUB_AES128_CTR.equals(policy) || SecurityPolicy.PUBSUB_AES256_CTR.equals(policy)) {
+			cipher = new BufferedBlockCipher(new SICBlockCipher(new AESEngine()));
+		}else {
+			cipher = new BufferedBlockCipher(new CBCBlockCipher(new AESEngine()));
+		}
 
-		cipher.init(
-				false,
-				new ParametersWithIV(new KeyParameter(encryptingKey), iv));
+		cipher.init(false, new ParametersWithIV(new KeyParameter(encryptingKey), iv));
 
 		int decryptedBytes = cipher.processBytes(dataToDecrypt, inputOffset,
 				inputLength, output, outputOffset);
@@ -211,14 +214,14 @@ public class ScCryptoProvider implements CryptoProvider {
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
 					throws ServiceResultException {
 
-		// BufferedBlockCipher cipher = new BufferedBlockCipher(new
-		// CBCBlockCipher(new AESEngine()));
-		BufferedBlockCipher cipher = new BufferedBlockCipher(
-				new CBCBlockCipher(new RijndaelEngine()));
+		final BufferedBlockCipher cipher;
+		if(SecurityPolicy.PUBSUB_AES128_CTR.equals(policy) || SecurityPolicy.PUBSUB_AES256_CTR.equals(policy)) {
+			cipher = new BufferedBlockCipher(new SICBlockCipher(new AESEngine()));
+		}else {
+			cipher = new BufferedBlockCipher(new CBCBlockCipher(new RijndaelEngine()));
+		}
 
-		cipher.init(
-				true,
-				new ParametersWithIV(new KeyParameter(encryptingKey), iv));
+		cipher.init(true, new ParametersWithIV(new KeyParameter(encryptingKey), iv));
 
 		int encryptedBytes = cipher.processBytes(dataToEncrypt, inputOffset,
 				inputLength, output, outputOffset);

@@ -21,23 +21,36 @@ public enum SecurityAlgorithm {
 	// Symmetric signature	
 	HmacSha1(AlgorithmType.SymmetricSignature, "http://www.w3.org/2000/09/xmldsig#hmac-sha1", "HmacSHA1", 160),
 	HmacSha256(AlgorithmType.SymmetricSignature, "http://www.w3.org/2000/09/xmldsig#hmac-sha256", "HmacSHA256", 256),
+
 	// Symmetric encryption
 	Aes128(AlgorithmType.SymmetricEncryption, "http://www.w3.org/2001/04/xmlenc#aes128-cbc", "AES/CBC/NoPadding", 128),
 	Aes256(AlgorithmType.SymmetricEncryption, "http://www.w3.org/2001/04/xmlenc#aes256-cbc", "AES/CBC/NoPadding", 256),
+
+	// PubSub algorithms
+	Aes128Ctr(AlgorithmType.SymmetricEncryption, "http://opcfoundation.org/ua/security/aes128-ctr", "AES/CTR/NoPadding", 128),
+	Aes256Ctr(AlgorithmType.SymmetricEncryption, "http://opcfoundation.org/ua/security/aes256-ctr", "AES/CTR/NoPadding", 256),
+
 	// Asymmetric signature
 	RsaSha1(AlgorithmType.AsymmetricSignature, "http://www.w3.org/2000/09/xmldsig#rsa-sha1", "SHA1withRSA", 160),
 	RsaSha256(AlgorithmType.AsymmetricSignature, "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256", "SHA256withRSA", 256),
+	RsaPssSha256(AlgorithmType.AsymmetricSignature, "http://opcfoundation.org/UA/security/rsa-pss-sha2-256", "SHA256withRSAandMGF1", 256),
+
 	// Asymmetric encryption
 	Rsa15(AlgorithmType.AsymmetricEncryption, "http://www.w3.org/2001/04/xmlenc#rsa-1_5", "RSA/NONE/PKCS1Padding", 0),
 	RsaOaep(AlgorithmType.AsymmetricEncryption, "http://www.w3.org/2001/04/xmlenc#rsa-oaep", "RSA/NONE/OAEPWithSHA1AndMGF1Padding", 0),
+	// NOTE: Sun provider uses Sha1 for MGF1, where as Bouncy Castle uses Sha256!!!
+	// https://stackoverflow.com/questions/32161720/breaking-down-rsa-ecb-oaepwithsha-256andmgf1padding
+	RsaOaep256(AlgorithmType.AsymmetricEncryption, "http://www.w3.org/2001/04/xmlenc#rsa-oaep", "RSA/NONE/OAEPWithSHA-256AndMGF1Padding", 0),
+
 	// Asymmetric keywrap
 	KwRsaOaep(AlgorithmType.AsymmetricKeywrap, "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p","", 0),
 	KwRsa15(AlgorithmType.AsymmetricKeywrap, "http://www.w3.org/2001/04/xmlenc#rsa-1_5","", 0),
+
 	// key derivation
 	PSha1(AlgorithmType.KeyDerivation, "http://www.w3.org/2001/04/xmlenc#aes128-cbc","HmacSHA1", 0),
 	PSha256(AlgorithmType.KeyDerivation, "http://docs.oasis-open.org/ws-sx/ws-secureconversation/200512/dk/p_sha256","HmacSHA256", 0);
-	
-	
+
+
 	public enum AlgorithmType {
 		SymmetricSignature,
 		SymmetricEncryption,

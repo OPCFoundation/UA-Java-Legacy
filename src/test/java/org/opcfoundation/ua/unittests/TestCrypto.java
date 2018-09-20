@@ -44,6 +44,7 @@ import org.opcfoundation.ua.transport.security.ScCryptoProvider;
 import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
 import org.opcfoundation.ua.transport.security.SecurityConfiguration;
 import org.opcfoundation.ua.transport.security.SecurityMode;
+import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.StringUtils;
 import org.slf4j.Logger;
@@ -131,6 +132,89 @@ public class TestCrypto extends TestCase {
 		}
 	}
 
+    public void testEncryptDecryptAes128WithBc() throws Exception {
+        try {
+          // Sample values from: http://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+          byte[] key = javax.xml.bind.DatatypeConverter.parseHexBinary("2b7e151628aed2a6abf7158809cf4f3c");
+          byte[] iv = javax.xml.bind.DatatypeConverter.parseHexBinary("000102030405060708090a0b0c0d0e0f");
+          byte[] input = javax.xml.bind.DatatypeConverter.parseHexBinary("6bc1bee22e409f96e93d7e117393172a");
+          byte[] output = javax.xml.bind.DatatypeConverter.parseHexBinary("7649abac8119b246cee98e9b12e9197d");
+          encryptDecryptSymm(SecurityPolicy.AES128_SHA256_RSAOAEP, key, iv, input, output);
+        } finally {
+            _tearDown();
+        }
+      }
+    
+
+    public void testEncryptDecryptAes256WithBc() throws Exception {
+      try {
+        // Sample values from: http://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+        byte[] key = javax.xml.bind.DatatypeConverter.parseHexBinary("603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4");
+        byte[] iv = javax.xml.bind.DatatypeConverter.parseHexBinary("000102030405060708090a0b0c0d0e0f");
+        byte[] input = javax.xml.bind.DatatypeConverter.parseHexBinary("6bc1bee22e409f96e93d7e117393172a");
+        byte[] output = javax.xml.bind.DatatypeConverter.parseHexBinary("f58c4c04d6e5f1ba779eabfb5f7bfbd6");
+        encryptDecryptSymm(SecurityPolicy.AES256_SHA256_RSAPSS, key, iv, input, output);
+      } finally {
+          _tearDown();
+      }
+    }
+    
+    public void testEncryptDecryptPubSub128WithBc() throws Exception {
+      try {
+        // Sample values from: https://tools.ietf.org/html/rfc3686#section-6
+        byte[] key = javax.xml.bind.DatatypeConverter.parseHexBinary("7691BE035E5020A8AC6E618529F9A0DC");
+        byte[] iv = javax.xml.bind.DatatypeConverter.parseHexBinary("00E0017B27777F3F4A1786F000000001");
+        byte[] input = javax.xml.bind.DatatypeConverter.parseHexBinary("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20212223");
+        byte[] output = javax.xml.bind.DatatypeConverter.parseHexBinary("C1CF48A89F2FFDD9CF4652E9EFDB72D74540A42BDE6D7836D59A5CEAAEF3105325B2072F");
+        encryptDecryptSymm(SecurityPolicy.PUBSUB_AES128_CTR, key, iv, input, output);
+      } finally {
+          _tearDown();
+      }
+    }
+    
+    public void testEncryptDecryptPubSub256WithBc() throws Exception {
+      try {
+        // Sample values from: https://tools.ietf.org/html/rfc3686#section-6
+        byte[] key = javax.xml.bind.DatatypeConverter.parseHexBinary("FF7A617CE69148E4F1726E2F43581DE2AA62D9F805532EDFF1EED687FB54153D");
+        byte[] iv = javax.xml.bind.DatatypeConverter.parseHexBinary("001CC5B751A51D70A1C1114800000001");
+        byte[] input = javax.xml.bind.DatatypeConverter.parseHexBinary("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20212223");
+        byte[] output = javax.xml.bind.DatatypeConverter.parseHexBinary("EB6C52821D0BBBF7CE7594462ACA4FAAB407DF866569FD07F48CC0B583D6071F1EC0E6B8");
+        encryptDecryptSymm(SecurityPolicy.PUBSUB_AES256_CTR, key, iv, input, output);
+      } finally {
+          _tearDown();
+      }
+
+    }    
+	
+    public void encryptDecryptSymm(SecurityPolicy policy, byte[] key, byte[] iv, byte[] input, byte[] output) throws ServiceResultException {
+      
+      byte[] encrypted = new byte[input.length];
+      
+      BcCryptoProvider cryptoProvider = new BcCryptoProvider();      
+      cryptoProvider.encryptSymm(policy, key, iv, input, 0, input.length, encrypted, 0);
+      
+      logger.info("Encrypted bytes:        " + javax.xml.bind.DatatypeConverter.printHexBinary(encrypted));
+      logger.info("Target encrypted bytes: " + javax.xml.bind.DatatypeConverter.printHexBinary(output));
+      
+      for (int i = 0; i < output.length; i++) {
+        if (output[i] != encrypted[i]) {
+          Assert.fail("Encrypted and target output data do not match.");
+        }
+      }
+
+      byte[] decrypted = new byte[input.length];
+      cryptoProvider.decryptSymm(policy, key, iv, output, 0, output.length, decrypted, 0);
+      
+      logger.info("Decrypted bytes:        " + javax.xml.bind.DatatypeConverter.printHexBinary(decrypted));
+      logger.info("Target decrypted bytes: " + javax.xml.bind.DatatypeConverter.printHexBinary(input));
+      
+      for (int i = 0; i < input.length; i++) {
+        if (input[i] != decrypted[i]) {
+          Assert.fail("Decrypted and target output data do not match.");
+        }
+      }      
+    }
+	
 	public void encryptDecryptAsymm() throws ServiceResultException {
 		
 		Certificate serverCert = serverProfile.getLocalCertificate();

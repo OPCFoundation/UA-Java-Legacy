@@ -32,19 +32,32 @@ public final class SecurityMode {
 	public final static SecurityMode BASIC256_SIGN = new SecurityMode(SecurityPolicy.BASIC256, MessageSecurityMode.Sign);
 	public final static SecurityMode BASIC256SHA256_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.BASIC256SHA256, MessageSecurityMode.SignAndEncrypt);
 	public final static SecurityMode BASIC256SHA256_SIGN = new SecurityMode(SecurityPolicy.BASIC256SHA256, MessageSecurityMode.Sign);
+	public final static SecurityMode AES128_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.AES128_SHA256_RSAOAEP, MessageSecurityMode.SignAndEncrypt);
+	public final static SecurityMode AES128_SIGN = new SecurityMode(SecurityPolicy.AES128_SHA256_RSAOAEP, MessageSecurityMode.Sign);
+	public final static SecurityMode AES256_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.AES256_SHA256_RSAPSS, MessageSecurityMode.SignAndEncrypt);
+	public final static SecurityMode AES256_SIGN = new SecurityMode(SecurityPolicy.AES256_SHA256_RSAPSS, MessageSecurityMode.Sign);
+	public final static SecurityMode PUBSUB_AES128CTR_SIGN = new SecurityMode(SecurityPolicy.PUBSUB_AES128_CTR, MessageSecurityMode.Sign);
+	public final static SecurityMode PUBSUB_AES256CTR_SIGN = new SecurityMode(SecurityPolicy.PUBSUB_AES256_CTR, MessageSecurityMode.Sign);
+	public final static SecurityMode PUBSUB_AES128CTR_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.PUBSUB_AES128_CTR, MessageSecurityMode.SignAndEncrypt);
+	public final static SecurityMode PUBSUB_AES256CTR_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.PUBSUB_AES256_CTR, MessageSecurityMode.SignAndEncrypt);
 
+	
 	// Unsecure Security Mode
 	public final static SecurityMode NONE = new SecurityMode(SecurityPolicy.NONE, MessageSecurityMode.None);
 	
 	// Security Mode Sets
 	// The 101-modes are the default for the time being, until all stacks add support for BASIC256SHA256
+	public final static SecurityMode[] ALL_104 = new SecurityMode[] {NONE, BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT, BASIC256SHA256_SIGN, BASIC256SHA256_SIGN_ENCRYPT, AES128_SIGN, AES128_SIGN_ENCRYPT, AES256_SIGN, AES256_SIGN_ENCRYPT}; 
 	public final static SecurityMode[] ALL_102 = new SecurityMode[] {NONE, BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT, BASIC256SHA256_SIGN, BASIC256SHA256_SIGN_ENCRYPT}; 
 	public final static SecurityMode[] ALL_101 = new SecurityMode[] {NONE, BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT}; 
-	public final static SecurityMode[] ALL = ALL_101; 
+	public final static SecurityMode[] ALL = ALL_101;
+	
+	public final static SecurityMode[] SECURE_104 = new SecurityMode[] {BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT, BASIC256SHA256_SIGN, BASIC256SHA256_SIGN_ENCRYPT, AES128_SIGN, AES128_SIGN_ENCRYPT, AES256_SIGN, AES256_SIGN_ENCRYPT}; 
 	public final static SecurityMode[] SECURE_102 = new SecurityMode[] {BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT, BASIC256SHA256_SIGN, BASIC256SHA256_SIGN_ENCRYPT}; 
 	public final static SecurityMode[] SECURE_101 = new SecurityMode[] {BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT}; 
-	public final static SecurityMode[] SECURE = SECURE_101; 
-	public final static SecurityMode[] NON_SECURE = new SecurityMode[] {NONE}; 	
+	public final static SecurityMode[] SECURE = SECURE_101;
+	
+	public final static SecurityMode[] NON_SECURE = new SecurityMode[] {NONE};
 
 	private final SecurityPolicy securityPolicy;
 	private final MessageSecurityMode messageSecurityMode;
