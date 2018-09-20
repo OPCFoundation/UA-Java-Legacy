@@ -22,7 +22,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
-import org.opcfoundation.ua.transport.tcp.impl.SecurityToken;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.StringUtils;
 import org.slf4j.Logger;
@@ -143,7 +142,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public int decryptSymm(SecurityToken token, byte[] dataToDecrypt,
+	public int decryptSymm(SecurityPolicy policy, byte[] encryptingKey, byte[] iv, byte[] dataToDecrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
 					throws ServiceResultException {
 
@@ -152,9 +151,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 		cipher.init(
 				false,
-				new ParametersWithIV(new KeyParameter(token
-						.getRemoteEncryptingKey()), token
-						.getRemoteInitializationVector()));
+				new ParametersWithIV(new KeyParameter(encryptingKey), iv));
 
 		int decryptedBytes = cipher.processBytes(dataToDecrypt, inputOffset,
 				inputLength, output, outputOffset);
@@ -210,7 +207,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public int encryptSymm(SecurityToken token, byte[] dataToEncrypt,
+	public int encryptSymm(SecurityPolicy policy, byte[] encryptingKey, byte[] iv, byte[] dataToEncrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
 					throws ServiceResultException {
 
@@ -221,9 +218,7 @@ public class ScCryptoProvider implements CryptoProvider {
 
 		cipher.init(
 				true,
-				new ParametersWithIV(new KeyParameter(token
-						.getLocalEncryptingKey()), token
-						.getLocalInitializationVector()));
+				new ParametersWithIV(new KeyParameter(encryptingKey), iv));
 
 		int encryptedBytes = cipher.processBytes(dataToEncrypt, inputOffset,
 				inputLength, output, outputOffset);
@@ -290,16 +285,11 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public void signSymm(SecurityToken token, byte[] input, int verifyLen,
+	public void signSymm(SecurityPolicy policy, byte[] key, byte[] input, int inputOffset, int verifyLen,
 			byte[] output) throws ServiceResultException {
-
-		SecurityAlgorithm algorithm = token.getSecurityPolicy()
-				.getSymmetricSignatureAlgorithm();
-		HMac hmac = createMac(algorithm,
-				new KeyParameter(token.getLocalSigningKey()));
-		hmac.update(input, 0, verifyLen);
+		HMac hmac = createMac(policy.getSymmetricSignatureAlgorithm(), new KeyParameter(key));
+		hmac.update(input, inputOffset, verifyLen);
 		hmac.doFinal(output, 0);
-
 	}
 
 	/** {@inheritDoc} */
@@ -325,15 +315,13 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public void verifySymm(SecurityToken token, byte[] dataToVerify,
+	public void verifySymm(SecurityPolicy policy, byte[] key, byte[] dataToVerify, int inputOffset, int verifyLen,
 			byte[] signature) throws ServiceResultException {
 
-		SecurityAlgorithm algorithm = token.getSecurityPolicy()
-				.getSymmetricSignatureAlgorithm();
-		HMac hmac = createMac(algorithm,
-				new KeyParameter(token.getRemoteSigningKey()));
+		HMac hmac = createMac(policy.getSymmetricSignatureAlgorithm(),
+				new KeyParameter(key));
 		byte[] computedSignature = new byte[hmac.getMacSize()];
-		hmac.update(dataToVerify, 0, dataToVerify.length);
+		hmac.update(dataToVerify, inputOffset, verifyLen);
 		hmac.doFinal(computedSignature, 0);
 
 		// Compare signatures

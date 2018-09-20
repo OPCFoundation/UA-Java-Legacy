@@ -153,15 +153,13 @@ public class ChunkSymmDecryptVerifier implements Runnable {
 		}
 	}
 	
-    private int decrypt(SecurityToken token, byte[] dataToDecrypt, int inputOffset, int inputLength, byte[] output, int outputOffset) throws ServiceResultException{
+	private int decrypt(SecurityToken token, byte[] dataToDecrypt, int inputOffset, int inputLength, byte[] output, int outputOffset) throws ServiceResultException{
 		logger.debug("decrypt: dataToDecrypt.length={} inputOffset={} inputLength={} output.length={} outputOffset={}", dataToDecrypt.length, inputOffset, inputLength, output.length, outputOffset);
-		return CryptoUtil.getCryptoProvider().decryptSymm(token, dataToDecrypt, inputOffset, inputLength, output, outputOffset);
+		return CryptoUtil.getCryptoProvider().decryptSymm(token.getSecurityPolicy(), token.getRemoteEncryptingKey(), token.getRemoteInitializationVector(), dataToDecrypt, inputOffset, inputLength, output, outputOffset);
 	}
-    
-    private void verify(SecurityToken token, byte[] dataToVerify, byte[] signature) 
-    throws ServiceResultException 
-    {
-    	CryptoUtil.getCryptoProvider().verifySymm(token, dataToVerify, signature);
-    }
+
+	private void verify(SecurityToken token, byte[] dataToVerify, byte[] signature) throws ServiceResultException {
+		CryptoUtil.getCryptoProvider().verifySymm(token.getSecurityPolicy(), token.getRemoteSigningKey(), dataToVerify, 0, dataToVerify.length, signature);
+	}
 	
 }

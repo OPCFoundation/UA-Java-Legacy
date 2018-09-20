@@ -26,13 +26,13 @@ import java.security.interfaces.RSAPrivateKey;
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.ShortBufferException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.opcfoundation.ua.common.RuntimeServiceResultException;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
-import org.opcfoundation.ua.transport.tcp.impl.SecurityToken;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,20 +146,19 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public int decryptSymm(SecurityToken token, byte[] dataToDecrypt,
+	public int decryptSymm(SecurityPolicy policy, byte[] encryptingKey, byte[] iv, byte[] dataToDecrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
 			throws ServiceResultException {
 
 		// Decrypt
-		SecurityAlgorithm algorithm = token.getSecurityPolicy()
-				.getSymmetricEncryptionAlgorithm();
+		SecurityAlgorithm algorithm = policy.getSymmetricEncryptionAlgorithm();
 		// isTraceEnabled checked because potentially time consuming CryptoUtil
 		// methods get evaluated otherwise every time.
 		if (logger.isTraceEnabled()) {
 			logger.trace("decrypt: token.getRemoteEncryptingKey()="
-					+ CryptoUtil.toHex(token.getRemoteEncryptingKey()));
+					+ CryptoUtil.toHex(encryptingKey));
 			logger.trace("decrypt: token.getRemoteInitializationVector()="
-					+ CryptoUtil.toHex(token.getRemoteInitializationVector()));
+					+ CryptoUtil.toHex(iv));
 			logger.trace("decrypt: dataToDecrypt="
 					+ CryptoUtil.toHex(dataToDecrypt));
 			logger.trace("decrypt: algorithm=" + algorithm);
@@ -168,13 +167,13 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 		Cipher cipher;
 		int decryptedBytes = 0;
 
-		SecretKeySpec spec = new SecretKeySpec(token.getRemoteEncryptingKey(),
+		SecretKeySpec spec = new SecretKeySpec(encryptingKey,
 				algorithm.getStandardName());
 
 		try {
 			cipher = Cipher.getInstance(algorithm.getTransformation());
 			cipher.init(Cipher.DECRYPT_MODE, spec,
-					new IvParameterSpec(token.getRemoteInitializationVector()));
+					new IvParameterSpec(iv));
 			decryptedBytes = cipher.update(dataToDecrypt, inputOffset,
 					inputLength, output, outputOffset);
 			decryptedBytes += cipher.doFinal(output, outputOffset
@@ -245,30 +244,17 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public int encryptSymm(SecurityToken token, byte[] dataToEncrypt,
+	public int encryptSymm(SecurityPolicy policy, byte[] encryptingKey, byte[] iv, byte[] dataToEncrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
 			throws ServiceResultException {
 
-		SecurityAlgorithm algorithm = token.getSecurityPolicy()
-				.getSymmetricEncryptionAlgorithm();
-		SecretKeySpec spec = new SecretKeySpec(token.getLocalEncryptingKey(),
+		SecurityAlgorithm algorithm = policy.getSymmetricEncryptionAlgorithm();
+		SecretKeySpec spec = new SecretKeySpec(encryptingKey,
 				algorithm.getStandardName());
 
 		try {
 			Cipher cipher = Cipher.getInstance(algorithm.getTransformation());
-			int blockSize = cipher.getBlockSize();
-
-			// Check that input data is even with the encryption blocks
-			if (dataToEncrypt.length % blockSize != 0) {
-				// ERROR
-				logger.error("Input data is not an even number of encryption blocks.");
-				throw new ServiceResultException(
-						StatusCodes.Bad_InternalError,
-						"Error in symmetric decrypt: Input data is not an even number of encryption blocks.");
-			}
-
-			cipher.init(Cipher.ENCRYPT_MODE, spec,
-					new IvParameterSpec(token.getLocalInitializationVector()));
+			cipher.init(Cipher.ENCRYPT_MODE, spec, new IvParameterSpec(iv));
 			int encryptedBytes = cipher.update(dataToEncrypt, inputOffset,
 					inputLength, output, outputOffset);
 			encryptedBytes += cipher.doFinal(output, outputOffset
@@ -311,10 +297,10 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public void signSymm(SecurityToken token, byte[] input, int verifyLen,
+	public void signSymm(SecurityPolicy policy, byte[] key, byte[] input, int inputOffset, int verifyLen,
 			byte[] output) throws ServiceResultException {
-		Mac hmac = token.createLocalHmac();
-		hmac.update(input, 0, verifyLen);
+		Mac hmac = createMac(policy.getSymmetricSignatureAlgorithm(), key);
+		hmac.update(input, inputOffset, verifyLen);
 		try {
 			hmac.doFinal(output, 0);
 		} catch (GeneralSecurityException e) {
@@ -353,12 +339,24 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public void verifySymm(SecurityToken token, byte[] dataToVerify,
+	public void verifySymm(SecurityPolicy policy, byte[] key, byte[] dataToVerify, int inputOffset, int verifyLen,
 			byte[] signature) throws ServiceResultException {
 
 		// Get right hmac
-		Mac hmac = token.createRemoteHmac();
-		byte[] computedSignature = hmac.doFinal(dataToVerify);
+		Mac hmac = createMac(policy.getSymmetricSignatureAlgorithm(), key);
+		hmac.update(dataToVerify, inputOffset, verifyLen);
+		byte[] computedSignature = new byte[hmac.getMacLength()];
+		try {
+			hmac.doFinal(computedSignature, 0);
+		} catch (ShortBufferException e) {
+			//Should not happen in practice
+			logger.error("verifySymm", e);
+			throw new ServiceResultException(StatusCodes.Bad_SecurityChecksFailed, "Invalid signature");
+		} catch (IllegalStateException e) {
+			//Should not happen in practice
+			logger.error("verifySymm", e);
+			throw new ServiceResultException(StatusCodes.Bad_SecurityChecksFailed, "Invalid signature");
+		}
 
 		// Compare signatures
 		// First test that sizes are the same

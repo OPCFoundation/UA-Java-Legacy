@@ -122,15 +122,13 @@ public class ChunkSymmEncryptSigner implements Runnable {
 	}
 	
 	private int encrypt(SecurityToken token, byte[] dataToEncrypt, int inputOffset, int inputLength, byte[] output, int outputOffset) 
-			throws ServiceResultException
-	{
-		return CryptoUtil.getCryptoProvider().encryptSymm(token, dataToEncrypt, inputOffset, inputLength, output, outputOffset);
+			throws ServiceResultException {
+		return CryptoUtil.getCryptoProvider().encryptSymm(token.getSecurityPolicy(),token.getLocalEncryptingKey(), token.getLocalInitializationVector(), dataToEncrypt, inputOffset, inputLength, output, outputOffset);
 	}
 	
 	private void sign(SecurityToken token, byte[] input, int verifyLen, byte[] output)
-			throws ServiceResultException
-	{
-		CryptoUtil.getCryptoProvider().signSymm(token, input, verifyLen, output);
+			throws ServiceResultException {
+		CryptoUtil.getCryptoProvider().signSymm(token.getSecurityPolicy(), token.getLocalSigningKey(), input, 0, verifyLen, output);
 	}
 
 }

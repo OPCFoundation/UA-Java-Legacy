@@ -17,7 +17,6 @@ import java.security.PublicKey;
 import javax.crypto.Mac;
 
 import org.opcfoundation.ua.common.ServiceResultException;
-import org.opcfoundation.ua.transport.tcp.impl.SecurityToken;
 
 /**
  * Crypto Provider interface for encrypting and decrypting services.
@@ -78,7 +77,7 @@ public interface CryptoProvider {
 	 * @return a int.
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
-	public int decryptSymm(SecurityToken token, byte[] dataToDecrypt,
+	public int decryptSymm(SecurityPolicy policy, byte[] encryptingKey, byte[] initializationVector, byte[] dataToDecrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
 					throws ServiceResultException;
 
@@ -108,7 +107,7 @@ public interface CryptoProvider {
 	 * @return a int.
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
-	public int encryptSymm(SecurityToken token, byte[] dataToEncrypt,
+	public int encryptSymm(SecurityPolicy policy, byte[] encryptingKey, byte[] initializationVector, byte[] dataToEncrypt,
 			int inputOffset, int inputLength, byte[] output, int outputOffset)
 					throws ServiceResultException;
 
@@ -134,7 +133,7 @@ public interface CryptoProvider {
 	 * @param output an array of byte.
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
-	public void signSymm(SecurityToken token, byte[] input, int verifyLen,
+	public void signSymm(SecurityPolicy policy, byte[] key, byte[] input, int inputOffset, int verifyLen,
 			byte[] output) throws ServiceResultException;
 
 	/**
@@ -159,7 +158,7 @@ public interface CryptoProvider {
 	 * @param signature an array of byte.
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
-	public void verifySymm(SecurityToken token, byte[] dataToVerify,
+	public void verifySymm(SecurityPolicy policy, byte[] key, byte[] dataToVerify, int inputOffset, int verifyLen,
 			byte[] signature) throws ServiceResultException;
 
 }
