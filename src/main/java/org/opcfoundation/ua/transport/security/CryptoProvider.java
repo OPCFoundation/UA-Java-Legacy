@@ -28,35 +28,28 @@ public interface CryptoProvider {
 
 	public String base64Encode(byte[] bytes);
 
-	public Mac createMac(SecurityAlgorithm algorithm, byte[] secret)
-			throws ServiceResultException;
+	public Mac createMac(SecurityAlgorithm algorithm, byte[] secret) throws ServiceResultException;
 
-	public int decryptAsymm(PrivateKey decryptingKey,
-			SecurityAlgorithm algorithm, byte[] dataToDecrypt, byte[] output,
+	public int decryptAsymm(PrivateKey decryptingKey, SecurityAlgorithm algorithm, byte[] dataToDecrypt, byte[] output,
 			int outputOffset) throws ServiceResultException;
 
 	public int decryptSymm(SecurityPolicy policy, byte[] encryptingKey, byte[] initializationVector, byte[] dataToDecrypt,
-			int inputOffset, int inputLength, byte[] output, int outputOffset)
-					throws ServiceResultException;
+			int inputOffset, int inputLength, byte[] output, int outputOffset) throws ServiceResultException;
 
-	public void encryptAsymm(PublicKey encryptingCertificate,
-			SecurityAlgorithm algorithm, byte[] dataToEncrypt, byte[] output,
+	public void encryptAsymm(PublicKey encryptingCertificate, SecurityAlgorithm algorithm, byte[] dataToEncrypt, byte[] output,
 			int outputOffset) throws ServiceResultException;
 
 	public int encryptSymm(SecurityPolicy policy, byte[] encryptingKey, byte[] initializationVector, byte[] dataToEncrypt,
-			int inputOffset, int inputLength, byte[] output, int outputOffset)
-					throws ServiceResultException;
+			int inputOffset, int inputLength, byte[] output, int outputOffset) throws ServiceResultException;
 
-	public byte[] signAsymm(PrivateKey senderPrivate,
-			SecurityAlgorithm algorithm, byte[] dataToSign)
-					throws ServiceResultException;
+	public byte[] signAsymm(PrivateKey senderPrivate, SecurityAlgorithm algorithm, byte[] dataToSign) 
+			throws ServiceResultException;
 
 	public void signSymm(SecurityPolicy policy, byte[] key, byte[] input, int inputOffset, int verifyLen,
-			byte[] output) throws ServiceResultException;
+			byte[] output, int outputOffset) throws ServiceResultException;
 
-	public boolean verifyAsymm(PublicKey signingCertificate,
-			SecurityAlgorithm algorithm, byte[] dataToVerify, byte[] signature)
-					throws ServiceResultException;
+	public boolean verifyAsymm(PublicKey signingCertificate, SecurityAlgorithm algorithm, byte[] dataToVerify, 
+			byte[] signature) throws ServiceResultException;
 
 	public void verifySymm(SecurityPolicy policy, byte[] key, byte[] dataToVerify, int inputOffset, int verifyLen,
 			byte[] signature) throws ServiceResultException;

@@ -281,11 +281,11 @@ public class BcCryptoProvider implements CryptoProvider {
 	/** {@inheritDoc} */
 	@Override
 	public void signSymm(SecurityPolicy policy, byte[] key, byte[] input, int inputOffset, int verifyLen,
-			byte[] output) throws ServiceResultException {
+			byte[] output, int outputOffset) throws ServiceResultException {
 
 		HMac hmac = createMac(policy.getSymmetricSignatureAlgorithm(), new KeyParameter(key));
 		hmac.update(input, inputOffset, verifyLen);
-		hmac.doFinal(output, 0);
+		hmac.doFinal(output, outputOffset);
 
 	}
 

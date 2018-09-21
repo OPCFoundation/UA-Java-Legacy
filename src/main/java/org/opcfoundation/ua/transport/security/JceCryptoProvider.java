@@ -298,11 +298,11 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 	/** {@inheritDoc} */
 	@Override
 	public void signSymm(SecurityPolicy policy, byte[] key, byte[] input, int inputOffset, int verifyLen,
-			byte[] output) throws ServiceResultException {
+			byte[] output, int outputOffset) throws ServiceResultException {
 		Mac hmac = createMac(policy.getSymmetricSignatureAlgorithm(), key);
 		hmac.update(input, inputOffset, verifyLen);
 		try {
-			hmac.doFinal(output, 0);
+			hmac.doFinal(output, outputOffset);
 		} catch (GeneralSecurityException e) {
 			throw new RuntimeServiceResultException(new ServiceResultException(
 					StatusCodes.Bad_InternalError, e));
