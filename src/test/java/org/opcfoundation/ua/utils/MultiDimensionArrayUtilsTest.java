@@ -27,72 +27,68 @@
  * http://opcfoundation.org/License/MIT/1.00/
  * ======================================================================*/
 
-package org.opcfoundation.ua.unittests;
+package org.opcfoundation.ua.utils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 
-import junit.framework.TestCase;
-
+import org.junit.Test;
 import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
 import org.opcfoundation.ua.utils.MultiDimensionArrayUtils.ArrayIterator;
 
 
-public class TestMultiDimensionArrayUtils extends TestCase {
+public class MultiDimensionArrayUtilsTest {
 
 	Integer[][][] md = new Integer[][][] {{{5, 6, 7, 10}, {2, 4, 6, 9}}};
 	Integer[] sd = new Integer[] {5, 6, 7, 10, 2, 4, 6, 9};
 	
-	public void setUp() {
-	}
-	
-	public void tearDown() throws Exception {
-	}
-	
-	public void testPrintArrayDeep()
-	{
+	@Test
+	public void testPrintArrayDeep() {
 		MultiDimensionArrayUtils.printArrayDeep(md, System.out);
 	}
 	
-	public void testGetArrayLengths()
-	{
+	@Test
+	public void testGetArrayLengths() {
 		int lens[] = MultiDimensionArrayUtils.getArrayLengths(md);
 		assertTrue(Arrays.equals(new int[]{1, 2, 4}, lens));
 	}
 	
-	public void testGetDimension()
-	{
+	@Test
+	public void testGetDimension() {
 		assertEquals(3, MultiDimensionArrayUtils.getDimension(md));
 	}
 	
-	public void testCreateMultiDimArray()
-	{
+	@Test
+	public void testCreateMultiDimArray() {
 		boolean[][][] a = (boolean[][][]) MultiDimensionArrayUtils.createMultiDimArray(boolean.class, new int[] {2, 2, 2});
 		assertTrue(Arrays.deepEquals( new boolean[2][2][2], a));
 	}
 	
-	public void testGetLength()
-	{
+	@Test
+	public void testGetLength() {
 		assertEquals( 8, MultiDimensionArrayUtils.getLength( new int[] {2, 2, 2} ) );		
 	}
 	
-	public void testGetComponentType()
-	{
+	@Test
+	public void testGetComponentType() {
 		assertEquals( Integer.class, MultiDimensionArrayUtils.getComponentType(md.getClass()) );
 	}
 	
-	public void testDemuxArray()
-	{
+	@Test
+	public void testDemuxArray() {
 		Integer[][][] mdD = (Integer[][][]) MultiDimensionArrayUtils.demuxArray(sd, new int[]{1, 2, 4}, Integer.class);
 		assertTrue( Arrays.deepEquals( md, mdD) );		
 	}
 	
-	public void testMuxArray()
-	{
+	@Test
+	public void testMuxArray() {
 		Integer[] sdD = (Integer[]) MultiDimensionArrayUtils.muxArray(md);
 		assertTrue( Arrays.equals( sd, sdD) );
 	}
 	
-	public void testArrayIterator()
-	{
+	@Test
+	public void testArrayIterator() {
 		ArrayIterator<Integer> iter = MultiDimensionArrayUtils.arrayIterator(md, MultiDimensionArrayUtils.getArrayLengths(md));
 		assertEquals( 5, (int)iter.next());
 		assertEquals( 6, (int)iter.next());
@@ -104,6 +100,7 @@ public class TestMultiDimensionArrayUtils extends TestCase {
 		assertEquals( 9, (int)iter.next());		
 	}
 	
+	@Test
 	public void testMuxArray2() {
 		int sd[] = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 };
 		int[][][][] md = new int[][][][] { { { { 1, 2 }, { 3, 4 } }, { { 5, 6 }, { 7, 8 } } },
@@ -111,7 +108,5 @@ public class TestMultiDimensionArrayUtils extends TestCase {
 				{ { { 17, 18 }, { 19, 20 } }, { { 21, 22 }, { 23, 24 } } } };
 		assertTrue(Arrays.equals(sd, (int[]) MultiDimensionArrayUtils.muxArray(md)));
 	}
-	
-	
 
 }
