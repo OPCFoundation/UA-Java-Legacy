@@ -28,8 +28,7 @@
  * ======================================================================*/
 
 package org.opcfoundation.ua.utils;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 
@@ -55,8 +54,18 @@ public class MultiDimensionArrayUtilsTest {
 	}
 	
 	@Test
-	public void testGetDimension() {
+	public void getDimensionMultidimArray() {
 		assertEquals(3, MultiDimensionArrayUtils.getDimension(md));
+	}
+	
+	@Test
+	public void getDimensionArray() {
+		assertEquals(1, MultiDimensionArrayUtils.getDimension(sd));
+	}
+	
+	@Test
+	public void getDimensionScalar() throws Exception {
+		assertEquals(0, MultiDimensionArrayUtils.getDimension(Integer.valueOf(0)));
 	}
 	
 	@Test
