@@ -326,7 +326,7 @@ public class BouncyCastleUtils {
 			pemWrt.writeObject(key);
 		else {
 			char[] pw = password.toCharArray();
-			PEMEncryptor encryptor = new JcePEMEncryptorBuilder(algorithm).setSecureRandom(CryptoUtil.getRandom()).build(pw);
+			PEMEncryptor encryptor = new JcePEMEncryptorBuilder(algorithm).setProvider("BC").setSecureRandom(CryptoUtil.getRandom()).build(pw);
 			
 			pemWrt.writeObject(key, encryptor);
 		}
