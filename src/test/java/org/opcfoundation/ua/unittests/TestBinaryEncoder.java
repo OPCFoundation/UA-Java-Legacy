@@ -52,7 +52,6 @@ import org.opcfoundation.ua.core.BuildInfo;
 import org.opcfoundation.ua.core.ServerState;
 import org.opcfoundation.ua.core.ServerStatusDataType;
 import org.opcfoundation.ua.encoding.EncoderContext;
-import org.opcfoundation.ua.encoding.EncoderMode;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
@@ -73,7 +72,6 @@ public class TestBinaryEncoder extends TestCase {
 		buf.order(ByteOrder.LITTLE_ENDIAN);
 		
 		enc = new BinaryEncoder(buf);		
-		enc.setEncoderMode(EncoderMode.NonStrict);
 		ctx = new EncoderContext(new NamespaceTable(), new ServerTable(), StackUtils.getDefaultSerializer(), Integer.MAX_VALUE);
 //		ctx.setMaxArrayLength(5);
 		enc.setEncoderContext( ctx );

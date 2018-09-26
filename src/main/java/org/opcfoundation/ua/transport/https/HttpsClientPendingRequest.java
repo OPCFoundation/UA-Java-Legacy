@@ -33,7 +33,6 @@ import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.DecodingException;
-import org.opcfoundation.ua.encoding.EncoderMode;
 import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
@@ -136,7 +135,6 @@ class HttpsClientPendingRequest implements Runnable {
     		byte[] data = new byte[ len ];
     		BinaryEncoder enc = new BinaryEncoder( data );
     		enc.setEncoderContext( httpsClient.encoderCtx );
-    		enc.setEncoderMode( EncoderMode.NonStrict );
     		enc.putMessage( requestMessage );
     		httpPost.setEntity( new NByteArrayEntity(data) );
     		

@@ -65,7 +65,6 @@ import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.DecodingException;
 import org.opcfoundation.ua.encoding.EncodeType;
 import org.opcfoundation.ua.encoding.EncoderContext;
-import org.opcfoundation.ua.encoding.EncoderMode;
 import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
@@ -479,7 +478,6 @@ public class TcpConnection implements IConnection {
 				dec.setEncoderContext(ctx);
 
 				BinaryEncoder enc = new BinaryEncoder(out);
-				enc.setEncoderMode(EncoderMode.NonStrict);
 				enc.setEncoderContext(ctx);
 
 				EncoderCalc calc = new EncoderCalc();
@@ -1321,7 +1319,6 @@ public class TcpConnection implements IConnection {
 		outBuffer.order(ByteOrder.LITTLE_ENDIAN);
 		
 		BinaryEncoder enc = new BinaryEncoder(outBuffer);
-		enc.setEncoderMode(EncoderMode.NonStrict);
 		enc.setEncoderContext(ctx);
 		enc.putMessage(request);
 		return new MessageBuffers(chunks, plaintexts);

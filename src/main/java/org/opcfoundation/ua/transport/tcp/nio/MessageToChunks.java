@@ -20,7 +20,6 @@ import org.opcfoundation.ua.common.RuntimeServiceResultException;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.EncoderContext;
-import org.opcfoundation.ua.encoding.EncoderMode;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
 import org.opcfoundation.ua.encoding.binary.EncoderCalc;
@@ -93,7 +92,6 @@ public class MessageToChunks implements Callable<ByteBuffer[]>
 		
 		BinaryEncoder enc = new BinaryEncoder(array);
 		enc.setEncoderContext(encoderCtx);
-		enc.setEncoderMode(EncoderMode.NonStrict);
 		
 		if (type == MessageType.Message)
 			enc.putMessage(msg);

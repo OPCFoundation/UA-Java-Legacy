@@ -64,17 +64,15 @@ import org.opcfoundation.ua.utils.bytebuffer.IBinaryWriteable;
 import org.opcfoundation.ua.utils.bytebuffer.OutputStreamWriteable;
 
 /**
- * Encodes builtintypes, enumerations, structures and messages to
- * a byte buffer.
+ * Encodes built-in types, Enumerations, Structures and Messages.
+ * 
+ * An EncoderContext must be set before use.
  *
- * <p>
- * Null valued arguments are encoded with default empty values
- * when encoder mode is NonStrict.
+ * Null valued arguments are encoded with default empty values 
+ * (for UA types not having a Null encoding)
+ * when encoder mode is NonStrict, which is the default mode.
  *
- * @see EncoderCalc Calculates lengths of messages
- * @see IEncoder encoder interface
- * @see BinaryDecoder binary decoder
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
+ * @see BinaryDecoder the decoder equivalent of this class.
  */
 public class BinaryEncoder implements IEncoder {
 	private static Logger logger = LoggerFactory.getLogger(BinaryEncoder.class);
@@ -84,15 +82,14 @@ public class BinaryEncoder implements IEncoder {
 
 	IBinaryWriteable out;
 	EncoderContext ctx; 
-	EncoderMode mode = EncoderMode.Strict;
+	EncoderMode mode = EncoderMode.NonStrict;
 
 	/**
 	 * <p>Constructor for BinaryEncoder.</p>
 	 *
 	 * @param out a {@link org.opcfoundation.ua.utils.bytebuffer.IBinaryWriteable} object.
 	 */
-	public BinaryEncoder(IBinaryWriteable out)
-	{
+	public BinaryEncoder(IBinaryWriteable out) {
 		setWriteable(out);
 		//ctx = EncoderContext.getDefault();
 	}
@@ -102,8 +99,7 @@ public class BinaryEncoder implements IEncoder {
 	 *
 	 * @param os a {@link java.io.OutputStream} object.
 	 */
-	public BinaryEncoder(OutputStream os)
-	{
+	public BinaryEncoder(OutputStream os) {
 		OutputStreamWriteable osr = new OutputStreamWriteable(os);
 		osr.order(ByteOrder.LITTLE_ENDIAN);
 		//ctx = EncoderContext.getDefault();
@@ -115,8 +111,7 @@ public class BinaryEncoder implements IEncoder {
 	 *
 	 * @param buf a {@link java.nio.ByteBuffer} object.
 	 */
-	public BinaryEncoder(ByteBuffer buf)
-	{
+	public BinaryEncoder(ByteBuffer buf) {
 		ByteBufferWriteable wbb = new ByteBufferWriteable(buf); 
 		//ctx = EncoderContext.getDefault();
 		setWriteable(wbb);
@@ -127,8 +122,7 @@ public class BinaryEncoder implements IEncoder {
 	 *
 	 * @param buf an array of byte.
 	 */
-	public BinaryEncoder(byte[] buf)
-	{
+	public BinaryEncoder(byte[] buf) {
 		ByteBuffer bb = ByteBuffer.wrap(buf);
 		bb.order(ByteOrder.LITTLE_ENDIAN);
 		setWriteable( new ByteBufferWriteable(bb) ); 
@@ -142,8 +136,7 @@ public class BinaryEncoder implements IEncoder {
 	 * @param off a int.
 	 * @param len a int.
 	 */
-	public BinaryEncoder(byte[] buf, int off, int len)
-	{
+	public BinaryEncoder(byte[] buf, int off, int len) {
 		ByteBuffer bb = ByteBuffer.wrap(buf, off, len);
 		bb.order(ByteOrder.LITTLE_ENDIAN);
 		setWriteable( new ByteBufferWriteable(bb) ); 

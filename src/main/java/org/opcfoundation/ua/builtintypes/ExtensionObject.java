@@ -19,7 +19,6 @@ import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.DecodingException;
 import org.opcfoundation.ua.encoding.EncodeType;
 import org.opcfoundation.ua.encoding.EncoderContext;
-import org.opcfoundation.ua.encoding.EncoderMode;
 import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
@@ -117,7 +116,6 @@ public class ExtensionObject {
 		serializer.calcEncodeable(encodeable.getClass(), encodeable, calc);
 		byte[] data = new byte[calc.getLength()];
 		BinaryEncoder enc = new BinaryEncoder(data);
-		enc.setEncoderMode(EncoderMode.NonStrict);
 		enc.setEncoderContext(ctx);
 		enc.putEncodeable(null, encodeable);
 		return new ExtensionObject(encodeable.getBinaryEncodeId(), data);

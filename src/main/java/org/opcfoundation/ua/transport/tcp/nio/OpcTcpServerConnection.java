@@ -43,7 +43,6 @@ import org.opcfoundation.ua.core.OpenSecureChannelRequest;
 import org.opcfoundation.ua.core.SecurityTokenRequestType;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.EncoderContext;
-import org.opcfoundation.ua.encoding.EncoderMode;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
 import org.opcfoundation.ua.encoding.binary.EncoderCalc;
@@ -1108,7 +1107,6 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 
 				final BinaryEncoder enc = new BinaryEncoder(out);
 				enc.setEncoderContext(encoderCtx);
-				enc.setEncoderMode(EncoderMode.NonStrict);
 
 				Runnable encoder = new Runnable() {
 					@Override

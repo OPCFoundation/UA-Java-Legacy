@@ -31,7 +31,6 @@ import org.opcfoundation.ua.builtintypes.ServiceResponse;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.DecodingException;
-import org.opcfoundation.ua.encoding.EncoderMode;
 import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
@@ -227,7 +226,6 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 		    		byte[] data = new byte[ len ];
 		    		BinaryEncoder enc = new BinaryEncoder( data );
 		    		enc.setEncoderContext( endpoint.getEncoderContext() );
-		    		enc.setEncoderMode( EncoderMode.NonStrict );
 		    		enc.putMessage( responseObject );
 		    		responseHandle.setEntity( new NByteArrayEntity(data) );
 				} catch (EncodingException e) {
