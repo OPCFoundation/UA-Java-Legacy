@@ -1278,7 +1278,14 @@ public class TcpConnection implements IConnection {
 		out.put(chunk);
 	}
 
-	private MessageBuffers encodeMessage(ChunkFactory cf, int len, IEncodeable request) throws ServiceResultException {
+	private MessageBuffers encodeMessage(ChunkFactory cf, final int len, IEncodeable request) throws ServiceResultException {
+		// check message max size
+		if ( ctx.maxMessageSize!=0 && len > ctx.maxMessageSize ) {
+			final EncodingException encodingException = new EncodingException(StatusCodes.Bad_EncodingLimitsExceeded, "MaxMessageSize "+ctx.maxMessageSize+" < "+len);
+			logger.warn("encodeMessage: failed", encodingException);
+			throw encodingException;
+		}
+		
 		// Calculate chunk count
 		final int count = (len + cf.maxPlaintextSize - 1) / cf.maxPlaintextSize;
 		int maxSendChunkCount;
@@ -1312,15 +1319,6 @@ public class TcpConnection implements IConnection {
 		};
 		ByteBufferArrayWriteable2 outBuffer = new ByteBufferArrayWriteable2(plaintexts, listener);
 		outBuffer.order(ByteOrder.LITTLE_ENDIAN);
-		
-		EncoderCalc calc = new EncoderCalc();
-		calc.setEncoderContext(ctx);
-		calc.putMessage( request );
-		if ( ctx.maxMessageSize!=0 && calc.getLength() > ctx.maxMessageSize ) {
-			final EncodingException encodingException = new EncodingException(StatusCodes.Bad_EncodingLimitsExceeded, "MaxMessageSize "+ctx.maxMessageSize+" < "+len);
-			logger.warn("encodeMessage: failed", encodingException);
-			throw encodingException;
-		}
 		
 		BinaryEncoder enc = new BinaryEncoder(outBuffer);
 		enc.setEncoderMode(EncoderMode.NonStrict);
