@@ -12,6 +12,7 @@
 
 package org.opcfoundation.ua.transport.tcp.nio;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.concurrent.Callable;
@@ -22,7 +23,6 @@ import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
-import org.opcfoundation.ua.encoding.binary.EncoderCalc;
 import org.opcfoundation.ua.transport.tcp.impl.ChunkFactory;
 import org.opcfoundation.ua.transport.tcp.impl.TcpConnectionParameters;
 import org.opcfoundation.ua.utils.bytebuffer.ByteBufferArrayWriteable;
@@ -70,13 +70,14 @@ public class MessageToChunks implements Callable<ByteBuffer[]>
 	throws RuntimeServiceResultException
 	{		
 	  try {
-		EncoderCalc calc = new EncoderCalc();
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.setEncoderContext(encoderCtx);
 		if (type == MessageType.Encodeable)
 			calc.putEncodeable(null, msg);
 		else
 			calc.putMessage(msg);
-		int len = calc.getLength();
+		int len = tmp.size();
 		
 		if (len>ctx.maxSendMessageSize && ctx.maxSendMessageSize!=0)
 			throw new ServiceResultException(StatusCodes.Bad_TcpMessageTooLarge);

@@ -29,6 +29,7 @@
 
 package org.opcfoundation.ua.unittests;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -55,7 +56,6 @@ import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
-import org.opcfoundation.ua.encoding.binary.EncoderCalc;
 import org.opcfoundation.ua.utils.StackUtils;
 
 public class TestBinaryEncoder extends TestCase {
@@ -63,8 +63,9 @@ public class TestBinaryEncoder extends TestCase {
 	EncoderContext ctx;
 	BinaryEncoder enc;
 	BinaryDecoder dec;
-	EncoderCalc calc;
+	BinaryEncoder calc;
 	ByteBuffer buf;
+	ByteArrayOutputStream calcBuf;
 	
 	public void setUp() throws Exception {
 		
@@ -79,7 +80,8 @@ public class TestBinaryEncoder extends TestCase {
 		dec = new BinaryDecoder(buf);		
 		dec.setEncoderContext( ctx );
 		
-		calc = new EncoderCalc();
+		calcBuf = new ByteArrayOutputStream();
+		calc = new BinaryEncoder(calcBuf);
 		calc.setEncoderContext( ctx );		
 	}
 	
@@ -128,7 +130,7 @@ public class TestBinaryEncoder extends TestCase {
 			IEncodeable o = c.newInstance();
 			if (!( o instanceof Structure)) continue;
 			tstStructure( (Structure) o );
-			calc.reset();
+			calcBuf.reset();
 			buf.rewind();
 		}
 		
@@ -143,7 +145,7 @@ public class TestBinaryEncoder extends TestCase {
 			IEncodeable[] o = (IEncodeable[]) Array.newInstance(c, 1);
 			if (!( o instanceof Structure[])) continue;
 			tstStructureArray( (Structure[]) o );
-			calc.reset();
+			calcBuf.reset();
 			buf.rewind();
 		}		
 	}
@@ -151,10 +153,10 @@ public class TestBinaryEncoder extends TestCase {
 	public void tstVariant(Variant v) 
 	throws Exception
 	{
-		calc.reset();
+		calcBuf.reset();
 		buf.rewind();
 		calc.putVariant(null, v);
-		int len = calc.getLength();
+		int len = calcBuf.size();
 
 		buf.rewind();
 		enc.putVariant(null, v);
@@ -174,10 +176,10 @@ public class TestBinaryEncoder extends TestCase {
 	{
 		DataValue v = new DataValue(StatusCode.getFromBits( StatusCode.HISTORIANBITS_INTERPOLATED ));
 
-		calc.reset();
+		calcBuf.reset();
 		buf.rewind();
 		calc.putDataValue(null, v);
-		int len = calc.getLength();
+		int len = calcBuf.size();
 
 		buf.rewind();
 		enc.putDataValue(null, v);
@@ -192,10 +194,10 @@ public class TestBinaryEncoder extends TestCase {
 	public void tstStructure(Structure o) throws Exception 
 	{		
 //		System.out.println(o.getClass().getName());
-		calc.reset();
+		calcBuf.reset();
 		buf.rewind();
 		calc.putStructure(null, o);
-		int len = calc.getLength();
+		int len = calcBuf.size();
 
 		buf.rewind();
 		enc.putStructure(null, o);
@@ -213,10 +215,10 @@ public class TestBinaryEncoder extends TestCase {
 		Class<? extends Structure> componentType = (Class<? extends Structure>) o.getClass().getComponentType();
 
 		//		System.out.println(o.getClass().getName());
-		calc.reset();
+		calcBuf.reset();
 		buf.rewind();
 		calc.putEncodeableArray(null, componentType, o);
-		int len = calc.getLength();
+		int len = calcBuf.size();
 
 		buf.rewind();
 		enc.putEncodeableArray(null, componentType, o);
@@ -233,10 +235,10 @@ public class TestBinaryEncoder extends TestCase {
 	
 	public void tstNodeId(NodeId id) throws Exception 
 	{	
-		calc.reset();
+		calcBuf.reset();
 		buf.rewind();
 		calc.putNodeId(null, id);
-		int len = calc.getLength();
+		int len = calcBuf.size();
 
 		buf.rewind();
 		enc.putNodeId(null, id);

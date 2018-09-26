@@ -2,6 +2,7 @@ package org.opcfoundation.ua.encoding.binary;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -26,9 +27,10 @@ public class BinaryEncoderTest {
 		DateTime dt = DateTime.fromMillis(100000); //some time that is not min or max
 		UnsignedShort tenPicoSeconds = UnsignedShort.valueOf(10); //100 picoseconds, something that is not 0
 		final DataValue dv = new DataValue(new Variant(Integer.valueOf(1)), StatusCode.BAD, dt, tenPicoSeconds, dt, tenPicoSeconds);
-		EncoderCalc calc = new EncoderCalc();
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.putDataValue(null, dv);
-		int len = calc.length;
+		int len = tmp.size();
 		byte[] buf = new byte[len];
 		BinaryEncoder enc = new BinaryEncoder(buf);
 		enc.putDataValue(null, dv);
@@ -107,10 +109,11 @@ public class BinaryEncoderTest {
 	}
 	
 	private byte[] binaryEncode(Object o) throws Exception{
-		EncoderCalc calc = new EncoderCalc();
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.setEncoderContext(EncoderContext.getDefaultInstance());
 		calc.put(null, o);
-		int len = calc.length;
+		int len = tmp.size();
 		byte[] buf = new byte[len];
 		BinaryEncoder enc = new BinaryEncoder(buf);
 		enc.setEncoderContext(EncoderContext.getDefaultInstance());

@@ -2,6 +2,7 @@ package org.opcfoundation.ua.encoding.binary;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -22,10 +23,11 @@ public class BinaryDecoderTest {
 		ExpandedNodeId data = new ExpandedNodeId(null, 0, 128);
 		
 		EncoderContext ctx = EncoderContext.getDefaultInstance();
-		EncoderCalc calc = new EncoderCalc();
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.setEncoderContext(ctx);
 		calc.putExpandedNodeId(null, data);
-		int len = calc.length;
+		int len = tmp.size();
 		
 		byte[] buf = new byte[len];
 		BinaryEncoder enc = new BinaryEncoder(buf);
@@ -44,10 +46,11 @@ public class BinaryDecoderTest {
 		ExpandedNodeId data = new ExpandedNodeId(null, 0, 33000);
 		
 		EncoderContext ctx = EncoderContext.getDefaultInstance();
-		EncoderCalc calc = new EncoderCalc();
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.setEncoderContext(ctx);
 		calc.putExpandedNodeId(null, data);
-		int len = calc.length;
+		int len = tmp.size();
 		
 		byte[] buf = new byte[len];
 		BinaryEncoder enc = new BinaryEncoder(buf);
@@ -66,10 +69,11 @@ public class BinaryDecoderTest {
 		NodeId data = new NodeId(0, 128);
 		
 		EncoderContext ctx = EncoderContext.getDefaultInstance();
-		EncoderCalc calc = new EncoderCalc();
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.setEncoderContext(ctx);
 		calc.putNodeId(null, data);
-		int len = calc.length;
+		int len = tmp.size();
 		
 		byte[] buf = new byte[len];
 		BinaryEncoder enc = new BinaryEncoder(buf);
@@ -88,10 +92,11 @@ public class BinaryDecoderTest {
 		NodeId data = new NodeId(0, 33000);
 		
 		EncoderContext ctx = EncoderContext.getDefaultInstance();
-		EncoderCalc calc = new EncoderCalc();
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.setEncoderContext(ctx);
 		calc.putNodeId(null, data);
-		int len = calc.length;
+		int len = tmp.size();
 		
 		byte[] buf = new byte[len];
 		BinaryEncoder enc = new BinaryEncoder(buf);
@@ -203,10 +208,11 @@ public class BinaryDecoderTest {
 
 	
 	private byte[] binaryEncode(Object o) throws Exception{
-		EncoderCalc calc = new EncoderCalc();
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.setEncoderContext(EncoderContext.getDefaultInstance());
 		calc.put(null, o);
-		int len = calc.length;
+		int len = tmp.size();
 		byte[] buf = new byte[len];
 		BinaryEncoder enc = new BinaryEncoder(buf);
 		enc.setEncoderContext(EncoderContext.getDefaultInstance());

@@ -12,6 +12,7 @@
 
 package org.opcfoundation.ua.encoding.binary;
 
+import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -1945,10 +1946,12 @@ public class BinaryEncoder implements IEncoder {
 		}
 		putSByte(null, 1);
 		
-		EncoderCalc calc = new EncoderCalc();
+		
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.setEncoderContext( getEncoderContext() );
 		calc.putEncodeable(null, v);
-		int len = calc.getLength();
+		int len = tmp.size();
 		
 		putInt32(null, len);
 		putEncodeable(null, v);

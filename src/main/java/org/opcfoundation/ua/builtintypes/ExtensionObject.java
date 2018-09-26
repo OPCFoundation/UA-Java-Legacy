@@ -12,6 +12,7 @@
 
 package org.opcfoundation.ua.builtintypes;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 import org.opcfoundation.ua.common.NamespaceTable;
@@ -23,7 +24,6 @@ import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
-import org.opcfoundation.ua.encoding.binary.EncoderCalc;
 import org.opcfoundation.ua.encoding.binary.IEncodeableSerializer;
 import org.opcfoundation.ua.encoding.xml.XmlDecoder;
 import org.opcfoundation.ua.utils.ObjectUtils;
@@ -108,13 +108,14 @@ public class ExtensionObject {
 	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
 	 */
 	public static ExtensionObject binaryEncode(Structure encodeable, IEncodeableSerializer serializer, EncoderContext ctx)
-	throws EncodingException
-	{
-		ctx.setEncodeableSerializer(serializer);			
-		EncoderCalc calc = new EncoderCalc();
+	throws EncodingException {
+		ctx.setEncodeableSerializer(serializer);
+		
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.setEncoderContext(ctx);
 		serializer.calcEncodeable(encodeable.getClass(), encodeable, calc);
-		byte[] data = new byte[calc.getLength()];
+		byte[] data = new byte[tmp.size()];
 		BinaryEncoder enc = new BinaryEncoder(data);
 		enc.setEncoderContext(ctx);
 		enc.putEncodeable(null, encodeable);

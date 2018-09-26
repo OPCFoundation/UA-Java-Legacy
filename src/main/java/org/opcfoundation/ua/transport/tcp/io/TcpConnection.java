@@ -24,6 +24,7 @@ import static org.opcfoundation.ua.core.StatusCodes.Bad_TcpMessageTooLarge;
 import static org.opcfoundation.ua.core.StatusCodes.Bad_TcpMessageTypeInvalid;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -69,7 +70,6 @@ import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
-import org.opcfoundation.ua.encoding.binary.EncoderCalc;
 import org.opcfoundation.ua.encoding.binary.IEncodeableSerializer;
 import org.opcfoundation.ua.transport.IConnectionListener;
 import org.opcfoundation.ua.transport.SecureChannel;
@@ -480,9 +480,6 @@ public class TcpConnection implements IConnection {
 				BinaryEncoder enc = new BinaryEncoder(out);
 				enc.setEncoderContext(ctx);
 
-				EncoderCalc calc = new EncoderCalc();
-				calc.setEncoderContext(ctx);
-
 				// Hello
 				Hello h = new Hello();
 				h.setEndpointUrl(endpointDescription.getEndpointUrl());
@@ -502,9 +499,12 @@ public class TcpConnection implements IConnection {
 				}
 
 				// Write to stream
+				ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+				BinaryEncoder calc = new BinaryEncoder(tmp);
+				calc.setEncoderContext(ctx);
 				out.putInt(TcpMessageType.HELF);
 				calc.putEncodeable(null, Hello.class, h);
-				int len = calc.getAndReset() + 8;
+				int len = tmp.size() + 8;
 				out.putInt(len);
 				enc.putEncodeable(null, Hello.class, h);
 				out.flush();
@@ -1095,7 +1095,6 @@ public class TcpConnection implements IConnection {
 		if (request == null)
 			logger.warn("sendRequest: request=null");
 		
-		EncoderCalc calc = null;
 		boolean asymm = request instanceof OpenSecureChannelRequest;
 		final Socket s = getSocket();
 		logger.debug("sendRequest: socket={}", s);
@@ -1109,10 +1108,11 @@ public class TcpConnection implements IConnection {
 			SecurityToken token = null;
 
 			// Count message size
-			calc = new EncoderCalc();
+			ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+			BinaryEncoder calc = new BinaryEncoder(tmp);
 			calc.setEncoderContext(ctx);
 			calc.putMessage(request);
-			int len = calc.getAndReset();
+			int len = tmp.size();
 
 			if (secureChannelId != 0) {
 				token = getSecurityTokenToUse(secureChannelId);
@@ -1186,8 +1186,8 @@ public class TcpConnection implements IConnection {
 		} catch (RuntimeException e) {
 			logger.warn(
 					String.format(
-							"sendRequest %s failed: socket=%s, asymm=%s, calc=%s",
-							request.getClass().getName(), s, asymm, calc), e);
+							"sendRequest %s failed: socket=%s, asymm=%s",
+							request.getClass().getName(), s, asymm), e);
 			throw e;
 		}
 	}

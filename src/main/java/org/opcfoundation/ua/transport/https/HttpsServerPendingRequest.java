@@ -11,6 +11,7 @@
 */
 package org.opcfoundation.ua.transport.https;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.apache.http.Header;
@@ -35,7 +36,6 @@ import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
-import org.opcfoundation.ua.encoding.binary.EncoderCalc;
 import org.opcfoundation.ua.transport.AsyncWrite;
 import org.opcfoundation.ua.transport.ServerSecureChannel;
 import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
@@ -219,10 +219,11 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 						NHttpServerConnection nHttpServerConnection = ((HttpsServerConnection) channel.getConnection()).getNHttpServerConnection();
 						logger.debug("sendResponse: timeout={} {} context={}", httpExchange.getTimeout(), nHttpServerConnection.getSocketTimeout(), nHttpServerConnection.getContext());
 					}
-	        		EncoderCalc calc = new EncoderCalc();
+	    	    	ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+	    	    	BinaryEncoder calc = new BinaryEncoder(tmp);
 	    			calc.setEncoderContext( endpoint.getEncoderContext() );
 					calc.putMessage( responseObject );
-		    		int len = calc.getLength();
+		    		int len = tmp.size();
 		    		byte[] data = new byte[ len ];
 		    		BinaryEncoder enc = new BinaryEncoder( data );
 		    		enc.setEncoderContext( endpoint.getEncoderContext() );

@@ -18,6 +18,7 @@ import static org.opcfoundation.ua.core.StatusCodes.Bad_TcpInternalError;
 import static org.opcfoundation.ua.core.StatusCodes.Bad_Timeout;
 import static org.opcfoundation.ua.core.StatusCodes.Bad_UnexpectedError;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -45,7 +46,6 @@ import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
-import org.opcfoundation.ua.encoding.binary.EncoderCalc;
 import org.opcfoundation.ua.transport.AsyncWrite;
 import org.opcfoundation.ua.transport.CloseableObject;
 import org.opcfoundation.ua.transport.CloseableObjectState;
@@ -977,10 +977,11 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 					//Probably more efficient to check isTraceEnabled before executing ObjectUtils.printFieldsDeep
 					if (logger.isTraceEnabled())
 						logger.trace("sendSecureMessage: " + ObjectUtils.printFieldsDeep(msg.getMessage()));
-					EncoderCalc calc = new EncoderCalc();
+					ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+					BinaryEncoder calc = new BinaryEncoder(tmp);
 					calc.setEncoderContext(encoderCtx);
 					calc.putMessage(msg.getMessage());
-					int len = calc.getLength();
+					int len = tmp.size();
 
 					if (len>ctx.maxSendMessageSize && ctx.maxSendMessageSize!=0)
 						throw new ServiceResultException(StatusCodes.Bad_TcpMessageTooLarge);
