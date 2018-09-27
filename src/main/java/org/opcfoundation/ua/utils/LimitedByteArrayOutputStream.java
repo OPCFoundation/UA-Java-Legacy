@@ -54,6 +54,22 @@ public class LimitedByteArrayOutputStream extends OutputStream{
 		}
 	}
 	
+	@Override
+	public void write(byte[] b, int off, int len) throws EncodingLimitsExceededIoException {
+		//NOTE, if b is null will throw NPE, which the the same logic as in OutputStream.
+		if(delegate.size() >= limit-len) {
+			throw new EncodingLimitsExceededIoException("Stream size is "+delegate.size() + " limit is "+limit+", cannot write "+len +" bytes");
+		}else {
+			delegate.write(b, off, len);
+		}
+	}
+	
+	@Override
+	public void write(byte[] b) throws EncodingLimitsExceededIoException {
+		//NOTE, if b is null will throw NPE, which the the same logic as in OutputStream.
+		write(b, 0, b.length);
+	}
+	
 	/**
 	 * Behaves same as {@link ByteArrayOutputStream#reset()}
 	 */
@@ -66,6 +82,11 @@ public class LimitedByteArrayOutputStream extends OutputStream{
 	 */
 	public byte[] toByteArray() {
 		return delegate.toByteArray();
+	}
+	
+	@Override
+	public String toString() {
+		return delegate.toString();
 	}
 	
 }

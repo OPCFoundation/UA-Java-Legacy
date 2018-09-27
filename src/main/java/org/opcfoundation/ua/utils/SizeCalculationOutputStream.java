@@ -12,7 +12,6 @@
 
 package org.opcfoundation.ua.utils;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,8 +31,19 @@ public class SizeCalculationOutputStream extends OutputStream{
 	}
 	
 	@Override
-	public void write(int b) throws IOException {
+	public void write(int b) {
 		calc.incrementAndGet();
+	}
+	
+	@Override
+	public void write(byte[] b, int off, int len) {
+		calc.addAndGet(len);
+	}
+	
+	@Override
+	public void write(byte[] b) {
+		//NOTE, if b is null will throw NPE, which the the same logic as in OutputStream.
+		calc.addAndGet(b.length);
 	}
 	
 	/**
