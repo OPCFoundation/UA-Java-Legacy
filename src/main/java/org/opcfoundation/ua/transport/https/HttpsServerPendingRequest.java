@@ -11,6 +11,7 @@
 */
 package org.opcfoundation.ua.transport.https;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.apache.http.Header;
@@ -40,7 +41,6 @@ import org.opcfoundation.ua.transport.ServerSecureChannel;
 import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
 import org.opcfoundation.ua.transport.security.HttpsSecurityPolicy;
 import org.opcfoundation.ua.transport.tcp.impl.ErrorMessage;
-import org.opcfoundation.ua.utils.SizeCalculationOutputStream;
 import org.opcfoundation.ua.utils.StackUtils;
 
 class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, ServiceResponse> implements Runnable {
@@ -219,18 +219,13 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 						NHttpServerConnection nHttpServerConnection = ((HttpsServerConnection) channel.getConnection()).getNHttpServerConnection();
 						logger.debug("sendResponse: timeout={} {} context={}", httpExchange.getTimeout(), nHttpServerConnection.getSocketTimeout(), nHttpServerConnection.getContext());
 					}
-	    	    	SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
-	    	    	BinaryEncoder calc = new BinaryEncoder(tmp);
-	    			calc.setEncoderContext( endpoint.getEncoderContext() );
-					calc.putMessage( responseObject );
-		    		int len = tmp.getLength();
-		    		byte[] data = new byte[ len ];
-		    		BinaryEncoder enc = new BinaryEncoder( data );
-		    		enc.setEncoderContext( endpoint.getEncoderContext() );
-		    		enc.putMessage( responseObject );
-		    		responseHandle.setEntity( new NByteArrayEntity(data) );
+					ByteArrayOutputStream data = new ByteArrayOutputStream();
+					BinaryEncoder enc = new BinaryEncoder( data );
+					enc.setEncoderContext( endpoint.getEncoderContext() );
+					enc.putMessage( responseObject );
+					responseHandle.setEntity( new NByteArrayEntity(data.toByteArray()) );
 				} catch (EncodingException e) {
-			    	logger.info("sendResponse: Encoding failed", e);
+					logger.info("sendResponse: Encoding failed", e);
 					// Internal Error
 					if ( responseObject instanceof ErrorMessage == false ) {
 						responseHandle.setStatusCode( 500 );
