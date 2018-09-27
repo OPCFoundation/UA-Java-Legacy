@@ -96,6 +96,7 @@ import org.opcfoundation.ua.transport.tcp.impl.SecurityToken;
 import org.opcfoundation.ua.transport.tcp.impl.TcpMessageType;
 import org.opcfoundation.ua.utils.CertificateUtils;
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.SizeCalculationOutputStream;
 import org.opcfoundation.ua.utils.StackUtils;
 import org.opcfoundation.ua.utils.bytebuffer.ByteBufferArrayReadable;
 import org.opcfoundation.ua.utils.bytebuffer.ByteBufferArrayWriteable2;
@@ -499,12 +500,12 @@ public class TcpConnection implements IConnection {
 				}
 
 				// Write to stream
-				ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+				SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
 				BinaryEncoder calc = new BinaryEncoder(tmp);
 				calc.setEncoderContext(ctx);
 				out.putInt(TcpMessageType.HELF);
 				calc.putEncodeable(null, Hello.class, h);
-				int len = tmp.size() + 8;
+				int len = tmp.getLength() + 8;
 				out.putInt(len);
 				enc.putEncodeable(null, Hello.class, h);
 				out.flush();
@@ -1108,11 +1109,11 @@ public class TcpConnection implements IConnection {
 			SecurityToken token = null;
 
 			// Count message size
-			ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+			SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
 			BinaryEncoder calc = new BinaryEncoder(tmp);
 			calc.setEncoderContext(ctx);
 			calc.putMessage(request);
-			int len = tmp.size();
+			int len = tmp.getLength();
 
 			if (secureChannelId != 0) {
 				token = getSecurityTokenToUse(secureChannelId);

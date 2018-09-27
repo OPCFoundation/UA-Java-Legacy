@@ -28,16 +28,10 @@ public class BinaryEncoderTest {
 		UnsignedShort tenPicoSeconds = UnsignedShort.valueOf(10); //100 picoseconds, something that is not 0
 		final DataValue dv = new DataValue(new Variant(Integer.valueOf(1)), StatusCode.BAD, dt, tenPicoSeconds, dt, tenPicoSeconds);
 		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		BinaryEncoder calc = new BinaryEncoder(tmp);
-		calc.putDataValue(null, dv);
-		int len = tmp.size();
-		byte[] buf = new byte[len];
-		BinaryEncoder enc = new BinaryEncoder(buf);
+		BinaryEncoder enc = new BinaryEncoder(tmp);
 		enc.putDataValue(null, dv);
 		
-		//System.out.println(CryptoUtil.toHex(buf)); 
-		
-		BinaryDecoder dec = new BinaryDecoder(buf);
+		BinaryDecoder dec = new BinaryDecoder(tmp.toByteArray());
 		final DataValue dv2 = dec.getDataValue(null);
 		
 		//System.out.println(dv);
@@ -110,15 +104,10 @@ public class BinaryEncoderTest {
 	
 	private byte[] binaryEncode(Object o) throws Exception{
 		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		BinaryEncoder calc = new BinaryEncoder(tmp);
-		calc.setEncoderContext(EncoderContext.getDefaultInstance());
-		calc.put(null, o);
-		int len = tmp.size();
-		byte[] buf = new byte[len];
-		BinaryEncoder enc = new BinaryEncoder(buf);
+		BinaryEncoder enc = new BinaryEncoder(tmp);
 		enc.setEncoderContext(EncoderContext.getDefaultInstance());
 		enc.put(null, o);
-		return buf;
+		return tmp.toByteArray();
 	}
 	
 }

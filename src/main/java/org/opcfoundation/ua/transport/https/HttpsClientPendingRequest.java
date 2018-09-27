@@ -41,6 +41,7 @@ import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
 import org.opcfoundation.ua.transport.UriUtil;
 import org.opcfoundation.ua.transport.impl.AsyncResultImpl;
 import org.opcfoundation.ua.transport.tcp.impl.ErrorMessage;
+import org.opcfoundation.ua.utils.SizeCalculationOutputStream;
 
 class HttpsClientPendingRequest implements Runnable {
 
@@ -118,11 +119,11 @@ class HttpsClientPendingRequest implements Runnable {
 	    	httpPost.addHeader("Content-Type", "application/octet-stream");
 	    	
 			// Calculate message length
-	    	ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+	    	SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
 	    	BinaryEncoder calc = new BinaryEncoder(tmp);
        		calc.setEncoderContext( httpsClient.encoderCtx );
 			calc.putMessage( requestMessage );
-    		int len = tmp.size();
+    		int len = tmp.getLength();
 
     		// Assert max size is not exceeded
     		int maxLen = httpsClient.encoderCtx.getMaxMessageSize();

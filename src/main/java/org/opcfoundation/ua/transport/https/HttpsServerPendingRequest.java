@@ -41,6 +41,7 @@ import org.opcfoundation.ua.transport.ServerSecureChannel;
 import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
 import org.opcfoundation.ua.transport.security.HttpsSecurityPolicy;
 import org.opcfoundation.ua.transport.tcp.impl.ErrorMessage;
+import org.opcfoundation.ua.utils.SizeCalculationOutputStream;
 import org.opcfoundation.ua.utils.StackUtils;
 
 class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, ServiceResponse> implements Runnable {
@@ -219,11 +220,11 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 						NHttpServerConnection nHttpServerConnection = ((HttpsServerConnection) channel.getConnection()).getNHttpServerConnection();
 						logger.debug("sendResponse: timeout={} {} context={}", httpExchange.getTimeout(), nHttpServerConnection.getSocketTimeout(), nHttpServerConnection.getContext());
 					}
-	    	    	ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+	    	    	SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
 	    	    	BinaryEncoder calc = new BinaryEncoder(tmp);
 	    			calc.setEncoderContext( endpoint.getEncoderContext() );
 					calc.putMessage( responseObject );
-		    		int len = tmp.size();
+		    		int len = tmp.getLength();
 		    		byte[] data = new byte[ len ];
 		    		BinaryEncoder enc = new BinaryEncoder( data );
 		    		enc.setEncoderContext( endpoint.getEncoderContext() );

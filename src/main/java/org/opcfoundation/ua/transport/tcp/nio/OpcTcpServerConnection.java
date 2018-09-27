@@ -78,6 +78,7 @@ import org.opcfoundation.ua.utils.CertificateUtils;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.IStatefulObject;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.utils.SizeCalculationOutputStream;
 import org.opcfoundation.ua.utils.StackUtils;
 import org.opcfoundation.ua.utils.StateListener;
 import org.opcfoundation.ua.utils.TimerUtil;
@@ -977,11 +978,11 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 					//Probably more efficient to check isTraceEnabled before executing ObjectUtils.printFieldsDeep
 					if (logger.isTraceEnabled())
 						logger.trace("sendSecureMessage: " + ObjectUtils.printFieldsDeep(msg.getMessage()));
-					ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+					SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
 					BinaryEncoder calc = new BinaryEncoder(tmp);
 					calc.setEncoderContext(encoderCtx);
 					calc.putMessage(msg.getMessage());
-					int len = tmp.size();
+					int len = tmp.getLength();
 
 					if (len>ctx.maxSendMessageSize && ctx.maxSendMessageSize!=0)
 						throw new ServiceResultException(StatusCodes.Bad_TcpMessageTooLarge);

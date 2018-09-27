@@ -12,7 +12,6 @@
 
 package org.opcfoundation.ua.encoding.binary;
 
-import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -59,6 +58,8 @@ import org.opcfoundation.ua.encoding.EncoderMode;
 import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.IEncoder;
+import org.opcfoundation.ua.utils.EncodingLimitsExceededIoException;
+import org.opcfoundation.ua.utils.LimitedByteArrayOutputStream;
 import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
 import org.opcfoundation.ua.utils.bytebuffer.ByteBufferWriteable;
 import org.opcfoundation.ua.utils.bytebuffer.IBinaryWriteable;
@@ -299,6 +300,9 @@ public class BinaryEncoder implements IEncoder {
 			return new EncodingException(StatusCodes.Bad_ConnectionRejected, e);
 		if (e instanceof SocketException)
 			return new EncodingException(StatusCodes.Bad_CommunicationError, e);
+		if(e instanceof EncodingLimitsExceededIoException) {
+			return new EncodingException(new StatusCode(StatusCodes.Bad_EncodingLimitsExceeded), e, e.getMessage());
+		}
 		return new EncodingException(StatusCodes.Bad_UnexpectedError, e);		
 	}	
 	
@@ -1946,15 +1950,18 @@ public class BinaryEncoder implements IEncoder {
 		}
 		putSByte(null, 1);
 		
-		
-		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		BinaryEncoder calc = new BinaryEncoder(tmp);
-		calc.setEncoderContext( getEncoderContext() );
-		calc.putEncodeable(null, v);
-		int len = tmp.size();
-		
-		putInt32(null, len);
-		putEncodeable(null, v);
+		int limit = ctx.getMaxByteStringLength();
+		if(limit == 0) {
+			limit = ctx.getMaxMessageSize();
+		}
+		if(limit == 0) {
+			limit = Integer.MAX_VALUE;
+		}
+		LimitedByteArrayOutputStream tmpStream = LimitedByteArrayOutputStream.withSizeLimit(limit);
+		BinaryEncoder tmp = new BinaryEncoder(tmpStream);
+		tmp.setEncoderContext(getEncoderContext());
+		tmp.putEncodeable(null, v);
+		putByteString(null, tmpStream.toByteArray());
 	}
 
 	/**

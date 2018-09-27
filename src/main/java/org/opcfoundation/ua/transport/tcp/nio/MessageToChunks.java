@@ -25,6 +25,7 @@ import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
 import org.opcfoundation.ua.transport.tcp.impl.ChunkFactory;
 import org.opcfoundation.ua.transport.tcp.impl.TcpConnectionParameters;
+import org.opcfoundation.ua.utils.SizeCalculationOutputStream;
 import org.opcfoundation.ua.utils.bytebuffer.ByteBufferArrayWriteable;
 import org.opcfoundation.ua.utils.bytebuffer.ByteQueue;
 
@@ -66,18 +67,16 @@ public class MessageToChunks implements Callable<ByteBuffer[]>
 	
 	/** {@inheritDoc} */
 	@Override
-	public ByteBuffer[] call() 
-	throws RuntimeServiceResultException
-	{		
+	public ByteBuffer[] call() throws RuntimeServiceResultException {
 	  try {
-		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
 		BinaryEncoder calc = new BinaryEncoder(tmp);
 		calc.setEncoderContext(encoderCtx);
 		if (type == MessageType.Encodeable)
 			calc.putEncodeable(null, msg);
 		else
 			calc.putMessage(msg);
-		int len = tmp.size();
+		int len = tmp.getLength();
 		
 		if (len>ctx.maxSendMessageSize && ctx.maxSendMessageSize!=0)
 			throw new ServiceResultException(StatusCodes.Bad_TcpMessageTooLarge);

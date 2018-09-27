@@ -12,7 +12,6 @@
 
 package org.opcfoundation.ua.builtintypes;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 import org.opcfoundation.ua.common.NamespaceTable;
@@ -26,6 +25,7 @@ import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
 import org.opcfoundation.ua.encoding.binary.IEncodeableSerializer;
 import org.opcfoundation.ua.encoding.xml.XmlDecoder;
+import org.opcfoundation.ua.utils.LimitedByteArrayOutputStream;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.utils.StackUtils;
 import org.slf4j.Logger;
@@ -111,15 +111,19 @@ public class ExtensionObject {
 	throws EncodingException {
 		ctx.setEncodeableSerializer(serializer);
 		
-		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		BinaryEncoder calc = new BinaryEncoder(tmp);
-		calc.setEncoderContext(ctx);
-		serializer.calcEncodeable(encodeable.getClass(), encodeable, calc);
-		byte[] data = new byte[tmp.size()];
-		BinaryEncoder enc = new BinaryEncoder(data);
+		int limit = ctx.getMaxByteStringLength();
+		if(limit == 0) {
+			limit = ctx.getMaxMessageSize();
+		}
+		if(limit == 0) {
+			limit = Integer.MAX_VALUE;
+		}
+		LimitedByteArrayOutputStream stream = LimitedByteArrayOutputStream.withSizeLimit(limit);
+		BinaryEncoder enc = new BinaryEncoder(stream);
 		enc.setEncoderContext(ctx);
 		enc.putEncodeable(null, encodeable);
-		return new ExtensionObject(encodeable.getBinaryEncodeId(), data);
+		
+		return new ExtensionObject(encodeable.getBinaryEncodeId(), stream.toByteArray());
 	}
 	
 	/**

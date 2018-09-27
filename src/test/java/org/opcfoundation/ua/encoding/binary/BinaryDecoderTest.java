@@ -47,21 +47,15 @@ public class BinaryDecoderTest {
 		
 		EncoderContext ctx = EncoderContext.getDefaultInstance();
 		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		BinaryEncoder calc = new BinaryEncoder(tmp);
-		calc.setEncoderContext(ctx);
-		calc.putExpandedNodeId(null, data);
-		int len = tmp.size();
-		
-		byte[] buf = new byte[len];
-		BinaryEncoder enc = new BinaryEncoder(buf);
+
+		BinaryEncoder enc = new BinaryEncoder(tmp);
 		enc.setEncoderContext(ctx);
 		enc.putExpandedNodeId(null, data);
 		
-		BinaryDecoder sut = new BinaryDecoder(buf);
+		BinaryDecoder sut = new BinaryDecoder(tmp.toByteArray());
 		sut.setEncoderContext(ctx);
 		ExpandedNodeId actual = sut.getExpandedNodeId(null);
 		assertEquals(data, actual);
-
 	}
 	
 	@Test
@@ -70,21 +64,15 @@ public class BinaryDecoderTest {
 		
 		EncoderContext ctx = EncoderContext.getDefaultInstance();
 		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		BinaryEncoder calc = new BinaryEncoder(tmp);
-		calc.setEncoderContext(ctx);
-		calc.putNodeId(null, data);
-		int len = tmp.size();
-		
-		byte[] buf = new byte[len];
-		BinaryEncoder enc = new BinaryEncoder(buf);
+
+		BinaryEncoder enc = new BinaryEncoder(tmp);
 		enc.setEncoderContext(ctx);
 		enc.putNodeId(null, data);
 		
-		BinaryDecoder sut = new BinaryDecoder(buf);
+		BinaryDecoder sut = new BinaryDecoder(tmp.toByteArray());
 		sut.setEncoderContext(ctx);
 		NodeId actual = sut.getNodeId(null);
 		assertEquals(data, actual);
-		
 	}
 	
 	@Test
@@ -93,21 +81,14 @@ public class BinaryDecoderTest {
 		
 		EncoderContext ctx = EncoderContext.getDefaultInstance();
 		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		BinaryEncoder calc = new BinaryEncoder(tmp);
-		calc.setEncoderContext(ctx);
-		calc.putNodeId(null, data);
-		int len = tmp.size();
-		
-		byte[] buf = new byte[len];
-		BinaryEncoder enc = new BinaryEncoder(buf);
+		BinaryEncoder enc = new BinaryEncoder(tmp);
 		enc.setEncoderContext(ctx);
 		enc.putNodeId(null, data);
 		
-		BinaryDecoder sut = new BinaryDecoder(buf);
+		BinaryDecoder sut = new BinaryDecoder(tmp.toByteArray());
 		sut.setEncoderContext(ctx);
 		NodeId actual = sut.getNodeId(null);
 		assertEquals(data, actual);
-
 	}
 	
 	@Test
@@ -209,15 +190,10 @@ public class BinaryDecoderTest {
 	
 	private byte[] binaryEncode(Object o) throws Exception{
 		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		BinaryEncoder calc = new BinaryEncoder(tmp);
-		calc.setEncoderContext(EncoderContext.getDefaultInstance());
-		calc.put(null, o);
-		int len = tmp.size();
-		byte[] buf = new byte[len];
-		BinaryEncoder enc = new BinaryEncoder(buf);
+		BinaryEncoder enc = new BinaryEncoder(tmp);
 		enc.setEncoderContext(EncoderContext.getDefaultInstance());
 		enc.put(null, o);
-		return buf;
+		return tmp.toByteArray();
 	}
 	
 }
