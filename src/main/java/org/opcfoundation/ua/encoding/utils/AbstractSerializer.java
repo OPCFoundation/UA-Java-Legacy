@@ -62,14 +62,13 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 	}
 	
 	/**
-	 * <p>calcEncodeable.</p>
-	 *
-	 * @param encodeable a {@link org.opcfoundation.ua.encoding.IEncodeable} object.
-	 * @param calculator a {@link org.opcfoundation.ua.encoding.IEncoder} object.
-	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 * @deprecated overriding this method is no longer necessary, is not called.
 	 */
-	public abstract void calcEncodeable(IEncodeable encodeable, IEncoder calculator)
-	throws EncodingException;
+	@Deprecated
+	public void calcEncodeable(IEncodeable encodeable, IEncoder calculator)
+	throws EncodingException{
+		
+	}
 
 	/**
 	 * <p>putEncodeable.</p>
@@ -92,7 +91,11 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 	throws DecodingException;
 	
 	
-	/** {@inheritDoc} */
+
+	/**
+	 * @deprecated see text of {@link IEncodeableSerializer#calcEncodeable(Class, IEncodeable, IEncoder)}
+	 */
+	@Deprecated
 	@Override
 	public void calcEncodeable(Class<? extends IEncodeable> clazz,
 			IEncodeable encodeable, IEncoder calculator)

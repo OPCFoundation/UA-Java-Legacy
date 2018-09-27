@@ -100,7 +100,9 @@ public interface IEncodeableSerializer {
 	 * @param calculator a {@link org.opcfoundation.ua.encoding.IEncoder} object.
 	 * @param clazz a {@link java.lang.Class} object.
 	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 * @deprecated this is no longer called by the stack, equivalent operations are done though the {@link #putEncodeable(Class, IEncodeable, IEncoder)}
 	 */
+	@Deprecated
 	void calcEncodeable(Class<? extends IEncodeable> clazz, IEncodeable encodeable, IEncoder calculator)
 	throws EncodingException;
 	
