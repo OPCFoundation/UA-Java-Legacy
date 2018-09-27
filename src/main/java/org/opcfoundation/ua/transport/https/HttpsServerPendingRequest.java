@@ -11,7 +11,6 @@
 */
 package org.opcfoundation.ua.transport.https;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import org.apache.http.Header;

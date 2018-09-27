@@ -24,7 +24,6 @@ import static org.opcfoundation.ua.core.StatusCodes.Bad_TcpMessageTooLarge;
 import static org.opcfoundation.ua.core.StatusCodes.Bad_TcpMessageTypeInvalid;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.ConnectException;

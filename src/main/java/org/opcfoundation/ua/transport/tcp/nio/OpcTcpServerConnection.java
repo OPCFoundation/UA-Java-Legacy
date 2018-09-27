@@ -18,7 +18,6 @@ import static org.opcfoundation.ua.core.StatusCodes.Bad_TcpInternalError;
 import static org.opcfoundation.ua.core.StatusCodes.Bad_Timeout;
 import static org.opcfoundation.ua.core.StatusCodes.Bad_UnexpectedError;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;

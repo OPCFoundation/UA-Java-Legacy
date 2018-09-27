@@ -12,7 +12,6 @@
 
 package org.opcfoundation.ua.transport.tcp.nio;
 
-import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.concurrent.Callable;
