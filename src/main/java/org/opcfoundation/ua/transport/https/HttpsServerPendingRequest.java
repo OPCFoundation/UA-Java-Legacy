@@ -219,11 +219,11 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 						NHttpServerConnection nHttpServerConnection = ((HttpsServerConnection) channel.getConnection()).getNHttpServerConnection();
 						logger.debug("sendResponse: timeout={} {} context={}", httpExchange.getTimeout(), nHttpServerConnection.getSocketTimeout(), nHttpServerConnection.getContext());
 					}
-					ByteArrayOutputStream data = new ByteArrayOutputStream();
-					BinaryEncoder enc = new BinaryEncoder( data );
+					ByteArrayOutputStream buf = new ByteArrayOutputStream();
+					BinaryEncoder enc = new BinaryEncoder( buf );
 					enc.setEncoderContext( endpoint.getEncoderContext() );
 					enc.putMessage( responseObject );
-					responseHandle.setEntity( new NByteArrayEntity(data.toByteArray()) );
+					responseHandle.setEntity( new NByteArrayEntity(buf.toByteArray()) );
 				} catch (EncodingException e) {
 					logger.info("sendResponse: Encoding failed", e);
 					// Internal Error

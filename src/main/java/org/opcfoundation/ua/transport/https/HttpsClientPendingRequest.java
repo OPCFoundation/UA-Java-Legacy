@@ -118,11 +118,11 @@ class HttpsClientPendingRequest implements Runnable {
 	    	httpPost.addHeader("Content-Type", "application/octet-stream");
 	    	
 			// Calculate message length
-	    	SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
-	    	BinaryEncoder calc = new BinaryEncoder(tmp);
+	    	SizeCalculationOutputStream calcBuf = new SizeCalculationOutputStream();
+	    	BinaryEncoder calc = new BinaryEncoder(calcBuf);
        		calc.setEncoderContext( httpsClient.encoderCtx );
 			calc.putMessage( requestMessage );
-    		int len = tmp.getLength();
+    		int len = calcBuf.getLength();
 
     		// Assert max size is not exceeded
     		int maxLen = httpsClient.encoderCtx.getMaxMessageSize();

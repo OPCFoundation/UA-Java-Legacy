@@ -499,12 +499,12 @@ public class TcpConnection implements IConnection {
 				}
 
 				// Write to stream
-				SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
-				BinaryEncoder calc = new BinaryEncoder(tmp);
+				SizeCalculationOutputStream calcBuf = new SizeCalculationOutputStream();
+				BinaryEncoder calc = new BinaryEncoder(calcBuf);
 				calc.setEncoderContext(ctx);
 				out.putInt(TcpMessageType.HELF);
 				calc.putEncodeable(null, Hello.class, h);
-				int len = tmp.getLength() + 8;
+				int len = calcBuf.getLength() + 8;
 				out.putInt(len);
 				enc.putEncodeable(null, Hello.class, h);
 				out.flush();
@@ -1108,11 +1108,11 @@ public class TcpConnection implements IConnection {
 			SecurityToken token = null;
 
 			// Count message size
-			SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
-			BinaryEncoder calc = new BinaryEncoder(tmp);
+			SizeCalculationOutputStream calcBuf = new SizeCalculationOutputStream();
+			BinaryEncoder calc = new BinaryEncoder(calcBuf);
 			calc.setEncoderContext(ctx);
 			calc.putMessage(request);
-			int len = tmp.getLength();
+			int len = calcBuf.getLength();
 
 			if (secureChannelId != 0) {
 				token = getSecurityTokenToUse(secureChannelId);

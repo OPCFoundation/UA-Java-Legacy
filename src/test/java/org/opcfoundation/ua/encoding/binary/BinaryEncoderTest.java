@@ -27,15 +27,13 @@ public class BinaryEncoderTest {
 		DateTime dt = DateTime.fromMillis(100000); //some time that is not min or max
 		UnsignedShort tenPicoSeconds = UnsignedShort.valueOf(10); //100 picoseconds, something that is not 0
 		final DataValue dv = new DataValue(new Variant(Integer.valueOf(1)), StatusCode.BAD, dt, tenPicoSeconds, dt, tenPicoSeconds);
-		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		BinaryEncoder enc = new BinaryEncoder(tmp);
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		BinaryEncoder enc = new BinaryEncoder(buf);
 		enc.putDataValue(null, dv);
 		
-		BinaryDecoder dec = new BinaryDecoder(tmp.toByteArray());
+		BinaryDecoder dec = new BinaryDecoder(buf.toByteArray());
 		final DataValue dv2 = dec.getDataValue(null);
 		
-		//System.out.println(dv);
-		//System.out.println(dv2);
 		assertEquals(dv, dv2);
 	}
 	
@@ -103,11 +101,11 @@ public class BinaryEncoderTest {
 	}
 	
 	private byte[] binaryEncode(Object o) throws Exception{
-		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		BinaryEncoder enc = new BinaryEncoder(tmp);
+		ByteArrayOutputStream r = new ByteArrayOutputStream();
+		BinaryEncoder enc = new BinaryEncoder(r);
 		enc.setEncoderContext(EncoderContext.getDefaultInstance());
 		enc.put(null, o);
-		return tmp.toByteArray();
+		return r.toByteArray();
 	}
 	
 }

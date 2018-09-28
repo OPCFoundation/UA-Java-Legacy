@@ -977,11 +977,11 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 					//Probably more efficient to check isTraceEnabled before executing ObjectUtils.printFieldsDeep
 					if (logger.isTraceEnabled())
 						logger.trace("sendSecureMessage: " + ObjectUtils.printFieldsDeep(msg.getMessage()));
-					SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
-					BinaryEncoder calc = new BinaryEncoder(tmp);
+					SizeCalculationOutputStream calcBuf = new SizeCalculationOutputStream();
+					BinaryEncoder calc = new BinaryEncoder(calcBuf);
 					calc.setEncoderContext(encoderCtx);
 					calc.putMessage(msg.getMessage());
-					int len = tmp.getLength();
+					int len = calcBuf.getLength();
 
 					if (len>ctx.maxSendMessageSize && ctx.maxSendMessageSize!=0)
 						throw new ServiceResultException(StatusCodes.Bad_TcpMessageTooLarge);

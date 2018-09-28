@@ -118,12 +118,12 @@ public class ExtensionObject {
 		if(limit == 0) {
 			limit = Integer.MAX_VALUE;
 		}
-		LimitedByteArrayOutputStream stream = LimitedByteArrayOutputStream.withSizeLimit(limit);
-		BinaryEncoder enc = new BinaryEncoder(stream);
+		LimitedByteArrayOutputStream buf = LimitedByteArrayOutputStream.withSizeLimit(limit);
+		BinaryEncoder enc = new BinaryEncoder(buf);
 		enc.setEncoderContext(ctx);
 		enc.putEncodeable(null, encodeable);
 		
-		return new ExtensionObject(encodeable.getBinaryEncodeId(), stream.toByteArray());
+		return new ExtensionObject(encodeable.getBinaryEncodeId(), buf.toByteArray());
 	}
 	
 	/**

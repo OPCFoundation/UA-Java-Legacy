@@ -68,14 +68,14 @@ public class MessageToChunks implements Callable<ByteBuffer[]>
 	@Override
 	public ByteBuffer[] call() throws RuntimeServiceResultException {
 	  try {
-		SizeCalculationOutputStream tmp = new SizeCalculationOutputStream();
-		BinaryEncoder calc = new BinaryEncoder(tmp);
+		SizeCalculationOutputStream calcBuf = new SizeCalculationOutputStream();
+		BinaryEncoder calc = new BinaryEncoder(calcBuf);
 		calc.setEncoderContext(encoderCtx);
 		if (type == MessageType.Encodeable)
 			calc.putEncodeable(null, msg);
 		else
 			calc.putMessage(msg);
-		int len = tmp.getLength();
+		int len = calcBuf.getLength();
 		
 		if (len>ctx.maxSendMessageSize && ctx.maxSendMessageSize!=0)
 			throw new ServiceResultException(StatusCodes.Bad_TcpMessageTooLarge);
