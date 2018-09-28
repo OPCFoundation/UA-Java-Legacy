@@ -16,6 +16,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.net.SocketException;
@@ -24,7 +25,9 @@ import java.nio.ByteOrder;
 import java.nio.channels.ClosedChannelException;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -49,8 +52,10 @@ import org.opcfoundation.ua.builtintypes.UnsignedLong;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.builtintypes.XmlElement;
+import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.IdType;
+import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.EncodeType;
 import org.opcfoundation.ua.encoding.EncoderContext;
@@ -82,6 +87,291 @@ public class BinaryEncoder implements IEncoder {
 	/** Constant <code>UTF8</code> */
 	public static final Charset UTF8 = Charset.forName("utf-8");
 
+	/**
+	 * Internal helper. Must be private and nested class to access private methods of BinaryEncoder
+	 */
+	private static interface ScalarEncoder<T>{
+		
+		//NOTE! the clazz parameter is primarily for Structures
+		public void put(BinaryEncoder enc, String fieldName, T value, Class<? extends T> clazz) throws EncodingException;
+		
+	}
+	
+	/**
+	 * Private helper map, contains known scalar serializers for final classes that can be lookuped via Class object directly.
+	 */
+	private static final Map<Class<?>, ScalarEncoder<?>> finalClassesKnownSerializersHelper = new HashMap<Class<?>, BinaryEncoder.ScalarEncoder<?>>();
+	
+	private static final ScalarEncoder<DateTime> scalarSerializerDateTime;
+	private static final ScalarEncoder<ExtensionObject> scalarSerializerExtensionObject;
+	private static final ScalarEncoder<Structure> scalarSerializerStructure;
+	private static final ScalarEncoder<DataValue> scalarSerializerDataValue;
+	private static final ScalarEncoder<Variant> scalarSerializerVariant;
+	private static final ScalarEncoder<DiagnosticInfo> scalarSerializerDiagnosticInfo;
+	private static final ScalarEncoder<Enumeration> scalarSerializerEnumeration;
+	private static final ScalarEncoder<BigDecimal> scalarSerializerDecimal;
+	
+	private static final ExpandedNodeId DECIMAL_EXPANDED_NODE_ID; 
+	
+	private static <T> void addKnownFinalClassScalarSerializer(Class<T> clazz, ScalarEncoder<T> serializer) {
+		// Ensure only final classes are put into the map, as we can only use direct key lookup,
+		// not "is this class instance of some key" as there is no API to do that (and might have multiple matches).
+		if(!Modifier.isFinal(clazz.getModifiers())) {
+			throw new Error("Class "+clazz+" is not final, and cannot be put to known final classes serialization helper");
+		}
+		ScalarEncoder<?> existing = finalClassesKnownSerializersHelper.put(clazz, serializer);
+		if(existing != null) {
+			throw new Error("Class "+clazz+" already has a serializer defined");
+		}
+	}
+	
+	static {
+		DECIMAL_EXPANDED_NODE_ID = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());;
+		
+		//final classes
+		addKnownFinalClassScalarSerializer(Boolean.class, new ScalarEncoder<Boolean>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Boolean value, Class<? extends Boolean> clazz)
+					throws EncodingException {
+				enc.putBoolean(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(Byte.class, new ScalarEncoder<Byte>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Byte value, Class<? extends Byte> clazz)
+					throws EncodingException {
+				enc.putSByte(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(UnsignedByte.class, new ScalarEncoder<UnsignedByte>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, UnsignedByte value, Class<? extends UnsignedByte> clazz)
+					throws EncodingException {
+				enc.putByte(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(Short.class, new ScalarEncoder<Short>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Short value, Class<? extends Short> clazz)
+					throws EncodingException {
+				enc.putInt16(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(UnsignedShort.class, new ScalarEncoder<UnsignedShort>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, UnsignedShort value, 
+					Class<? extends UnsignedShort> clazz) throws EncodingException {
+				enc.putUInt16(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(Integer.class, new ScalarEncoder<Integer>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Integer value, Class<? extends Integer> clazz)
+					throws EncodingException {
+				enc.putInt32(fieldName, value);
+			} 
+		});
+		addKnownFinalClassScalarSerializer(UnsignedInteger.class, new ScalarEncoder<UnsignedInteger>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName,
+					UnsignedInteger value, Class<? extends UnsignedInteger> clazz) throws EncodingException {
+				enc.putUInt32(fieldName, value);
+			}
+			
+		});
+		addKnownFinalClassScalarSerializer(Long.class, new ScalarEncoder<Long>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Long value, Class<? extends Long> clazz)
+					throws EncodingException {
+				enc.putInt64(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(UnsignedLong.class, new ScalarEncoder<UnsignedLong>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, UnsignedLong value, Class<? extends UnsignedLong> clazz)
+					throws EncodingException {
+				enc.putUInt64(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(Float.class, new ScalarEncoder<Float>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Float value, Class<? extends Float> clazz)
+					throws EncodingException {
+				enc.putFloat(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(Double.class, new ScalarEncoder<Double>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Double value, Class<? extends Double> clazz)
+					throws EncodingException {
+				enc.putDouble(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(String.class, new ScalarEncoder<String>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, String value, Class<? extends String> clazz)
+					throws EncodingException {
+				enc.putString(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(UUID.class, new ScalarEncoder<UUID>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, UUID value, Class<? extends UUID> clazz)
+					throws EncodingException {
+				enc.putGuid(fieldName, value);
+			} 
+		});
+		addKnownFinalClassScalarSerializer(ByteString.class, new ScalarEncoder<ByteString>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, ByteString value, Class<? extends ByteString> clazz)
+					throws EncodingException {
+				enc.putByteString(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(XmlElement.class, new ScalarEncoder<XmlElement>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, XmlElement value, Class<? extends XmlElement> clazz)
+					throws EncodingException {
+				enc.putXmlElement(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(NodeId.class, new ScalarEncoder<NodeId>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, NodeId value, Class<? extends NodeId> clazz)
+					throws EncodingException {
+				enc.putNodeId(fieldName, value);
+			}
+		});
+		addKnownFinalClassScalarSerializer(ExpandedNodeId.class, new ScalarEncoder<ExpandedNodeId>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName,
+					ExpandedNodeId value, Class<? extends ExpandedNodeId> clazz) throws EncodingException {
+				enc.putExpandedNodeId(fieldName, value);
+				
+			}
+		});
+		addKnownFinalClassScalarSerializer(StatusCode.class, new ScalarEncoder<StatusCode>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, StatusCode value, Class<? extends StatusCode> clazz)
+					throws EncodingException {
+				enc.putStatusCode(fieldName, value);
+			} 
+		});
+		addKnownFinalClassScalarSerializer(QualifiedName.class, new ScalarEncoder<QualifiedName>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName,
+					QualifiedName value, Class<? extends QualifiedName> clazz) throws EncodingException {
+				enc.putQualifiedName(fieldName, value);				
+			}
+		});
+		addKnownFinalClassScalarSerializer(LocalizedText.class, new ScalarEncoder<LocalizedText>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName,
+					LocalizedText value, Class<? extends LocalizedText> clazz) throws EncodingException {
+				enc.putLocalizedText(fieldName, value);
+			}
+		});
+		
+		//nonfinal, must create serializer outside of map since unlimited classes map e.g. to Structure.
+		scalarSerializerDateTime = new ScalarEncoder<DateTime>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, DateTime value, Class<? extends DateTime> clazz)
+					throws EncodingException {
+				enc.putDateTime(fieldName, value);
+			}
+		};
+		scalarSerializerExtensionObject = new ScalarEncoder<ExtensionObject>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName,
+					ExtensionObject value, Class<? extends ExtensionObject> clazz) throws EncodingException {
+				enc.putExtensionObject(fieldName, value);
+			}
+		};
+		scalarSerializerStructure = new ScalarEncoder<Structure>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Structure value, Class<? extends Structure> clazz)
+					throws EncodingException {
+				enc.putEncodeable(fieldName, clazz, value);
+			}
+		};
+		scalarSerializerDataValue = new ScalarEncoder<DataValue>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, DataValue value, Class<? extends DataValue> clazz)
+					throws EncodingException {
+				enc.putDataValue(fieldName, value);
+			}
+		};
+		scalarSerializerVariant = new ScalarEncoder<Variant>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Variant value, Class<? extends Variant> clazz)
+					throws EncodingException {
+				enc.putVariant(fieldName, value);
+			}
+		};
+		scalarSerializerDiagnosticInfo = new ScalarEncoder<DiagnosticInfo>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName,
+					DiagnosticInfo value, Class<? extends DiagnosticInfo> clazz) throws EncodingException {
+				enc.putDiagnosticInfo(fieldName, value);
+			}
+		};
+		scalarSerializerEnumeration = new ScalarEncoder<Enumeration>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Enumeration value, Class<? extends Enumeration> clazz)
+					throws EncodingException {
+				enc.putEnumeration(fieldName, value);
+			}
+		};
+		scalarSerializerDecimal = new ScalarEncoder<BigDecimal>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, BigDecimal value,
+					Class<? extends BigDecimal> clazz)
+					throws EncodingException {
+				enc.putDecimal(fieldName, value);
+			}
+		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <T> ScalarEncoder<T> findScalarSerializerForClass(Class<?> clazz) throws EncodingException {
+		//Seach first known final classes
+		ScalarEncoder<?> r = finalClassesKnownSerializersHelper.get(clazz);
+		if (r != null) {
+			return (ScalarEncoder<T>) r;
+		}
+		
+		//Must check individually, as subclasses are possible and expected
+		//nonfinal, must create serializer outside of map since unlimited classes map e.g. to Structure.
+		if (ExtensionObject.class.isAssignableFrom(clazz)) {
+			return (ScalarEncoder<T>) scalarSerializerExtensionObject;
+		}
+		if (Structure.class.isAssignableFrom(clazz)) {
+			return (ScalarEncoder<T>) scalarSerializerStructure;
+		}
+		if (DataValue.class.isAssignableFrom(clazz)) {
+			return (ScalarEncoder<T>) scalarSerializerDataValue;
+		}
+		if (Variant.class.isAssignableFrom(clazz)) {
+			return (ScalarEncoder<T>) scalarSerializerVariant;
+		}
+		if (DiagnosticInfo.class.isAssignableFrom(clazz)) {
+			return (ScalarEncoder<T>) scalarSerializerDiagnosticInfo;
+		}
+		if (Enumeration.class.isAssignableFrom(clazz)) {
+			return (ScalarEncoder<T>) scalarSerializerEnumeration;
+		}
+		if(DateTime.class.isAssignableFrom(clazz)) {
+			return (ScalarEncoder<T>) scalarSerializerDateTime;
+		}
+		if(BigDecimal.class.isAssignableFrom(clazz)) {
+			return (ScalarEncoder<T>) scalarSerializerDecimal;
+		}
+		
+		//no supported class found
+		throw new EncodingException("Cannot encode class: "+clazz);
+	}
+	
+	
 	IBinaryWriteable out;
 	EncoderContext ctx; 
 	EncoderMode mode = EncoderMode.NonStrict;
@@ -223,25 +513,10 @@ public class BinaryEncoder implements IEncoder {
 	}
 	
 	private void putDecimal(String fieldName, BigDecimal bd) throws EncodingException{
-		ExtensionObject eo = EncoderUtils.decimalToExtensionObject(bd);
+		ExtensionObject eo = decimalToExtensionObject(bd);
 		putExtensionObject(fieldName, eo);
 	}
-	
-	private void putDecimalArray(String fieldName, BigDecimal[] bds) throws EncodingException{
-		try {
-			if (bds==null) {
-				out.putInt(-1);
-				return;
-			}
-		
-			assertArrayLength(bds.length);
-			out.putInt(bds.length);
-			for (BigDecimal o : bds)
-				putDecimal(null, o);
-		} catch (IOException e) {
-			throw toEncodingException(e);
-		}
-	}
+
 	
 	/**
 	 * Assert array length is within restrictions
@@ -290,8 +565,7 @@ public class BinaryEncoder implements IEncoder {
 		}
 	}		
 	
-	private static EncodingException toEncodingException(IOException e) 
-	{
+	private static EncodingException toEncodingException(IOException e) {
 		if (e instanceof ClosedChannelException)
 			return new EncodingException(StatusCodes.Bad_ConnectionClosed, e);
 		if (e instanceof EOFException)
@@ -304,7 +578,11 @@ public class BinaryEncoder implements IEncoder {
 			return new EncodingException(new StatusCode(StatusCodes.Bad_EncodingLimitsExceeded), e, e.getMessage());
 		}
 		return new EncodingException(StatusCodes.Bad_UnexpectedError, e);		
-	}	
+	}
+	
+
+	
+	
 	
 	/** {@inheritDoc} */
 	public void putBoolean(String fieldName, Boolean v)
@@ -2195,7 +2473,7 @@ public class BinaryEncoder implements IEncoder {
 		if (!v.isArray()) {
 			putSByte(null, builtinType);
 			if(isDecimal) {
-				o = EncoderUtils.decimalToExtensionObject((BigDecimal) o);
+				o = decimalToExtensionObject((BigDecimal) o);
 			}
 			putScalar(null, builtinType, o);
 			return;
@@ -2206,7 +2484,7 @@ public class BinaryEncoder implements IEncoder {
 		if (dim==1) {
 			putSByte( null, (builtinType | 0x80));
 			if(isDecimal) {
-				o = EncoderUtils.decimalArraytoExtensionObjectArray((BigDecimal[]) o);
+				o = decimalArraytoExtensionObjectArray((BigDecimal[]) o);
 			}
 			putArray(null, builtinType, o);
 			return;
@@ -2222,7 +2500,7 @@ public class BinaryEncoder implements IEncoder {
 			while (i.hasNext()) {
 				Object elem = i.next();
 				if(isDecimal) {
-					elem = EncoderUtils.decimalToExtensionObject((BigDecimal) elem);
+					elem = decimalToExtensionObject((BigDecimal) elem);
 				}
 				putScalar(null, builtinType, elem);
 			}
@@ -2612,29 +2890,107 @@ public class BinaryEncoder implements IEncoder {
 	/** {@inheritDoc} */
 	@Override
 	public void put(String fieldName, Object o) throws EncodingException {
-		if(o instanceof BigDecimal) {
-			put(fieldName, o, BigDecimal.class);
-			return;
+		if(o == null){
+			throw new EncodingException("Cannot encode null object without Class information, use the overload that takes Class parameter");
 		}
-		if(o instanceof BigDecimal[]) {
-			put(fieldName, o, BigDecimal[].class);
-			return;
-		}
-		EncoderUtils.put(this, fieldName, o);
+		put(fieldName, o, o.getClass());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void put(String fieldName, Object o, Class<?> clazz) throws EncodingException {
-		if(BigDecimal.class.isAssignableFrom(clazz)) {
-			putDecimal(fieldName, (BigDecimal) o);
+		// NOTE! the Object o is allowed to be null, therefore all logic must avoid using that
+		// i.e. it is just passed to the internal serializer and generic array handling logic.
+		
+		//Get component type of the class, if it is an array
+		final Class<?> componentType = MultiDimensionArrayUtils.getComponentType(clazz);
+		
+		//Find scalar serializer for the component type (will throw if not supported class)
+		ScalarEncoder<Object> serializer = findScalarSerializerForClass(componentType);
+		
+		//Get number of dimensions for the potential array
+		int dims = MultiDimensionArrayUtils.getClassDimensions(clazz);
+		
+		//handle scalar, just call serializer directly
+		if(dims == 0) {
+			serializer.put(this, fieldName, o, componentType);
 			return;
 		}
-		if(BigDecimal[].class.isAssignableFrom(clazz)) {
-			putDecimalArray(fieldName, (BigDecimal[]) o);
+		
+		//handle 1-dim
+		if(dims == 1) {
+			if (o==null) {
+				putInt32(null, -1);
+				return;
+			}
+			//value is 1-dim array, can be casted to Object[]
+			Object[] arr = (Object[]) o;
+			int len = arr.length;
+			assertArrayLength(len);
+			putInt32(null, len);
+			for(Object elem : arr) {
+				serializer.put(this, null, elem, componentType);
+			}
 			return;
-		}		
-		EncoderUtils.put(this, fieldName, o, clazz);
+		}
+
+		//handle multidim,
+		if(o == null) {
+			//NOTE specification is not clear on how multidim null should be encoded.
+			//1-dim encoding maintains the difference vs. empty so encoding null like
+			//an empty would, but set each dimension to -1, which 1-dim uses for null.
+			int[] nulldims = new int[dims];
+			for(int i=0;i<nulldims.length;i++) {
+				nulldims[i] = -1;
+			}
+			putInt32Array(null, nulldims);
+			return;
+		}
+		
+		//Based on the spec Part 6 the form is Int32 array of the dims following the array values individually
+		int[] arrayDims = MultiDimensionArrayUtils.getArrayLengths(o);
+		//NOTE! output is 1-dim array that can be casted to Object[]
+		Object[] muxed = (Object[]) MultiDimensionArrayUtils.muxArray(o, arrayDims, componentType);
+		int muxedlen = muxed.length;
+		assertArrayLength(muxedlen); //assumption
+		putInt32Array(null, arrayDims);
+		//NOTE! based on the spec there is no second array len in the stream for the individual values
+		for(Object elem : muxed) {
+			serializer.put(this, null, elem, componentType);
+		}
+		
+	}
+
+	static ExtensionObject[] decimalArraytoExtensionObjectArray(BigDecimal[] bds) throws EncodingException{
+		if(bds == null) {
+			return null;
+		}
+		ExtensionObject[] r = new ExtensionObject[bds.length];
+		for(int i = 0; i<bds.length;i++) {
+			r[i] = decimalToExtensionObject(bds[i]);
+		}
+		return r;
+	}
+
+	static ExtensionObject decimalToExtensionObject(BigDecimal bd) throws EncodingException {
+		int scaleInt = bd.scale();
+		if(scaleInt > Short.MAX_VALUE) {
+			throw new EncodingException("Decimal scale overflow Short max value: "+scaleInt);
+		}
+		if(scaleInt < Short.MIN_VALUE) {
+			throw new EncodingException("Decimal scale underflow Short min value: "+scaleInt);
+		}
+		short scale = (short)scaleInt;
+		ByteBuffer bb = ByteBuffer.allocate(2);
+		bb.order(ByteOrder.LITTLE_ENDIAN);
+		bb.putShort(scale);
+		byte[] scalebytes = bb.array();
+		
+		//NOTE BigInteger uses big-endian, and UA Decimal encoding uses little-endian
+		byte[] valuebytes = ByteUtils.reverse(bd.unscaledValue().toByteArray());
+		byte[] combined = ByteUtils.concat(scalebytes, valuebytes);
+		
+		return new ExtensionObject(DECIMAL_EXPANDED_NODE_ID, combined);
 	}
 
 	

@@ -1,17 +1,27 @@
 package org.opcfoundation.ua.encoding.binary;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
+import org.opcfoundation.ua.core.NodeAttributes;
+import org.opcfoundation.ua.core.ObjectAttributes;
+import org.opcfoundation.ua.core.ServerState;
+import org.opcfoundation.ua.core.ServerStatusDataType;
 import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.utils.CryptoUtil;
 
@@ -65,6 +75,20 @@ public class BinaryEncoderTest {
 	}
 	
 	@Test
+	public void verifyBooleanMultidim() throws Exception {
+		BinaryEncoder enc = spy(new BinaryEncoder(new ByteArrayOutputStream()));
+		enc.setEncoderContext(EncoderContext.getDefaultInstance());
+		Boolean[][] test = new Boolean[2][2];
+		for(int i = 0;i<2;i++) {
+			for(int j = 0; j<2; j++) {
+				test[i][j] = Boolean.TRUE;
+			}
+		}
+		enc.put("Test", test);
+		verify(enc, times(4)).putBoolean(null, Boolean.TRUE);
+	}
+	
+	@Test
 	public void decimalArrayEncoding() throws Exception {
 		long value = 1518632738243L;
 		ArrayList<BigDecimal> data = new ArrayList<BigDecimal>();
@@ -98,6 +122,78 @@ public class BinaryEncoderTest {
 		dec.setEncoderContext(EncoderContext.getDefaultInstance());
 		Variant actual = dec.get(null, Variant.class);
 		assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void verifyPutStructureCallsPutEncodeable() throws Exception {
+		BinaryEncoder enc = spy(new BinaryEncoder(new ByteArrayOutputStream()));
+		enc.setEncoderContext(EncoderContext.getDefaultInstance());
+		ServerStatusDataType test = new ServerStatusDataType();
+		enc.put("Test", test, ServerStatusDataType.class);
+		verify(enc).putEncodeable("Test", ServerStatusDataType.class, test);
+	}
+	
+	@Test
+	public void verifyStructureArray() throws Exception {
+		BinaryEncoder enc = spy(new BinaryEncoder(new ByteArrayOutputStream()));
+		enc.setEncoderContext(EncoderContext.getDefaultInstance());
+		ServerStatusDataType[] test = new ServerStatusDataType[2];
+		ServerStatusDataType t1 = new ServerStatusDataType();
+		ServerStatusDataType t2 = new ServerStatusDataType();
+		test[0] = t1;
+		test[1] = t2;
+		enc.put("Test", test, ServerStatusDataType[].class);
+		ArgumentCaptor<ServerStatusDataType> cap = ArgumentCaptor.forClass(ServerStatusDataType.class);
+		verify(enc, times(2)).putEncodeable(eq((String)null), eq(ServerStatusDataType.class), cap.capture());
+		List<ServerStatusDataType> caps = cap.getAllValues();
+		assertSame(t1, caps.get(0));
+		assertSame(t2, caps.get(1));
+	}
+	
+	@Test
+	public void verifyEnumerationArrayWithClass() throws Exception {
+		BinaryEncoder enc = spy(new BinaryEncoder(new ByteArrayOutputStream()));
+		enc.setEncoderContext(EncoderContext.getDefaultInstance());
+		ServerState[] test = new ServerState[2];
+		test[0] = ServerState.Running;
+		test[1] = ServerState.Shutdown;
+		enc.put("Test", test, ServerState[].class);
+		ArgumentCaptor<ServerState> cap = ArgumentCaptor.forClass(ServerState.class);
+		verify(enc, times(2)).putEnumeration(eq((String)null), cap.capture());
+		List<ServerState> caps = cap.getAllValues();
+		assertSame(ServerState.Running, caps.get(0));
+		assertSame(ServerState.Shutdown, caps.get(1));
+	}
+	
+	@Test
+	public void verifyCorrectStructureClassUsed() throws Exception {
+		/*
+		 * Point of this test is to ensure the given Class parameter
+		 * is used when determining the Structure serializer,
+		 * and not a potential subclass from the Object.
+		 * 
+		 */
+		BinaryEncoder enc = spy(new BinaryEncoder(new ByteArrayOutputStream()));
+		enc.setEncoderContext(EncoderContext.getDefaultInstance());
+		ObjectAttributes test = new ObjectAttributes();
+		enc.put("Test", test, NodeAttributes.class);
+		verify(enc).putEncodeable("Test", NodeAttributes.class, test);
+	}
+	
+	@Test
+	public void verifyBooleanWithoutClass() throws Exception {
+		BinaryEncoder enc = spy(new BinaryEncoder(new ByteArrayOutputStream()));
+		Boolean test = Boolean.TRUE;
+		enc.put("Test", test);
+		verify(enc).putBoolean("Test", test);
+	}
+	
+	@Test
+	public void verifyBooleanWithtClass() throws Exception {
+		BinaryEncoder enc = spy(new BinaryEncoder(new ByteArrayOutputStream()));
+		Boolean test = Boolean.TRUE;
+		enc.put("Test", test, Boolean.class);
+		verify(enc).putBoolean("Test", test);
 	}
 	
 	private byte[] binaryEncode(Object o) throws Exception{
