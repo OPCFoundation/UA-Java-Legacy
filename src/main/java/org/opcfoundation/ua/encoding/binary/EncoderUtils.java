@@ -44,7 +44,9 @@ import org.opcfoundation.ua.encoding.IEncoder;
 /**
  * <p>EncoderUtils class.</p>
  *
+ *@deprecated use equivalent methods from the {@link IEncoder} object
  */
+@Deprecated
 public class EncoderUtils {
 	/**
 	 * <p>put.</p>
@@ -53,7 +55,9 @@ public class EncoderUtils {
 	 * @param fieldName a {@link java.lang.String} object.
 	 * @param o a {@link java.lang.Object} object.
 	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 * @deprecated use {@link IEncoder#put(String, Object)} directly instead
 	 */
+	@Deprecated
 	public static void put(IEncoder encoder, String fieldName, Object o) throws EncodingException {
 		if(o == null){
 			throw new EncodingException("Cannot encode null object without Class information");
@@ -71,7 +75,9 @@ public class EncoderUtils {
 	 * @param o a {@link java.lang.Object} object.
 	 * @param clazz a {@link java.lang.Class} object.
 	 * @throws org.opcfoundation.ua.encoding.EncodingException if any.
+	 * @deprecated use {@link IEncoder#put(String, Object, Class)} directly instead
 	 */
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	public static void put(IEncoder encoder, String fieldName, Object o, Class<?> clazz) throws EncodingException {
 		if (Boolean.class.isAssignableFrom(clazz)) {
