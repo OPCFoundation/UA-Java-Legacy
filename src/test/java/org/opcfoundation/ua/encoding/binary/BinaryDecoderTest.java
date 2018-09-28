@@ -100,7 +100,7 @@ public class BinaryDecoderTest {
 		byte[] scalebytes = binaryEncode(scale);
 		byte[] valuebytes = binaryEncode(value);
 		System.out.println("valuebits:" + CryptoUtil.toHex(valuebytes));
-		byte[] combinedbytes = EncoderUtils.concat(scalebytes, valuebytes);
+		byte[] combinedbytes = ByteUtils.concat(scalebytes, valuebytes);
 		System.out.println("combined bytes len: "+combinedbytes.length);
 		ExpandedNodeId id = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());
 		ExtensionObject eo = new ExtensionObject(id, combinedbytes);
@@ -178,7 +178,7 @@ public class BinaryDecoderTest {
 	private byte[] createDecimalAsEncodedBytes(long valueraw, short scale) throws Exception{
 		byte[] scalebytes = binaryEncode(scale);
 		byte[] valuebytes = binaryEncode(valueraw);
-		return EncoderUtils.concat(scalebytes, valuebytes);
+		return ByteUtils.concat(scalebytes, valuebytes);
 	}
 
 	

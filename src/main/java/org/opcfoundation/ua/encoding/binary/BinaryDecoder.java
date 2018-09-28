@@ -1729,7 +1729,7 @@ public class BinaryDecoder implements IDecoder {
 		// value is rest of the bytes, as little-endian
 		// NOTE! BigInteger wants big-endian input
 		byte[] valueData = Arrays.copyOfRange(data, 2, data.length);
-		valueData = EncoderUtils.reverse(valueData);
+		valueData = ByteUtils.reverse(valueData);
 		BigInteger value = new BigInteger(valueData);
 		return new BigDecimal(value, scale);
 	}
