@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.ConnectException;
@@ -27,6 +28,8 @@ import java.nio.ByteOrder;
 import java.nio.channels.ClosedChannelException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.opcfoundation.ua.builtintypes.ByteString;
@@ -47,6 +50,7 @@ import org.opcfoundation.ua.builtintypes.UnsignedLong;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.builtintypes.XmlElement;
+import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.DecodingException;
@@ -84,8 +88,292 @@ public class BinaryDecoder implements IDecoder {
 			return new DecodingException(StatusCodes.Bad_UnexpectedError, e);
 		return new DecodingException(StatusCodes.Bad_UnexpectedError, e);
 	}
+	
+	/**
+	 * Internal helper. Must be private and nested class to access private methods of BinaryDecoder
+	 */
+	private static interface ScalarDecoder<T>{
+		
+		//NOTE! the clazz parameter is primarily for Structures
+		public T get(BinaryDecoder dec, String fieldName, Class<? extends T> clazz) throws DecodingException;
+		
+	}
+	
+	/**
+	 * Private helper map, contains known scalar serializers for final classes that can be lookuped via Class object directly.
+	 */
+	private static final Map<Class<?>, ScalarDecoder<?>> finalClassesKnownSerializersHelper = new HashMap<Class<?>, ScalarDecoder<?>>();
+	
+	private static final ScalarDecoder<DateTime> scalarSerializerDateTime;
+	private static final ScalarDecoder<ExtensionObject> scalarSerializerExtensionObject;
+	private static final ScalarDecoder<Structure> scalarSerializerStructure;
+	private static final ScalarDecoder<DataValue> scalarSerializerDataValue;
+	private static final ScalarDecoder<Variant> scalarSerializerVariant;
+	private static final ScalarDecoder<DiagnosticInfo> scalarSerializerDiagnosticInfo;
+	private static final ScalarDecoder<Enumeration> scalarSerializerEnumeration;
+	private static final ScalarDecoder<BigDecimal> scalarSerializerDecimal;
+	
+	private static final ExpandedNodeId DECIMAL_EXPANDED_NODE_ID; 
+	
+	private static <T> void addKnownFinalClassScalarSerializer(Class<T> clazz, ScalarDecoder<T> serializer) {
+		// Ensure only final classes are put into the map, as we can only use direct key lookup,
+		// not "is this class instance of some key" as there is no API to do that (and might have multiple matches).
+		if(!Modifier.isFinal(clazz.getModifiers())) {
+			throw new Error("Class "+clazz+" is not final, and cannot be put to known final classes serialization helper");
+		}
+		ScalarDecoder<?> existing = finalClassesKnownSerializersHelper.put(clazz, serializer);
+		if(existing != null) {
+			throw new Error("Class "+clazz+" already has a serializer defined");
+		}
+	}
+	
+	static {
+		DECIMAL_EXPANDED_NODE_ID = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());;
+		
+		//final classes
+		addKnownFinalClassScalarSerializer(Boolean.class, new ScalarDecoder<Boolean>() {
+			@Override
+			public Boolean get(BinaryDecoder dec, String fieldName, Class<? extends Boolean> clazz)
+					throws DecodingException {
+				return dec.getBoolean(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(Byte.class, new ScalarDecoder<Byte>() {
+			@Override
+			public Byte get(BinaryDecoder dec, String fieldName, Class<? extends Byte> clazz)
+					throws DecodingException {
+				return dec.getSByte(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(UnsignedByte.class, new ScalarDecoder<UnsignedByte>() {
+			@Override
+			public UnsignedByte get(BinaryDecoder dec, String fieldName, Class<? extends UnsignedByte> clazz)
+					throws DecodingException {
+				return dec.getByte(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(Short.class, new ScalarDecoder<Short>() {
+			@Override
+			public Short get(BinaryDecoder dec, String fieldName, Class<? extends Short> clazz)
+					throws DecodingException {
+				return dec.getInt16(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(UnsignedShort.class, new ScalarDecoder<UnsignedShort>() {
+			@Override
+			public UnsignedShort get(BinaryDecoder dec, String fieldName, Class<? extends UnsignedShort> clazz)
+					throws DecodingException {
+				return dec.getUInt16(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(Integer.class, new ScalarDecoder<Integer>() {
+			@Override
+			public Integer get(BinaryDecoder dec, String fieldName, Class<? extends Integer> clazz)
+					throws DecodingException {
+				return dec.getInt32(fieldName);
+			} 
+		});
+		addKnownFinalClassScalarSerializer(UnsignedInteger.class, new ScalarDecoder<UnsignedInteger>() {
+			@Override
+			public UnsignedInteger get(BinaryDecoder dec, String fieldName,
+					Class<? extends UnsignedInteger> clazz) throws DecodingException {
+				return dec.getUInt32(fieldName);
+			}
+			
+		});
+		addKnownFinalClassScalarSerializer(Long.class, new ScalarDecoder<Long>() {
+			@Override
+			public Long get(BinaryDecoder dec, String fieldName, Class<? extends Long> clazz)
+					throws DecodingException {
+				return dec.getInt64(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(UnsignedLong.class, new ScalarDecoder<UnsignedLong>() {
+			@Override
+			public UnsignedLong get(BinaryDecoder dec, String fieldName, Class<? extends UnsignedLong> clazz)
+					throws DecodingException {
+				return dec.getUInt64(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(Float.class, new ScalarDecoder<Float>() {
+			@Override
+			public Float get(BinaryDecoder dec, String fieldName, Class<? extends Float> clazz)
+					throws DecodingException {
+				return dec.getFloat(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(Double.class, new ScalarDecoder<Double>() {
+			@Override
+			public Double get(BinaryDecoder dec, String fieldName, Class<? extends Double> clazz)
+					throws DecodingException {
+				return dec.getDouble(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(String.class, new ScalarDecoder<String>() {
+			@Override
+			public String get(BinaryDecoder dec, String fieldName, Class<? extends String> clazz)
+					throws DecodingException {
+				return dec.getString(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(UUID.class, new ScalarDecoder<UUID>() {
+			@Override
+			public UUID get(BinaryDecoder dec, String fieldName, Class<? extends UUID> clazz)
+					throws DecodingException {
+				return dec.getGuid(fieldName);
+			} 
+		});
+		addKnownFinalClassScalarSerializer(ByteString.class, new ScalarDecoder<ByteString>() {
+			@Override
+			public ByteString get(BinaryDecoder dec, String fieldName, Class<? extends ByteString> clazz)
+					throws DecodingException {
+				return dec.getByteString(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(XmlElement.class, new ScalarDecoder<XmlElement>() {
+			@Override
+			public XmlElement get(BinaryDecoder dec, String fieldName, Class<? extends XmlElement> clazz)
+					throws DecodingException {
+				return dec.getXmlElement(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(NodeId.class, new ScalarDecoder<NodeId>() {
+			@Override
+			public NodeId get(BinaryDecoder dec, String fieldName, Class<? extends NodeId> clazz)
+					throws DecodingException {
+				return dec.getNodeId(fieldName);
+			}
+		});
+		addKnownFinalClassScalarSerializer(ExpandedNodeId.class, new ScalarDecoder<ExpandedNodeId>() {
+			@Override
+			public ExpandedNodeId get(BinaryDecoder dec, String fieldName,
+					Class<? extends ExpandedNodeId> clazz) throws DecodingException {
+				return dec.getExpandedNodeId(fieldName);
+				
+			}
+		});
+		addKnownFinalClassScalarSerializer(StatusCode.class, new ScalarDecoder<StatusCode>() {
+			@Override
+			public StatusCode get(BinaryDecoder dec, String fieldName, Class<? extends StatusCode> clazz)
+					throws DecodingException {
+				return dec.getStatusCode(fieldName);
+			} 
+		});
+		addKnownFinalClassScalarSerializer(QualifiedName.class, new ScalarDecoder<QualifiedName>() {
+			@Override
+			public QualifiedName get(BinaryDecoder dec, String fieldName,
+					Class<? extends QualifiedName> clazz) throws DecodingException {
+				return dec.getQualifiedName(fieldName);				
+			}
+		});
+		addKnownFinalClassScalarSerializer(LocalizedText.class, new ScalarDecoder<LocalizedText>() {
+			@Override
+			public LocalizedText get(BinaryDecoder dec, String fieldName,
+					Class<? extends LocalizedText> clazz) throws DecodingException {
+				return dec.getLocalizedText(fieldName);
+			}
+		});
+		
+		//nonfinal, must create serializer outside of map since unlimited classes map e.g. to Structure.
+		scalarSerializerDateTime = new ScalarDecoder<DateTime>() {
+			@Override
+			public DateTime get(BinaryDecoder dec, String fieldName, Class<? extends DateTime> clazz)
+					throws DecodingException {
+				return dec.getDateTime(fieldName);
+			}
+		};
+		scalarSerializerExtensionObject = new ScalarDecoder<ExtensionObject>() {
+			@Override
+			public ExtensionObject get(BinaryDecoder dec, String fieldName,
+					Class<? extends ExtensionObject> clazz) throws DecodingException {
+				return dec.getExtensionObject(fieldName);
+			}
+		};
+		scalarSerializerStructure = new ScalarDecoder<Structure>() {
+			@Override
+			public Structure get(BinaryDecoder dec, String fieldName, Class<? extends Structure> clazz)
+					throws DecodingException {
+				return dec.getEncodeable(fieldName, clazz);
+			}
+		};
+		scalarSerializerDataValue = new ScalarDecoder<DataValue>() {
+			@Override
+			public DataValue get(BinaryDecoder dec, String fieldName, Class<? extends DataValue> clazz)
+					throws DecodingException {
+				return dec.getDataValue(fieldName);
+			}
+		};
+		scalarSerializerVariant = new ScalarDecoder<Variant>() {
+			@Override
+			public Variant get(BinaryDecoder dec, String fieldName, Class<? extends Variant> clazz)
+					throws DecodingException {
+				return dec.getVariant(fieldName);
+			}
+		};
+		scalarSerializerDiagnosticInfo = new ScalarDecoder<DiagnosticInfo>() {
+			@Override
+			public DiagnosticInfo get(BinaryDecoder dec, String fieldName,
+					Class<? extends DiagnosticInfo> clazz) throws DecodingException {
+				return dec.getDiagnosticInfo(fieldName);
+			}
+		};
+		scalarSerializerEnumeration = new ScalarDecoder<Enumeration>() {
+			@Override
+			public Enumeration get(BinaryDecoder dec, String fieldName, Class<? extends Enumeration> clazz)
+					throws DecodingException {
+				return dec.getEnumeration(fieldName, clazz);
+			}
+		};
+		scalarSerializerDecimal = new ScalarDecoder<BigDecimal>() {
+			@Override
+			public BigDecimal get(BinaryDecoder dec, String fieldName, Class<? extends BigDecimal> clazz)
+					throws DecodingException {
+				return dec.getDecimal(fieldName);
+			}
+		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <T> ScalarDecoder<T> findScalarSerializerForClass(Class<?> clazz) throws DecodingException {
+		//Seach first known final classes
+		ScalarDecoder<?> r = finalClassesKnownSerializersHelper.get(clazz);
+		if (r != null) {
+			return (ScalarDecoder<T>) r;
+		}
+		
+		//Must check individually, as subclasses are possible and expected
+		//nonfinal, must create serializer outside of map since unlimited classes map e.g. to Structure.
+		if (ExtensionObject.class.isAssignableFrom(clazz)) {
+			return (ScalarDecoder<T>) scalarSerializerExtensionObject;
+		}
+		if (Structure.class.isAssignableFrom(clazz)) {
+			return (ScalarDecoder<T>) scalarSerializerStructure;
+		}
+		if (DataValue.class.isAssignableFrom(clazz)) {
+			return (ScalarDecoder<T>) scalarSerializerDataValue;
+		}
+		if (Variant.class.isAssignableFrom(clazz)) {
+			return (ScalarDecoder<T>) scalarSerializerVariant;
+		}
+		if (DiagnosticInfo.class.isAssignableFrom(clazz)) {
+			return (ScalarDecoder<T>) scalarSerializerDiagnosticInfo;
+		}
+		if (Enumeration.class.isAssignableFrom(clazz)) {
+			return (ScalarDecoder<T>) scalarSerializerEnumeration;
+		}
+		if(DateTime.class.isAssignableFrom(clazz)) {
+			return (ScalarDecoder<T>) scalarSerializerDateTime;
+		}
+		if(BigDecimal.class.isAssignableFrom(clazz)) {
+			return (ScalarDecoder<T>) scalarSerializerDecimal;
+		}
+		
+		//no supported class found
+		throw new DecodingException("Cannot decode class: "+clazz);
+	}
+	
+	
 	IBinaryReadable in;
-
 	EncoderContext ctx;
 
 	/**
@@ -93,8 +381,7 @@ public class BinaryDecoder implements IDecoder {
 	 *
 	 * @param buf an array of byte.
 	 */
-	public BinaryDecoder(byte[] buf)
-	{
+	public BinaryDecoder(byte[] buf) {
 		ByteBuffer bb = ByteBuffer.wrap(buf);
 		bb.order(ByteOrder.LITTLE_ENDIAN);
 		setReadable( new ByteBufferReadable(bb) );
@@ -107,8 +394,7 @@ public class BinaryDecoder implements IDecoder {
 	 * @param off a int.
 	 * @param len a int.
 	 */
-	public BinaryDecoder(byte[] buf, int off, int len)
-	{
+	public BinaryDecoder(byte[] buf, int off, int len) {
 		ByteBuffer bb = ByteBuffer.wrap(buf, off, len);
 		bb.order(ByteOrder.LITTLE_ENDIAN);
 		setReadable( new ByteBufferReadable(bb) );
@@ -119,8 +405,7 @@ public class BinaryDecoder implements IDecoder {
 	 *
 	 * @param buf a {@link java.nio.ByteBuffer} object.
 	 */
-	public BinaryDecoder(ByteBuffer buf)
-	{
+	public BinaryDecoder(ByteBuffer buf) {
 		setReadable(new ByteBufferReadable(buf));
 	}
 
@@ -129,8 +414,7 @@ public class BinaryDecoder implements IDecoder {
 	 *
 	 * @param in a {@link org.opcfoundation.ua.utils.bytebuffer.IBinaryReadable} object.
 	 */
-	public BinaryDecoder(IBinaryReadable in)
-	{
+	public BinaryDecoder(IBinaryReadable in) {
 		setReadable(in);
 	}
 
@@ -140,8 +424,7 @@ public class BinaryDecoder implements IDecoder {
 	 * @param is a {@link java.io.InputStream} object.
 	 * @param limit a int.
 	 */
-	public BinaryDecoder(InputStream is, int limit)
-	{
+	public BinaryDecoder(InputStream is, int limit) {
 		InputStreamReadable isr = new InputStreamReadable(is, limit);
 		isr.order(ByteOrder.LITTLE_ENDIAN);
 		setReadable(isr);
@@ -149,189 +432,70 @@ public class BinaryDecoder implements IDecoder {
 
 	/** {@inheritDoc} */
 	@Override
-	@SuppressWarnings("unchecked")
 	public <T> T get(String fieldName, Class<T> clazz) throws DecodingException {
-		if (clazz.equals(Boolean.class)) {
-			return (T) getBoolean(fieldName);
-		}
-		if (clazz.equals(Byte.class)) {
-			return (T) getSByte(fieldName);
-		}
-		if (clazz.equals(UnsignedByte.class)) {
-			return (T) getByte(fieldName);
-		}
-		if (clazz.equals(Short.class)) {
-			return (T) getInt16(fieldName);
-		}
-		if (clazz.equals(UnsignedShort.class)) {
-			return (T) getUInt16(fieldName);
-		}
-		if (clazz.equals(Integer.class)) {
-			return (T) getInt32(fieldName);
-		}
-		if (clazz.equals(UnsignedInteger.class)) {
-			return (T) getUInt32(fieldName);
-		}
-		if (clazz.equals(Long.class)) {
-			return (T) getInt64(fieldName);
-		}
-		if (clazz.equals(UnsignedLong.class)) {
-			return (T) getUInt64(fieldName);
-		}
-		if (clazz.equals(Float.class)) {
-			return (T) getFloat(fieldName);
-		}
-		if (clazz.equals(Double.class)) {
-			return (T) getDouble(fieldName);
-		}
-		if (clazz.equals(String.class)) {
-			return (T) getString(fieldName);
-		}
-		if (clazz.equals(DateTime.class)) {
-			return (T) getDateTime(fieldName);
-		}
-		if (clazz.equals(UUID.class)) {
-			return (T) getGuid(fieldName);
-		}
-		if (clazz.equals(ByteString.class)) {
-			return (T) getByteString(fieldName);
-		}
-		if (clazz.equals(XmlElement.class)) {
-			return (T) getXmlElement(fieldName);
-		}
-		if (clazz.equals(NodeId.class)) {
-			return (T) getNodeId(fieldName);
-		}
-		if (clazz.equals(ExpandedNodeId.class)) {
-			return (T) getExpandedNodeId(fieldName);
-		}
-		if (clazz.equals(StatusCode.class)) {
-			return (T) getStatusCode(fieldName);
-		}
-		if (clazz.equals(QualifiedName.class)) {
-			return (T) getQualifiedName(fieldName);
-		}
-		if (clazz.equals(LocalizedText.class)) {
-			return (T) getLocalizedText(fieldName);
-		}
-		if (clazz.equals(ExtensionObject.class)) {
-			return (T) getExtensionObject(fieldName);
-		}
-		if (Structure.class.isAssignableFrom(clazz)) {
-			return (T) getEncodeable(fieldName, (Class<? extends IEncodeable>) clazz);
-		}
-		if (clazz.equals(DataValue.class)) {
-			return (T) getDataValue(fieldName);
-		}
-		if (clazz.equals(Variant.class)) {
-			return (T) getVariant(fieldName);
-		}
-		if (clazz.equals(Object.class)) {
-			return (T) getVariant(fieldName).getValue();
-		}
-		if (clazz.equals(DiagnosticInfo.class)) {
-			return (T) getDiagnosticInfo(fieldName);
-		}
-		if (clazz.equals(Boolean[].class)) {
-			return (T) getBooleanArray(fieldName);
-		}
-		if (clazz.equals(Byte[].class)) {
-			return (T) getSByteArray(fieldName);
-		}
-		if (clazz.equals(UnsignedByte[].class)) {
-			return (T) getByteArray(fieldName);
-		}
-		if (clazz.equals(Short[].class)) {
-			return (T) getInt16Array(fieldName);
-		}
-		if (clazz.equals(UnsignedShort[].class)) {
-			return (T) getUInt16Array(fieldName);
-		}
-		if (clazz.equals(Integer[].class)) {
-			return (T) getInt32Array(fieldName);
-		}
-		if (clazz.equals(UnsignedInteger[].class)) {
-			return (T) getUInt32Array(fieldName);
-		}
-		if (clazz.equals(Long[].class)) {
-			return (T) getInt64Array(fieldName);
-		}
-		if (clazz.equals(UnsignedLong[].class)) {
-			return (T) getUInt64Array(fieldName);
-		}
-		if (clazz.equals(Float[].class)) {
-			return (T) getFloatArray(fieldName);
-		}
-		if (clazz.equals(Double[].class)) {
-			return (T) getDoubleArray(fieldName);
-		}
-		if (clazz.equals(String[].class)) {
-			return (T) getStringArray(fieldName);
-		}
-		if (clazz.equals(DateTime[].class)) {
-			return (T) getDateTimeArray(fieldName);
-		}
-		if (clazz.equals(UUID[].class)) {
-			return (T) getGuidArray(fieldName);
-		}
-		if (clazz.equals(ByteString[].class)) {
-			return (T) getByteStringArray(fieldName);
-		}
-		if (clazz.equals(XmlElement[].class)) {
-			return (T) getXmlElementArray(fieldName);
-		}
-		if (clazz.equals(NodeId[].class)) {
-			return (T) getNodeIdArray(fieldName);
-		}
-		if (clazz.equals(ExpandedNodeId[].class)) {
-			return (T) getExpandedNodeIdArray(fieldName);
-		}
-		if (clazz.equals(StatusCode[].class)) {
-			return (T) getStatusCodeArray(fieldName);
-		}
-		if (clazz.equals(QualifiedName[].class)) {
-			return (T) getQualifiedNameArray(fieldName);
-		}
-		if (clazz.equals(LocalizedText[].class)) {
-			return (T) getLocalizedTextArray(fieldName);
-		}
-		if (clazz.equals(ExtensionObject[].class)) {
-			return (T) getExtensionObjectArray(fieldName);
-		}
-		if (clazz.getComponentType() != null && Structure.class.isAssignableFrom(clazz.getComponentType())) {
-			return (T) getEncodeableArray(fieldName, (Class<? extends Structure>) clazz.getComponentType());
-		}
-		if (clazz.equals(DataValue[].class)) {
-			return (T) getDataValueArray(fieldName);
-		}
-		if (clazz.equals(Variant[].class)) {
-			return (T) getVariantArray(fieldName);
-		}
-		if (clazz.equals(Object[].class)) {
-			Variant[] varArray = getVariantArray(fieldName);
-			Object[] objArray = new Object[varArray.length];
-			for (int i = 0; i < varArray.length; i++)
-				objArray[i] = varArray[i].getValue();
-			return (T) objArray;
-		}
-		if (clazz.equals(DiagnosticInfo[].class)) {
-			return (T) getDiagnosticInfoArray(fieldName);
-		}
-		if (Enumeration.class.isAssignableFrom(clazz)) {
-			return (T) getEnumeration(fieldName, (Class<? extends Enumeration>) clazz);
-		}
-		if (clazz.getComponentType() != null && Enumeration.class.isAssignableFrom(clazz.getComponentType())) {
-			return (T) getEnumerationArray(fieldName, (Class<? extends Enumeration>) clazz);
+		//Get component type of the class, if it is an array
+		final Class<?> componentType = MultiDimensionArrayUtils.getComponentType(clazz);
+		
+		//Find scalar serializer for the component type (will throw if not supported class)
+		ScalarDecoder<?> serializer = findScalarSerializerForClass(componentType);
+		
+		//Get number of dimensions for the potential array
+		int dims = MultiDimensionArrayUtils.getClassDimensions(clazz);
+		
+		//handle scalar, just call serializer directly
+		if(dims == 0) {
+			@SuppressWarnings("unchecked")
+			ScalarDecoder<T> sSerializer = (ScalarDecoder<T>) serializer;
+			return sSerializer.get(this, fieldName, clazz);
 		}
 		
-		if(clazz.equals(BigDecimal.class)) {
-			return (T) getDecimal(fieldName);
-		}
-		if(clazz.equals(BigDecimal[].class)) {
-			return (T) getDecimalArray(fieldName);
+		//handle 1-dim array
+		if(dims == 1) {
+			final int len = getInt32(null);
+			if(len == -1) {
+				//null array
+				return null;
+			}
+			
+			//can cast; actual type does not change
+			Object[] arr = (Object[]) Array.newInstance(componentType, len);
+			@SuppressWarnings("unchecked")
+			ScalarDecoder<Object> sSerializer = (ScalarDecoder<Object>) serializer;
+			for(int i=0;i<len;i++) {
+				arr[i] = sSerializer.get(this, null, componentType);
+			}
+			@SuppressWarnings("unchecked")
+			T r = (T) arr;
+			return r;
 		}
 		
-		throw new DecodingException("Cannot decode "+clazz);
+		//handle multidim
+		int[] arrDims = getInt32Array_(null);
+		if(arrDims == null) {
+			//ASSUMPTION, null if dimensions not known, returning null
+			return null;
+		}
+		int totalElements = 1; //starting value; total is multiplication of all elements
+		for(int dimLen : arrDims) {
+			//ASSUMPTION, if any is negative, it means it is null instead of empty
+			//specification does not define null specially, but assuming one exists
+			//as it does for 1-dim arrays and there the separation must be kept.
+			if(dimLen < 0) {
+				return null;
+			}
+			//NOTE that if any is 0, total is 0, which is what spec says.
+			totalElements = totalElements * dimLen;
+		}
+		//can cast; actual type does not change
+		Object[] arr = (Object[]) Array.newInstance(componentType, totalElements);
+		@SuppressWarnings("unchecked")
+		ScalarDecoder<Object> sSerializer = (ScalarDecoder<Object>) serializer;
+		for(int i=0;i<totalElements;i++) {
+			arr[i] = sSerializer.get(this, null, componentType);
+		}
+		@SuppressWarnings("unchecked")
+		T r = (T) MultiDimensionArrayUtils.demuxArray(arr, arrDims, componentType);
+		return r;
 	}
 
 	/** {@inheritDoc} */
@@ -1694,6 +1858,9 @@ public class BinaryDecoder implements IDecoder {
 	private BigDecimal getDecimal(String fieldName) throws DecodingException {
 		//Decimals are encoded as fake Structures
 		ExtensionObject eo = getExtensionObject(fieldName);
+		if(getEncoderContext().getNamespaceTable().nodeIdEquals(eo.getTypeId(), DECIMAL_EXPANDED_NODE_ID)) {
+			logger.error("Encountered a Decimal that does not define correct id, is {}", eo.getTypeId());
+		}
 		try {
 			byte[] data = (byte[]) eo.getObject();
 			return bytesToDecimal(data);
@@ -1734,20 +1901,6 @@ public class BinaryDecoder implements IDecoder {
 		return new BigDecimal(value, scale);
 	}
 
-	private BigDecimal[] getDecimalArray(String fieldName) throws DecodingException{
-		try {
-			int len = in.getInt();
-			if (len==-1) return null;
-			assertArrayLength(len, 3);
-			BigDecimal[] result = new BigDecimal[len];
-			for (int i=0; i<len; i++)
-				result[i] = getDecimal(null);
-			return result;
-		} catch (IOException e) {
-			throw toDecodingException(e);
-		}
-	}
-	
 	/**
 	 * <p>remaining.</p>
 	 *

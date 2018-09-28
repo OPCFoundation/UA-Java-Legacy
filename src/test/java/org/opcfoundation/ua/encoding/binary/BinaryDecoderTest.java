@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.Test;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
@@ -15,6 +16,7 @@ import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.MultiDimensionArrayUtils;
 
 public class BinaryDecoderTest {
 	
@@ -67,6 +69,17 @@ public class BinaryDecoderTest {
 		sut.setEncoderContext(ctx);
 		NodeId actual = sut.getNodeId(null);
 		assertEquals(data, actual);
+	}
+	
+	@Test
+	public void multidimBooleanArray() throws Exception {
+		//TODO refactor to test vs. already encoded data
+		Boolean[][] expected = (Boolean[][]) MultiDimensionArrayUtils.demuxArray(new Boolean[] {true,  true,  true, true}, new int[] {2,2}, Boolean.class);
+		byte[] encoded = binaryEncode(expected);
+		BinaryDecoder sut = new BinaryDecoder(encoded);
+		sut.setEncoderContext(EncoderContext.getDefaultInstance());
+		Boolean[][] actual = sut.get(null, Boolean[][].class);
+		assertTrue(Arrays.deepEquals(expected, actual));
 	}
 	
 	@Test
