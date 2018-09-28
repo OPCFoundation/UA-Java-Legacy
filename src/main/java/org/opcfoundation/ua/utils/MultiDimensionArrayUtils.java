@@ -181,6 +181,13 @@ public class MultiDimensionArrayUtils {
 	public static int getDimension(Object value)
 	{			
 		Class<?> clazz = value.getClass();
+		return getClassDimensions(clazz);
+	}
+
+	/**
+	 * Get the number of dimensions the class has. 0 if not array.
+	 */
+	public static int getClassDimensions(Class<?> clazz) {
 		String signature = clazz.getName();
 		int dim = 0;
 		for (; dim<signature.length(); dim++)		
