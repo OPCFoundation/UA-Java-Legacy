@@ -1858,7 +1858,7 @@ public class BinaryDecoder implements IDecoder {
 	private BigDecimal getDecimal(String fieldName) throws DecodingException {
 		//Decimals are encoded as fake Structures
 		ExtensionObject eo = getExtensionObject(fieldName);
-		if(getEncoderContext().getNamespaceTable().nodeIdEquals(eo.getTypeId(), DECIMAL_EXPANDED_NODE_ID)) {
+		if(!getEncoderContext().getNamespaceTable().nodeIdEquals(eo.getTypeId(), DECIMAL_EXPANDED_NODE_ID)) {
 			logger.error("Encountered a Decimal that does not define correct id, is {}", eo.getTypeId());
 		}
 		try {
