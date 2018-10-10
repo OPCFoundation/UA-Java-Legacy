@@ -1,3 +1,7 @@
+1.3.346
+Fixed (#167): Removed redundant Message size calculation in TcpConnection.encodeMessage
+Fixed: Added .setProvider("BC") to BouncyCastleUtils.writeToPem as like in others methods of that class
+
 1.3.345
 Fixed (#83): Fixed NPE if equals was called for lazily encoded ExtensionObject
 Fixed (#150): First tcp message "UA Hello" was segmented, added buffering to avoid tcp fragments of one byte
