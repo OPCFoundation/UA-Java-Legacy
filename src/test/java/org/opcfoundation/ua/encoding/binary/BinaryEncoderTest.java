@@ -48,6 +48,19 @@ public class BinaryEncoderTest {
 	}
 	
 	@Test
+	public void objectClassEncoderPut() throws Exception {
+		Integer number = 438975789;
+		byte[] expected = binaryEncode(new Variant(number));
+		
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		BinaryEncoder sut = new BinaryEncoder(buf);
+		sut.put(null, number, Object.class);
+		
+		byte[] actual = buf.toByteArray();
+		assertArrayEquals(expected, actual);
+	}
+	
+	@Test
 	public void decimalEncoding() throws Exception {
 		long value = 1518632738243L; //random number
 		short scale = 4;

@@ -72,6 +72,16 @@ public class BinaryDecoderTest {
 	}
 	
 	@Test
+	public void objectClassDecoderGet() throws Exception {
+		final Integer expected = Integer.valueOf(1237891223);
+		byte[] data = binaryEncode(new Variant(expected));
+		BinaryDecoder sut = new BinaryDecoder(data);
+		sut.setEncoderContext(EncoderContext.getDefaultInstance());
+		Object actual = sut.get(null, Object.class);
+		assertEquals(expected, actual);
+	}
+	
+	@Test
 	public void multidimBooleanArray() throws Exception {
 		//TODO refactor to test vs. already encoded data
 		Boolean[][] expected = (Boolean[][]) MultiDimensionArrayUtils.demuxArray(new Boolean[] {true,  true,  true, true}, new int[] {2,2}, Boolean.class);

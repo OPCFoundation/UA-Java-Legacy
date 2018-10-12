@@ -118,8 +118,10 @@ public class BinaryDecoder implements IDecoder {
 	private static <T> void addKnownFinalClassScalarSerializer(Class<T> clazz, ScalarDecoder<T> serializer) {
 		// Ensure only final classes are put into the map, as we can only use direct key lookup,
 		// not "is this class instance of some key" as there is no API to do that (and might have multiple matches).
-		if(!Modifier.isFinal(clazz.getModifiers())) {
-			throw new Error("Class "+clazz+" is not final, and cannot be put to known final classes serialization helper");
+		if(!Object.class.equals(clazz)) { //direct Object.class is special, see the static init block
+			if(!Modifier.isFinal(clazz.getModifiers())) {
+				throw new Error("Class "+clazz+" is not final, and cannot be put to known final classes serialization helper");
+			}
 		}
 		ScalarDecoder<?> existing = finalClassesKnownSerializersHelper.put(clazz, serializer);
 		if(existing != null) {
@@ -331,6 +333,16 @@ public class BinaryDecoder implements IDecoder {
 				return dec.getDecimal(fieldName);
 			}
 		};
+		
+		//Extra, see BinaryEncoder for the equivalent block and explanations
+		addKnownFinalClassScalarSerializer(Object.class, new ScalarDecoder<Object>() {
+			@Override
+			public Object get(BinaryDecoder dec, String fieldName,
+					Class<? extends Object> clazz) throws DecodingException {
+				return scalarSerializerVariant.get(dec, fieldName, Variant.class).getValue();
+			}
+		});
+		
 	}
 	
 	@SuppressWarnings("unchecked")

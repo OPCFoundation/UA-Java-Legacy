@@ -116,8 +116,10 @@ public class BinaryEncoder implements IEncoder {
 	private static <T> void addKnownFinalClassScalarSerializer(Class<T> clazz, ScalarEncoder<T> serializer) {
 		// Ensure only final classes are put into the map, as we can only use direct key lookup,
 		// not "is this class instance of some key" as there is no API to do that (and might have multiple matches).
-		if(!Modifier.isFinal(clazz.getModifiers())) {
-			throw new Error("Class "+clazz+" is not final, and cannot be put to known final classes serialization helper");
+		if(!Object.class.equals(clazz)) { //direct Object.class is special, see the static init block
+			if(!Modifier.isFinal(clazz.getModifiers())) {
+				throw new Error("Class "+clazz+" is not final, and cannot be put to known final classes serialization helper");
+			}
 		}
 		ScalarEncoder<?> existing = finalClassesKnownSerializersHelper.put(clazz, serializer);
 		if(existing != null) {
@@ -330,6 +332,20 @@ public class BinaryEncoder implements IEncoder {
 				enc.putDecimal(fieldName, value);
 			}
 		};
+		
+		//Extra, if given Object.class, put the value to a Variant and encode as Variant. This can be used to map
+		//Object.class <-> BaseDataType in serializers in addition to using Variant directly
+		//Uses variant serializer, therefore added last
+		//Additionally Object is not final, but the end result is that it should here behave as it would
+		// i.e. only and only if the given Class is directly Object (and not a subtype) it should use this one
+		addKnownFinalClassScalarSerializer(Object.class, new ScalarEncoder<Object>() {
+			@Override
+			public void put(BinaryEncoder enc, String fieldName, Object value,
+					Class<? extends Object> clazz) throws EncodingException {
+				scalarSerializerVariant.put(enc, fieldName, new Variant(value), Variant.class);
+			}
+		});
+		
 	}
 	
 	@SuppressWarnings("unchecked")
