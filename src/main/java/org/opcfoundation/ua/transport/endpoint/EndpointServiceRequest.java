@@ -13,6 +13,7 @@
 package org.opcfoundation.ua.transport.endpoint;
 
 import org.opcfoundation.ua.application.Server;
+import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.ServiceRequest;
 import org.opcfoundation.ua.builtintypes.ServiceResponse;
 import org.opcfoundation.ua.builtintypes.ServiceResult;
@@ -33,6 +34,7 @@ public abstract class EndpointServiceRequest<Request extends ServiceRequest, Res
 	protected Server server;
 	protected Endpoint endpoint;
 	protected Request request;
+	protected DateTime receiveTimestamp;
 
 	/**
 	 * <p>Constructor for EndpointServiceRequest.</p>
@@ -41,11 +43,20 @@ public abstract class EndpointServiceRequest<Request extends ServiceRequest, Res
 	 * @param server a {@link org.opcfoundation.ua.application.Server} object.
 	 * @param endpoint a {@link org.opcfoundation.ua.transport.Endpoint} object.
 	 */
-	public EndpointServiceRequest(Request request, Server server, Endpoint endpoint)
-	{
+	public EndpointServiceRequest(Request request, Server server, Endpoint endpoint) {
 		this.request = request;
 		this.server = server;
 		this.endpoint = endpoint;
+
+		//Best-effort solution, should be quite close.
+		this.receiveTimestamp = DateTime.currentTime();
+	}
+	
+	/**
+	 * Server-side timestamp when the {@link #getRequest()} was obtained. 
+	 */
+	public DateTime getReceiveTimestamp() {
+		return receiveTimestamp;
 	}
 	
 	/**
