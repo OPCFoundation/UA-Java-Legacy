@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.core.HistoryEventFieldList;
 import org.opcfoundation.ua.utils.AbstractStructure;
@@ -41,9 +43,9 @@ import org.opcfoundation.ua.utils.AbstractStructure;
 
 public class HistoryEvent extends AbstractStructure {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryEvent);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryEvent_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.HistoryEvent_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.HistoryEvent.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.HistoryEvent_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.HistoryEvent_Encoding_DefaultXml.getValue());
 	
     protected HistoryEventFieldList[] Events;
     

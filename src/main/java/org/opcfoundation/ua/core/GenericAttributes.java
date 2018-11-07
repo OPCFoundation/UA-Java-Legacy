@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.LocalizedText;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
@@ -43,9 +45,9 @@ import org.opcfoundation.ua.core.NodeAttributes;
 
 public class GenericAttributes extends NodeAttributes {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.GenericAttributes);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.GenericAttributes_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.GenericAttributes_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.GenericAttributes.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.GenericAttributes_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.GenericAttributes_Encoding_DefaultXml.getValue());
 	
     protected GenericAttributeValue[] AttributeValues;
     

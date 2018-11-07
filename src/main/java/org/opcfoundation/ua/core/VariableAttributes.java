@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.LocalizedText;
 import org.opcfoundation.ua.builtintypes.NodeId;
@@ -45,9 +47,9 @@ import org.opcfoundation.ua.core.NodeAttributes;
 
 public class VariableAttributes extends NodeAttributes {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.VariableAttributes);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.VariableAttributes_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.VariableAttributes_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.VariableAttributes.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.VariableAttributes_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.VariableAttributes_Encoding_DefaultXml.getValue());
 	
     protected Variant Value;
     protected NodeId DataType;

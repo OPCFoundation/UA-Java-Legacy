@@ -33,15 +33,17 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
 public class XVType extends AbstractStructure {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.XVType);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.XVType_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.XVType_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.XVType.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.XVType_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.XVType_Encoding_DefaultXml.getValue());
 	
     protected Double X;
     protected Float Value;

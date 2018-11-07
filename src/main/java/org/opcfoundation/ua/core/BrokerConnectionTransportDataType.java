@@ -33,15 +33,17 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.core.ConnectionTransportDataType;
 
 
 
 public class BrokerConnectionTransportDataType extends ConnectionTransportDataType {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.BrokerConnectionTransportDataType);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.BrokerConnectionTransportDataType_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.BrokerConnectionTransportDataType_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.BrokerConnectionTransportDataType.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.BrokerConnectionTransportDataType_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.BrokerConnectionTransportDataType_Encoding_DefaultXml.getValue());
 	
     protected String ResourceUri;
     protected String AuthenticationProfileUri;

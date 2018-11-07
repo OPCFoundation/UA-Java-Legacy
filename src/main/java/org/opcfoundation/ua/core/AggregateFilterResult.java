@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.core.AggregateConfiguration;
 import org.opcfoundation.ua.core.MonitoringFilterResult;
@@ -41,9 +43,9 @@ import org.opcfoundation.ua.core.MonitoringFilterResult;
 
 public class AggregateFilterResult extends MonitoringFilterResult {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.AggregateFilterResult);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.AggregateFilterResult_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.AggregateFilterResult_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.AggregateFilterResult.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.AggregateFilterResult_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.AggregateFilterResult_Encoding_DefaultXml.getValue());
 	
     protected DateTime RevisedStartTime;
     protected Double RevisedProcessingInterval;

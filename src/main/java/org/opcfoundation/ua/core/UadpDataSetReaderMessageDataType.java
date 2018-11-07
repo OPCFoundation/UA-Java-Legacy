@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.UUID;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.builtintypes.UnsignedShort;
@@ -42,9 +44,9 @@ import org.opcfoundation.ua.core.DataSetReaderMessageDataType;
 
 public class UadpDataSetReaderMessageDataType extends DataSetReaderMessageDataType {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.UadpDataSetReaderMessageDataType);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.UadpDataSetReaderMessageDataType_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.UadpDataSetReaderMessageDataType_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.UadpDataSetReaderMessageDataType.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.UadpDataSetReaderMessageDataType_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.UadpDataSetReaderMessageDataType_Encoding_DefaultXml.getValue());
 	
     protected UnsignedInteger GroupVersion;
     protected UnsignedShort NetworkMessageNumber;

@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.DataTypeDefinition;
@@ -43,9 +45,9 @@ import org.opcfoundation.ua.core.StructureType;
 
 public class StructureDefinition extends DataTypeDefinition {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.StructureDefinition);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.StructureDefinition_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.StructureDefinition_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.StructureDefinition.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.StructureDefinition_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.StructureDefinition_Encoding_DefaultXml.getValue());
 	
     protected NodeId DefaultEncodingId;
     protected NodeId BaseDataType;

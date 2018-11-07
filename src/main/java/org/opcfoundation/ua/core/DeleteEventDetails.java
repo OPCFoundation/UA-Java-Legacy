@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.NodeId;
@@ -42,9 +44,9 @@ import org.opcfoundation.ua.core.HistoryUpdateDetails;
 
 public class DeleteEventDetails extends HistoryUpdateDetails {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DeleteEventDetails);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DeleteEventDetails_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.DeleteEventDetails_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DeleteEventDetails.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DeleteEventDetails_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DeleteEventDetails_Encoding_DefaultXml.getValue());
 	
     protected ByteString[] EventIds;
     

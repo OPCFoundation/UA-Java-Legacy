@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.core.EventFilter;
@@ -44,9 +46,9 @@ import org.opcfoundation.ua.core.PerformUpdateType;
 
 public class UpdateEventDetails extends HistoryUpdateDetails {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.UpdateEventDetails);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.UpdateEventDetails_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.UpdateEventDetails_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.UpdateEventDetails.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.UpdateEventDetails_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.UpdateEventDetails_Encoding_DefaultXml.getValue());
 	
     protected PerformUpdateType PerformInsertReplace;
     protected EventFilter Filter;

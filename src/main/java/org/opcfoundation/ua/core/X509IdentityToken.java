@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.core.UserIdentityToken;
 
@@ -40,9 +42,9 @@ import org.opcfoundation.ua.core.UserIdentityToken;
 
 public class X509IdentityToken extends UserIdentityToken {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.X509IdentityToken);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.X509IdentityToken_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.X509IdentityToken_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.X509IdentityToken.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.X509IdentityToken_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.X509IdentityToken_Encoding_DefaultXml.getValue());
 	
     protected ByteString CertificateData;
     

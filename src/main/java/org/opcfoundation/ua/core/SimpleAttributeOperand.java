@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.QualifiedName;
@@ -43,9 +45,9 @@ import org.opcfoundation.ua.core.FilterOperand;
 
 public class SimpleAttributeOperand extends FilterOperand {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.SimpleAttributeOperand);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.SimpleAttributeOperand_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.SimpleAttributeOperand_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.SimpleAttributeOperand.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.SimpleAttributeOperand_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.SimpleAttributeOperand_Encoding_DefaultXml.getValue());
 	
     protected NodeId TypeDefinitionId;
     protected QualifiedName[] BrowsePath;

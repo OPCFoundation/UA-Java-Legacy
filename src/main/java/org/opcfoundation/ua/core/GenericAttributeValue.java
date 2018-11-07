@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.utils.AbstractStructure;
@@ -41,9 +43,9 @@ import org.opcfoundation.ua.utils.AbstractStructure;
 
 public class GenericAttributeValue extends AbstractStructure {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.GenericAttributeValue);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.GenericAttributeValue_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.GenericAttributeValue_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.GenericAttributeValue.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.GenericAttributeValue_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.GenericAttributeValue_Encoding_DefaultXml.getValue());
 	
     protected UnsignedInteger AttributeId;
     protected Variant Value;

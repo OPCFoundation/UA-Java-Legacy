@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.builtintypes.UnsignedByte;
 import org.opcfoundation.ua.core.WriterGroupTransportDataType;
 
@@ -40,9 +42,9 @@ import org.opcfoundation.ua.core.WriterGroupTransportDataType;
 
 public class DatagramWriterGroupTransportDataType extends WriterGroupTransportDataType {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DatagramWriterGroupTransportDataType);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DatagramWriterGroupTransportDataType_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.DatagramWriterGroupTransportDataType_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DatagramWriterGroupTransportDataType.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DatagramWriterGroupTransportDataType_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DatagramWriterGroupTransportDataType_Encoding_DefaultXml.getValue());
 	
     protected UnsignedByte MessageRepeatCount;
     protected Double MessageRepeatDelay;

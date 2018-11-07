@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.Variant;
 import org.opcfoundation.ua.core.DataTypeSchemaHeader;
@@ -45,9 +47,9 @@ import org.opcfoundation.ua.core.StructureDescription;
 
 public class UABinaryFileDataType extends DataTypeSchemaHeader {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.UABinaryFileDataType);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.UABinaryFileDataType_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.UABinaryFileDataType_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.UABinaryFileDataType.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.UABinaryFileDataType_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.UABinaryFileDataType_Encoding_DefaultXml.getValue());
 	
     protected String SchemaLocation;
     protected KeyValuePair[] FileHeader;

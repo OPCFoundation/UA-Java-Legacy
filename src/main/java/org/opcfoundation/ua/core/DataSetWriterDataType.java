@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
@@ -44,9 +46,9 @@ import org.opcfoundation.ua.utils.AbstractStructure;
 
 public class DataSetWriterDataType extends AbstractStructure {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DataSetWriterDataType);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DataSetWriterDataType_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.DataSetWriterDataType_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DataSetWriterDataType.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DataSetWriterDataType_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DataSetWriterDataType_Encoding_DefaultXml.getValue());
 	
     protected String Name;
     protected Boolean Enabled;

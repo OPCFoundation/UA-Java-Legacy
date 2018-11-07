@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.core.HistoryReadDetails;
@@ -41,9 +43,9 @@ import org.opcfoundation.ua.core.HistoryReadDetails;
 
 public class ReadAtTimeDetails extends HistoryReadDetails {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ReadAtTimeDetails);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ReadAtTimeDetails_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.ReadAtTimeDetails_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.ReadAtTimeDetails.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.ReadAtTimeDetails_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.ReadAtTimeDetails_Encoding_DefaultXml.getValue());
 	
     protected DateTime[] ReqTimes;
     protected Boolean UseSimpleBounds;

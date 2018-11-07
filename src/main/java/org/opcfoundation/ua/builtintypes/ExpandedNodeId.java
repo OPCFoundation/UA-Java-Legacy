@@ -20,7 +20,6 @@ import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.core.IdType;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.CryptoUtil;
-import org.opcfoundation.ua.utils.ObjectUtils;
 
 
 
@@ -171,23 +170,7 @@ public final class ExpandedNodeId implements Comparable<ExpandedNodeId>{
 		
 		this.value = value;
 		this.namespaceIndex = namespaceIndex;
-		
-
-		// add uri only for non-nulls
-		if(namespaceIndex == 0){
-			if(!ObjectUtils.equals(value, NodeId.NULL_NUMERIC.getValue())
-					&& !ObjectUtils.equals(value, NodeId.NULL_STRING.getValue())
-					&& !ObjectUtils.equals(value, NodeId.NULL_GUID.getValue())
-					&& !ObjectUtils.equals(value, NodeId.NULL_OPAQUE.getValue())){
-
-				this.namespaceUri = NamespaceTable.OPCUA_NAMESPACE;
-			}else{
-				this.namespaceUri = null;
-			}
-		}else{
-			this.namespaceUri = null;
-		}
-
+		this.namespaceUri = null; //GH#12
 
 		if (value==null) type = IdType.String; //changed from opaque
 		else if (value instanceof UnsignedInteger) type = IdType.Numeric;

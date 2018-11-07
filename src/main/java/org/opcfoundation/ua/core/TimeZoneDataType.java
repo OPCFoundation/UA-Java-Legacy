@@ -33,15 +33,17 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.utils.AbstractStructure;
 
 
 
 public class TimeZoneDataType extends AbstractStructure {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.TimeZoneDataType);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.TimeZoneDataType_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.TimeZoneDataType_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.TimeZoneDataType.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.TimeZoneDataType_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.TimeZoneDataType_Encoding_DefaultXml.getValue());
 	
     protected Short Offset;
     protected Boolean DaylightSavingInOffset;

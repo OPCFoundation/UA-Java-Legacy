@@ -15,6 +15,7 @@ package org.opcfoundation.ua.encoding.utils;
 import java.util.Collection;
 
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
+import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.encoding.DecodingException;
 import org.opcfoundation.ua.encoding.EncodeType;
 import org.opcfoundation.ua.encoding.EncodingException;
@@ -24,14 +25,45 @@ import org.opcfoundation.ua.encoding.IEncoder;
 import org.opcfoundation.ua.encoding.binary.IEncodeableSerializer;
 
 /**
- * Simple serializer that can serialize only one type of class.
- *
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
+ * Base for a simple serializer that can serialize only one type of class.
  */
 public abstract class AbstractSerializer implements IEncodeableSerializer {
 
+	/**
+	 * Fixes standard namespace identifiers to have the uri for mapping purposes. 
+	 * If given other namespace index identifiers, throw {@link IllegalArgumentException}.
+	 * Additionally throw if given non-local ids.
+	 * If given null, return null (as some encodings might be optional).
+	 */
+	private static ExpandedNodeId fixAndValidateId(ExpandedNodeId id) {
+		if(id == null) {
+			return null;
+		}
+		
+		if(!id.isLocal()) {
+			throw new IllegalArgumentException("Only ExpandedNodeIds that refer the local server are allowed as parameters");
+		}
+		
+		//Check if the uri already exists
+		if(id.getNamespaceUri() != null && !id.getNamespaceUri().isEmpty()) {
+			return id;
+		}
+		//if we reach this point the uri is null or empty
+		if(id.getNamespaceIndex() == 0) {
+			//Standard namespace, fix the uri
+			return new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, id.getValue());			
+		}
+		
+		//Otherwise the given parameter only contains unknown index.
+		throw new IllegalArgumentException("Only ExpandedNodeIds that contain the URI are allowed as parameter");
+	}
+	
 	Class<? extends IEncodeable> clazz;
-	ExpandedNodeId binaryId, xmlId, nodeId;
+
+	ExpandedNodeId nodeId;
+	ExpandedNodeId binaryId;
+	ExpandedNodeId xmlId;
+
 	
 	/**
 	 * <p>Constructor for AbstractSerializer.</p>
@@ -53,12 +85,15 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 	 * @param nodeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
 	 */
 	public AbstractSerializer(Class<? extends IEncodeable> clazz, ExpandedNodeId binaryId, ExpandedNodeId xmlId, ExpandedNodeId nodeId){
-		if (clazz==null)
-			throw new IllegalArgumentException("null arg");
+		if (clazz==null) {
+			throw new IllegalArgumentException("Given parameters cannot be null");
+		}
 		this.clazz = clazz;
-		this.binaryId = binaryId;
-		this.xmlId = xmlId;
-		this.nodeId = nodeId;
+		
+		// GH#12, ensure 0-namespaces have the URI here
+		this.binaryId = fixAndValidateId(binaryId);
+		this.xmlId = fixAndValidateId(xmlId);
+		this.nodeId = fixAndValidateId(nodeId);
 	}
 	
 	/**

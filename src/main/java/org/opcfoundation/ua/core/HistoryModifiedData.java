@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import java.util.Arrays;
 import org.opcfoundation.ua.builtintypes.DataValue;
 import org.opcfoundation.ua.core.HistoryData;
@@ -42,9 +44,9 @@ import org.opcfoundation.ua.core.ModificationInfo;
 
 public class HistoryModifiedData extends HistoryData {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryModifiedData);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryModifiedData_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.HistoryModifiedData_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.HistoryModifiedData.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.HistoryModifiedData_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.HistoryModifiedData_Encoding_DefaultXml.getValue());
 	
     protected ModificationInfo[] ModificationInfos;
     

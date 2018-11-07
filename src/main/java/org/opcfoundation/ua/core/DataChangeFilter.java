@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.core.DataChangeTrigger;
 import org.opcfoundation.ua.core.MonitoringFilter;
@@ -41,9 +43,9 @@ import org.opcfoundation.ua.core.MonitoringFilter;
 
 public class DataChangeFilter extends MonitoringFilter {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.DataChangeFilter);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.DataChangeFilter_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.DataChangeFilter_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DataChangeFilter.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DataChangeFilter_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.DataChangeFilter_Encoding_DefaultXml.getValue());
 	
     protected DataChangeTrigger Trigger;
     protected UnsignedInteger DeadbandType;

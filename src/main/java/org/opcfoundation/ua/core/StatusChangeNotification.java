@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.builtintypes.DiagnosticInfo;
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.core.NotificationData;
@@ -41,9 +43,9 @@ import org.opcfoundation.ua.core.NotificationData;
 
 public class StatusChangeNotification extends NotificationData {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.StatusChangeNotification);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.StatusChangeNotification_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.StatusChangeNotification_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.StatusChangeNotification.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.StatusChangeNotification_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.StatusChangeNotification_Encoding_DefaultXml.getValue());
 	
     protected StatusCode Status;
     protected DiagnosticInfo DiagnosticInfo;

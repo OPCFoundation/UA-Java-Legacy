@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.StatusCode;
@@ -42,9 +44,9 @@ import org.opcfoundation.ua.utils.AbstractStructure;
 
 public class HistoryReadResult extends AbstractStructure {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.HistoryReadResult);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.HistoryReadResult_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.HistoryReadResult_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.HistoryReadResult.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.HistoryReadResult_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.HistoryReadResult_Encoding_DefaultXml.getValue());
 	
     protected StatusCode StatusCode;
     protected ByteString ContinuationPoint;

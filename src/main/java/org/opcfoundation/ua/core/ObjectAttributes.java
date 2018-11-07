@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.builtintypes.LocalizedText;
 import org.opcfoundation.ua.builtintypes.UnsignedByte;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
@@ -42,9 +44,9 @@ import org.opcfoundation.ua.core.NodeAttributes;
 
 public class ObjectAttributes extends NodeAttributes {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.ObjectAttributes);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.ObjectAttributes_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.ObjectAttributes_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.ObjectAttributes.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.ObjectAttributes_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.ObjectAttributes_Encoding_DefaultXml.getValue());
 	
     protected UnsignedByte EventNotifier;
     

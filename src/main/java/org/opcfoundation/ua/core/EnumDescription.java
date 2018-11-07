@@ -33,6 +33,8 @@ import org.opcfoundation.ua.builtintypes.Structure;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
+import org.opcfoundation.ua.common.NamespaceTable;
+
 import org.opcfoundation.ua.builtintypes.NodeId;
 import org.opcfoundation.ua.builtintypes.QualifiedName;
 import org.opcfoundation.ua.builtintypes.UnsignedByte;
@@ -43,9 +45,9 @@ import org.opcfoundation.ua.core.EnumDefinition;
 
 public class EnumDescription extends DataTypeDescription {
 	
-	public static final ExpandedNodeId ID = new ExpandedNodeId(Identifiers.EnumDescription);
-	public static final ExpandedNodeId BINARY = new ExpandedNodeId(Identifiers.EnumDescription_Encoding_DefaultBinary);
-	public static final ExpandedNodeId XML = new ExpandedNodeId(Identifiers.EnumDescription_Encoding_DefaultXml);
+	public static final ExpandedNodeId ID = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.EnumDescription.getValue());
+	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.EnumDescription_Encoding_DefaultBinary.getValue());
+	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.EnumDescription_Encoding_DefaultXml.getValue());
 	
     protected EnumDefinition EnumDefinition;
     protected UnsignedByte BuiltInType;
