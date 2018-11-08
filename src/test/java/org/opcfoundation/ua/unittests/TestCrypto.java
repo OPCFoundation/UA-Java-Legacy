@@ -60,19 +60,6 @@ public class TestCrypto extends TestCase {
 	CryptoProvider clientCryptoProvider;
 	CryptoProvider serverCryptoProvider;
 	
-	public void testBase64Encode() {
-      base64EncodeDecode(0);
-      CryptoUtil.setSecurityProviderName("SunJCE");
-      base64EncodeDecode(0);
-	}
-	
-    public void testBase64EncodeMultiline() {
-      int lineLength = 64;
-      base64EncodeDecode(lineLength);
-      CryptoUtil.setSecurityProviderName("SunJCE");
-      base64EncodeDecode(lineLength);
-    }
-
     /**
      * @param lineLength
      */

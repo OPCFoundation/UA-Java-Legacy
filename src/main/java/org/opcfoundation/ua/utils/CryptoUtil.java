@@ -51,7 +51,6 @@ import org.opcfoundation.ua.transport.security.ScCryptoProvider;
 import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
 import org.opcfoundation.ua.transport.security.SecurityAlgorithm.AlgorithmType;
 import org.opcfoundation.ua.transport.security.SecurityConfiguration;
-import org.opcfoundation.ua.transport.security.SunJceCryptoProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -426,8 +425,6 @@ public class CryptoUtil {
 				cryptoProvider = new ScCryptoProvider();
 			} else if ("BC".equals(getSecurityProviderName())) {
 				cryptoProvider = new BcCryptoProvider();
-			} else if ("SunJCE".equals(getSecurityProviderName())) {
-				cryptoProvider = new SunJceCryptoProvider();
 			} else {
 				throw new RuntimeException("NO CRYPTO PROVIDER AVAILABLE!");
 			}

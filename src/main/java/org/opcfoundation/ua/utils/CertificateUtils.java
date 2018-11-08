@@ -44,7 +44,6 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
@@ -60,7 +59,6 @@ import org.opcfoundation.ua.transport.security.CertificateProvider;
 import org.opcfoundation.ua.transport.security.PrivKey;
 import org.opcfoundation.ua.transport.security.ScCertificateProvider;
 import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
-import org.opcfoundation.ua.transport.security.SunJceCertificateProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -549,8 +547,6 @@ public class CertificateUtils {
 				certificateProvider = new ScCertificateProvider();
 			} else if ("BC".equals(CryptoUtil.getSecurityProviderName())) {
 				certificateProvider = new BcCertificateProvider();
-			} else if ("SunJCE".equals(CryptoUtil.getSecurityProviderName())) {
-				certificateProvider = new SunJceCertificateProvider();
 			} else {
 				throw new RuntimeException("NO CRYPTO PROVIDER AVAILABLE!");
 			}
