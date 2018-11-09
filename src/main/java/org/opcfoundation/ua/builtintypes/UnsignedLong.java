@@ -86,11 +86,24 @@ public final class UnsignedLong extends Number implements Comparable<Number> {
 	 * @param value a long.
 	 * @return new or cached instance
 	 */
-	public static UnsignedLong valueOf(long value)
-	{
+	public static UnsignedLong valueOf(long value) {
 		if (value>=0 && value<CACHE.length)
 			return CACHE[(int)value];		
 		return new UnsignedLong(value);
+	}
+	
+	/**
+	 * Parses {@link UnsignedLong} from String. Behaves same as {@link #parseUnsignedLong(String)}.
+	 */
+	public static UnsignedLong valueOf(String s) {
+		return parseUnsignedLong(s);
+	}
+	
+	/**
+	 * Parses {@link UnsignedLong} from String. Behaves same as {@link #parseUnsignedLong(String, int)}.
+	 */
+	public static UnsignedLong valueOf(String s, int radix) {
+		return parseUnsignedLong(s, radix);
 	}
 	
 	/**

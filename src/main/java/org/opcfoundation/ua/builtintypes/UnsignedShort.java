@@ -104,12 +104,25 @@ public final class UnsignedShort extends Number implements Comparable<UnsignedSh
 	 * @param value a int.
 	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedShort} object.
 	 */
-	public static UnsignedShort valueOf(int value)
-	{
+	public static UnsignedShort valueOf(int value) {
 		if (value>=0 && value<CACHE.length)
 			return CACHE[value];
 		return new UnsignedShort(value);
-	}    
+	}
+	
+	/**
+	 * Parses {@link UnsignedShort} from String. Behaves the same as {@link #parseUnsignedShort(String)}.
+	 */
+	public static UnsignedShort valueOf(String s) {
+		return parseUnsignedShort(s);
+	}
+	
+	/**
+	 * Parses {@link UnsignedShort} from String. Behaves the same as {@link #parseUnsignedShort(String, int)}.
+	 */
+	public static UnsignedShort valueOf(String s, int radix) {
+		return parseUnsignedShort(s, radix);
+	}
 
 	private int value;
 

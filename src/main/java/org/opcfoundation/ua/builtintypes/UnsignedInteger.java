@@ -51,12 +51,26 @@ public final class UnsignedInteger extends Number implements Comparable<Number> 
 	 * @param value a long.
 	 * @return a {@link org.opcfoundation.ua.builtintypes.UnsignedInteger} object.
 	 */
-	public static UnsignedInteger valueOf(long value)
-	{
+	public static UnsignedInteger valueOf(long value) {
 		if (value>=0 && value<CACHE.length)
 			return CACHE[(int)value];
 		return new UnsignedInteger(value);
 	}
+	
+	/**
+	 * Parses {@link UnsignedInteger} from String. Behaves same as {@link #parseUnsignedInteger(String)}.
+	 */
+	public static UnsignedInteger valueOf(String s) {
+		return parseUnsignedInteger(s);
+	}
+	
+	/**
+	 * Parses {@link UnsignedInteger} from String. Behaves same as {@link #parseUnsignedInteger(String, int)}.
+	 */
+	public static UnsignedInteger valueOf(String s, int radix) {
+		return parseUnsignedInteger(s, radix);
+	}
+	
     
     /**
      * <p>max.</p>

@@ -88,6 +88,20 @@ public final class UnsignedByte extends Number implements Comparable<UnsignedByt
         return CACHE[value];
     }
     
+    /**
+     * Parses {@link UnsignedByte} from String. Behaves the same as {@link #parseUnsignedByte(String)}.
+     */
+    public static UnsignedByte valueOf(String s) {
+    	return parseUnsignedByte(s);
+    }
+    
+    /**
+     * Parses {@link UnsignedByte} from String. Behaves the same as {@link #parseUnsignedByte(String, int)}.
+     */
+    public static UnsignedByte valueOf(String s, int radix) {
+    	return parseUnsignedByte(s, radix);
+    }
+    
 	/**
 	 * <p>getFromBits.</p>
 	 *
