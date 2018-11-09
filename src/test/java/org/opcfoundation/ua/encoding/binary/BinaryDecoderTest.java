@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.Test;
+import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
 import org.opcfoundation.ua.builtintypes.NodeId;
@@ -126,7 +127,7 @@ public class BinaryDecoderTest {
 		byte[] combinedbytes = ByteUtils.concat(scalebytes, valuebytes);
 		System.out.println("combined bytes len: "+combinedbytes.length);
 		ExpandedNodeId id = new ExpandedNodeId(NamespaceTable.OPCUA_NAMESPACE, Identifiers.Decimal.getValue());
-		ExtensionObject eo = new ExtensionObject(id, combinedbytes);
+		ExtensionObject eo = new ExtensionObject(id, ByteString.valueOf(combinedbytes));
 		byte[] completebytes = binaryEncode(eo);
 		byte[] completedexpected = CryptoUtil.hexToBytes("0032010a0000000400c39d909561010000");
 		assertArrayEquals(completedexpected, completebytes);
@@ -198,10 +199,10 @@ public class BinaryDecoderTest {
 		assertArrayEquals(expecteds.toArray(), output);
 	}
 	
-	private byte[] createDecimalAsEncodedBytes(long valueraw, short scale) throws Exception{
+	private ByteString createDecimalAsEncodedBytes(long valueraw, short scale) throws Exception{
 		byte[] scalebytes = binaryEncode(scale);
 		byte[] valuebytes = binaryEncode(valueraw);
-		return ByteUtils.concat(scalebytes, valuebytes);
+		return ByteString.valueOf(ByteUtils.concat(scalebytes, valuebytes));
 	}
 
 	

@@ -1270,7 +1270,7 @@ public class XmlDecoder implements IDecoder {
 		if(body instanceof XmlElement)
 			tmp = new ExtensionObject(absoluteId, (XmlElement)body);
 		else
-			tmp = new ExtensionObject(absoluteId, (byte[])body);
+			tmp = new ExtensionObject(absoluteId, (ByteString)body);
 		
 		//try decoding, but failing is allowed (might be e.g. unknown Structure)
 		try {
@@ -1343,7 +1343,7 @@ public class XmlDecoder implements IDecoder {
 			ByteString bytes = getByteString("ByteString");
 			//popNamespace();
 
-			return ByteString.asByteArray(bytes);
+			return bytes;
 		}
 		return getXmlElement(EMPTY_STRING);
 		//		// check for empty body.

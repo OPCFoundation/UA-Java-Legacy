@@ -977,7 +977,7 @@ public class BinaryDecoder implements IDecoder {
 			
 			final ExtensionObject tmp;
 			if (encodingByte==1){
-			  tmp = new ExtensionObject(expandedNodeId, ByteString.asByteArray(getByteString(null)));
+			  tmp = new ExtensionObject(expandedNodeId, getByteString(null));
 			}else if (encodingByte==2){
 			  tmp = new ExtensionObject(expandedNodeId, getXmlElement(null));
 			}else{
@@ -1663,7 +1663,7 @@ public class BinaryDecoder implements IDecoder {
 			//Handle Decimals
 			if(value instanceof ExtensionObject && isDecimal((ExtensionObject)value)) {
 				try {
-					value = bytesToDecimal((byte[]) ((ExtensionObject)value).getObject());
+					value = bytesToDecimal((ByteString) ((ExtensionObject)value).getObject());
 				}catch(ClassCastException e) {
 					throw new DecodingException("Did not get an ExtensionObject with ByteString data for Decimal type", e);
 				}
@@ -1874,8 +1874,7 @@ public class BinaryDecoder implements IDecoder {
 			logger.error("Encountered a Decimal that does not define correct id, is {}", eo.getTypeId());
 		}
 		try {
-			byte[] data = (byte[]) eo.getObject();
-			return bytesToDecimal(data);
+			return bytesToDecimal((ByteString)eo.getObject());
 		}catch(ClassCastException e) {
 			throw new DecodingException("Did not get an ExtensionObject with ByteString data for Decimal type", e);
 		}
@@ -1887,7 +1886,7 @@ public class BinaryDecoder implements IDecoder {
 		for(int i = 0; i<eos.length;i++) {
 			ExtensionObject elem = eos[i];
 			if(isDecimal(elem)) {
-				r[i] = bytesToDecimal((byte[]) elem.getObject());
+				r[i] = bytesToDecimal((ByteString) elem.getObject());
 			}else {
 				//at least one non-decimal
 				return eos;
@@ -1896,8 +1895,9 @@ public class BinaryDecoder implements IDecoder {
 		return r;
 	}
 	
-	private BigDecimal bytesToDecimal(byte[] data) {
+	private BigDecimal bytesToDecimal(ByteString bs) {
 		//scale is first 2 bytes from the data as little-endian
+		byte[] data = bs.getValue();
 		ByteBuffer tmp = ByteBuffer.allocate(2);
 		tmp.order(ByteOrder.LITTLE_ENDIAN);
 		tmp.put(data[0]);

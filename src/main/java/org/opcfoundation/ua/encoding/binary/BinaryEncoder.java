@@ -2331,7 +2331,7 @@ public class BinaryEncoder implements IEncoder {
 			putSByte(null, 0);
 		} else if (v.getEncodeType() == EncodeType.Binary) {			
 			putSByte(null, 1);
-			putByteString(null, (byte[])o);
+			putByteString(null, (ByteString)o);
 		} else if (v.getEncodeType() == EncodeType.Xml) {
 			putSByte(null, 2);
 			putXmlElement(null, (XmlElement)o);
@@ -3006,7 +3006,7 @@ public class BinaryEncoder implements IEncoder {
 		byte[] valuebytes = ByteUtils.reverse(bd.unscaledValue().toByteArray());
 		byte[] combined = ByteUtils.concat(scalebytes, valuebytes);
 		
-		return new ExtensionObject(DECIMAL_EXPANDED_NODE_ID, combined);
+		return new ExtensionObject(DECIMAL_EXPANDED_NODE_ID, ByteString.valueOf(combined));
 	}
 
 	

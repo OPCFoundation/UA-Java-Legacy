@@ -12,8 +12,6 @@
 
 package org.opcfoundation.ua.builtintypes;
 
-import java.util.Arrays;
-
 import org.opcfoundation.ua.common.NamespaceTable;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.DecodingException;
@@ -123,7 +121,7 @@ public class ExtensionObject {
 		enc.setEncoderContext(ctx);
 		enc.putEncodeable(null, encodeable);
 		
-		return new ExtensionObject(encodeable.getBinaryEncodeId(), buf.toByteArray());
+		return new ExtensionObject(encodeable.getBinaryEncodeId(), ByteString.valueOf(buf.toByteArray()));
 	}
 	
 	/**
@@ -177,7 +175,7 @@ public class ExtensionObject {
 	 * @param typeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
 	 * @param object an array of byte.
 	 */
-	public ExtensionObject(ExpandedNodeId typeId, byte[] object) {
+	public ExtensionObject(ExpandedNodeId typeId, ByteString object) {
 		if (typeId==null)
 			throw new IllegalArgumentException("typeId argument must not be null");
 		this.typeId = typeId;
@@ -189,6 +187,18 @@ public class ExtensionObject {
 			this.encodeType = null;
 		  //throw new IllegalArgumentException("object argument must not be null");
 		}
+	}
+	
+	/**
+	 * <p>Constructor for ExtensionObject.</p>
+	 *
+	 * @param typeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * @param object an array of byte.
+	 * @deprecated use {@link #ExtensionObject(ExpandedNodeId, ByteString)} instead. This method will convert the given byte[] to ByteString.
+	 */
+	@Deprecated
+	public ExtensionObject(ExpandedNodeId typeId, byte[] object) {
+		this(typeId, ByteString.valueOf(object));
 	}
 
 	/**
@@ -231,18 +241,14 @@ public class ExtensionObject {
 	}
 	
 	/**
-	 * <p>Getter for the field <code>encodeType</code>.</p>
-	 *
-	 * @return a {@link org.opcfoundation.ua.encoding.EncodeType} object.
+	 * Returns the type of the raw data returned by {@link #getObject()}. Returns null if this {@link ExtensionObject} already contains a {@link Structure}.
 	 */
 	public EncodeType getEncodeType() {
 		return encodeType;
 	}
 	
 	/**
-	 * <p>Getter for the field <code>object</code>.</p>
-	 *
-	 * @return a {@link java.lang.Object} object.
+	 * Get the object within this {@link ExtensionObject}. Can either be an already decoded Structure, raw encoded format as either {@link ByteString} or {@link XmlElement}.
 	 */
 	public Object getObject() {
 		return object;
@@ -291,8 +297,7 @@ public class ExtensionObject {
 		  return r;
 		}
 		
-		if (object instanceof XmlElement) 
-		{
+		if (object instanceof XmlElement) {
 			Class<? extends IEncodeable> clazz = serializer.getClass(typeId);
 			logger.debug("decode: typeId={} class={}", typeId, clazz);
 			if (clazz == null)
@@ -309,17 +314,15 @@ public class ExtensionObject {
 				if (inElement)
 					dec.getEndElement();
 			} finally {
-				// TODO Auto-generated catch block
 				dec.close();
 			}
 			return result;
 		}
 
-		if (object instanceof byte[])
-		{
+		if (object instanceof ByteString) {
 			Class<? extends IEncodeable> clazz = serializer.getClass(typeId);
 			ctx.setEncodeableSerializer(serializer);
-			BinaryDecoder dec = new BinaryDecoder((byte[])object);
+			BinaryDecoder dec = new BinaryDecoder(((ByteString)object).getValue());
 			dec.setEncoderContext(ctx);
 			return (T) serializer.getEncodeable(clazz, dec);
 		}
@@ -359,19 +362,11 @@ public class ExtensionObject {
 
 	@Override
 	public int hashCode() {
-	  if(object == null){
-	    return 0;
-	  }
-	  
-	  if (object instanceof byte[]){
-	    return typeId.hashCode() + 13 * Arrays.hashCode((byte[])object); 
-	  }
-	  
-	  if (object instanceof XmlElement){
-		return typeId.hashCode() + 13 * ((XmlElement)object).hashCode();
-	  }
-	  
-	  return object.hashCode();
+		if(object == null){
+			return 0;
+		}
+		//Good enough for most use-cases
+		return object.hashCode();
 	}
 
 	/** {@inheritDoc} */
@@ -391,25 +386,7 @@ public class ExtensionObject {
 			return false;
 		}
 		
-		if (object==null) {
-			return other.object==null;
-		}
-		
-		if (object instanceof byte[]) {
-			if (!(other.object instanceof byte[])) return false;
-			return Arrays.equals((byte[])other.object, (byte[])object);
-		}
-		
-		if (object instanceof XmlElement) {
-			if (!(other.object instanceof XmlElement)) return false;
-			return ((XmlElement)other.object).equals((XmlElement)object);
-		}
-		
-		if (object instanceof Structure) {
-		  return object.equals(other.object);
-		}
-		
-		return false;
+		return ObjectUtils.equals(object, other.object);
 	}
 
 	/**
@@ -418,13 +395,19 @@ public class ExtensionObject {
 	 * @return true if value is encoded
 	 */
 	public boolean isEncoded(){
-	  if(object == null){
-	    return true;
-	  }
-	  return !(object instanceof Structure);
+		if(object == null){
+			return true;
+		}
+		return !(object instanceof Structure);
 	}
 
 
+	@Override
+	public String toString() {
+		return "ExtensionObject [typeId=" + typeId + ", encodeType="+ encodeType + ", object=" + object + "]";
+	}
+
+	
 
 	
 }
