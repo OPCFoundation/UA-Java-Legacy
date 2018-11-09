@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.opcfoundation.ua.utils.StackUtils;
 import org.opcfoundation.ua.utils.State;
 
 /**
@@ -68,7 +69,7 @@ public class AsyncSelector implements Runnable {
 	 */
 	public AsyncSelector(Selector sel) throws IOException {
 		this.sel = sel;
-		thread = new Thread(this, "Selector");
+		thread = new Thread(this, StackUtils.SELECTOR_NAME_PATTERN);
 		thread.setDaemon(true);
 		thread.start();
 	}

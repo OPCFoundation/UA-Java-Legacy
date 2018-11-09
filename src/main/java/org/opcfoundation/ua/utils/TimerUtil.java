@@ -19,8 +19,6 @@ import java.util.concurrent.Executor;
 
 /**
  * <p>TimerUtil class.</p>
- *
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class TimerUtil {
 	
@@ -37,7 +35,7 @@ public class TimerUtil {
 		Timer t = timer!=null ? timer.get() : null;
 		if (t==null)
 		{
-			t = new Timer("UA Timer", true);
+			t = new Timer(StackUtils.UA_TIMER_NAME_PATTERN, true);
 			timer = new WeakReference<Timer>(t);
 		}
 		return t;

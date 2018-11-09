@@ -57,6 +57,7 @@ import org.slf4j.LoggerFactory;
  * Utility methods for the OPC UA Java Stack.
  */
 public class StackUtils {
+
 	/**
 	 * The default thread factory
 	 */
@@ -113,7 +114,27 @@ public class StackUtils {
 	public static final UnsignedInteger SERVER_GIVEN_TOKEN_LIFETIME = UnsignedInteger.getFromBits(600*1000);
 	/** Constant <code>TCP_PROTOCOL_VERSION=0</code> */
 	public static final int TCP_PROTOCOL_VERSION = 0;
+	
+	/**
+	 * Naming pattern for the {@link #getNonBlockingWorkExecutor()} thread names. Can include a single %d for the number of the thread.
+	 */
+	public static String NON_BLOCKING_WORK_EXECUTOR_NAME_PATTERN = "Non-Blocking-Work-Executor-%d";
+	
+	/**
+	 * Naming pattern for the {@link #getBlockingWorkExecutor()} thread names. Can include a single %d for the number of the thread.
+	 */
+	public static String BLOCKING_WORK_EXECUTOR_NAME_PATTERN = "Blocking-Work-Executor-%d";
 
+	/**
+	 * Name used for the Thread in {@link TimerUtil}.
+	 */
+	public static String UA_TIMER_NAME_PATTERN = "UA Timer";
+	
+	/**
+	 * Name used for the Thread of {@link #getSelector()}. 
+	 */
+	public static String SELECTOR_NAME_PATTERN = "Selector";
+	
 	private static IEncodeableSerializer DEFAULT_SERIALIZER;
 
 	private static volatile UncaughtExceptionHandler uncaughtExceptionHandler = new UncaughtExceptionHandler() {
@@ -182,7 +203,7 @@ public class StackUtils {
 			ThreadFactory tf = new ThreadFactory() {
 				@Override
 				public Thread newThread(Runnable r) {
-					Thread t = new Thread(r, "Blocking-Work-Executor-"+(counter.incrementAndGet()));
+					Thread t = new Thread(r, String.format(BLOCKING_WORK_EXECUTOR_NAME_PATTERN, counter.incrementAndGet()));
 					t.setDaemon(true);
 					t.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 					return t;
@@ -273,7 +294,7 @@ public class StackUtils {
 			ThreadFactory tf = new ThreadFactory() {
 				@Override
 				public Thread newThread(Runnable r) {
-					Thread t = new Thread(r, "Non-Blocking-Work-Executor-"+(counter.incrementAndGet()));
+					Thread t = new Thread(r, String.format(NON_BLOCKING_WORK_EXECUTOR_NAME_PATTERN, counter.incrementAndGet()));
 					t.setDaemon(true);
 					t.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 					return t;
