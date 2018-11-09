@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.utils.State;
 
 /**
@@ -35,14 +34,11 @@ import org.opcfoundation.ua.utils.State;
  * <p>
  * AsyncSelector guarantees that selection event of a key is handled in one
  * thread at a time, and it the event handled accordingly, new selection events do not occur.
- *
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class AsyncSelector implements Runnable {
 
 	private enum SelectorState {Active, Disabled};
 	private final static EnumSet<SelectorState> ENABLED_STATE = EnumSet.of(SelectorState.Active);
-	private final ThreadGroup THREAD_GROUP = new ThreadGroup("Async Selector");
 
 	/** Selector state */
 	State<SelectorState>				state = new State<SelectorState>(SelectorState.Active);
@@ -71,8 +67,8 @@ public class AsyncSelector implements Runnable {
 	 * @throws java.io.IOException if any.
 	 */
 	public AsyncSelector(Selector sel) throws IOException {
-		this.sel = sel;		
-		thread = new Thread(THREAD_GROUP, this, "Selector");
+		this.sel = sel;
+		thread = new Thread(this, "Selector");
 		thread.setDaemon(true);
 		thread.start();
 	}

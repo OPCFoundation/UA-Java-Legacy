@@ -15,6 +15,7 @@ package org.opcfoundation.ua.utils;
 import java.io.EOFException;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.lang.ref.WeakReference;
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.nio.channels.ClosedChannelException;
@@ -61,24 +62,16 @@ public class StackUtils {
 	 */
 	static class NamedThreadFactory implements ThreadFactory {
 		static final AtomicInteger poolNumber = new AtomicInteger(1);
-		final ThreadGroup group;
 		final AtomicInteger threadNumber = new AtomicInteger(1);
 		final String namePrefix;
 
 		NamedThreadFactory(String name) {
-			SecurityManager s = System.getSecurityManager();
-			group = (s != null)? s.getThreadGroup() :
-				Thread.currentThread().getThreadGroup();
-			namePrefix = name+"-pool-" +
-					poolNumber.getAndIncrement() +
-					"-thread-";
+			namePrefix = name+"-pool-" + poolNumber.getAndIncrement() + "-thread-";
 		}
 
 		@Override
 		public Thread newThread(Runnable r) {
-			Thread t = new Thread(group, r,
-					namePrefix + threadNumber.getAndIncrement(),
-					0);
+			Thread t = new Thread(r, namePrefix + threadNumber.getAndIncrement());
 			if (t.isDaemon())
 				t.setDaemon(false);
 			if (t.getPriority() != Thread.NORM_PRIORITY)
@@ -185,12 +178,11 @@ public class StackUtils {
 	 */
 	public static synchronized Executor createBlockingWorkExecutor(String name, int maxThreadPoolSize) {
 		if (BLOCKING_EXECUTOR == null) {
-			final ThreadGroup tg = new ThreadGroup(name);
 			final AtomicInteger counter = new AtomicInteger(0);
 			ThreadFactory tf = new ThreadFactory() {
 				@Override
 				public Thread newThread(Runnable r) {
-					Thread t = new Thread(tg, r, "Blocking-Work-Executor-"+(counter.incrementAndGet()));
+					Thread t = new Thread(r, "Blocking-Work-Executor-"+(counter.incrementAndGet()));
 					t.setDaemon(true);
 					t.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 					return t;
@@ -277,12 +269,11 @@ public class StackUtils {
 	 */
 	public static synchronized Executor getNonBlockingWorkExecutor() {
 		if (NON_BLOCKING_EXECUTOR == null) {
-			final ThreadGroup tg = new ThreadGroup("Non-Blocking-Work-Executor-Group");
 			final AtomicInteger counter = new AtomicInteger(0);
 			ThreadFactory tf = new ThreadFactory() {
 				@Override
 				public Thread newThread(Runnable r) {
-					Thread t = new Thread(tg, r, "Non-Blocking-Work-Executor-"+(counter.incrementAndGet()));
+					Thread t = new Thread(r, "Non-Blocking-Work-Executor-"+(counter.incrementAndGet()));
 					t.setDaemon(true);
 					t.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 					return t;
@@ -429,14 +420,17 @@ public class StackUtils {
 			rejectionExecutor = null;
 		}
 
-		if (SELECTOR != null)
+		if (SELECTOR != null) {
 			try {
 				SELECTOR.close();
 				SELECTOR = null;
 			} catch (IOException e) {
 				logger.debug("SELECTOR.close failed", e);
 			}
-		Timer timer = TimerUtil.timer.get();
+		}
+		
+		WeakReference<Timer> timerContainer = TimerUtil.timer;
+		Timer timer = timerContainer==null ? null : timerContainer.get();
 		if (timer != null) {
 			timer.cancel();
 			TimerUtil.timer = null;
