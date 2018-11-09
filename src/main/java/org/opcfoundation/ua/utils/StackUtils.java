@@ -118,22 +118,22 @@ public class StackUtils {
 	/**
 	 * Naming pattern for the {@link #getNonBlockingWorkExecutor()} thread names. Can include a single %d for the number of the thread.
 	 */
-	public static String NON_BLOCKING_WORK_EXECUTOR_NAME_PATTERN = "Non-Blocking-Work-Executor-%d";
+	public static String NON_BLOCKING_WORK_EXECUTOR_NAME_PATTERN = "OPC-UA-Stack-Non-Blocking-Work-Executor-%d";
 	
 	/**
 	 * Naming pattern for the {@link #getBlockingWorkExecutor()} thread names. Can include a single %d for the number of the thread.
 	 */
-	public static String BLOCKING_WORK_EXECUTOR_NAME_PATTERN = "Blocking-Work-Executor-%d";
+	public static String BLOCKING_WORK_EXECUTOR_NAME_PATTERN = "OPC-UA-Stack-Blocking-Work-Executor-%d";
 
 	/**
 	 * Name used for the Thread in {@link TimerUtil}.
 	 */
-	public static String UA_TIMER_NAME_PATTERN = "UA Timer";
+	public static String UA_TIMER_NAME_PATTERN = "OPC-UA-Stack-Timer";
 	
 	/**
 	 * Name used for the Thread of {@link #getSelector()}. 
 	 */
-	public static String SELECTOR_NAME_PATTERN = "Selector";
+	public static String SELECTOR_NAME_PATTERN = "OPC-UA-Stack-Async-Selector";
 	
 	private static IEncodeableSerializer DEFAULT_SERIALIZER;
 
