@@ -49,7 +49,7 @@ public class ExtensionObject {
 	 * @throws org.opcfoundation.ua.encoding.EncodingException if the encodingType is unsupported or the encoding fails
 	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
 	 * @deprecated use {@link #encode(Structure, QualifiedName, EncoderContext)}  with the serializer already set in the context.
-	 *  This method will take a defensive copy of the given encoder and set the serializer directly to it.
+	 *  This method will take a defensive copy of the given encoder context and set the serializer directly to it.
 	 *  If the given serializer is null, the given context is used directly.
 	 */
 	@Deprecated
@@ -109,7 +109,7 @@ public class ExtensionObject {
 	 * @throws org.opcfoundation.ua.encoding.EncodingException on encoding problem
 	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
 	 * @deprecated use {@link #binaryEncode(Structure, EncoderContext)} with the serializer already set in the context. 
-	 *   This method will take a defensive copy of the given encoder and set the serializer directly to it. 
+	 *   This method will take a defensive copy of the given encoder context and set the serializer directly to it. 
 	 *   If the given serializer is null, the given context is used directly.
 	 */
 	@Deprecated
