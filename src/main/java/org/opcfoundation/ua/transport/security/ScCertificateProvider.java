@@ -64,7 +64,8 @@ public class ScCertificateProvider implements CertificateProvider {
 	private static final Logger logger = LoggerFactory.getLogger(ScCertificateProvider.class);
 
 	public ScCertificateProvider() {
-
+		//Ensure SC is loaded
+		CryptoUtil.loadOrInstallProvider("SC", "org.spongycastle.jce.provider.BouncyCastleProvider");
 	}
 	
 	/**

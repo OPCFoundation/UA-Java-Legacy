@@ -68,7 +68,8 @@ public class BcCertificateProvider implements CertificateProvider {
 	 * <p>Constructor for BcCertificateProvider.</p>
 	 */
 	public BcCertificateProvider() {
-
+		//Ensure BC is loaded
+		CryptoUtil.loadOrInstallProvider("BC", "org.bouncycastle.jce.provider.BouncyCastleProvider");
 	}
 
 	/**
