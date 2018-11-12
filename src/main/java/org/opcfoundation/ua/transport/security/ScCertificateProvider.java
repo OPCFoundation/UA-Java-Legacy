@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
@@ -30,6 +31,7 @@ import javax.security.auth.x500.X500Principal;
 
 import org.opcfoundation.ua.utils.CertificateUtils;
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongycastle.asn1.x500.X500Name;
@@ -50,6 +52,7 @@ import org.spongycastle.openssl.jcajce.JcePEMEncryptorBuilder;
 import org.spongycastle.operator.ContentSigner;
 import org.spongycastle.operator.OperatorCreationException;
 import org.spongycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.spongycastle.util.encoders.Base64;
 import org.spongycastle.x509.extension.X509ExtensionUtil;
 
 /**
@@ -58,9 +61,12 @@ import org.spongycastle.x509.extension.X509ExtensionUtil;
  */
 public class ScCertificateProvider implements CertificateProvider {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(ScCertificateProvider.class);
+	private static final Logger logger = LoggerFactory.getLogger(ScCertificateProvider.class);
 
+	public ScCertificateProvider() {
+
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 *
@@ -265,6 +271,22 @@ public class ScCertificateProvider implements CertificateProvider {
 			pemWrt.writeObject(key, encryptor);
 		}
 		pemWrt.close();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public byte[] base64Decode(String string) {
+		return Base64.decode(StringUtils.removeWhitespace(string));
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String base64Encode(byte[] bytes) {
+		try {
+			return new String(Base64.encode(bytes), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

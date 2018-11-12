@@ -12,10 +12,10 @@
 package org.opcfoundation.ua.transport.security;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
@@ -48,9 +48,11 @@ import org.bouncycastle.openssl.jcajce.JcePEMEncryptorBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.bouncycastle.util.encoders.Base64;
 import org.bouncycastle.x509.extension.X509ExtensionUtil;
 import org.opcfoundation.ua.utils.CertificateUtils;
 import org.opcfoundation.ua.utils.CryptoUtil;
+import org.opcfoundation.ua.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,17 +62,13 @@ import org.slf4j.LoggerFactory;
  */
 public class BcCertificateProvider implements CertificateProvider {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(BcCertificateProvider.class);
+	private static Logger logger = LoggerFactory.getLogger(BcCertificateProvider.class);
 
 	/**
 	 * <p>Constructor for BcCertificateProvider.</p>
 	 */
 	public BcCertificateProvider() {
 
-		if (!CryptoUtil.getSecurityProviderName().equals("BC")) {
-			throw new RuntimeException("NO SECURITY PROVIDER AVAILABLE!");
-		}
 	}
 
 	/**
@@ -278,6 +276,22 @@ public class BcCertificateProvider implements CertificateProvider {
 			pemWrt.writeObject(key, encryptor);
 		}
 		pemWrt.close();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public byte[] base64Decode(String string) {
+		return Base64.decode(StringUtils.removeWhitespace(string));
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String base64Encode(byte[] bytes) {
+		try {
+			return new String(Base64.encode(bytes), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

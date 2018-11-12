@@ -34,9 +34,12 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.opcfoundation.ua.utils.CertificateUtils;
+import org.opcfoundation.ua.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 import sun.security.util.DerOutputStream;
 import sun.security.util.DerValue;
 import sun.security.util.ObjectIdentifier;
@@ -462,6 +465,36 @@ public class SunJceCertificateProvider implements CertificateProvider {
 		// cert.sign(signerKey,
 		// CertificateUtils.getCertificateSignatureAlgorithm());
 		return cert;
+	}
+	
+	/** {@inheritDoc} */
+	@SuppressWarnings("restriction")
+    @Override
+	public byte[] base64Decode(String string) {
+	    // Java6 compatible decoding, using the internal API
+        BASE64Decoder bd = new BASE64Decoder();
+		try {
+		    String s = StringUtils.removeWhitespace(string);
+			return bd.decodeBuffer(s);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		// Java 8 compatible decoding, using the public API
+//	    Decoder bd = Base64.getDecoder();
+//	    String s = StringUtils.removeLineBreaks(string);
+//	    return bd.decode(s);
+	}
+
+	/** {@inheritDoc} */
+    @SuppressWarnings("restriction")
+	@Override
+	public String base64Encode(byte[] bytes) {
+        // Java6 compatible encoding, using the internal API
+		BASE64Encoder bd = new BASE64Encoder();
+		return bd.encode(bytes);
+		// Java 8 compatible encoding, using the public API
+//      Encoder bd = Base64.getEncoder();
+//      return bd.encodeToString(bytes);
 	}
 
 }

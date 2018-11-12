@@ -27,6 +27,13 @@ public interface CryptoProvider {
 	public byte[] base64Decode(String string);
 
 	public String base64Encode(byte[] bytes);
+	
+	/**
+	 * Should return a JCE provider name suitable for the operation. 
+	 * @param clazz, Specific case that could require different provider name. Can be null, if no specific one is requested.
+	 * @return suitable JCE provider name for the operation.
+	 */
+	public String getSecurityProviderName(Class<?> clazz);
 
 	public Mac createMac(SecurityAlgorithm algorithm, byte[] secret) throws ServiceResultException;
 

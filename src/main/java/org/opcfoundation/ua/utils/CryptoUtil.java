@@ -14,7 +14,6 @@ package org.opcfoundation.ua.utils;
 
 import java.security.InvalidKeyException;
 import java.security.Key;
-import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
@@ -22,7 +21,6 @@ import java.security.Provider;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
-import java.security.Signature;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
@@ -45,9 +43,7 @@ import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.SignatureData;
 import org.opcfoundation.ua.core.StatusCodes;
-import org.opcfoundation.ua.transport.security.BcCryptoProvider;
 import org.opcfoundation.ua.transport.security.CryptoProvider;
-import org.opcfoundation.ua.transport.security.ScCryptoProvider;
 import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
 import org.opcfoundation.ua.transport.security.SecurityAlgorithm.AlgorithmType;
 import org.opcfoundation.ua.transport.security.SecurityConfiguration;
@@ -88,6 +84,9 @@ public class CryptoUtil {
 	/** Hex chars for makeHexString-method **/
 	private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 
+	private static final String SC_PROVIDER_NAME = "org.opcfoundation.ua.transport.security.ScCryptoProvider";
+	private static final String BC_PROVIDER_NAME = "org.opcfoundation.ua.transport.security.BcCryptoProvider";
+	
 	private volatile static CryptoProvider cryptoProvider;
 
 	private volatile static String securityProviderName;
@@ -415,16 +414,24 @@ public class CryptoUtil {
 	}
 
 	/**
-	 * <p>Getter for the field <code>cryptoProvider</code>.</p>
-	 *
-	 * @return a {@link org.opcfoundation.ua.transport.security.CryptoProvider} object.
+	 * Returns {@link CryptoProvider} previously set with {@link #setCryptoProvider(CryptoProvider)}. 
+	 * If it is not set, tries to load either Bouncy or SpongyCastle based on the return value of {@link #getSecurityProviderName()}.
+	 * Throws {@link RuntimeException} if cannot be loaded.
 	 */
 	public static CryptoProvider getCryptoProvider() {
 		if (cryptoProvider == null) {
 			if ("SC".equals(getSecurityProviderName())) {
-				cryptoProvider = new ScCryptoProvider();
+				try {
+					cryptoProvider = (CryptoProvider) Class.forName(SC_PROVIDER_NAME).newInstance();
+				} catch (Exception e) {
+					throw new RuntimeException("Cannot init "+SC_PROVIDER_NAME, e);
+				}
 			} else if ("BC".equals(getSecurityProviderName())) {
-				cryptoProvider = new BcCryptoProvider();
+				try {
+					cryptoProvider = (CryptoProvider) Class.forName(BC_PROVIDER_NAME).newInstance();
+				} catch (Exception e) {
+					throw new RuntimeException("Cannot init "+BC_PROVIDER_NAME, e);
+				}
 			} else {
 				throw new RuntimeException("NO CRYPTO PROVIDER AVAILABLE!");
 			}
@@ -517,72 +524,31 @@ public class CryptoUtil {
 	}
 
 	/**
-	 * The Preferred Security Provider name. Will check if a Spongy Castle (on
-	 * Android) or Bouncy Castle provider is already available or if such can be
-	 * initialized from the respective class.
-	 * <p>
-	 *
-	 * @return the provider name to use for specific crypto tasks
-	 * @throws java.lang.RuntimeException
-	 *             if none is available and none cannot be initialized.
+	 * The Preferred Security Provider name. If not set via {@link #setSecurityProviderName(String)}, 
+	 * will return 'SC' on android and 'BC' otherwise. Otherwise returns the set String.
 	 */
 	public static String getSecurityProviderName() {
 		if (securityProviderName == null) {
-			Provider provider = null;
-			if (LOGGER.isDebugEnabled())
+			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Providers={}",
 						Arrays.toString(Security.getProviders()));
-			boolean isAndroid = System.getProperty("java.runtime.name")
+			}
+			boolean isAndroid = System.getProperty("java.vendor")
 					.toLowerCase().contains("android");
 			if (isAndroid) {
-				if (Security.getProvider("SC") != null)
-					securityProviderName = "SC";
-				else {
-					provider = hasClass("org.spongycastle.jce.provider.BouncyCastleProvider");
-					if (provider != null)
-						securityProviderName = "SC";
-				}
-			} else if (Security.getProvider("BC") != null)
+				securityProviderName = "SC";
+			} else{
 				securityProviderName = "BC";
-			else {
-				if (provider == null) {
-					provider = hasClass("org.bouncycastle.jce.provider.BouncyCastleProvider");
-					if (provider != null)
-						securityProviderName = "BC";
-				}
-				if (provider == null) {
-					provider = hasClass("com.sun.crypto.provider.SunJCE");
-					if (provider != null)
-					{
-	                    throw new RuntimeException("BouncyCastle Security Provider not available! Not recommended SunJCE Security Provider is found, use it with CryptoUtil.setSecurityProviderName.");                      
-					}
-				}
-				if (provider != null)
-					securityProviderName = provider.getName();
-
 			}
-			if (securityProviderName != null)
-				LOGGER.info("Using SecurityProvider {}", securityProviderName);
-			else
-				throw new RuntimeException("NO SECURITY PROVIDER AVAILABLE!");
 		}
 		return securityProviderName;
 	}
 
 	/**
-	 * <p>Getter for the field <code>securityProviderName</code>.</p>
-	 *
-	 * @param class1 a {@link java.lang.Class} object.
-	 * @return a {@link java.lang.String} object.
+	 * Gets a suitable jce provider name for the given situation.
 	 */
-	public static String getSecurityProviderName(Class<?> class1) {
-		if ("SunJCE".equals(getSecurityProviderName())) {
-			if (Signature.class.equals(class1))
-				return "SunRsaSign";
-			if (KeyStore.class.equals(class1))
-				return "SunJSSE";
-		}
-		return getSecurityProviderName();
+	public static String getSecurityProviderName(Class<?> clazz) {
+		return getCryptoProvider().getSecurityProviderName(clazz);
 	}
 
 	/**
@@ -653,19 +619,23 @@ public class CryptoUtil {
 	/**
 	 * Define the preferred CryptoProvider. Usually this is determined
 	 * automatically, but you may define the provider that you wish to use
-	 * yourself.
+	 * yourself. NOTE! This method will set the {@link #setSecurityProviderName(String)} from the given provider.
 	 *
-	 * @param cryptoProvider
-	 *            the cryptoProvider to set
+	 * @param cryptoProvider the cryptoProvider to set, if null will clear the previous one.
 	 */
 	public static void setCryptoProvider(CryptoProvider cryptoProvider) {
 		CryptoUtil.cryptoProvider = cryptoProvider;
+		CryptoUtil.securityProviderName = cryptoProvider==null ? null : cryptoProvider.getSecurityProviderName(null);
 	}
 
 	/**
 	 * Define the preferred SecurityProvider. Usually this is determined
 	 * automatically if SpongyCastle (on Android) or BouncyCastle is found,
 	 * but you may define the provider name that you wish to use yourself.
+	 * 
+	 * NOTE! Calling this with a different provider name than previously 
+	 * set will reset possible calls made to {@link #setCryptoProvider(CryptoProvider)}.
+	 * 
 	 *
 	 * @param securityProviderName
 	 *            the securityProviderName to set, e.g. "BC" for
@@ -764,25 +734,23 @@ public class CryptoUtil {
 		return getCryptoProvider().verifyAsymm(certificate.getPublicKey(),
 				algorithm, data, signature);
 	}
-
-	private static Provider hasClass(String className) {
+	
+	/**
+	 * Returns a loaded JCE {@link Provider} of the given class. 
+	 * Tries to add the provider if it is not already loaded.
+	 * Throws {@link IllegalArgumentException} if cannot be done.
+	 */
+	public static synchronized Provider loadOrInstallProvider(String jceName, String providerName) throws IllegalArgumentException{
+		Provider provider = Security.getProvider(jceName);
+		if(provider != null) {
+			return provider;
+		}
 		try {
-			Class<?> providerClass = CryptoUtil.class.getClassLoader()
-					.loadClass(className);
-			try {
-				Provider provider = (Provider) providerClass.getConstructor()
-						.newInstance();
-				Security.addProvider(provider);
-				LOGGER.info("SecurityProvider initialized from {}",
-						providerClass.getName());
-				return provider;
-			} catch (Exception e) {
-				throw new RuntimeException(
-						"Cannot add Security provider class="
-								+ providerClass.getName(), e);
-			}
-		} catch (ClassNotFoundException e) {
-			return null;
+			provider = (Provider) Class.forName(providerName).newInstance();
+			Security.addProvider(provider);
+			return provider;
+		}catch(Exception e) {
+			throw new IllegalArgumentException("Cannot add Security Provider class: "+providerName, e);
 		}
 	}
 

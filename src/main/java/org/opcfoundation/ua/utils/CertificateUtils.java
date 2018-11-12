@@ -53,11 +53,9 @@ import java.util.List;
 
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.SignatureData;
-import org.opcfoundation.ua.transport.security.BcCertificateProvider;
 import org.opcfoundation.ua.transport.security.Cert;
 import org.opcfoundation.ua.transport.security.CertificateProvider;
 import org.opcfoundation.ua.transport.security.PrivKey;
-import org.opcfoundation.ua.transport.security.ScCertificateProvider;
 import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +71,27 @@ public class CertificateUtils {
 	private static final int NAME_URI = 6;
 	private static Logger logger = LoggerFactory.getLogger(CertificateUtils.class);
 
+	
+	/**
+	 * <p>base64Decode.</p>
+	 *
+	 * @param string a {@link java.lang.String} object.
+	 * @return an array of byte.
+	 */
+	public static byte[] base64Decode(String string) {
+		return getCertificateProvider().base64Decode(string);
+	}
+
+	/**
+	 * <p>base64Encode a byte array to string</p>
+	 *
+	 * @param bytes the array of byte to convert.
+	 * @return a {@link java.lang.String} representing the byte array in base64 encoded string. 
+	 */
+	public static String base64Encode(byte[] bytes) {
+		return getCertificateProvider().base64Encode(bytes);
+	}
+	
 	/**
 	 * Sign data
 	 *
@@ -424,6 +443,8 @@ public class CertificateUtils {
 
 	private static int keySize = DEFAULT_KEY_SIZE;
 	private static String certificateSignatureAlgorithm = "SHA256WithRSA";
+	private static final String SC_PROVIDER_NAME = "org.opcfoundation.ua.transport.security.ScCertificateProvider";
+	private static final String BC_PROVIDER_NAME = "org.opcfoundation.ua.transport.security.BcCertificateProvider";
 
 	/**
 	 * Define the algorithm to use for certificate signatures.
@@ -544,9 +565,17 @@ public class CertificateUtils {
 	public static CertificateProvider getCertificateProvider() {
 		if (certificateProvider == null) {
 			if ("SC".equals(CryptoUtil.getSecurityProviderName())) {
-				certificateProvider = new ScCertificateProvider();
+				try {
+					certificateProvider = (CertificateProvider) Class.forName(SC_PROVIDER_NAME).newInstance();
+				} catch (Exception e) {
+					throw new RuntimeException("Cannot init "+SC_PROVIDER_NAME, e);
+				}
 			} else if ("BC".equals(CryptoUtil.getSecurityProviderName())) {
-				certificateProvider = new BcCertificateProvider();
+				try {
+					certificateProvider = (CertificateProvider) Class.forName(BC_PROVIDER_NAME).newInstance();
+				} catch (Exception e) {
+					throw new RuntimeException("Cannot init "+BC_PROVIDER_NAME, e);
+				}
 			} else {
 				throw new RuntimeException("NO CRYPTO PROVIDER AVAILABLE!");
 			}

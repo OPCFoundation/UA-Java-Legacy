@@ -12,9 +12,10 @@
 package org.opcfoundation.ua.transport.security;
 
 import java.io.IOException;
+import java.security.KeyStore;
 import java.security.Security;
+import java.security.Signature;
 
-import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.StringUtils;
 
 import sun.misc.BASE64Decoder;
@@ -30,8 +31,7 @@ public class SunJceCryptoProvider extends JceCryptoProvider implements CryptoPro
 	 * <p>Constructor for SunJceCryptoProvider.</p>
 	 */
 	public SunJceCryptoProvider() {
-		CryptoUtil.setSecurityProviderName("SunJCE");
-		this.provider = Security.getProvider("SunJCE");
+		super(Security.getProvider("SunJCE"));
 	}
 
 	/** {@inheritDoc} */
@@ -64,4 +64,16 @@ public class SunJceCryptoProvider extends JceCryptoProvider implements CryptoPro
 //      return bd.encodeToString(bytes);
 	}
 
+    @Override
+    public String getSecurityProviderName(Class<?> clazz) {
+		if (Signature.class.equals(clazz)) {
+			return "SunRsaSign";
+		}
+		if (KeyStore.class.equals(clazz)) {
+			return "SunJSSE";
+		}
+    	
+    	return super.getSecurityProviderName(clazz);
+    }
+    
 }

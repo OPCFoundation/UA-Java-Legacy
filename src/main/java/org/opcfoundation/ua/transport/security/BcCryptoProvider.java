@@ -65,7 +65,8 @@ public class BcCryptoProvider implements CryptoProvider {
 	 * <p>Constructor for BcCryptoProvider.</p>
 	 */
 	public BcCryptoProvider() {
-
+		//Ensure BC is loaded
+		CryptoUtil.loadOrInstallProvider("BC", "org.bouncycastle.jce.provider.BouncyCastleProvider");
 	}
 
 	/** {@inheritDoc} */
@@ -445,6 +446,11 @@ public class BcCryptoProvider implements CryptoProvider {
 				publicKey.getModulus(), publicKey.getPublicExponent());
 		return getAsymmetricSigner(forSigning, algorithm, params);
 
+	}
+
+	@Override
+	public String getSecurityProviderName(Class<?> clazz) {
+		return "BC";
 	}
 
 }

@@ -11,12 +11,7 @@
 */
 package org.opcfoundation.ua.transport.security;
 
-import java.io.UnsupportedEncodingException;
-import java.security.Security;
-
-import org.bouncycastle.util.encoders.Base64;
 import org.opcfoundation.ua.utils.CryptoUtil;
-import org.opcfoundation.ua.utils.StringUtils;
 
 /**
  * <p>BcJceCryptoProvider class.</p>
@@ -28,25 +23,7 @@ public class BcJceCryptoProvider extends JceCryptoProvider implements CryptoProv
 	 * <p>Constructor for BcJceCryptoProvider.</p>
 	 */
 	public BcJceCryptoProvider() {
-		super();
-		CryptoUtil.setSecurityProviderName("BC");
-		this.provider = Security.getProvider("BC");
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public byte[] base64Decode(String string) {
-		return Base64.decode(StringUtils.removeWhitespace(string));
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String base64Encode(byte[] bytes) {
-		try {
-			return new String(Base64.encode(bytes), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
+		super(CryptoUtil.loadOrInstallProvider("BC", "org.bouncycastle.jce.provider.BouncyCastleProvider"));
 	}
 
 }

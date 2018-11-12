@@ -33,36 +33,44 @@ import javax.crypto.spec.SecretKeySpec;
 import org.opcfoundation.ua.common.RuntimeServiceResultException;
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
+import org.opcfoundation.ua.utils.CertificateUtils;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <p>Abstract JceCryptoProvider class.</p>
+ * CryptoProvider that uses the JCE.
  *
  */
-public abstract class JceCryptoProvider implements CryptoProvider {
-
-	// base implementations should use Cipher, Signature, Mac...
-
-	static Logger logger = LoggerFactory.getLogger(JceCryptoProvider.class);
-	protected Provider provider;
+public class JceCryptoProvider implements CryptoProvider {
+	
+	private static final Logger logger = LoggerFactory.getLogger(JceCryptoProvider.class);
+	
+	protected final Provider provider;
 
 	/**
-	 * <p>Constructor for JceCryptoProvider.</p>
+	 * Constructs new {@link JceCryptoProvider} using the given JCE provider. 
+	 * JCE Providers can be obtained by calling {@link Security#getProvider(String)}. 
+	 * Throws {@link IllegalArgumentException} if the given provider is null.
 	 */
-	public JceCryptoProvider() {
-		String securityProviderName = CryptoUtil.getSecurityProviderName();
-		this.provider = Security.getProvider(securityProviderName);
+	public JceCryptoProvider(Provider jceProvider) {
+		if(jceProvider == null) {
+			throw new IllegalArgumentException("Given provider cannot be null");
+		}
+		this.provider = jceProvider;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	abstract public byte[] base64Decode(String string);
+	public byte[] base64Decode(String string) {
+		return CertificateUtils.base64Decode(string);
+	}
 
 	/** {@inheritDoc} */
 	@Override
-	abstract public String base64Encode(byte[] bytes);
+	public String base64Encode(byte[] bytes) {
+		return CertificateUtils.base64Encode(bytes);
+	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -441,6 +449,11 @@ public abstract class JceCryptoProvider implements CryptoProvider {
 			return Signature.getInstance(algorithm.getStandardName());
 		}
 
+	}
+
+	@Override
+	public String getSecurityProviderName(Class<?> clazz) {
+		return provider.getName();
 	}
 
 }

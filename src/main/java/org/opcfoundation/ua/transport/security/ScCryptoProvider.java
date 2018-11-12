@@ -65,7 +65,8 @@ public class ScCryptoProvider implements CryptoProvider {
 	 * <p>Constructor for ScCryptoProvider.</p>
 	 */
 	public ScCryptoProvider() {
-
+		//Ensure SC is loaded
+		CryptoUtil.loadOrInstallProvider("SC", "org.spongycastle.jce.provider.BouncyCastleProvider");
 	}
 
 	/** {@inheritDoc} */
@@ -452,6 +453,11 @@ public class ScCryptoProvider implements CryptoProvider {
 				publicKey.getModulus(), publicKey.getPublicExponent());
 		return getAsymmetricSigner(forSigning, algorithm, params);
 
+	}
+
+	@Override
+	public String getSecurityProviderName(Class<?> clazz) {
+		return "SC";
 	}
 
 }

@@ -30,6 +30,10 @@ import java.util.List;
  */
 public interface CertificateProvider {
 
+	public byte[] base64Decode(String string);
+
+	public String base64Encode(byte[] bytes);
+	
 	public X509Certificate generateCertificate(String domainName,
 			PublicKey publicKey, PrivateKey privateKey, KeyPair issuerKeys,
 			Date from, Date to, BigInteger serialNumber, String applicationUri,
