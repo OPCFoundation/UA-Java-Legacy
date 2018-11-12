@@ -298,6 +298,18 @@ public class EncoderContext {
 		this.maxArrayLength = maxArrayLength;
 	}
 	
+	/**
+	 * Returns a new EncoderContext with same values. Serializer, NamespaceTable and ServerTable refers to same objects as this one.
+	 */
+	public EncoderContext shallowCopy() {
+		EncoderContext copy = new EncoderContext(getNamespaceTable(), getServerTable(), getEncodeableSerializer());
+		copy.setMaxArrayLength(getMaxArrayLength());
+		copy.setMaxByteStringLength(getMaxByteStringLength());
+		copy.setMaxMessageSize(getMaxMessageSize());
+		copy.setMaxStringLength(getMaxStringLength());
+		return copy;
+	}
+	
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {

@@ -48,7 +48,11 @@ public class ExtensionObject {
 	 * @return the encodeable as an ExtensionObject
 	 * @throws org.opcfoundation.ua.encoding.EncodingException if the encodingType is unsupported or the encoding fails
 	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 * @deprecated use {@link #encode(Structure, QualifiedName, EncoderContext)}  with the serializer already set in the context.
+	 *  This method will take a defensive copy of the given encoder and set the serializer directly to it.
+	 *  If the given serializer is null, the given context is used directly.
 	 */
+	@Deprecated
 	public static ExtensionObject encode(
 			Structure encodeable,
 			QualifiedName encodingType, IEncodeableSerializer serializer, EncoderContext ctx) throws EncodingException {
@@ -81,7 +85,7 @@ public class ExtensionObject {
 	
 	/**
 	 * Create extension object by encoding an encodeable to a binary format
-	 * using the default serializer.
+	 * using the serializer that is set to the given context.
 	 *
 	 * @param encodeable encodeable
 	 * @return binary encoded encodeable
@@ -91,7 +95,7 @@ public class ExtensionObject {
 	public static ExtensionObject binaryEncode(Structure encodeable, EncoderContext ctx)
 	throws EncodingException
 	{
-		return binaryEncode( encodeable, StackUtils.getDefaultSerializer(), ctx);
+		return binaryEncode( encodeable, null, ctx);
 	}
 	
 	
@@ -104,21 +108,33 @@ public class ExtensionObject {
 	 * @return binary encoded encodeable
 	 * @throws org.opcfoundation.ua.encoding.EncodingException on encoding problem
 	 * @param ctx a {@link org.opcfoundation.ua.encoding.EncoderContext} object.
+	 * @deprecated use {@link #binaryEncode(Structure, EncoderContext)} with the serializer already set in the context. 
+	 *   This method will take a defensive copy of the given encoder and set the serializer directly to it. 
+	 *   If the given serializer is null, the given context is used directly.
 	 */
-	public static ExtensionObject binaryEncode(Structure encodeable, IEncodeableSerializer serializer, EncoderContext ctx)
+	@Deprecated
+	public static ExtensionObject binaryEncode(final Structure encodeable, final IEncodeableSerializer serializer, final EncoderContext ctx)
 	throws EncodingException {
-		ctx.setEncodeableSerializer(serializer);
+		//GH#180, must make defensive copy as we override the serializer
+		final EncoderContext context;
+		if(serializer == null) {
+			context = ctx;
+		}else {
+			context = ctx.shallowCopy();
+			context.setEncodeableSerializer(serializer);
+		}
+
 		
-		int limit = ctx.getMaxByteStringLength();
+		int limit = context.getMaxByteStringLength();
 		if(limit == 0) {
-			limit = ctx.getMaxMessageSize();
+			limit = context.getMaxMessageSize();
 		}
 		if(limit == 0) {
 			limit = Integer.MAX_VALUE;
 		}
 		LimitedByteArrayOutputStream buf = LimitedByteArrayOutputStream.withSizeLimit(limit);
 		BinaryEncoder enc = new BinaryEncoder(buf);
-		enc.setEncoderContext(ctx);
+		enc.setEncoderContext(context);
 		enc.putEncodeable(null, encodeable);
 		
 		return new ExtensionObject(encodeable.getBinaryEncodeId(), ByteString.valueOf(buf.toByteArray()));
