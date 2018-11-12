@@ -43,6 +43,7 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.params.RSAPrivateCrtKeyParameters;
+import org.bouncycastle.crypto.signers.PSSSigner;
 import org.bouncycastle.crypto.signers.RSADigestSigner;
 import org.bouncycastle.util.encoders.Base64;
 import org.opcfoundation.ua.common.ServiceResultException;
@@ -370,6 +371,8 @@ public class BcCryptoProvider implements CryptoProvider {
 			cipher = new PKCS1Encoding(new RSAEngine());
 		} else if (algorithm.equals(SecurityAlgorithm.RsaOaep)) {
 			cipher = new OAEPEncoding(new RSAEngine(), new SHA1Digest());
+		} else if (algorithm.equals(SecurityAlgorithm.RsaOaep256)) {
+			cipher = new OAEPEncoding(new RSAEngine(), new SHA256Digest());
 		} else {
 			throw new ServiceResultException(
 					StatusCodes.Bad_SecurityPolicyRejected,
@@ -409,6 +412,8 @@ public class BcCryptoProvider implements CryptoProvider {
 			signer = new RSADigestSigner(new SHA1Digest());
 		} else if (algorithm.equals(SecurityAlgorithm.RsaSha256)) {
 			signer = new RSADigestSigner(new SHA256Digest());
+		} else if (algorithm.equals(SecurityAlgorithm.RsaPssSha256)) {
+			signer = new PSSSigner(new RSAEngine(), new SHA256Digest(), 32);
 		} else {
 			throw new ServiceResultException(
 					StatusCodes.Bad_SecurityPolicyRejected,

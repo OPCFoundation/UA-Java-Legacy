@@ -49,6 +49,7 @@ import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.crypto.params.ParametersWithIV;
 import org.spongycastle.crypto.params.RSAKeyParameters;
 import org.spongycastle.crypto.params.RSAPrivateCrtKeyParameters;
+import org.spongycastle.crypto.signers.PSSSigner;
 import org.spongycastle.crypto.signers.RSADigestSigner;
 import org.spongycastle.util.encoders.Base64;
 
@@ -377,6 +378,8 @@ public class ScCryptoProvider implements CryptoProvider {
 			cipher = new PKCS1Encoding(new RSAEngine());
 		} else if (algorithm.equals(SecurityAlgorithm.RsaOaep)) {
 			cipher = new OAEPEncoding(new RSAEngine(), new SHA1Digest());
+		} else if (algorithm.equals(SecurityAlgorithm.RsaOaep256)) {
+			cipher = new OAEPEncoding(new RSAEngine(), new SHA256Digest());
 		} else {
 			throw new ServiceResultException(
 					StatusCodes.Bad_SecurityPolicyRejected,
@@ -416,6 +419,8 @@ public class ScCryptoProvider implements CryptoProvider {
 			signer = new RSADigestSigner(new SHA1Digest());
 		} else if (algorithm.equals(SecurityAlgorithm.RsaSha256)) {
 			signer = new RSADigestSigner(new SHA256Digest());
+		} else if (algorithm.equals(SecurityAlgorithm.RsaPssSha256)) {
+			signer = new PSSSigner(new RSAEngine(), new SHA256Digest(), 32);
 		} else {
 			throw new ServiceResultException(
 					StatusCodes.Bad_SecurityPolicyRejected,

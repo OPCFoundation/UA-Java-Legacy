@@ -479,19 +479,32 @@ public class CryptoUtil {
 		if (securityAlgorithm == null)
 			return 1;
 
-		if (securityAlgorithm.equals(SecurityAlgorithm.Rsa15)) {
-			if (key instanceof RSAPublicKey)
-				return ((RSAPublicKey) key).getModulus().bitLength() / 8 - 11;
+		//https://crypto.stackexchange.com/questions/42097/what-is-the-maximum-size-of-the-plaintext-message-for-rsa-oaep
+		final int n;
+		switch (securityAlgorithm) {
+			case Rsa15 :
+				n = 11;
+				break;
+			case RsaOaep:
+				n = 42;
+				break;
+			case RsaOaep256:
+				n = 66;
+				break;
+			default :
+				throw new ServiceResultException(
+						StatusCodes.Bad_SecurityPolicyRejected,
+						securityAlgorithm.getUri());
 		}
-
-		if (securityAlgorithm.equals(SecurityAlgorithm.RsaOaep)) {
-			if (key instanceof RSAPublicKey)
-				return ((RSAPublicKey) key).getModulus().bitLength() / 8 - 42;
+		
+		try {
+			return ((RSAPublicKey) key).getModulus().bitLength() / 8 - n;
+		}catch(ClassCastException e) {
+			LOGGER.error("key is not instance of RSAPublicKey", e);
+			throw new ServiceResultException(
+					StatusCodes.Bad_SecurityPolicyRejected,
+					securityAlgorithm.getUri());
 		}
-
-		throw new ServiceResultException(
-				StatusCodes.Bad_SecurityPolicyRejected,
-				securityAlgorithm.getUri());
 	}
 
 	/**
