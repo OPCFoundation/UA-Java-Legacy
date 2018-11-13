@@ -29,14 +29,11 @@
 
 package org.opcfoundation.ua.core;
 
-import java.io.IOException;
-
 import org.opcfoundation.ua.encoding.DecodingException;
 import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IDecoder;
 import org.opcfoundation.ua.encoding.IEncodeable;
 import org.opcfoundation.ua.encoding.IEncoder;
-import org.opcfoundation.ua.encoding.binary.EncoderCalc;
 import org.opcfoundation.ua.encoding.binary.DecoderUtils;
 import org.opcfoundation.ua.encoding.binary.EncodeableReflectionSerializer;
 import org.opcfoundation.ua.encoding.binary.IEncodeableSerializer;
@@ -65,7 +62,7 @@ public class EncodeableSerializer extends SerializerComposition {
 	
 	public EncodeableSerializer() {
 		
-		_Content_ 
+_Content_ 
 		
 	}
 	

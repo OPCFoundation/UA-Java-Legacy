@@ -29,8 +29,6 @@
 
 package org.opcfoundation.ua.core;
 
-import java.io.IOException;
-
 import org.opcfoundation.ua.encoding.DecodingException;
 import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.encoding.IDecoder;

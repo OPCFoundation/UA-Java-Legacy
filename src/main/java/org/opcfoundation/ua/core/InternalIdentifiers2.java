@@ -37,10 +37,6 @@ import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 
 class InternalIdentifiers2 {
 	
-    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_TransportSettings = init(15243);
-    public static final NodeId PublishedEventsType_ExtensionFields = init(15511);
-    public static final NodeId PublishedEventsType_ExtensionFields_AddExtensionField = init(15512);
-    public static final NodeId PublishedEventsType_ExtensionFields_AddExtensionField_InputArguments = init(15513);
     public static final NodeId PublishedEventsType_ExtensionFields_AddExtensionField_OutputArguments = init(15514);
     public static final NodeId PublishedEventsType_ExtensionFields_RemoveExtensionField = init(15515);
     public static final NodeId PublishedEventsType_ExtensionFields_RemoveExtensionField_InputArguments = init(15516);

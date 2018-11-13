@@ -37,10 +37,6 @@ import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 
 class InternalIdentifiers1 {
 	
-    public static final NodeId HistoryUpdateResponse = init(701);
-    public static final NodeId HistoryUpdateResponse_Encoding_DefaultBinary = init(703);
-    public static final NodeId HistoryUpdateResponse_Encoding_DefaultJson = init(15288);
-    public static final NodeId HistoryUpdateResponse_Encoding_DefaultXml = init(702);
     public static final NodeId HistoryUpdateResult = init(695);
     public static final NodeId HistoryUpdateResult_Encoding_DefaultBinary = init(697);
     public static final NodeId HistoryUpdateResult_Encoding_DefaultJson = init(15286);
@@ -4037,6 +4033,10 @@ class InternalIdentifiers1 {
     public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status_Disable = init(15242);
     public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status_Enable = init(15241);
     public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status_State = init(15240);
+    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_TransportSettings = init(15243);
+    public static final NodeId PublishedEventsType_ExtensionFields = init(15511);
+    public static final NodeId PublishedEventsType_ExtensionFields_AddExtensionField = init(15512);
+    public static final NodeId PublishedEventsType_ExtensionFields_AddExtensionField_InputArguments = init(15513);
  
 
 	static NodeId init(int value)

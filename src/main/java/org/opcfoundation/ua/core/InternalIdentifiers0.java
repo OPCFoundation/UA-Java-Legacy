@@ -2384,10 +2384,6 @@ class InternalIdentifiers0 {
     public static final NodeId DeadbandType = init(718);
     public static final NodeId DeadbandType_EnumStrings = init(7610);
     public static final NodeId Decimal = init(50);
-    public static final NodeId DecimalDataType = init(17861);
-    public static final NodeId DecimalDataType_Encoding_DefaultBinary = init(17863);
-    public static final NodeId DecimalDataType_Encoding_DefaultJson = init(15045);
-    public static final NodeId DecimalDataType_Encoding_DefaultXml = init(17862);
     public static final NodeId DecimalString = init(12878);
     public static final NodeId DefaultBinary = init(3062);
     public static final NodeId DefaultInputValues = init(16306);
@@ -4037,6 +4033,10 @@ class InternalIdentifiers0 {
     public static final NodeId HistoryUpdateRequest_Encoding_DefaultBinary = init(700);
     public static final NodeId HistoryUpdateRequest_Encoding_DefaultJson = init(15287);
     public static final NodeId HistoryUpdateRequest_Encoding_DefaultXml = init(699);
+    public static final NodeId HistoryUpdateResponse = init(701);
+    public static final NodeId HistoryUpdateResponse_Encoding_DefaultBinary = init(703);
+    public static final NodeId HistoryUpdateResponse_Encoding_DefaultJson = init(15288);
+    public static final NodeId HistoryUpdateResponse_Encoding_DefaultXml = init(702);
  
 
 	static NodeId init(int value)

@@ -55,6 +55,7 @@ import org.opcfoundation.ua.codegen.EngineeringUnitsUtil.EUnit;
 import org.opcfoundation.ua.codegen.IdentifiersUtil.Identifier;
 import org.xml.sax.SAXException;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 public class Main2 {
@@ -70,29 +71,35 @@ public class Main2 {
 		DictionaryTypes2.ModelDesign dom = new DictionaryTypes2.ModelDesign();
 		dom.readFromNode( DOMUtils.getNode("src/main/resources/codegen_data/data/UA Defined Types.xml", "ModelDesign") );
 		dom.readFromNode( DOMUtils.getNode("src/main/resources/codegen_data/data/ext-UA Defined Types.xml", "ModelDesign") );
-		
-		List<IdentifiersUtil.Identifier> identifiers = new ArrayList<IdentifiersUtil.Identifier>();
-		IdentifiersUtil.readIdentifiers(new File("src/main/resources/codegen_data/data/StandardTypes.csv"), identifiers);
 
 		// Read template overrides
 		Map<String, Template> overrides = OverrideUtil.getOverrides( OverrideUtil.OVERRIDES_FOLDER );
 		
 		// Build Enumerations
+		System.out.println("Building Enumerations");
 		buildEnumerations( dom, overrides );
 		
 		// Build Structures
+		System.out.println("Building Structures");
 		buildStructures( dom, overrides );
 		
 		// Build EncodeableSerializer.java
+		System.out.println("Building Serializers");
 		buildSerializer( dom );
 		
 		// Build ChannelService.java 
+		System.out.println("Building ChannelService");
 		buildChannelService( dom );
 		
 		// Build Identifiers.java
+		System.out.println("Building Identifiers");
+		List<IdentifiersUtil.Identifier> identifiers = new ArrayList<IdentifiersUtil.Identifier>();
+		IdentifiersUtil.readIdentifiers(new File("src/main/resources/codegen_data/data/StandardTypes.csv"), identifiers);
+		identifiers = ResourceFileFixerUtil.fixIdentifiers(ImmutableList.copyOf(identifiers));
 		buildIdentifiers("org.opcfoundation.ua.core.Identifiers", identifiers);
 		
 		// Build Standard Engineering Units
+		System.out.println("Building StandardEngineeringUnits");
 		List<EUnit> eunits = EngineeringUnitsUtil.readUnits(new File("src/main/resources/codegen_data/data/UNECE_rec20_Rev10e_2014_utf16.txt"));
 		buildEngineeringUnits("org.opcfoundation.ua.core.StandardEngineeringUnits", eunits);
 		
@@ -102,9 +109,11 @@ public class Main2 {
 		ServiceSetUtil.Build(DEST, serviceSets);		
 
 		// Build StatusCodes.java
+		System.out.println("Building StatusCodes");
 		buildStatusCodes();
 		
 		// Build Attributes.java
+		System.out.println("Building Attributes");
 		DictionaryTypes.TypeDictionary attributes = new DictionaryTypes.TypeDictionary();
 		attributes.readFromNode( DOMUtils.getNode("src/main/resources/codegen_data/data/UA Attributes.xml", "opc:TypeDictionary") );
 		attributes.TargetNamespace = "http://opcfoundation.org/UA/Attributes";
@@ -728,8 +737,8 @@ public class Main2 {
 			if (dt.getSuperType()==enumeration) continue;
 			if (dt.isOptionSet) continue;
 			result.add(dt);
-		}		
-		return result;
+		}
+		return ResourceFileFixerUtil.fixStructures(ImmutableList.copyOf(result));
 	}	
 	
 	public static void buildStatusCodes()
