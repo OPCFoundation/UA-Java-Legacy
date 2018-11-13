@@ -1,5 +1,6 @@
 package org.opcfoundation.ua.utils;
 
+import org.opcfoundation.ua.builtintypes.ExpandedNodeId;
 import org.opcfoundation.ua.builtintypes.Structure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,5 +27,20 @@ public abstract class AbstractStructure implements Structure{
 		}
 	}
 	
+	/**
+	 * Returns null by default unless overridden.
+	 */
+	@Override
+	public ExpandedNodeId getXmlEncodeId() {
+		return null;
+	}
+	
+	/**
+	 * Returns null by default unless overridden.
+	 */
+	@Override
+	public ExpandedNodeId getJsonEncodeId() {
+		return null;
+	}
 	
 }

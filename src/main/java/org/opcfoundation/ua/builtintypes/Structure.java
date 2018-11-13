@@ -16,36 +16,37 @@ import org.opcfoundation.ua.encoding.IEncodeable;
 
 /**
  * Super interface for all complex type serializable objects
- *
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public interface Structure extends IEncodeable, Cloneable {
 
 	/**
-	 * <p>getTypeId.</p>
-	 *
-	 * @return a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * The NodeId for the actual DataType node defining this Structure type. Should never be null. 
+	 * Shall always contain the NamespaceUri within the {@link ExpandedNodeId}.
 	 */
 	ExpandedNodeId getTypeId();
+	
 	/**
-	 * <p>getXmlEncodeId.</p>
-	 *
-	 * @return a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * The NodeId for the "Default XML" encodings node of this Structure type. Can be null if not supported.
+	 * Shall always contain the NamespaceUri within the {@link ExpandedNodeId}, if not null.
 	 */
 	ExpandedNodeId getXmlEncodeId();
+	
 	/**
-	 * <p>getBinaryEncodeId.</p>
-	 *
-	 * @return a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * The NodeId for the "Default Binary" encodings node of this Structure type. Should never be null as the encoding is mandatory.
+	 * Shall always contain the NamespaceUri within the {@link ExpandedNodeId}.
 	 */
 	ExpandedNodeId getBinaryEncodeId();
 	
 	/**
+	 * The NodeId for the "Default JSON" encodings node of this Structure type. Can be null if not supported.
+	 * Shall always contain the NamespaceUri within the {@link ExpandedNodeId}, if not null.
+	 */
+	ExpandedNodeId getJsonEncodeId();
+	
+	/**
 	 * As every Structure is Cloneable, this method provides convinience method for
 	 * calling .clone for an unknown Structure. Classes implementing Structure should change the signature
-	 * to return the type of the implementing class.
-	 * 
-	 * @return a deep clone of this Structure
+	 * to return the type of the implementing class. Returns a deep clone of this Structure object.
 	 */
 	Structure clone();
 	

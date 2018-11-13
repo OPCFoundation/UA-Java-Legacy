@@ -17,5 +17,6 @@ package org.opcfoundation.ua.encoding;
  */
 public enum EncodeType {
 	Binary,
-	Xml
+	Xml,
+	Json;
 }

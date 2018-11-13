@@ -25,7 +25,7 @@ import org.opcfoundation.ua.encoding.IEncoder;
 import org.opcfoundation.ua.encoding.binary.IEncodeableSerializer;
 
 /**
- * Base for a simple serializer that can serialize only one type of class.
+ * Base for a simple serializer that can serialize only one type of class. Extending this class via non-code-generating ways should be avoided.
  */
 public abstract class AbstractSerializer implements IEncodeableSerializer {
 
@@ -63,28 +63,41 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 	ExpandedNodeId nodeId;
 	ExpandedNodeId binaryId;
 	ExpandedNodeId xmlId;
-
+	ExpandedNodeId jsonId;
 	
 	/**
-	 * <p>Constructor for AbstractSerializer.</p>
-	 *
-	 * @param clazz a {@link java.lang.Class} object.
-	 * @param binaryId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
-	 * @param xmlId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * Creates new {@link AbstractSerializer}. This will call {@link #AbstractSerializer(Class, ExpandedNodeId, ExpandedNodeId, ExpandedNodeId)} with type nodeId null.
+	 * 
+	 * @param clazz Structure to serialize
+	 * @param binaryId binary id for the serialization, shall not be null
+	 * @param xmlId xml id for the serialization, can be null
 	 */
 	public AbstractSerializer(Class<? extends IEncodeable> clazz, ExpandedNodeId binaryId, ExpandedNodeId xmlId){
 		this(clazz, binaryId, xmlId, null);
 	}
 	
 	/**
-	 * <p>Constructor for AbstractSerializer.</p>
-	 *
-	 * @param clazz a {@link java.lang.Class} object.
-	 * @param binaryId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
-	 * @param xmlId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
-	 * @param nodeId a {@link org.opcfoundation.ua.builtintypes.ExpandedNodeId} object.
+	 * Creates new {@link AbstractSerializer}. This will call {@link #AbstractSerializer(Class, ExpandedNodeId, ExpandedNodeId, ExpandedNodeId, ExpandedNodeId)} with jsonId  null.
+	 * 
+	 * @param clazz Structure to serialize
+	 * @param binaryId binary id for the serialization, shall not be null
+	 * @param xmlId xml id for the serialization, can be null
+	 * @param nodeId node id of the DataType node of the Structure, can be null
 	 */
 	public AbstractSerializer(Class<? extends IEncodeable> clazz, ExpandedNodeId binaryId, ExpandedNodeId xmlId, ExpandedNodeId nodeId){
+		this(clazz, binaryId, xmlId, nodeId, null);
+	}
+	
+	/**
+	 * Creates new {@link AbstractSerializer}.
+	 * 
+	 * @param clazz Structure to serialize
+	 * @param binaryId binary id for the serialization, shall not be null
+	 * @param xmlId xml id for the serialization, can be null
+	 * @param nodeId node id of the DataType node of the Structure, can be null
+	 * @param jsonId json id for the serializationm can be null
+	 */
+	public AbstractSerializer(Class<? extends IEncodeable> clazz, ExpandedNodeId binaryId, ExpandedNodeId xmlId, ExpandedNodeId nodeId, ExpandedNodeId jsonId){
 		if (clazz==null) {
 			throw new IllegalArgumentException("Given parameters cannot be null");
 		}
@@ -94,6 +107,7 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 		this.binaryId = fixAndValidateId(binaryId);
 		this.xmlId = fixAndValidateId(xmlId);
 		this.nodeId = fixAndValidateId(nodeId);
+		this.jsonId = fixAndValidateId(jsonId);
 	}
 	
 	/**
@@ -153,15 +167,24 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 	/** {@inheritDoc} */
 	@Override
 	public Class<? extends IEncodeable> getClass(ExpandedNodeId id) {
-		return (id.equals(binaryId) || id.equals(xmlId) || (nodeId!= null && id.equals(nodeId))) ? clazz : null; 
+		return (id.equals(binaryId) || id.equals(xmlId) || id.equals(jsonId) || (nodeId!= null && id.equals(nodeId))) ? clazz : null; 
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public ExpandedNodeId getNodeId(Class<? extends IEncodeable> clazz, EncodeType type) {
-		if (type==null) return nodeId; //XXX not pretty, but will do for the moment
-		if (type==EncodeType.Binary) return binaryId;
-		if (type==EncodeType.Xml) return xmlId;
+		if (type==null) {
+			return nodeId; //XXX not pretty, but will do for the moment
+		}
+		if (type==EncodeType.Binary) {
+			return binaryId;
+		}
+		if (type==EncodeType.Xml) {
+			return xmlId;
+		}
+		if(type==EncodeType.Json) {
+			return jsonId;
+		}
 		return null; 
 	}
 	
@@ -183,10 +206,15 @@ public abstract class AbstractSerializer implements IEncodeableSerializer {
 	/** {@inheritDoc} */
 	@Override
 	public void getSupportedNodeIds(Collection<ExpandedNodeId> result) {
-		if (binaryId!=null)
+		if (binaryId!=null) {
 			result.add(binaryId);
-		if (xmlId!=null)
+		}
+		if (xmlId!=null) {
 			result.add(xmlId);
+		}
+		if(jsonId!=null) {
+			result.add(jsonId);
+		}
 	}
 
 
