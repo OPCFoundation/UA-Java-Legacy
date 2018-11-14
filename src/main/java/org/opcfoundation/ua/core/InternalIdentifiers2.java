@@ -37,6 +37,18 @@ import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 
 class InternalIdentifiers2 {
 	
+    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_TotalInformation_DiagnosticsLevel = init(18994);
+    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_TotalInformation_TimeFirstChange = init(18995);
+    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_KeyFrameCount = init(16812);
+    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_MessageSettings = init(16840);
+    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status = init(15239);
+    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status_Disable = init(15242);
+    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status_Enable = init(15241);
+    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status_State = init(15240);
+    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_TransportSettings = init(15243);
+    public static final NodeId PublishedEventsType_ExtensionFields = init(15511);
+    public static final NodeId PublishedEventsType_ExtensionFields_AddExtensionField = init(15512);
+    public static final NodeId PublishedEventsType_ExtensionFields_AddExtensionField_InputArguments = init(15513);
     public static final NodeId PublishedEventsType_ExtensionFields_AddExtensionField_OutputArguments = init(15514);
     public static final NodeId PublishedEventsType_ExtensionFields_RemoveExtensionField = init(15515);
     public static final NodeId PublishedEventsType_ExtensionFields_RemoveExtensionField_InputArguments = init(15516);
@@ -207,6 +219,8 @@ class InternalIdentifiers2 {
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_Diagnostics_TotalInformation_Classification = init(18096);
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_Diagnostics_TotalInformation_DiagnosticsLevel = init(18097);
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_Diagnostics_TotalInformation_TimeFirstChange = init(18098);
+    public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_HeaderLayoutUri = init(17562);
+    public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_KeyFrameCount = init(17560);
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_MessageReceiveTimeout = init(18082);
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_MessageSettings = init(18087);
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_PublisherId = init(18077);
@@ -218,8 +232,6 @@ class InternalIdentifiers2 {
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_Status_Enable = init(18090);
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_Status_State = init(18089);
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_SubscribedDataSet = init(21006);
-    public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_SubscribedDataSet_DataSetMetaData = init(21007);
-    public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_SubscribedDataSet_MessageReceiveTimeout = init(21008);
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_TransportSettings = init(18086);
     public static final NodeId ReaderGroupType_DataSetReaderName_Placeholder_WriterGroupId = init(18078);
     public static final NodeId ReaderGroupType_Diagnostics = init(21015);
@@ -494,6 +506,7 @@ class InternalIdentifiers2 {
     public static final NodeId RoleType_RemoveIdentity = init(15626);
     public static final NodeId RoleType_RemoveIdentity_InputArguments = init(15627);
     public static final NodeId RootFolder = init(84);
+    public static final NodeId RsaEncryptedSecret = init(17545);
     public static final NodeId RsaMinApplicationCertificateType = init(12559);
     public static final NodeId RsaSha256ApplicationCertificateType = init(12560);
     public static final NodeId SByte = init(2);
@@ -977,7 +990,6 @@ class InternalIdentifiers2 {
     public static final NodeId ServerType_VendorServerInfo = init(2011);
     public static final NodeId ServerVendorCapabilityType = init(2137);
     public static final NodeId Server_Auditing = init(2994);
-    public static final NodeId Server_CurrentTimeZone = init(16313);
     public static final NodeId Server_EstimatedReturnTime = init(12885);
     public static final NodeId Server_GetMonitoredItems = init(11492);
     public static final NodeId Server_GetMonitoredItems_InputArguments = init(11493);
@@ -1455,11 +1467,7 @@ class InternalIdentifiers2 {
     public static final NodeId SubscribedDataSetMirrorDataType_Encoding_DefaultJson = init(16311);
     public static final NodeId SubscribedDataSetMirrorDataType_Encoding_DefaultXml = init(16012);
     public static final NodeId SubscribedDataSetMirrorType = init(15127);
-    public static final NodeId SubscribedDataSetMirrorType_DataSetMetaData = init(15128);
-    public static final NodeId SubscribedDataSetMirrorType_MessageReceiveTimeout = init(15129);
     public static final NodeId SubscribedDataSetType = init(15108);
-    public static final NodeId SubscribedDataSetType_DataSetMetaData = init(15109);
-    public static final NodeId SubscribedDataSetType_MessageReceiveTimeout = init(15110);
     public static final NodeId SubscriptionAcknowledgement = init(821);
     public static final NodeId SubscriptionAcknowledgement_Encoding_DefaultBinary = init(823);
     public static final NodeId SubscriptionAcknowledgement_Encoding_DefaultJson = init(15351);
@@ -1867,8 +1875,6 @@ class InternalIdentifiers2 {
     public static final NodeId TargetVariablesType_AddTargetVariables = init(15115);
     public static final NodeId TargetVariablesType_AddTargetVariables_InputArguments = init(15116);
     public static final NodeId TargetVariablesType_AddTargetVariables_OutputArguments = init(15117);
-    public static final NodeId TargetVariablesType_DataSetMetaData = init(15112);
-    public static final NodeId TargetVariablesType_MessageReceiveTimeout = init(15113);
     public static final NodeId TargetVariablesType_RemoveTargetVariables = init(15118);
     public static final NodeId TargetVariablesType_RemoveTargetVariables_InputArguments = init(15119);
     public static final NodeId TargetVariablesType_RemoveTargetVariables_OutputArguments = init(15120);
@@ -2632,6 +2638,7 @@ class InternalIdentifiers2 {
     public static final NodeId WriterGroupType_Diagnostics_TotalInformation_DiagnosticsLevel = init(17817);
     public static final NodeId WriterGroupType_Diagnostics_TotalInformation_TimeFirstChange = init(17818);
     public static final NodeId WriterGroupType_GroupProperties = init(17489);
+    public static final NodeId WriterGroupType_HeaderLayoutUri = init(17559);
     public static final NodeId WriterGroupType_KeepAliveTime = init(17738);
     public static final NodeId WriterGroupType_LocaleIds = init(17740);
     public static final NodeId WriterGroupType_MaxNetworkMessageSize = init(17729);

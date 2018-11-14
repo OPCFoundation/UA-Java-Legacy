@@ -62,6 +62,8 @@ public class DataSetReaderDataType extends AbstractStructure {
     protected DataSetMetaDataType DataSetMetaData;
     protected UnsignedInteger DataSetFieldContentMask;
     protected Double MessageReceiveTimeout;
+    protected UnsignedInteger KeyFrameCount;
+    protected String HeaderLayoutUri;
     protected MessageSecurityMode SecurityMode;
     protected String SecurityGroupId;
     protected EndpointDescription[] SecurityKeyServices;
@@ -72,7 +74,7 @@ public class DataSetReaderDataType extends AbstractStructure {
     
     public DataSetReaderDataType() {}
     
-    public DataSetReaderDataType(String Name, Boolean Enabled, Variant PublisherId, UnsignedShort WriterGroupId, UnsignedShort DataSetWriterId, DataSetMetaDataType DataSetMetaData, UnsignedInteger DataSetFieldContentMask, Double MessageReceiveTimeout, MessageSecurityMode SecurityMode, String SecurityGroupId, EndpointDescription[] SecurityKeyServices, KeyValuePair[] DataSetReaderProperties, ExtensionObject TransportSettings, ExtensionObject MessageSettings, ExtensionObject SubscribedDataSet)
+    public DataSetReaderDataType(String Name, Boolean Enabled, Variant PublisherId, UnsignedShort WriterGroupId, UnsignedShort DataSetWriterId, DataSetMetaDataType DataSetMetaData, UnsignedInteger DataSetFieldContentMask, Double MessageReceiveTimeout, UnsignedInteger KeyFrameCount, String HeaderLayoutUri, MessageSecurityMode SecurityMode, String SecurityGroupId, EndpointDescription[] SecurityKeyServices, KeyValuePair[] DataSetReaderProperties, ExtensionObject TransportSettings, ExtensionObject MessageSettings, ExtensionObject SubscribedDataSet)
     {
         this.Name = Name;
         this.Enabled = Enabled;
@@ -82,6 +84,8 @@ public class DataSetReaderDataType extends AbstractStructure {
         this.DataSetMetaData = DataSetMetaData;
         this.DataSetFieldContentMask = DataSetFieldContentMask;
         this.MessageReceiveTimeout = MessageReceiveTimeout;
+        this.KeyFrameCount = KeyFrameCount;
+        this.HeaderLayoutUri = HeaderLayoutUri;
         this.SecurityMode = SecurityMode;
         this.SecurityGroupId = SecurityGroupId;
         this.SecurityKeyServices = SecurityKeyServices;
@@ -171,6 +175,26 @@ public class DataSetReaderDataType extends AbstractStructure {
         this.MessageReceiveTimeout = MessageReceiveTimeout;
     }
     
+    public UnsignedInteger getKeyFrameCount()
+    {
+        return KeyFrameCount;
+    }
+    
+    public void setKeyFrameCount(UnsignedInteger KeyFrameCount)
+    {
+        this.KeyFrameCount = KeyFrameCount;
+    }
+    
+    public String getHeaderLayoutUri()
+    {
+        return HeaderLayoutUri;
+    }
+    
+    public void setHeaderLayoutUri(String HeaderLayoutUri)
+    {
+        this.HeaderLayoutUri = HeaderLayoutUri;
+    }
+    
     public MessageSecurityMode getSecurityMode()
     {
         return SecurityMode;
@@ -257,6 +281,8 @@ public class DataSetReaderDataType extends AbstractStructure {
         result.DataSetMetaData = DataSetMetaData==null ? null : DataSetMetaData.clone();
         result.DataSetFieldContentMask = DataSetFieldContentMask;
         result.MessageReceiveTimeout = MessageReceiveTimeout;
+        result.KeyFrameCount = KeyFrameCount;
+        result.HeaderLayoutUri = HeaderLayoutUri;
         result.SecurityMode = SecurityMode;
         result.SecurityGroupId = SecurityGroupId;
         if (SecurityKeyServices!=null) {
@@ -306,6 +332,12 @@ public class DataSetReaderDataType extends AbstractStructure {
         if (MessageReceiveTimeout==null) {
             if (other.MessageReceiveTimeout != null) return false;
         } else if (!MessageReceiveTimeout.equals(other.MessageReceiveTimeout)) return false;
+        if (KeyFrameCount==null) {
+            if (other.KeyFrameCount != null) return false;
+        } else if (!KeyFrameCount.equals(other.KeyFrameCount)) return false;
+        if (HeaderLayoutUri==null) {
+            if (other.HeaderLayoutUri != null) return false;
+        } else if (!HeaderLayoutUri.equals(other.HeaderLayoutUri)) return false;
         if (SecurityMode==null) {
             if (other.SecurityMode != null) return false;
         } else if (!SecurityMode.equals(other.SecurityMode)) return false;
@@ -351,6 +383,10 @@ public class DataSetReaderDataType extends AbstractStructure {
                 + ((DataSetFieldContentMask == null) ? 0 : DataSetFieldContentMask.hashCode());
         result = prime * result
                 + ((MessageReceiveTimeout == null) ? 0 : MessageReceiveTimeout.hashCode());
+        result = prime * result
+                + ((KeyFrameCount == null) ? 0 : KeyFrameCount.hashCode());
+        result = prime * result
+                + ((HeaderLayoutUri == null) ? 0 : HeaderLayoutUri.hashCode());
         result = prime * result
                 + ((SecurityMode == null) ? 0 : SecurityMode.hashCode());
         result = prime * result

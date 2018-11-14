@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ModelDesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" TargetNamespace="http://opcfoundation.org/UA/" TargetVersion="1.04" TargetPublicationDate="2018-06-20T00:00:00Z" TargetXmlNamespace="http://opcfoundation.org/UA/" tns:ns="http://opcfoundation.org/UA/" uax:ns="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:tns="http://opcfoundation.org/UA/" xmlns="http://opcfoundation.org/UA/ModelDesign.xsd">
+<ModelDesign xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" TargetNamespace="http://opcfoundation.org/UA/" TargetVersion="1.04" TargetPublicationDate="2018-11-15T00:00:00Z" TargetXmlNamespace="http://opcfoundation.org/UA/" tns:ns="http://opcfoundation.org/UA/" uax:ns="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd" xmlns:tns="http://opcfoundation.org/UA/" xmlns="http://opcfoundation.org/UA/ModelDesign.xsd">
   <Namespaces>
     <Namespace Name="OpcUa" Prefix="Opc.Ua" XmlNamespace="http://opcfoundation.org/UA/2008/02/Types.xsd">http://opcfoundation.org/UA/</Namespace>
   </Namespaces>
@@ -440,17 +440,11 @@
       </Reference>
     </References>
   </Object>
-  <ReferenceType SymbolicName="tns:DescribesArgument" PartNo="3" BaseType="tns:HasComponent">
-    <InverseName>ArgumentDescriptionFor</InverseName>
+  <ReferenceType SymbolicName="tns:HasArgumentDescription" PartNo="3" BaseType="tns:HasComponent">
+    <InverseName>ArgumentDescriptionOf</InverseName>
   </ReferenceType>
-  <ReferenceType SymbolicName="tns:DescribesInputArgument" PartNo="3" BaseType="tns:DescribesArgument">
-    <InverseName>InputArgumentDescriptionFor</InverseName>
-  </ReferenceType>
-  <ReferenceType SymbolicName="tns:DescribesOptionalInputArgument" PartNo="3" BaseType="tns:DescribesInputArgument">
-    <InverseName>OptionalInputArgumentDescriptionFor</InverseName>
-  </ReferenceType>
-  <ReferenceType SymbolicName="tns:DescribesOutputArgument" PartNo="3" BaseType="tns:DescribesArgument">
-    <InverseName>OutputArgumentDescriptionFor</InverseName>
+  <ReferenceType SymbolicName="tns:HasOptionalInputArgumentDescription" PartNo="3" BaseType="tns:HasArgumentDescription">
+    <InverseName>OptionalInputArgumentDescriptionOf</InverseName>
   </ReferenceType>
   <Object SymbolicName="tns:OPCUANamespaceMetadata" PartNo="5" TypeDefinition="tns:NamespaceMetadataType">
     <BrowseName>http://opcfoundation.org/UA/</BrowseName>
@@ -467,7 +461,7 @@
       </Property>
       <Property SymbolicName="tns:NamespacePublicationDate" DataType="tns:DateTime">
         <DefaultValue>
-          <uax:String>2018-06-12</uax:String>
+          <uax:DateTime>2018-11-15</uax:DateTime>
         </DefaultValue>
       </Property>
       <Property SymbolicName="tns:IsNamespaceSubset" DataType="tns:Boolean">
@@ -1269,7 +1263,7 @@
       <Property SymbolicName="tns:BitMask" ModellingRule="Optional" DataType="tns:Boolean" ValueRank="Array" />
     </Children>
   </VariableType>
-  <VariableType SymbolicName="tns:SelectionListType" PartNo="5" BaseType="tns:BaseDataVariableType" DataType="tns:ServerStatusDataType" ValueRank="ScalarOrArray" ExposesItsChildren="true">
+  <VariableType SymbolicName="tns:SelectionListType" PartNo="5" BaseType="tns:BaseDataVariableType" DataType="tns:BaseDataType" ValueRank="ScalarOrArray" ExposesItsChildren="true">
     <Children>
       <Property SymbolicName="tns:Selections" DataType="tns:BaseDataType" ValueRank="Array" />
       <Property SymbolicName="tns:SelectionDescriptions" ModellingRule="Optional" DataType="tns:LocalizedText" ValueRank="Array" />
@@ -1299,7 +1293,7 @@
   <Object SymbolicName="tns:Server" PartNo="5" TypeDefinition="tns:ServerType" ModellingRule="None" SupportsEvents="true">
     <Children>
       <Property SymbolicName="tns:EstimatedReturnTime" ModellingRule="Mandatory" />
-      <Property SymbolicName="tns:CurrentTimeZone" ModellingRule="Mandatory" />
+      <Property SymbolicName="tns:LocalTime" ModellingRule="Mandatory" />
       <Object SymbolicName="tns:ServerCapabilities">
         <Children>
           <Property SymbolicName="tns:MaxArrayLength" ModellingRule="Mandatory" />
@@ -1401,6 +1395,17 @@
       <Field Name="Value" DataType="tns:BaseDataType" />
     </Fields>
   </DataType>
+  <DataType SymbolicName="tns:AdditionalParametersType" PartNo="5" ReleaseStatus="Draft" BaseType="tns:Structure" NoArraysAllowed="true">
+    <Fields>
+      <Field Name="Parameters" DataType="tns:KeyValuePair" ValueRank="Array" />
+    </Fields>
+  </DataType>
+  <DataType SymbolicName="tns:EphemeralKeyType" PartNo="5" ReleaseStatus="Draft" BaseType="tns:Structure" NoArraysAllowed="true">
+    <Fields>
+      <Field Name="PublicKey" DataType="tns:ByteString" />
+      <Field Name="Signature" DataType="tns:ByteString" />
+    </Fields>
+  </DataType>
   <DataType SymbolicName="tns:EndpointType" PartNo="5" BaseType="tns:Structure">
     <Fields>
       <Field Name="EndpointUrl" DataType="tns:String" />
@@ -1465,6 +1470,19 @@
     </Children>
     <ClassName>StateMachineTransition</ClassName>
   </ObjectType>
+  <ObjectType SymbolicName="tns:ChoiceStateType" PartNo="5" BaseType="tns:StateType">
+    <ClassName>StateMachineChoiceStateType</ClassName>
+  </ObjectType>
+  <ReferenceType SymbolicName="tns:HasGuard" PartNo="5" BaseType="tns:HasComponent">
+    <InverseName>GuardOf</InverseName>
+  </ReferenceType>
+  <VariableType SymbolicName="tns:GuardVariableType" PartNo="5" BaseType="tns:BaseDataVariableType" DataType="tns:LocalizedText" />
+  <VariableType SymbolicName="tns:ExpressionGuardVariableType" PartNo="5" BaseType="tns:GuardVariableType" DataType="tns:LocalizedText">
+    <Children>
+      <Property SymbolicName="tns:Expression" ModellingRule="Mandatory" DataType="tns:ContentFilter" />
+    </Children>
+  </VariableType>
+  <VariableType SymbolicName="tns:ElseGuardVariableType" PartNo="5" BaseType="tns:GuardVariableType" DataType="tns:LocalizedText" />
   <ObjectType SymbolicName="tns:TransitionEventType" PartNo="5" BaseType="tns:BaseEventType">
     <Children>
       <Variable SymbolicName="tns:Transition" TypeDefinition="tns:TransitionVariableType" DataType="tns:LocalizedText" />
@@ -1478,7 +1496,7 @@
       <Property SymbolicName="tns:NewStateId" DataType="tns:BaseDataType" />
     </Children>
   </ObjectType>
-  <DataType SymbolicName="tns:OpenFileMode" BaseType="tns:Enumeration">
+  <DataType SymbolicName="tns:OpenFileMode" PartNo="5" BaseType="tns:Enumeration">
     <Fields>
       <Field Name="Read" Identifier="1" />
       <Field Name="Write" Identifier="2" />
@@ -1828,32 +1846,32 @@
   </DataType>
   <Method SymbolicName="tns:AddIdentityMethodType" PartNo="5">
     <InputArguments>
-      <Argument Name="RuleToAdd" DataType="tns:IdentityMappingRuleType" />
+      <Argument Name="Rule" DataType="tns:IdentityMappingRuleType" />
     </InputArguments>
   </Method>
   <Method SymbolicName="tns:RemoveIdentityMethodType" PartNo="5">
     <InputArguments>
-      <Argument Name="RuleToRemove" DataType="tns:IdentityMappingRuleType" />
+      <Argument Name="Rule" DataType="tns:IdentityMappingRuleType" />
     </InputArguments>
   </Method>
   <Method SymbolicName="tns:AddApplicationMethodType" PartNo="5">
     <InputArguments>
-      <Argument Name="RuleToAdd" DataType="tns:String" />
+      <Argument Name="ApplicationUri" DataType="tns:String" />
     </InputArguments>
   </Method>
   <Method SymbolicName="tns:RemoveApplicationMethodType" PartNo="5">
     <InputArguments>
-      <Argument Name="RuleToRemove" DataType="tns:String" />
+      <Argument Name="ApplicationUri" DataType="tns:String" />
     </InputArguments>
   </Method>
   <Method SymbolicName="tns:AddEndpointMethodType" PartNo="5">
     <InputArguments>
-      <Argument Name="RuleToAdd" DataType="tns:String" />
+      <Argument Name="Endpoint" DataType="tns:String" />
     </InputArguments>
   </Method>
   <Method SymbolicName="tns:RemoveEndpointMethodType" PartNo="5">
     <InputArguments>
-      <Argument Name="RuleToRemove" DataType="tns:String" />
+      <Argument Name="Endpoint" DataType="tns:String" />
     </InputArguments>
   </Method>
   <ObjectType SymbolicName="tns:RoleMappingRuleChangedAuditEventType" PartNo="5" BaseType="tns:AuditUpdateMethodEventType" />
@@ -2058,24 +2076,25 @@
       </Property>
     </Children>
   </VariableType>
-  <VariableType SymbolicName="tns:AnalogItemType" PartNo="8" BaseType="tns:DataItemType" DataType="tns:Number">
+  <VariableType SymbolicName="tns:BaseAnalogType" PartNo="8" BaseType="tns:DataItemType" DataType="tns:Number">
     <Children>
       <Property SymbolicName="tns:InstrumentRange" ModellingRule="Optional" DataType="tns:Range" />
+      <Property SymbolicName="tns:EURange" ModellingRule="Optional" DataType="tns:Range" />
+      <Property SymbolicName="tns:EngineeringUnits" ModellingRule="Optional" DataType="tns:EUInformation" />
+    </Children>
+  </VariableType>
+  <VariableType SymbolicName="tns:AnalogItemType" PartNo="8" BaseType="tns:BaseAnalogType" DataType="tns:Number">
+    <Children>
       <Property SymbolicName="tns:EURange" ModellingRule="Mandatory" DataType="tns:Range" />
-      <Property SymbolicName="tns:EngineeringUnits" ModellingRule="Optional" DataType="tns:EUInformation" />
     </Children>
   </VariableType>
-  <VariableType SymbolicName="tns:EUItemType" PartNo="8" BaseType="tns:DataItemType" DataType="tns:Number">
+  <VariableType SymbolicName="tns:AnalogUnitType" PartNo="8" BaseType="tns:BaseAnalogType" DataType="tns:Number">
     <Children>
-      <Property SymbolicName="tns:InstrumentRange" ModellingRule="Optional" DataType="tns:Range" />
-      <Property SymbolicName="tns:EURange" ModellingRule="Optional" DataType="tns:Range" />
-      <Property SymbolicName="tns:EngineeringUnits" ModellingRule="Optional" DataType="tns:EUInformation" />
+      <Property SymbolicName="tns:EngineeringUnits" ModellingRule="Mandatory" DataType="tns:EUInformation" />
     </Children>
   </VariableType>
-  <VariableType SymbolicName="tns:AnalogUnitItemType" PartNo="8" BaseType="tns:DataItemType" DataType="tns:Number">
+  <VariableType SymbolicName="tns:AnalogUnitRangeType" PartNo="8" BaseType="tns:AnalogItemType" DataType="tns:Number">
     <Children>
-      <Property SymbolicName="tns:InstrumentRange" ModellingRule="Optional" DataType="tns:Range" />
-      <Property SymbolicName="tns:EURange" ModellingRule="Optional" DataType="tns:Range" />
       <Property SymbolicName="tns:EngineeringUnits" ModellingRule="Mandatory" DataType="tns:EUInformation" />
     </Children>
   </VariableType>
@@ -3732,17 +3751,17 @@
       </Reference>
     </References>
   </Object>
-  <Method SymbolicName="tns:CreateCredentialMethodType">
+  <Method SymbolicName="tns:CreateCredentialMethodType" PartNo="12">
     <InputArguments>
       <Argument Name="ResourceUri" DataType="tns:String" />
       <Argument Name="ProfileUri" DataType="tns:String" />
       <Argument Name="EndpointUrls" DataType="tns:String" ValueRank="Array" />
     </InputArguments>
     <OutputArguments>
-      <Argument Name="ObjectId" DataType="tns:NodeId" />
+      <Argument Name="CredentialNodeId" DataType="tns:NodeId" />
     </OutputArguments>
   </Method>
-  <ObjectType SymbolicName="tns:KeyCredentialConfigurationFolderType" BaseType="tns:FolderType">
+  <ObjectType SymbolicName="tns:KeyCredentialConfigurationFolderType" PartNo="12" BaseType="tns:FolderType">
     <Children>
       <Object SymbolicName="tns:ServiceName_Placeholder" TypeDefinition="tns:KeyCredentialConfigurationType" ModellingRule="OptionalPlaceholder">
         <BrowseName>&lt;ServiceName&gt;</BrowseName>
@@ -3750,7 +3769,7 @@
       <Method SymbolicName="tns:CreateCredential" TypeDefinition="tns:CreateCredentialMethodType" ModellingRule="Optional" />
     </Children>
   </ObjectType>
-  <Object SymbolicName="tns:KeyCredentialConfiguration" TypeDefinition="tns:KeyCredentialConfigurationFolderType">
+  <Object SymbolicName="tns:KeyCredentialConfiguration" PartNo="12" TypeDefinition="tns:KeyCredentialConfigurationFolderType">
     <References>
       <Reference IsInverse="true">
         <ReferenceType>tns:HasComponent</ReferenceType>
@@ -3758,7 +3777,7 @@
       </Reference>
     </References>
   </Object>
-  <Method SymbolicName="tns:GetEncryptingKeyMethodType">
+  <Method SymbolicName="tns:GetEncryptingKeyMethodType" PartNo="12">
     <InputArguments>
       <Argument Name="CredentialId" DataType="tns:String" />
       <Argument Name="RequestedSecurityPolicyUri" DataType="tns:String" />
@@ -3768,7 +3787,7 @@
       <Argument Name="RevisedSecurityPolicyUri" DataType="tns:NodeId" />
     </OutputArguments>
   </Method>
-  <ObjectType SymbolicName="tns:KeyCredentialConfigurationType" BaseType="tns:BaseObjectType">
+  <ObjectType SymbolicName="tns:KeyCredentialConfigurationType" PartNo="12" BaseType="tns:BaseObjectType">
     <Children>
       <Property SymbolicName="tns:ResourceUri" ModellingRule="Mandatory" DataType="tns:String" ValueRank="Scalar" />
       <Property SymbolicName="tns:ProfileUri" ModellingRule="Mandatory" DataType="tns:String" ValueRank="Scalar" />
@@ -3779,7 +3798,7 @@
       <Method SymbolicName="tns:DeleteCredential" ModellingRule="Optional" />
     </Children>
   </ObjectType>
-  <Method SymbolicName="tns:KeyCredentialUpdateMethodType">
+  <Method SymbolicName="tns:KeyCredentialUpdateMethodType" PartNo="12">
     <InputArguments>
       <Argument Name="CredentialId" DataType="tns:String" />
       <Argument Name="CredentialSecret" DataType="tns:ByteString" />
@@ -3787,14 +3806,14 @@
       <Argument Name="SecurityPolicyUri" DataType="tns:String" />
     </InputArguments>
   </Method>
-  <ObjectType SymbolicName="tns:KeyCredentialAuditEventType" BaseType="tns:AuditUpdateMethodEventType" IsAbstract="true">
+  <ObjectType SymbolicName="tns:KeyCredentialAuditEventType" PartNo="12" BaseType="tns:AuditUpdateMethodEventType" IsAbstract="true">
     <Children>
       <Property SymbolicName="tns:ResourceUri" ModellingRule="Mandatory" DataType="tns:String" />
     </Children>
   </ObjectType>
-  <ObjectType SymbolicName="tns:KeyCredentialUpdatedAuditEventType" BaseType="tns:KeyCredentialAuditEventType" />
-  <ObjectType SymbolicName="tns:KeyCredentialDeletedAuditEventType" BaseType="tns:KeyCredentialAuditEventType" />
-  <Object SymbolicName="tns:AuthorizationServices" TypeDefinition="tns:FolderType">
+  <ObjectType SymbolicName="tns:KeyCredentialUpdatedAuditEventType" PartNo="12" BaseType="tns:KeyCredentialAuditEventType" />
+  <ObjectType SymbolicName="tns:KeyCredentialDeletedAuditEventType" PartNo="12" BaseType="tns:KeyCredentialAuditEventType" />
+  <Object SymbolicName="tns:AuthorizationServices" PartNo="12" TypeDefinition="tns:FolderType">
     <Children>
       <Object SymbolicName="tns:ServiceName_Placeholder" TypeDefinition="tns:AuthorizationServiceConfigurationType" ModellingRule="OptionalPlaceholder">
         <BrowseName>&lt;ServiceName&gt;</BrowseName>
@@ -3808,7 +3827,7 @@
       </Reference>
     </References>
   </Object>
-  <ObjectType SymbolicName="tns:AuthorizationServiceConfigurationType" BaseType="tns:BaseObjectType">
+  <ObjectType SymbolicName="tns:AuthorizationServiceConfigurationType" PartNo="12" BaseType="tns:BaseObjectType">
     <Children>
       <Property SymbolicName="tns:ServiceUri" ModellingRule="Mandatory" DataType="tns:String" ValueRank="Scalar" />
       <Property SymbolicName="tns:ServiceCertificate" ModellingRule="Mandatory" DataType="tns:ByteString" ValueRank="Scalar" />
@@ -3971,13 +3990,13 @@
     <BrowseName>VariancePopulation</BrowseName>
     <Description>Retrieve the variance for the interval as calculated by the StandardDeviationPopulation which includes Simple Bounding Values.</Description>
   </Object>
-  <DataType SymbolicName="tns:DecimalDataType" PartNo="3" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DecimalDataType" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="Scale" DataType="tns:Int16" />
       <Field Name="Value" DataType="tns:ByteString" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DataTypeSchemaHeader" PartNo="14" BaseType="tns:Structure">
+  <DataType SymbolicName="tns:DataTypeSchemaHeader" PartNo="14" BaseType="tns:Structure" IsAbstract="true">
     <Fields>
       <Field Name="Namespaces" DataType="tns:String" ValueRank="Array" />
       <Field Name="StructureDataTypes" DataType="tns:StructureDescription" ValueRank="Array" />
@@ -3985,7 +4004,7 @@
       <Field Name="SimpleDataTypes" DataType="tns:SimpleTypeDescription" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DataTypeDescription" PartNo="14" BaseType="tns:Structure">
+  <DataType SymbolicName="tns:DataTypeDescription" PartNo="14" BaseType="tns:Structure" IsAbstract="true">
     <Fields>
       <Field Name="DataTypeId" DataType="tns:NodeId" />
       <Field Name="Name" DataType="tns:QualifiedName" />
@@ -4015,7 +4034,7 @@
       <Field Name="Body" DataType="tns:BaseDataType" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:PubSubState" BaseType="tns:Enumeration">
+  <DataType SymbolicName="tns:PubSubState" PartNo="14" BaseType="tns:Enumeration">
     <Fields>
       <Field Name="Disabled" Identifier="0" />
       <Field Name="Paused" Identifier="1" />
@@ -4048,7 +4067,7 @@
   </DataType>
   <DataType SymbolicName="tns:DataSetFieldFlags" PartNo="14" BaseType="tns:UInt16" IsOptionSet="true" NoArraysAllowed="true">
     <Fields>
-      <Field Name="PromotedField" Identifier="1" />
+      <Field Name="PromotedField" BitMask="0001" />
     </Fields>
   </DataType>
   <DataType SymbolicName="tns:ConfigurationVersionDataType" PartNo="14" BaseType="tns:Structure">
@@ -4116,7 +4135,7 @@
   </DataType>
   <DataType SymbolicName="tns:DataSetWriterTransportDataType" PartNo="14" BaseType="tns:Structure" IsAbstract="true" />
   <DataType SymbolicName="tns:DataSetWriterMessageDataType" PartNo="14" BaseType="tns:Structure" IsAbstract="true" />
-  <DataType SymbolicName="tns:PubSubGroupDataType" PartNo="14" BaseType="tns:Structure">
+  <DataType SymbolicName="tns:PubSubGroupDataType" PartNo="14" BaseType="tns:Structure" IsAbstract="true">
     <Fields>
       <Field Name="Name" DataType="tns:String" />
       <Field Name="Enabled" DataType="tns:Boolean" />
@@ -4134,6 +4153,7 @@
       <Field Name="KeepAliveTime" DataType="tns:Duration" />
       <Field Name="Priority" DataType="tns:Byte" />
       <Field Name="LocaleIds" DataType="tns:LocaleId" ValueRank="Array" />
+      <Field Name="HeaderLayoutUri" DataType="tns:String" />
       <Field Name="TransportSettings" DataType="tns:Structure" />
       <Field Name="MessageSettings" DataType="tns:Structure" />
       <Field Name="DataSetWriters" DataType="tns:DataSetWriterDataType" ValueRank="Array" />
@@ -4184,6 +4204,8 @@
       <Field Name="DataSetMetaData" DataType="tns:DataSetMetaDataType" />
       <Field Name="DataSetFieldContentMask" DataType="tns:DataSetFieldContentMask" />
       <Field Name="MessageReceiveTimeout" DataType="tns:Duration" />
+      <Field Name="KeyFrameCount" DataType="tns:UInt32" />
+      <Field Name="HeaderLayoutUri" DataType="tns:String" />
       <Field Name="SecurityMode" DataType="tns:MessageSecurityMode" />
       <Field Name="SecurityGroupId" DataType="tns:String" />
       <Field Name="SecurityKeyServices" DataType="tns:EndpointDescription" ValueRank="Array" />
@@ -4232,7 +4254,7 @@
       <Field Name="Enabled" DataType="tns:Boolean" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DataSetOrderingType" BaseType="tns:Enumeration">
+  <DataType SymbolicName="tns:DataSetOrderingType" PartNo="14" BaseType="tns:Enumeration">
     <Fields>
       <Field Name="Undefined" Identifier="0" />
       <Field Name="AscendingWriterId" Identifier="1" />
@@ -4320,6 +4342,7 @@
   </DataType>
   <DataType SymbolicName="tns:JsonDataSetWriterMessageDataType" PartNo="14" BaseType="tns:DataSetWriterMessageDataType">
     <Fields>
+      <Field Name="NetworkMessageContentMask" DataType="tns:JsonNetworkMessageContentMask" />
       <Field Name="DataSetMessageContentMask" DataType="tns:JsonDataSetMessageContentMask" />
     </Fields>
   </DataType>
@@ -4368,6 +4391,7 @@
       <Field Name="QueueName" DataType="tns:String" />
       <Field Name="ResourceUri" DataType="tns:String" />
       <Field Name="AuthenticationProfileUri" DataType="tns:String" />
+      <Field Name="RequestedDeliveryGuarantee" DataType="tns:BrokerTransportQualityOfService" />
       <Field Name="MetaDataQueueName" DataType="tns:String" />
       <Field Name="MetaDataUpdateTime" DataType="tns:Duration" />
     </Fields>
@@ -4743,6 +4767,7 @@
       <Property SymbolicName="tns:KeepAliveTime" ModellingRule="Mandatory" DataType="tns:Duration" />
       <Property SymbolicName="tns:Priority" ModellingRule="Mandatory" DataType="tns:Byte" />
       <Property SymbolicName="tns:LocaleIds" ModellingRule="Mandatory" DataType="tns:LocaleId" ValueRank="Array" />
+      <Property SymbolicName="tns:HeaderLayoutUri" ModellingRule="Mandatory" DataType="tns:String" />
       <Object SymbolicName="tns:TransportSettings" TypeDefinition="tns:WriterGroupTransportType" ModellingRule="Optional" />
       <Object SymbolicName="tns:MessageSettings" TypeDefinition="tns:WriterGroupMessageType" ModellingRule="Optional" />
       <Object SymbolicName="tns:DataSetWriterName_Placeholder" TypeDefinition="tns:DataSetWriterType" ModellingRule="OptionalPlaceholder">
@@ -4824,7 +4849,9 @@
       <Property SymbolicName="tns:DataSetWriterId" ModellingRule="Mandatory" DataType="tns:UInt16" />
       <Property SymbolicName="tns:DataSetMetaData" ModellingRule="Mandatory" DataType="tns:DataSetMetaDataType" />
       <Property SymbolicName="tns:DataSetFieldContentMask" ModellingRule="Mandatory" DataType="tns:DataSetFieldContentMask" />
-      <Property SymbolicName="tns:MessageReceiveTimeout" ModellingRule="Mandatory" DataType="tns:UInt16" />
+      <Property SymbolicName="tns:MessageReceiveTimeout" ModellingRule="Mandatory" DataType="tns:Duration" />
+      <Property SymbolicName="tns:KeyFrameCount" ModellingRule="Mandatory" DataType="tns:UInt32" />
+      <Property SymbolicName="tns:HeaderLayoutUri" ModellingRule="Mandatory" DataType="tns:String" />
       <Property SymbolicName="tns:SecurityMode" ModellingRule="Optional" DataType="tns:MessageSecurityMode" />
       <Property SymbolicName="tns:SecurityGroupId" ModellingRule="Optional" DataType="tns:String" />
       <Property SymbolicName="tns:SecurityKeyServices" ModellingRule="Optional" DataType="tns:EndpointDescription" ValueRank="Array" />
@@ -4858,12 +4885,7 @@
       <Argument Name="ParentNodeId" DataType="tns:NodeId" />
     </OutputArguments>
   </Method>
-  <ObjectType SymbolicName="tns:SubscribedDataSetType" PartNo="14" BaseType="tns:BaseObjectType">
-    <Children>
-      <Property SymbolicName="tns:DataSetMetaData" ModellingRule="Mandatory" DataType="tns:DataSetMetaDataType" />
-      <Property SymbolicName="tns:MessageReceiveTimeout" ModellingRule="Mandatory" DataType="tns:Duration" />
-    </Children>
-  </ObjectType>
+  <ObjectType SymbolicName="tns:SubscribedDataSetType" PartNo="14" BaseType="tns:BaseObjectType" />
   <ObjectType SymbolicName="tns:TargetVariablesType" PartNo="14" BaseType="tns:SubscribedDataSetType">
     <Children>
       <Property SymbolicName="tns:TargetVariables" ModellingRule="Mandatory" DataType="tns:FieldTargetDataType" ValueRank="Array" />
@@ -4995,7 +5017,7 @@
       <Object SymbolicName="tns:LiveValues" ModellingRule="Mandatory" />
     </Children>
   </ObjectType>
-  <DataType SymbolicName="tns:DiagnosticsLevel" BaseType="tns:Enumeration">
+  <DataType SymbolicName="tns:DiagnosticsLevel" PartNo="14" BaseType="tns:Enumeration">
     <Fields>
       <Field Name="Basic" Identifier="0" />
       <Field Name="Advanced" Identifier="1" />
@@ -5012,7 +5034,7 @@
       <Property SymbolicName="tns:TimeFirstChange" DataType="tns:DateTime" />
     </Children>
   </VariableType>
-  <DataType SymbolicName="tns:PubSubDiagnosticsCounterClassification" BaseType="tns:Enumeration">
+  <DataType SymbolicName="tns:PubSubDiagnosticsCounterClassification" PartNo="14" BaseType="tns:Enumeration">
     <Fields>
       <Field Name="Information" Identifier="0" />
       <Field Name="Error" Identifier="1" />
@@ -5473,7 +5495,7 @@
       <Property SymbolicName="tns:MessageRepeatDelay" ModellingRule="Mandatory" DataType="tns:Duration" />
     </Children>
   </ObjectType>
-  <ObjectType SymbolicName="tns:BrokerConnectionTransportType" PartNo="14" BaseType="tns:WriterGroupTransportType">
+  <ObjectType SymbolicName="tns:BrokerConnectionTransportType" PartNo="14" BaseType="tns:ConnectionTransportType">
     <Children>
       <Property SymbolicName="tns:ResourceUri" ModellingRule="Mandatory" DataType="tns:String" />
       <Property SymbolicName="tns:AuthenticationProfileUri" ModellingRule="Mandatory" DataType="tns:String" />
@@ -5591,7 +5613,8 @@
       <Field Name="CurrentRead" BitMask="0001" />
       <Field Name="CurrentWrite" BitMask="0002" />
       <Field Name="HistoryRead" BitMask="0004" />
-      <Field Name="HistoryWrite" BitMask="0010" />
+      <Field Name="HistoryWrite" BitMask="0008" />
+      <Field Name="SemanticChange" BitMask="0010" />
       <Field Name="StatusWrite" BitMask="0020" />
       <Field Name="TimestampWrite" BitMask="0040" />
     </Fields>
@@ -5601,7 +5624,8 @@
       <Field Name="CurrentRead" BitMask="0001" />
       <Field Name="CurrentWrite" BitMask="0002" />
       <Field Name="HistoryRead" BitMask="0004" />
-      <Field Name="HistoryWrite" BitMask="0010" />
+      <Field Name="HistoryWrite" BitMask="0008" />
+      <Field Name="SemanticChange" BitMask="0010" />
       <Field Name="StatusWrite" BitMask="0020" />
       <Field Name="TimestampWrite" BitMask="0040" />
       <Field Name="NonatomicRead" BitMask="000100" />
@@ -5661,7 +5685,7 @@
       <Field Name="Fields" DataType="tns:EnumField" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:Node" SymbolicId="tns:Node" PartNo="3" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:Node" SymbolicId="tns:Node" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:Structure" NoClassGeneration="true">
     <Description>Specifies the attributes which belong to all nodes.</Description>
     <Fields>
       <Field Name="NodeId" DataType="tns:NodeId">
@@ -5699,9 +5723,9 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:InstanceNode" SymbolicId="tns:InstanceNode" PartNo="3" BaseType="tns:Node" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true" />
-  <DataType SymbolicName="tns:TypeNode" SymbolicId="tns:TypeNode" PartNo="3" BaseType="tns:Node" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true" />
-  <DataType SymbolicName="tns:ObjectNode" SymbolicId="tns:ObjectNode" PartNo="3" BaseType="tns:InstanceNode" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:InstanceNode" SymbolicId="tns:InstanceNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:Node" NoClassGeneration="true" NoArraysAllowed="true" />
+  <DataType SymbolicName="tns:TypeNode" SymbolicId="tns:TypeNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:Node" NoClassGeneration="true" NoArraysAllowed="true" />
+  <DataType SymbolicName="tns:ObjectNode" SymbolicId="tns:ObjectNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:InstanceNode" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>Specifies the attributes which belong to object nodes.</Description>
     <Fields>
       <Field Name="EventNotifier" DataType="tns:Byte">
@@ -5709,7 +5733,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ObjectTypeNode" SymbolicId="tns:ObjectTypeNode" PartNo="3" BaseType="tns:TypeNode" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ObjectTypeNode" SymbolicId="tns:ObjectTypeNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:TypeNode" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>Specifies the attributes which belong to object type nodes.</Description>
     <Fields>
       <Field Name="IsAbstract" DataType="tns:Boolean">
@@ -5717,7 +5741,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:VariableNode" SymbolicId="tns:VariableNode" PartNo="3" BaseType="tns:InstanceNode" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:VariableNode" SymbolicId="tns:VariableNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:InstanceNode" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>Specifies the attributes which belong to variable nodes.</Description>
     <Fields>
       <Field Name="Value" DataType="tns:BaseDataType">
@@ -5749,7 +5773,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:VariableTypeNode" SymbolicId="tns:VariableTypeNode" PartNo="3" BaseType="tns:TypeNode" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:VariableTypeNode" SymbolicId="tns:VariableTypeNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:TypeNode" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>Specifies the attributes which belong to variable type nodes.</Description>
     <Fields>
       <Field Name="Value" DataType="tns:BaseDataType">
@@ -5769,7 +5793,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ReferenceTypeNode" SymbolicId="tns:ReferenceTypeNode" PartNo="3" BaseType="tns:TypeNode" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ReferenceTypeNode" SymbolicId="tns:ReferenceTypeNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:TypeNode" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>Specifies the attributes which belong to reference type nodes.</Description>
     <Fields>
       <Field Name="IsAbstract" DataType="tns:Boolean">
@@ -5783,7 +5807,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:MethodNode" SymbolicId="tns:MethodNode" PartNo="3" BaseType="tns:InstanceNode" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:MethodNode" SymbolicId="tns:MethodNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:InstanceNode" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>Specifies the attributes which belong to method nodes.</Description>
     <Fields>
       <Field Name="Executable" DataType="tns:Boolean">
@@ -5794,7 +5818,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ViewNode" SymbolicId="tns:ViewNode" PartNo="3" BaseType="tns:InstanceNode" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ViewNode" SymbolicId="tns:ViewNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:InstanceNode" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="ContainsNoLoops" DataType="tns:Boolean">
         <Description>If TRUE the view contains a tree of non-looping hierarchical references.</Description>
@@ -5804,7 +5828,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DataTypeNode" SymbolicId="tns:DataTypeNode" PartNo="3" BaseType="tns:TypeNode" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DataTypeNode" SymbolicId="tns:DataTypeNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:TypeNode" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="IsAbstract" DataType="tns:Boolean">
         <Description>If TRUE the type is abstract and only subtypes of it appear in the address space.</Description>
@@ -5814,7 +5838,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ReferenceNode" SymbolicId="tns:ReferenceNode" PartNo="3" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ReferenceNode" SymbolicId="tns:ReferenceNode" PartNo="3" NotInAddressSpace="true" Purpose="CodeGenerator" BaseType="tns:Structure" NoClassGeneration="true">
     <Description>Specifies a reference which belongs to a node.</Description>
     <Fields>
       <Field Name="ReferenceTypeId" DataType="tns:NodeId">
@@ -5878,7 +5902,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:Union" SymbolicId="tns:Union" PartNo="3" BaseType="tns:Structure">
+  <DataType SymbolicName="tns:Union" SymbolicId="tns:Union" PartNo="3" BaseType="tns:Structure" IsAbstract="true">
     <Description>This abstract DataType is the base DataType for all union DataTypes.</Description>
   </DataType>
   <DataType SymbolicName="tns:NormalizedString" SymbolicId="tns:NormalizedString" PartNo="3" BaseType="tns:String" NoArraysAllowed="true">
@@ -5957,7 +5981,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:RequestHeader" SymbolicId="tns:RequestHeader" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:RequestHeader" SymbolicId="tns:RequestHeader" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The header passed with every server request.</Description>
     <Fields>
       <Field Name="AuthenticationToken" DataType="tns:SessionAuthenticationToken">
@@ -5983,7 +6007,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ResponseHeader" SymbolicId="tns:ResponseHeader" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ResponseHeader" SymbolicId="tns:ResponseHeader" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The header passed with every server response.</Description>
     <Fields>
       <Field Name="Timestamp" DataType="tns:UtcTime">
@@ -6007,7 +6031,7 @@
     </Fields>
   </DataType>
   <DataType SymbolicName="tns:VersionTime" SymbolicId="tns:VersionTime" PartNo="4" BaseType="tns:UInt32" NoArraysAllowed="true" />
-  <DataType SymbolicName="tns:ServiceFault" SymbolicId="tns:ServiceFault" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ServiceFault" SymbolicId="tns:ServiceFault" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The response returned by all services when there is a service level error.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6015,7 +6039,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:SessionlessInvokeRequestType" SymbolicId="tns:SessionlessInvokeRequestType" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:SessionlessInvokeRequestType" SymbolicId="tns:SessionlessInvokeRequestType" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="UrisVersion" DataType="tns:VersionTime" ValueRank="Array" />
       <Field Name="NamespaceUris" DataType="tns:String" ValueRank="Array" />
@@ -6024,14 +6048,14 @@
       <Field Name="ServiceId" DataType="tns:UInt32" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:SessionlessInvokeResponseType" SymbolicId="tns:SessionlessInvokeResponseType" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:SessionlessInvokeResponseType" SymbolicId="tns:SessionlessInvokeResponseType" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="NamespaceUris" DataType="tns:String" ValueRank="Array" />
       <Field Name="ServerUris" DataType="tns:String" ValueRank="Array" />
       <Field Name="ServiceId" DataType="tns:UInt32" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:FindServersRequest" SymbolicId="tns:FindServersRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:FindServersRequest" SymbolicId="tns:FindServersRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Finds the servers known to the discovery server.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6048,7 +6072,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:FindServersResponse" SymbolicId="tns:FindServersResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:FindServersResponse" SymbolicId="tns:FindServersResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Finds the servers known to the discovery server.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6067,7 +6091,7 @@
       <Field Name="ServerCapabilities" DataType="tns:String" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:FindServersOnNetworkRequest" SymbolicId="tns:FindServersOnNetworkRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:FindServersOnNetworkRequest" SymbolicId="tns:FindServersOnNetworkRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="StartingRecordId" DataType="tns:Counter" />
@@ -6075,7 +6099,7 @@
       <Field Name="ServerCapabilityFilter" DataType="tns:String" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:FindServersOnNetworkResponse" SymbolicId="tns:FindServersOnNetworkResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:FindServersOnNetworkResponse" SymbolicId="tns:FindServersOnNetworkResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="LastCounterResetTime" DataType="tns:UtcTime" />
@@ -6168,7 +6192,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:GetEndpointsRequest" SymbolicId="tns:GetEndpointsRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:GetEndpointsRequest" SymbolicId="tns:GetEndpointsRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Gets the endpoints used by the server.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6185,7 +6209,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:GetEndpointsResponse" SymbolicId="tns:GetEndpointsResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:GetEndpointsResponse" SymbolicId="tns:GetEndpointsResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Gets the endpoints used by the server.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6225,7 +6249,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:RegisterServerRequest" SymbolicId="tns:RegisterServerRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:RegisterServerRequest" SymbolicId="tns:RegisterServerRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Registers a server with the discovery server.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6236,7 +6260,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:RegisterServerResponse" SymbolicId="tns:RegisterServerResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:RegisterServerResponse" SymbolicId="tns:RegisterServerResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Registers a server with the discovery server.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6258,14 +6282,14 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:RegisterServer2Request" SymbolicId="tns:RegisterServer2Request" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:RegisterServer2Request" SymbolicId="tns:RegisterServer2Request" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="Server" DataType="tns:RegisteredServer" />
       <Field Name="DiscoveryConfiguration" DataType="tns:Structure" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:RegisterServer2Response" SymbolicId="tns:RegisterServer2Response" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:RegisterServer2Response" SymbolicId="tns:RegisterServer2Response" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="ConfigurationResults" DataType="tns:StatusCode" ValueRank="Array" />
@@ -6283,7 +6307,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ChannelSecurityToken" SymbolicId="tns:ChannelSecurityToken" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ChannelSecurityToken" SymbolicId="tns:ChannelSecurityToken" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The token that identifies a set of keys for an active secure channel.</Description>
     <Fields>
       <Field Name="ChannelId" DataType="tns:UInt32">
@@ -6300,7 +6324,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:OpenSecureChannelRequest" SymbolicId="tns:OpenSecureChannelRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:OpenSecureChannelRequest" SymbolicId="tns:OpenSecureChannelRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Creates a secure channel with a server.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6323,7 +6347,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:OpenSecureChannelResponse" SymbolicId="tns:OpenSecureChannelResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:OpenSecureChannelResponse" SymbolicId="tns:OpenSecureChannelResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Creates a secure channel with a server.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6340,7 +6364,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CloseSecureChannelRequest" SymbolicId="tns:CloseSecureChannelRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CloseSecureChannelRequest" SymbolicId="tns:CloseSecureChannelRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Closes a secure channel.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6348,7 +6372,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CloseSecureChannelResponse" SymbolicId="tns:CloseSecureChannelResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CloseSecureChannelResponse" SymbolicId="tns:CloseSecureChannelResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Closes a secure channel.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6370,7 +6394,7 @@
   <DataType SymbolicName="tns:SessionAuthenticationToken" SymbolicId="tns:SessionAuthenticationToken" PartNo="4" BaseType="tns:NodeId" NoArraysAllowed="true">
     <Description>A unique identifier for a session used to authenticate requests.</Description>
   </DataType>
-  <DataType SymbolicName="tns:SignatureData" SymbolicId="tns:SignatureData" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:SignatureData" SymbolicId="tns:SignatureData" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>A digital signature.</Description>
     <Fields>
       <Field Name="Algorithm" DataType="tns:String">
@@ -6381,7 +6405,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CreateSessionRequest" SymbolicId="tns:CreateSessionRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CreateSessionRequest" SymbolicId="tns:CreateSessionRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Creates a new session with the server.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6413,7 +6437,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CreateSessionResponse" SymbolicId="tns:CreateSessionResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CreateSessionResponse" SymbolicId="tns:CreateSessionResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Creates a new session with the server.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6492,7 +6516,9 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ActivateSessionRequest" SymbolicId="tns:ActivateSessionRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:RsaEncryptedSecret" SymbolicId="tns:RsaEncryptedSecret" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:BaseDataType" NoClassGeneration="true" NoArraysAllowed="true" />
+  <DataType SymbolicName="tns:EccEncryptedSecret" SymbolicId="tns:EccEncryptedSecret" PartNo="4" NotInAddressSpace="true" ReleaseStatus="Draft" Purpose="ServicesOnly" BaseType="tns:BaseDataType" NoClassGeneration="true" NoArraysAllowed="true" />
+  <DataType SymbolicName="tns:ActivateSessionRequest" SymbolicId="tns:ActivateSessionRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Activates a session with the server.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6515,7 +6541,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ActivateSessionResponse" SymbolicId="tns:ActivateSessionResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ActivateSessionResponse" SymbolicId="tns:ActivateSessionResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Activates a session with the server.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6532,7 +6558,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CloseSessionRequest" SymbolicId="tns:CloseSessionRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CloseSessionRequest" SymbolicId="tns:CloseSessionRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Closes a session with the server.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6543,7 +6569,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CloseSessionResponse" SymbolicId="tns:CloseSessionResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CloseSessionResponse" SymbolicId="tns:CloseSessionResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Closes a session with the server.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6551,7 +6577,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CancelRequest" SymbolicId="tns:CancelRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CancelRequest" SymbolicId="tns:CancelRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Cancels an outstanding request.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6562,7 +6588,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CancelResponse" SymbolicId="tns:CancelResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CancelResponse" SymbolicId="tns:CancelResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Cancels an outstanding request.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6683,7 +6709,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:NodeAttributes" SymbolicId="tns:NodeAttributes" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:NodeAttributes" SymbolicId="tns:NodeAttributes" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The base attributes for all nodes.</Description>
     <Fields>
       <Field Name="SpecifiedAttributes" DataType="tns:UInt32">
@@ -6703,7 +6729,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ObjectAttributes" SymbolicId="tns:ObjectAttributes" PartNo="4" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ObjectAttributes" SymbolicId="tns:ObjectAttributes" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The attributes for an object node.</Description>
     <Fields>
       <Field Name="EventNotifier" DataType="tns:Byte">
@@ -6711,7 +6737,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:VariableAttributes" SymbolicId="tns:VariableAttributes" PartNo="4" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:VariableAttributes" SymbolicId="tns:VariableAttributes" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The attributes for a variable node.</Description>
     <Fields>
       <Field Name="Value" DataType="tns:BaseDataType">
@@ -6740,7 +6766,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:MethodAttributes" SymbolicId="tns:MethodAttributes" PartNo="4" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:MethodAttributes" SymbolicId="tns:MethodAttributes" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The attributes for a method node.</Description>
     <Fields>
       <Field Name="Executable" DataType="tns:Boolean">
@@ -6751,7 +6777,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ObjectTypeAttributes" SymbolicId="tns:ObjectTypeAttributes" PartNo="4" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ObjectTypeAttributes" SymbolicId="tns:ObjectTypeAttributes" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The attributes for an object type node.</Description>
     <Fields>
       <Field Name="IsAbstract" DataType="tns:Boolean">
@@ -6759,7 +6785,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:VariableTypeAttributes" SymbolicId="tns:VariableTypeAttributes" PartNo="4" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:VariableTypeAttributes" SymbolicId="tns:VariableTypeAttributes" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The attributes for a variable type node.</Description>
     <Fields>
       <Field Name="Value" DataType="tns:BaseDataType">
@@ -6779,7 +6805,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ReferenceTypeAttributes" SymbolicId="tns:ReferenceTypeAttributes" PartNo="4" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ReferenceTypeAttributes" SymbolicId="tns:ReferenceTypeAttributes" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The attributes for a reference type node.</Description>
     <Fields>
       <Field Name="IsAbstract" DataType="tns:Boolean">
@@ -6793,7 +6819,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DataTypeAttributes" SymbolicId="tns:DataTypeAttributes" PartNo="4" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DataTypeAttributes" SymbolicId="tns:DataTypeAttributes" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The attributes for a data type node.</Description>
     <Fields>
       <Field Name="IsAbstract" DataType="tns:Boolean">
@@ -6801,7 +6827,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ViewAttributes" SymbolicId="tns:ViewAttributes" PartNo="4" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ViewAttributes" SymbolicId="tns:ViewAttributes" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The attributes for a view node.</Description>
     <Fields>
       <Field Name="ContainsNoLoops" DataType="tns:Boolean">
@@ -6812,13 +6838,13 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:GenericAttributeValue" SymbolicId="tns:GenericAttributeValue" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:GenericAttributeValue" SymbolicId="tns:GenericAttributeValue" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="AttributeId" DataType="tns:IntegerId" />
       <Field Name="Value" DataType="tns:BaseDataType" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:GenericAttributes" SymbolicId="tns:GenericAttributes" PartNo="4" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:GenericAttributes" SymbolicId="tns:GenericAttributes" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NodeAttributes" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="AttributeValues" DataType="tns:GenericAttributeValue" ValueRank="Array" />
     </Fields>
@@ -6849,7 +6875,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:AddNodesResult" SymbolicId="tns:AddNodesResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:AddNodesResult" SymbolicId="tns:AddNodesResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Description>A result of an add node operation.</Description>
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode">
@@ -6860,7 +6886,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:AddNodesRequest" SymbolicId="tns:AddNodesRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:AddNodesRequest" SymbolicId="tns:AddNodesRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Adds one or more nodes to the server address space.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6871,7 +6897,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:AddNodesResponse" SymbolicId="tns:AddNodesResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:AddNodesResponse" SymbolicId="tns:AddNodesResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Adds one or more nodes to the server address space.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6908,7 +6934,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:AddReferencesRequest" SymbolicId="tns:AddReferencesRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:AddReferencesRequest" SymbolicId="tns:AddReferencesRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Adds one or more references to the server address space.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6919,7 +6945,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:AddReferencesResponse" SymbolicId="tns:AddReferencesResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:AddReferencesResponse" SymbolicId="tns:AddReferencesResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Adds one or more references to the server address space.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6944,7 +6970,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteNodesRequest" SymbolicId="tns:DeleteNodesRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteNodesRequest" SymbolicId="tns:DeleteNodesRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Delete one or more nodes from the server address space.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -6955,7 +6981,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteNodesResponse" SymbolicId="tns:DeleteNodesResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteNodesResponse" SymbolicId="tns:DeleteNodesResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Delete one or more nodes from the server address space.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -6989,7 +7015,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteReferencesRequest" SymbolicId="tns:DeleteReferencesRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteReferencesRequest" SymbolicId="tns:DeleteReferencesRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Delete one or more references from the server address space.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -7000,7 +7026,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteReferencesResponse" SymbolicId="tns:DeleteReferencesResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteReferencesResponse" SymbolicId="tns:DeleteReferencesResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Delete one or more references from the server address space.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -7097,7 +7123,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:BrowseDirection" SymbolicId="tns:BrowseDirection" PartNo="4" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowseDirection" SymbolicId="tns:BrowseDirection" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The directions of the references to return.</Description>
     <Fields>
       <Field Name="Forward" Identifier="0">
@@ -7112,7 +7138,7 @@
       <Field Name="Invalid" Identifier="3" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ViewDescription" SymbolicId="tns:ViewDescription" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ViewDescription" SymbolicId="tns:ViewDescription" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>The view to browse.</Description>
     <Fields>
       <Field Name="ViewId" DataType="tns:NodeId">
@@ -7126,7 +7152,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:BrowseDescription" SymbolicId="tns:BrowseDescription" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowseDescription" SymbolicId="tns:BrowseDescription" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Description>A request to browse the the references from a node.</Description>
     <Fields>
       <Field Name="NodeId" DataType="tns:NodeId">
@@ -7149,7 +7175,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:BrowseResultMask" SymbolicId="tns:BrowseResultMask" PartNo="4" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowseResultMask" SymbolicId="tns:BrowseResultMask" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true">
     <Description>A bit mask which specifies what should be returned in a browse response.</Description>
     <Fields>
       <Field Name="None" Identifier="0">
@@ -7184,7 +7210,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ReferenceDescription" SymbolicId="tns:ReferenceDescription" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ReferenceDescription" SymbolicId="tns:ReferenceDescription" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Description>The description of a reference.</Description>
     <Fields>
       <Field Name="ReferenceTypeId" DataType="tns:NodeId">
@@ -7213,7 +7239,7 @@
   <DataType SymbolicName="tns:ContinuationPoint" SymbolicId="tns:ContinuationPoint" PartNo="4" BaseType="tns:ByteString" NoArraysAllowed="true">
     <Description>An identifier for a suspended query or browse operation.</Description>
   </DataType>
-  <DataType SymbolicName="tns:BrowseResult" SymbolicId="tns:BrowseResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowseResult" SymbolicId="tns:BrowseResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Description>The result of a browse operation.</Description>
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode">
@@ -7227,7 +7253,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:BrowseRequest" SymbolicId="tns:BrowseRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowseRequest" SymbolicId="tns:BrowseRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Browse the references for one or more nodes from the server address space.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -7244,7 +7270,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:BrowseResponse" SymbolicId="tns:BrowseResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowseResponse" SymbolicId="tns:BrowseResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Browse the references for one or more nodes from the server address space.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -7258,7 +7284,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:BrowseNextRequest" SymbolicId="tns:BrowseNextRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowseNextRequest" SymbolicId="tns:BrowseNextRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Continues one or more browse operations.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -7272,7 +7298,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:BrowseNextResponse" SymbolicId="tns:BrowseNextResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowseNextResponse" SymbolicId="tns:BrowseNextResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Continues one or more browse operations.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -7311,7 +7337,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:BrowsePath" SymbolicId="tns:BrowsePath" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowsePath" SymbolicId="tns:BrowsePath" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Description>A request to translate a path into a node id.</Description>
     <Fields>
       <Field Name="StartingNode" DataType="tns:NodeId">
@@ -7322,7 +7348,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:BrowsePathTarget" SymbolicId="tns:BrowsePathTarget" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowsePathTarget" SymbolicId="tns:BrowsePathTarget" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Description>The target of the translated path.</Description>
     <Fields>
       <Field Name="TargetId" DataType="tns:ExpandedNodeId">
@@ -7333,7 +7359,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:BrowsePathResult" SymbolicId="tns:BrowsePathResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:BrowsePathResult" SymbolicId="tns:BrowsePathResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Description>The result of a translate opearation.</Description>
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode">
@@ -7344,7 +7370,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:TranslateBrowsePathsToNodeIdsRequest" SymbolicId="tns:TranslateBrowsePathsToNodeIdsRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:TranslateBrowsePathsToNodeIdsRequest" SymbolicId="tns:TranslateBrowsePathsToNodeIdsRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Translates one or more paths in the server address space.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -7355,7 +7381,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:TranslateBrowsePathsToNodeIdsResponse" SymbolicId="tns:TranslateBrowsePathsToNodeIdsResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:TranslateBrowsePathsToNodeIdsResponse" SymbolicId="tns:TranslateBrowsePathsToNodeIdsResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Translates one or more paths in the server address space.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -7369,7 +7395,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:RegisterNodesRequest" SymbolicId="tns:RegisterNodesRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:RegisterNodesRequest" SymbolicId="tns:RegisterNodesRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Registers one or more nodes for repeated use within a session.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -7380,7 +7406,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:RegisterNodesResponse" SymbolicId="tns:RegisterNodesResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:RegisterNodesResponse" SymbolicId="tns:RegisterNodesResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Registers one or more nodes for repeated use within a session.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -7391,7 +7417,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:UnregisterNodesRequest" SymbolicId="tns:UnregisterNodesRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:UnregisterNodesRequest" SymbolicId="tns:UnregisterNodesRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Unregisters one or more previously registered nodes.</Description>
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader">
@@ -7402,7 +7428,7 @@
       </Field>
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:UnregisterNodesResponse" SymbolicId="tns:UnregisterNodesResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:UnregisterNodesResponse" SymbolicId="tns:UnregisterNodesResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Description>Unregisters one or more previously registered nodes.</Description>
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader">
@@ -7435,14 +7461,14 @@
       <Field Name="SecurityTokenLifetime" DataType="tns:Int32" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:QueryDataDescription" SymbolicId="tns:QueryDataDescription" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:QueryDataDescription" SymbolicId="tns:QueryDataDescription" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="RelativePath" DataType="tns:RelativePath" />
       <Field Name="AttributeId" DataType="tns:IntegerId" />
       <Field Name="IndexRange" DataType="tns:NumericRange" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:NodeTypeDescription" SymbolicId="tns:NodeTypeDescription" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:NodeTypeDescription" SymbolicId="tns:NodeTypeDescription" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="TypeDefinitionNode" DataType="tns:ExpandedNodeId" />
       <Field Name="IncludeSubTypes" DataType="tns:Boolean" />
@@ -7471,14 +7497,14 @@
       <Field Name="BitwiseOr" Identifier="17" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:QueryDataSet" SymbolicId="tns:QueryDataSet" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:QueryDataSet" SymbolicId="tns:QueryDataSet" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="NodeId" DataType="tns:ExpandedNodeId" />
       <Field Name="TypeDefinitionNode" DataType="tns:ExpandedNodeId" />
       <Field Name="Values" DataType="tns:BaseDataType" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:NodeReference" SymbolicId="tns:NodeReference" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:NodeReference" SymbolicId="tns:NodeReference" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="NodeId" DataType="tns:NodeId" />
       <Field Name="ReferenceTypeId" DataType="tns:NodeId" />
@@ -7525,27 +7551,27 @@
       <Field Name="IndexRange" DataType="tns:NumericRange" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ContentFilterElementResult" SymbolicId="tns:ContentFilterElementResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ContentFilterElementResult" SymbolicId="tns:ContentFilterElementResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode" />
       <Field Name="OperandStatusCodes" DataType="tns:StatusCode" ValueRank="Array" />
       <Field Name="OperandDiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ContentFilterResult" SymbolicId="tns:ContentFilterResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ContentFilterResult" SymbolicId="tns:ContentFilterResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="ElementResults" DataType="tns:ContentFilterElementResult" ValueRank="Array" />
       <Field Name="ElementDiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ParsingResult" SymbolicId="tns:ParsingResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ParsingResult" SymbolicId="tns:ParsingResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode" />
       <Field Name="DataStatusCodes" DataType="tns:StatusCode" ValueRank="Array" />
       <Field Name="DataDiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:QueryFirstRequest" SymbolicId="tns:QueryFirstRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:QueryFirstRequest" SymbolicId="tns:QueryFirstRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="View" DataType="tns:ViewDescription" />
@@ -7555,7 +7581,7 @@
       <Field Name="MaxReferencesToReturn" DataType="tns:Counter" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:QueryFirstResponse" SymbolicId="tns:QueryFirstResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:QueryFirstResponse" SymbolicId="tns:QueryFirstResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="QueryDataSets" DataType="tns:QueryDataSet" ValueRank="Array" />
@@ -7565,21 +7591,21 @@
       <Field Name="FilterResult" DataType="tns:ContentFilterResult" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:QueryNextRequest" SymbolicId="tns:QueryNextRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:QueryNextRequest" SymbolicId="tns:QueryNextRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="ReleaseContinuationPoint" DataType="tns:Boolean" />
       <Field Name="ContinuationPoint" DataType="tns:ContinuationPoint" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:QueryNextResponse" SymbolicId="tns:QueryNextResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:QueryNextResponse" SymbolicId="tns:QueryNextResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="QueryDataSets" DataType="tns:QueryDataSet" ValueRank="Array" />
       <Field Name="RevisedContinuationPoint" DataType="tns:ContinuationPoint" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:TimestampsToReturn" SymbolicId="tns:TimestampsToReturn" PartNo="4" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:TimestampsToReturn" SymbolicId="tns:TimestampsToReturn" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="Source" Identifier="0" />
       <Field Name="Server" Identifier="1" />
@@ -7588,7 +7614,7 @@
       <Field Name="Invalid" Identifier="4" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ReadValueId" SymbolicId="tns:ReadValueId" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ReadValueId" SymbolicId="tns:ReadValueId" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="NodeId" DataType="tns:NodeId" />
       <Field Name="AttributeId" DataType="tns:IntegerId" />
@@ -7596,7 +7622,7 @@
       <Field Name="DataEncoding" DataType="tns:QualifiedName" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ReadRequest" SymbolicId="tns:ReadRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ReadRequest" SymbolicId="tns:ReadRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="MaxAge" DataType="tns:Duration" />
@@ -7604,14 +7630,14 @@
       <Field Name="NodesToRead" DataType="tns:ReadValueId" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ReadResponse" SymbolicId="tns:ReadResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ReadResponse" SymbolicId="tns:ReadResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:DataValue" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryReadValueId" SymbolicId="tns:HistoryReadValueId" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryReadValueId" SymbolicId="tns:HistoryReadValueId" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="NodeId" DataType="tns:NodeId" />
       <Field Name="IndexRange" DataType="tns:NumericRange" />
@@ -7619,15 +7645,15 @@
       <Field Name="ContinuationPoint" DataType="tns:ByteString" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryReadResult" SymbolicId="tns:HistoryReadResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryReadResult" SymbolicId="tns:HistoryReadResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode" />
       <Field Name="ContinuationPoint" DataType="tns:ByteString" />
       <Field Name="HistoryData" DataType="tns:Structure" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryReadDetails" SymbolicId="tns:HistoryReadDetails" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true" />
-  <DataType SymbolicName="tns:ReadEventDetails" SymbolicId="tns:ReadEventDetails" PartNo="4" BaseType="tns:HistoryReadDetails" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryReadDetails" SymbolicId="tns:HistoryReadDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" />
+  <DataType SymbolicName="tns:ReadEventDetails" SymbolicId="tns:ReadEventDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryReadDetails" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="NumValuesPerNode" DataType="tns:Counter" />
       <Field Name="StartTime" DataType="tns:UtcTime" />
@@ -7635,7 +7661,7 @@
       <Field Name="Filter" DataType="tns:EventFilter" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ReadRawModifiedDetails" SymbolicId="tns:ReadRawModifiedDetails" PartNo="4" BaseType="tns:HistoryReadDetails" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ReadRawModifiedDetails" SymbolicId="tns:ReadRawModifiedDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryReadDetails" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="IsReadModified" DataType="tns:Boolean" />
       <Field Name="StartTime" DataType="tns:UtcTime" />
@@ -7644,7 +7670,7 @@
       <Field Name="ReturnBounds" DataType="tns:Boolean" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ReadProcessedDetails" SymbolicId="tns:ReadProcessedDetails" PartNo="4" BaseType="tns:HistoryReadDetails" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ReadProcessedDetails" SymbolicId="tns:ReadProcessedDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryReadDetails" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="StartTime" DataType="tns:UtcTime" />
       <Field Name="EndTime" DataType="tns:UtcTime" />
@@ -7653,25 +7679,25 @@
       <Field Name="AggregateConfiguration" DataType="tns:AggregateConfiguration" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ReadAtTimeDetails" SymbolicId="tns:ReadAtTimeDetails" PartNo="4" BaseType="tns:HistoryReadDetails" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ReadAtTimeDetails" SymbolicId="tns:ReadAtTimeDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryReadDetails" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="ReqTimes" DataType="tns:UtcTime" ValueRank="Array" />
       <Field Name="UseSimpleBounds" DataType="tns:Boolean" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryData" SymbolicId="tns:HistoryData" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryData" SymbolicId="tns:HistoryData" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="DataValues" DataType="tns:DataValue" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ModificationInfo" SymbolicId="tns:ModificationInfo" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ModificationInfo" SymbolicId="tns:ModificationInfo" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="ModificationTime" DataType="tns:UtcTime" />
       <Field Name="UpdateType" DataType="tns:HistoryUpdateType" />
       <Field Name="UserName" DataType="tns:String" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryModifiedData" SymbolicId="tns:HistoryModifiedData" PartNo="4" BaseType="tns:HistoryData" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryModifiedData" SymbolicId="tns:HistoryModifiedData" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryData" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="ModificationInfos" DataType="tns:ModificationInfo" ValueRank="Array" />
     </Fields>
@@ -7681,7 +7707,7 @@
       <Field Name="Events" DataType="tns:HistoryEventFieldList" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryReadRequest" SymbolicId="tns:HistoryReadRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryReadRequest" SymbolicId="tns:HistoryReadRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="HistoryReadDetails" DataType="tns:Structure" />
@@ -7690,14 +7716,14 @@
       <Field Name="NodesToRead" DataType="tns:HistoryReadValueId" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryReadResponse" SymbolicId="tns:HistoryReadResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryReadResponse" SymbolicId="tns:HistoryReadResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:HistoryReadResult" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:WriteValue" SymbolicId="tns:WriteValue" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:WriteValue" SymbolicId="tns:WriteValue" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="NodeId" DataType="tns:NodeId" />
       <Field Name="AttributeId" DataType="tns:IntegerId" />
@@ -7705,20 +7731,20 @@
       <Field Name="Value" DataType="tns:DataValue" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:WriteRequest" SymbolicId="tns:WriteRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:WriteRequest" SymbolicId="tns:WriteRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="NodesToWrite" DataType="tns:WriteValue" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:WriteResponse" SymbolicId="tns:WriteResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:WriteResponse" SymbolicId="tns:WriteResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:StatusCode" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryUpdateDetails" SymbolicId="tns:HistoryUpdateDetails" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryUpdateDetails" SymbolicId="tns:HistoryUpdateDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="NodeId" DataType="tns:NodeId" />
     </Fields>
@@ -7739,70 +7765,70 @@
       <Field Name="Remove" Identifier="4" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:UpdateDataDetails" SymbolicId="tns:UpdateDataDetails" PartNo="4" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:UpdateDataDetails" SymbolicId="tns:UpdateDataDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="PerformInsertReplace" DataType="tns:PerformUpdateType" />
       <Field Name="UpdateValues" DataType="tns:DataValue" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:UpdateStructureDataDetails" SymbolicId="tns:UpdateStructureDataDetails" PartNo="4" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:UpdateStructureDataDetails" SymbolicId="tns:UpdateStructureDataDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="PerformInsertReplace" DataType="tns:PerformUpdateType" />
       <Field Name="UpdateValues" DataType="tns:DataValue" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:UpdateEventDetails" SymbolicId="tns:UpdateEventDetails" PartNo="4" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:UpdateEventDetails" SymbolicId="tns:UpdateEventDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="PerformInsertReplace" DataType="tns:PerformUpdateType" />
       <Field Name="Filter" DataType="tns:EventFilter" />
       <Field Name="EventData" DataType="tns:HistoryEventFieldList" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteRawModifiedDetails" SymbolicId="tns:DeleteRawModifiedDetails" PartNo="4" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteRawModifiedDetails" SymbolicId="tns:DeleteRawModifiedDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="IsDeleteModified" DataType="tns:Boolean" />
       <Field Name="StartTime" DataType="tns:UtcTime" />
       <Field Name="EndTime" DataType="tns:UtcTime" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteAtTimeDetails" SymbolicId="tns:DeleteAtTimeDetails" PartNo="4" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteAtTimeDetails" SymbolicId="tns:DeleteAtTimeDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="ReqTimes" DataType="tns:UtcTime" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteEventDetails" SymbolicId="tns:DeleteEventDetails" PartNo="4" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteEventDetails" SymbolicId="tns:DeleteEventDetails" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:HistoryUpdateDetails" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="EventIds" DataType="tns:ByteString" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryUpdateResult" SymbolicId="tns:HistoryUpdateResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryUpdateResult" SymbolicId="tns:HistoryUpdateResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode" />
       <Field Name="OperationResults" DataType="tns:StatusCode" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryUpdateRequest" SymbolicId="tns:HistoryUpdateRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryUpdateRequest" SymbolicId="tns:HistoryUpdateRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="HistoryUpdateDetails" DataType="tns:Structure" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:HistoryUpdateResponse" SymbolicId="tns:HistoryUpdateResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:HistoryUpdateResponse" SymbolicId="tns:HistoryUpdateResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:HistoryUpdateResult" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CallMethodRequest" SymbolicId="tns:CallMethodRequest" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CallMethodRequest" SymbolicId="tns:CallMethodRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="ObjectId" DataType="tns:NodeId" />
       <Field Name="MethodId" DataType="tns:NodeId" />
       <Field Name="InputArguments" DataType="tns:BaseDataType" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CallMethodResult" SymbolicId="tns:CallMethodResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CallMethodResult" SymbolicId="tns:CallMethodResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode" />
       <Field Name="InputArgumentResults" DataType="tns:StatusCode" ValueRank="Array" />
@@ -7810,34 +7836,34 @@
       <Field Name="OutputArguments" DataType="tns:BaseDataType" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CallRequest" SymbolicId="tns:CallRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CallRequest" SymbolicId="tns:CallRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="MethodsToCall" DataType="tns:CallMethodRequest" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CallResponse" SymbolicId="tns:CallResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CallResponse" SymbolicId="tns:CallResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:CallMethodResult" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:MonitoringMode" SymbolicId="tns:MonitoringMode" PartNo="4" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:MonitoringMode" SymbolicId="tns:MonitoringMode" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="Disabled" Identifier="0" />
       <Field Name="Sampling" Identifier="1" />
       <Field Name="Reporting" Identifier="2" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DataChangeTrigger" SymbolicId="tns:DataChangeTrigger" PartNo="4" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DataChangeTrigger" SymbolicId="tns:DataChangeTrigger" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="Status" Identifier="0" />
       <Field Name="StatusValue" Identifier="1" />
       <Field Name="StatusValueTimestamp" Identifier="2" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeadbandType" SymbolicId="tns:DeadbandType" PartNo="4" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeadbandType" SymbolicId="tns:DeadbandType" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="None" Identifier="0" />
       <Field Name="Absolute" Identifier="1" />
@@ -7845,7 +7871,7 @@
     </Fields>
   </DataType>
   <DataType SymbolicName="tns:MonitoringFilter" SymbolicId="tns:MonitoringFilter" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" />
-  <DataType SymbolicName="tns:DataChangeFilter" SymbolicId="tns:DataChangeFilter" PartNo="4" BaseType="tns:MonitoringFilter" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DataChangeFilter" SymbolicId="tns:DataChangeFilter" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:MonitoringFilter" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="Trigger" DataType="tns:DataChangeTrigger" />
       <Field Name="DeadbandType" DataType="tns:UInt32" />
@@ -7867,7 +7893,7 @@
       <Field Name="UseSlopedExtrapolation" DataType="tns:Boolean" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:AggregateFilter" SymbolicId="tns:AggregateFilter" PartNo="4" BaseType="tns:MonitoringFilter" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:AggregateFilter" SymbolicId="tns:AggregateFilter" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:MonitoringFilter" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="StartTime" DataType="tns:UtcTime" />
       <Field Name="AggregateType" DataType="tns:NodeId" />
@@ -7875,22 +7901,22 @@
       <Field Name="AggregateConfiguration" DataType="tns:AggregateConfiguration" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:MonitoringFilterResult" SymbolicId="tns:MonitoringFilterResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true" />
-  <DataType SymbolicName="tns:EventFilterResult" SymbolicId="tns:EventFilterResult" PartNo="4" BaseType="tns:MonitoringFilterResult" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:MonitoringFilterResult" SymbolicId="tns:MonitoringFilterResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" />
+  <DataType SymbolicName="tns:EventFilterResult" SymbolicId="tns:EventFilterResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:MonitoringFilterResult" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="SelectClauseResults" DataType="tns:StatusCode" ValueRank="Array" />
       <Field Name="SelectClauseDiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
       <Field Name="WhereClauseResult" DataType="tns:ContentFilterResult" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:AggregateFilterResult" SymbolicId="tns:AggregateFilterResult" PartNo="4" BaseType="tns:MonitoringFilterResult" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:AggregateFilterResult" SymbolicId="tns:AggregateFilterResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:MonitoringFilterResult" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="RevisedStartTime" DataType="tns:UtcTime" />
       <Field Name="RevisedProcessingInterval" DataType="tns:Duration" />
       <Field Name="RevisedAggregateConfiguration" DataType="tns:AggregateConfiguration" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:MonitoringParameters" SymbolicId="tns:MonitoringParameters" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:MonitoringParameters" SymbolicId="tns:MonitoringParameters" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="ClientHandle" DataType="tns:IntegerId" />
       <Field Name="SamplingInterval" DataType="tns:Duration" />
@@ -7899,14 +7925,14 @@
       <Field Name="DiscardOldest" DataType="tns:Boolean" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:MonitoredItemCreateRequest" SymbolicId="tns:MonitoredItemCreateRequest" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:MonitoredItemCreateRequest" SymbolicId="tns:MonitoredItemCreateRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="ItemToMonitor" DataType="tns:ReadValueId" />
       <Field Name="MonitoringMode" DataType="tns:MonitoringMode" />
       <Field Name="RequestedParameters" DataType="tns:MonitoringParameters" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:MonitoredItemCreateResult" SymbolicId="tns:MonitoredItemCreateResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:MonitoredItemCreateResult" SymbolicId="tns:MonitoredItemCreateResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode" />
       <Field Name="MonitoredItemId" DataType="tns:IntegerId" />
@@ -7915,7 +7941,7 @@
       <Field Name="FilterResult" DataType="tns:Structure" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CreateMonitoredItemsRequest" SymbolicId="tns:CreateMonitoredItemsRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CreateMonitoredItemsRequest" SymbolicId="tns:CreateMonitoredItemsRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="SubscriptionId" DataType="tns:IntegerId" />
@@ -7923,20 +7949,20 @@
       <Field Name="ItemsToCreate" DataType="tns:MonitoredItemCreateRequest" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CreateMonitoredItemsResponse" SymbolicId="tns:CreateMonitoredItemsResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CreateMonitoredItemsResponse" SymbolicId="tns:CreateMonitoredItemsResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:MonitoredItemCreateResult" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:MonitoredItemModifyRequest" SymbolicId="tns:MonitoredItemModifyRequest" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:MonitoredItemModifyRequest" SymbolicId="tns:MonitoredItemModifyRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="MonitoredItemId" DataType="tns:IntegerId" />
       <Field Name="RequestedParameters" DataType="tns:MonitoringParameters" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:MonitoredItemModifyResult" SymbolicId="tns:MonitoredItemModifyResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:MonitoredItemModifyResult" SymbolicId="tns:MonitoredItemModifyResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode" />
       <Field Name="RevisedSamplingInterval" DataType="tns:Duration" />
@@ -7944,7 +7970,7 @@
       <Field Name="FilterResult" DataType="tns:Structure" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ModifyMonitoredItemsRequest" SymbolicId="tns:ModifyMonitoredItemsRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ModifyMonitoredItemsRequest" SymbolicId="tns:ModifyMonitoredItemsRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="SubscriptionId" DataType="tns:IntegerId" />
@@ -7952,14 +7978,14 @@
       <Field Name="ItemsToModify" DataType="tns:MonitoredItemModifyRequest" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ModifyMonitoredItemsResponse" SymbolicId="tns:ModifyMonitoredItemsResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ModifyMonitoredItemsResponse" SymbolicId="tns:ModifyMonitoredItemsResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:MonitoredItemModifyResult" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:SetMonitoringModeRequest" SymbolicId="tns:SetMonitoringModeRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:SetMonitoringModeRequest" SymbolicId="tns:SetMonitoringModeRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="SubscriptionId" DataType="tns:IntegerId" />
@@ -7967,14 +7993,14 @@
       <Field Name="MonitoredItemIds" DataType="tns:IntegerId" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:SetMonitoringModeResponse" SymbolicId="tns:SetMonitoringModeResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:SetMonitoringModeResponse" SymbolicId="tns:SetMonitoringModeResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:StatusCode" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:SetTriggeringRequest" SymbolicId="tns:SetTriggeringRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:SetTriggeringRequest" SymbolicId="tns:SetTriggeringRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="SubscriptionId" DataType="tns:IntegerId" />
@@ -7983,7 +8009,7 @@
       <Field Name="LinksToRemove" DataType="tns:IntegerId" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:SetTriggeringResponse" SymbolicId="tns:SetTriggeringResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:SetTriggeringResponse" SymbolicId="tns:SetTriggeringResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="AddResults" DataType="tns:StatusCode" ValueRank="Array" />
@@ -7992,21 +8018,21 @@
       <Field Name="RemoveDiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteMonitoredItemsRequest" SymbolicId="tns:DeleteMonitoredItemsRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteMonitoredItemsRequest" SymbolicId="tns:DeleteMonitoredItemsRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="SubscriptionId" DataType="tns:IntegerId" />
       <Field Name="MonitoredItemIds" DataType="tns:IntegerId" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteMonitoredItemsResponse" SymbolicId="tns:DeleteMonitoredItemsResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteMonitoredItemsResponse" SymbolicId="tns:DeleteMonitoredItemsResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:StatusCode" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CreateSubscriptionRequest" SymbolicId="tns:CreateSubscriptionRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CreateSubscriptionRequest" SymbolicId="tns:CreateSubscriptionRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="RequestedPublishingInterval" DataType="tns:Duration" />
@@ -8017,7 +8043,7 @@
       <Field Name="Priority" DataType="tns:Byte" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:CreateSubscriptionResponse" SymbolicId="tns:CreateSubscriptionResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:CreateSubscriptionResponse" SymbolicId="tns:CreateSubscriptionResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="SubscriptionId" DataType="tns:IntegerId" />
@@ -8026,7 +8052,7 @@
       <Field Name="RevisedMaxKeepAliveCount" DataType="tns:Counter" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ModifySubscriptionRequest" SymbolicId="tns:ModifySubscriptionRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ModifySubscriptionRequest" SymbolicId="tns:ModifySubscriptionRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="SubscriptionId" DataType="tns:IntegerId" />
@@ -8037,7 +8063,7 @@
       <Field Name="Priority" DataType="tns:Byte" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ModifySubscriptionResponse" SymbolicId="tns:ModifySubscriptionResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ModifySubscriptionResponse" SymbolicId="tns:ModifySubscriptionResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="RevisedPublishingInterval" DataType="tns:Duration" />
@@ -8045,46 +8071,46 @@
       <Field Name="RevisedMaxKeepAliveCount" DataType="tns:Counter" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:SetPublishingModeRequest" SymbolicId="tns:SetPublishingModeRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:SetPublishingModeRequest" SymbolicId="tns:SetPublishingModeRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="PublishingEnabled" DataType="tns:Boolean" />
       <Field Name="SubscriptionIds" DataType="tns:IntegerId" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:SetPublishingModeResponse" SymbolicId="tns:SetPublishingModeResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:SetPublishingModeResponse" SymbolicId="tns:SetPublishingModeResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:StatusCode" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:NotificationMessage" SymbolicId="tns:NotificationMessage" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:NotificationMessage" SymbolicId="tns:NotificationMessage" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="SequenceNumber" DataType="tns:Counter" />
       <Field Name="PublishTime" DataType="tns:UtcTime" />
       <Field Name="NotificationData" DataType="tns:Structure" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:NotificationData" SymbolicId="tns:NotificationData" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true" />
-  <DataType SymbolicName="tns:DataChangeNotification" SymbolicId="tns:DataChangeNotification" PartNo="4" BaseType="tns:NotificationData" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:NotificationData" SymbolicId="tns:NotificationData" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true" NoArraysAllowed="true" />
+  <DataType SymbolicName="tns:DataChangeNotification" SymbolicId="tns:DataChangeNotification" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NotificationData" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="MonitoredItems" DataType="tns:MonitoredItemNotification" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:MonitoredItemNotification" SymbolicId="tns:MonitoredItemNotification" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:MonitoredItemNotification" SymbolicId="tns:MonitoredItemNotification" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="ClientHandle" DataType="tns:IntegerId" />
       <Field Name="Value" DataType="tns:DataValue" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:EventNotificationList" SymbolicId="tns:EventNotificationList" PartNo="4" BaseType="tns:NotificationData" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:EventNotificationList" SymbolicId="tns:EventNotificationList" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NotificationData" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="Events" DataType="tns:EventFieldList" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:EventFieldList" SymbolicId="tns:EventFieldList" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:EventFieldList" SymbolicId="tns:EventFieldList" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="ClientHandle" DataType="tns:IntegerId" />
       <Field Name="EventFields" DataType="tns:BaseDataType" ValueRank="Array" />
@@ -8095,25 +8121,25 @@
       <Field Name="EventFields" DataType="tns:BaseDataType" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:StatusChangeNotification" SymbolicId="tns:StatusChangeNotification" PartNo="4" BaseType="tns:NotificationData" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:StatusChangeNotification" SymbolicId="tns:StatusChangeNotification" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:NotificationData" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="Status" DataType="tns:StatusCode" />
       <Field Name="DiagnosticInfo" DataType="tns:DiagnosticInfo" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:SubscriptionAcknowledgement" SymbolicId="tns:SubscriptionAcknowledgement" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:SubscriptionAcknowledgement" SymbolicId="tns:SubscriptionAcknowledgement" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="SubscriptionId" DataType="tns:IntegerId" />
       <Field Name="SequenceNumber" DataType="tns:Counter" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:PublishRequest" SymbolicId="tns:PublishRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:PublishRequest" SymbolicId="tns:PublishRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="SubscriptionAcknowledgements" DataType="tns:SubscriptionAcknowledgement" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:PublishResponse" SymbolicId="tns:PublishResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:PublishResponse" SymbolicId="tns:PublishResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="SubscriptionId" DataType="tns:IntegerId" />
@@ -8124,46 +8150,46 @@
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:RepublishRequest" SymbolicId="tns:RepublishRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:RepublishRequest" SymbolicId="tns:RepublishRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="SubscriptionId" DataType="tns:IntegerId" />
       <Field Name="RetransmitSequenceNumber" DataType="tns:Counter" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:RepublishResponse" SymbolicId="tns:RepublishResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:RepublishResponse" SymbolicId="tns:RepublishResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="NotificationMessage" DataType="tns:NotificationMessage" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:TransferResult" SymbolicId="tns:TransferResult" PartNo="4" BaseType="tns:Structure" NoClassGeneration="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:TransferResult" SymbolicId="tns:TransferResult" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoClassGeneration="true">
     <Fields>
       <Field Name="StatusCode" DataType="tns:StatusCode" />
       <Field Name="AvailableSequenceNumbers" DataType="tns:Counter" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:TransferSubscriptionsRequest" SymbolicId="tns:TransferSubscriptionsRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:TransferSubscriptionsRequest" SymbolicId="tns:TransferSubscriptionsRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="SubscriptionIds" DataType="tns:IntegerId" ValueRank="Array" />
       <Field Name="SendInitialValues" DataType="tns:Boolean" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:TransferSubscriptionsResponse" SymbolicId="tns:TransferSubscriptionsResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:TransferSubscriptionsResponse" SymbolicId="tns:TransferSubscriptionsResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:TransferResult" ValueRank="Array" />
       <Field Name="DiagnosticInfos" DataType="tns:DiagnosticInfo" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteSubscriptionsRequest" SymbolicId="tns:DeleteSubscriptionsRequest" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteSubscriptionsRequest" SymbolicId="tns:DeleteSubscriptionsRequest" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="RequestHeader" DataType="tns:RequestHeader" />
       <Field Name="SubscriptionIds" DataType="tns:IntegerId" ValueRank="Array" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:DeleteSubscriptionsResponse" SymbolicId="tns:DeleteSubscriptionsResponse" PartNo="4" BaseType="tns:Structure" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:DeleteSubscriptionsResponse" SymbolicId="tns:DeleteSubscriptionsResponse" PartNo="4" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Structure" NoArraysAllowed="true">
     <Fields>
       <Field Name="ResponseHeader" DataType="tns:ResponseHeader" />
       <Field Name="Results" DataType="tns:StatusCode" ValueRank="Array" />
@@ -8361,7 +8387,7 @@
       <Field Name="EventQueueOverFlowCount" DataType="tns:UInt32" />
     </Fields>
   </DataType>
-  <DataType SymbolicName="tns:ModelChangeStructureVerbMask" SymbolicId="tns:ModelChangeStructureVerbMask" PartNo="5" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true" NotInAddressSpace="true">
+  <DataType SymbolicName="tns:ModelChangeStructureVerbMask" SymbolicId="tns:ModelChangeStructureVerbMask" PartNo="5" NotInAddressSpace="true" Purpose="ServicesOnly" BaseType="tns:Enumeration" NoClassGeneration="true" NoArraysAllowed="true">
     <Fields>
       <Field Name="NodeAdded" Identifier="1" />
       <Field Name="NodeDeleted" Identifier="2" />

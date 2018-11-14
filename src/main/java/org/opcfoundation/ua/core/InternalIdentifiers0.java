@@ -573,12 +573,18 @@ class InternalIdentifiers0 {
     public static final NodeId AnalogItemType_EngineeringUnits = init(2371);
     public static final NodeId AnalogItemType_InstrumentRange = init(2370);
     public static final NodeId AnalogItemType_ValuePrecision = init(3775);
-    public static final NodeId AnalogUnitItemType = init(17503);
-    public static final NodeId AnalogUnitItemType_Definition = init(17504);
-    public static final NodeId AnalogUnitItemType_EURange = init(17509);
-    public static final NodeId AnalogUnitItemType_EngineeringUnits = init(17510);
-    public static final NodeId AnalogUnitItemType_InstrumentRange = init(17506);
-    public static final NodeId AnalogUnitItemType_ValuePrecision = init(17505);
+    public static final NodeId AnalogUnitRangeType = init(17570);
+    public static final NodeId AnalogUnitRangeType_Definition = init(17571);
+    public static final NodeId AnalogUnitRangeType_EURange = init(17574);
+    public static final NodeId AnalogUnitRangeType_EngineeringUnits = init(17575);
+    public static final NodeId AnalogUnitRangeType_InstrumentRange = init(17573);
+    public static final NodeId AnalogUnitRangeType_ValuePrecision = init(17572);
+    public static final NodeId AnalogUnitType = init(17497);
+    public static final NodeId AnalogUnitType_Definition = init(17498);
+    public static final NodeId AnalogUnitType_EURange = init(17501);
+    public static final NodeId AnalogUnitType_EngineeringUnits = init(17502);
+    public static final NodeId AnalogUnitType_InstrumentRange = init(17500);
+    public static final NodeId AnalogUnitType_ValuePrecision = init(17499);
     public static final NodeId Annotation = init(891);
     public static final NodeId Annotation_Encoding_DefaultBinary = init(893);
     public static final NodeId Annotation_Encoding_DefaultJson = init(15382);
@@ -1421,6 +1427,12 @@ class InternalIdentifiers0 {
     public static final NodeId AxisInformation_Encoding_DefaultXml = init(12081);
     public static final NodeId AxisScaleEnumeration = init(12077);
     public static final NodeId AxisScaleEnumeration_EnumStrings = init(12078);
+    public static final NodeId BaseAnalogType = init(15318);
+    public static final NodeId BaseAnalogType_Definition = init(17565);
+    public static final NodeId BaseAnalogType_EURange = init(17568);
+    public static final NodeId BaseAnalogType_EngineeringUnits = init(17569);
+    public static final NodeId BaseAnalogType_InstrumentRange = init(17567);
+    public static final NodeId BaseAnalogType_ValuePrecision = init(17566);
     public static final NodeId BaseConditionClassType = init(11163);
     public static final NodeId BaseDataType = init(24);
     public static final NodeId BaseDataVariableType = init(63);
@@ -1912,6 +1924,8 @@ class InternalIdentifiers0 {
     public static final NodeId ChannelSecurityToken_Encoding_DefaultBinary = init(443);
     public static final NodeId ChannelSecurityToken_Encoding_DefaultJson = init(15131);
     public static final NodeId ChannelSecurityToken_Encoding_DefaultXml = init(442);
+    public static final NodeId ChoiceStateType = init(15109);
+    public static final NodeId ChoiceStateType_StateNumber = init(15110);
     public static final NodeId CloseAndCommitMethodType = init(15800);
     public static final NodeId CloseAndCommitMethodType_InputArguments = init(15801);
     public static final NodeId CloseAndCommitMethodType_OutputArguments = init(15802);
@@ -2233,6 +2247,8 @@ class InternalIdentifiers0 {
     public static final NodeId DataSetReaderType_Diagnostics_TotalInformation_Classification = init(19613);
     public static final NodeId DataSetReaderType_Diagnostics_TotalInformation_DiagnosticsLevel = init(19614);
     public static final NodeId DataSetReaderType_Diagnostics_TotalInformation_TimeFirstChange = init(19615);
+    public static final NodeId DataSetReaderType_HeaderLayoutUri = init(17564);
+    public static final NodeId DataSetReaderType_KeyFrameCount = init(17563);
     public static final NodeId DataSetReaderType_MessageReceiveTimeout = init(21102);
     public static final NodeId DataSetReaderType_MessageSettings = init(21103);
     public static final NodeId DataSetReaderType_PublisherId = init(21097);
@@ -2244,8 +2260,6 @@ class InternalIdentifiers0 {
     public static final NodeId DataSetReaderType_Status_Enable = init(15309);
     public static final NodeId DataSetReaderType_Status_State = init(15308);
     public static final NodeId DataSetReaderType_SubscribedDataSet = init(15316);
-    public static final NodeId DataSetReaderType_SubscribedDataSet_DataSetMetaData = init(15317);
-    public static final NodeId DataSetReaderType_SubscribedDataSet_MessageReceiveTimeout = init(15318);
     public static final NodeId DataSetReaderType_TransportSettings = init(15311);
     public static final NodeId DataSetReaderType_WriterGroupId = init(21098);
     public static final NodeId DataSetToWriter = init(14936);
@@ -2442,10 +2456,6 @@ class InternalIdentifiers0 {
     public static final NodeId DeleteSubscriptionsResponse_Encoding_DefaultBinary = init(850);
     public static final NodeId DeleteSubscriptionsResponse_Encoding_DefaultJson = init(15360);
     public static final NodeId DeleteSubscriptionsResponse_Encoding_DefaultXml = init(849);
-    public static final NodeId DescribesArgument = init(129);
-    public static final NodeId DescribesInputArgument = init(130);
-    public static final NodeId DescribesOptionalInputArgument = init(131);
-    public static final NodeId DescribesOutputArgument = init(132);
     public static final NodeId DeviceFailureEventType = init(2131);
     public static final NodeId DeviceFailureEventType_EventId = init(3662);
     public static final NodeId DeviceFailureEventType_EventType = init(3663);
@@ -2836,16 +2846,11 @@ class InternalIdentifiers0 {
     public static final NodeId EUInformation_Encoding_DefaultBinary = init(889);
     public static final NodeId EUInformation_Encoding_DefaultJson = init(15376);
     public static final NodeId EUInformation_Encoding_DefaultXml = init(888);
-    public static final NodeId EUItemType = init(17497);
-    public static final NodeId EUItemType_Definition = init(17498);
-    public static final NodeId EUItemType_EURange = init(17501);
-    public static final NodeId EUItemType_EngineeringUnits = init(17502);
-    public static final NodeId EUItemType_InstrumentRange = init(17500);
-    public static final NodeId EUItemType_ValuePrecision = init(17499);
     public static final NodeId ElementOperand = init(592);
     public static final NodeId ElementOperand_Encoding_DefaultBinary = init(594);
     public static final NodeId ElementOperand_Encoding_DefaultJson = init(15207);
     public static final NodeId ElementOperand_Encoding_DefaultXml = init(593);
+    public static final NodeId ElseGuardVariableType = init(15317);
     public static final NodeId EndpointConfiguration = init(331);
     public static final NodeId EndpointConfiguration_Encoding_DefaultBinary = init(333);
     public static final NodeId EndpointConfiguration_Encoding_DefaultJson = init(15199);
@@ -3627,6 +3632,8 @@ class InternalIdentifiers0 {
     public static final NodeId ExclusiveRateOfChangeAlarmType_Time = init(9628);
     public static final NodeId ExclusiveRateOfChangeAlarmType_Unsuppress = init(17938);
     public static final NodeId ExpandedNodeId = init(18);
+    public static final NodeId ExpressionGuardVariableType = init(15128);
+    public static final NodeId ExpressionGuardVariableType_Expression = init(15129);
     public static final NodeId ExtensionFieldsType = init(15489);
     public static final NodeId ExtensionFieldsType_AddExtensionField = init(15491);
     public static final NodeId ExtensionFieldsType_AddExtensionField_InputArguments = init(15492);
@@ -3897,6 +3904,7 @@ class InternalIdentifiers0 {
     public static final NodeId GetSecurityKeysMethodType = init(15218);
     public static final NodeId GetSecurityKeysMethodType_InputArguments = init(15219);
     public static final NodeId GetSecurityKeysMethodType_OutputArguments = init(15220);
+    public static final NodeId GuardVariableType = init(15113);
     public static final NodeId Guid = init(14);
     public static final NodeId HAConfiguration = init(11202);
     public static final NodeId HAConfiguration_AggregateConfiguration = init(11203);
@@ -3914,6 +3922,7 @@ class InternalIdentifiers0 {
     public static final NodeId HAConfiguration_StartOfOnlineArchive = init(11504);
     public static final NodeId HAConfiguration_Stepped = init(11208);
     public static final NodeId HasAlarmSuppressionGroup = init(16361);
+    public static final NodeId HasArgumentDescription = init(129);
     public static final NodeId HasCause = init(53);
     public static final NodeId HasChild = init(34);
     public static final NodeId HasComponent = init(47);
@@ -3929,9 +3938,11 @@ class InternalIdentifiers0 {
     public static final NodeId HasEncoding = init(38);
     public static final NodeId HasEventSource = init(36);
     public static final NodeId HasFalseSubState = init(9005);
+    public static final NodeId HasGuard = init(15112);
     public static final NodeId HasHistoricalConfiguration = init(56);
     public static final NodeId HasModellingRule = init(37);
     public static final NodeId HasNotifier = init(48);
+    public static final NodeId HasOptionalInputArgumentDescription = init(131);
     public static final NodeId HasOrderedComponent = init(49);
     public static final NodeId HasProperty = init(46);
     public static final NodeId HasPubSubConnection = init(14476);
@@ -4026,17 +4037,6 @@ class InternalIdentifiers0 {
     public static final NodeId HistoryServerCapabilities_UpdateDataCapability = init(11198);
     public static final NodeId HistoryServerCapabilities_UpdateEventCapability = init(11283);
     public static final NodeId HistoryUpdateDetails = init(677);
-    public static final NodeId HistoryUpdateDetails_Encoding_DefaultBinary = init(679);
-    public static final NodeId HistoryUpdateDetails_Encoding_DefaultJson = init(15279);
-    public static final NodeId HistoryUpdateDetails_Encoding_DefaultXml = init(678);
-    public static final NodeId HistoryUpdateRequest = init(698);
-    public static final NodeId HistoryUpdateRequest_Encoding_DefaultBinary = init(700);
-    public static final NodeId HistoryUpdateRequest_Encoding_DefaultJson = init(15287);
-    public static final NodeId HistoryUpdateRequest_Encoding_DefaultXml = init(699);
-    public static final NodeId HistoryUpdateResponse = init(701);
-    public static final NodeId HistoryUpdateResponse_Encoding_DefaultBinary = init(703);
-    public static final NodeId HistoryUpdateResponse_Encoding_DefaultJson = init(15288);
-    public static final NodeId HistoryUpdateResponse_Encoding_DefaultXml = init(702);
  
 
 	static NodeId init(int value)

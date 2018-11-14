@@ -59,13 +59,14 @@ public class WriterGroupDataType extends PubSubGroupDataType {
     protected Double KeepAliveTime;
     protected UnsignedByte Priority;
     protected String[] LocaleIds;
+    protected String HeaderLayoutUri;
     protected ExtensionObject TransportSettings;
     protected ExtensionObject MessageSettings;
     protected DataSetWriterDataType[] DataSetWriters;
     
     public WriterGroupDataType() {}
     
-    public WriterGroupDataType(String Name, Boolean Enabled, MessageSecurityMode SecurityMode, String SecurityGroupId, EndpointDescription[] SecurityKeyServices, UnsignedInteger MaxNetworkMessageSize, KeyValuePair[] GroupProperties, UnsignedShort WriterGroupId, Double PublishingInterval, Double KeepAliveTime, UnsignedByte Priority, String[] LocaleIds, ExtensionObject TransportSettings, ExtensionObject MessageSettings, DataSetWriterDataType[] DataSetWriters)
+    public WriterGroupDataType(String Name, Boolean Enabled, MessageSecurityMode SecurityMode, String SecurityGroupId, EndpointDescription[] SecurityKeyServices, UnsignedInteger MaxNetworkMessageSize, KeyValuePair[] GroupProperties, UnsignedShort WriterGroupId, Double PublishingInterval, Double KeepAliveTime, UnsignedByte Priority, String[] LocaleIds, String HeaderLayoutUri, ExtensionObject TransportSettings, ExtensionObject MessageSettings, DataSetWriterDataType[] DataSetWriters)
     {
         super(Name, Enabled, SecurityMode, SecurityGroupId, SecurityKeyServices, MaxNetworkMessageSize, GroupProperties);
         this.WriterGroupId = WriterGroupId;
@@ -73,6 +74,7 @@ public class WriterGroupDataType extends PubSubGroupDataType {
         this.KeepAliveTime = KeepAliveTime;
         this.Priority = Priority;
         this.LocaleIds = LocaleIds;
+        this.HeaderLayoutUri = HeaderLayoutUri;
         this.TransportSettings = TransportSettings;
         this.MessageSettings = MessageSettings;
         this.DataSetWriters = DataSetWriters;
@@ -126,6 +128,16 @@ public class WriterGroupDataType extends PubSubGroupDataType {
     public void setLocaleIds(String[] LocaleIds)
     {
         this.LocaleIds = LocaleIds;
+    }
+    
+    public String getHeaderLayoutUri()
+    {
+        return HeaderLayoutUri;
+    }
+    
+    public void setHeaderLayoutUri(String HeaderLayoutUri)
+    {
+        this.HeaderLayoutUri = HeaderLayoutUri;
     }
     
     public ExtensionObject getTransportSettings()
@@ -186,6 +198,7 @@ public class WriterGroupDataType extends PubSubGroupDataType {
         result.KeepAliveTime = KeepAliveTime;
         result.Priority = Priority;
         result.LocaleIds = LocaleIds==null ? null : LocaleIds.clone();
+        result.HeaderLayoutUri = HeaderLayoutUri;
         result.TransportSettings = TransportSettings;
         result.MessageSettings = MessageSettings;
         if (DataSetWriters!=null) {
@@ -239,6 +252,9 @@ public class WriterGroupDataType extends PubSubGroupDataType {
         if (LocaleIds==null) {
             if (other.LocaleIds != null) return false;
         } else if (!Arrays.equals(LocaleIds, other.LocaleIds)) return false;
+        if (HeaderLayoutUri==null) {
+            if (other.HeaderLayoutUri != null) return false;
+        } else if (!HeaderLayoutUri.equals(other.HeaderLayoutUri)) return false;
         if (TransportSettings==null) {
             if (other.TransportSettings != null) return false;
         } else if (!TransportSettings.equals(other.TransportSettings)) return false;
@@ -280,6 +296,8 @@ public class WriterGroupDataType extends PubSubGroupDataType {
                 + ((Priority == null) ? 0 : Priority.hashCode());
         result = prime * result
                 + ((LocaleIds == null) ? 0 : Arrays.hashCode(LocaleIds));
+        result = prime * result
+                + ((HeaderLayoutUri == null) ? 0 : HeaderLayoutUri.hashCode());
         result = prime * result
                 + ((TransportSettings == null) ? 0 : TransportSettings.hashCode());
         result = prime * result

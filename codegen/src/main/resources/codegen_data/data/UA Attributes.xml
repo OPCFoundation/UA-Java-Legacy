@@ -6,7 +6,7 @@
   xmlns:opc="http://opcfoundation.org/UA/TypeDictionary/"
   xmlns="http://opcfoundation.org/UA/StatusCodes/"
   TargetNamespace="http://opcfoundation.org/UA/StatusCodes/"
-  TargetPublicationDate="2018-02-09T00:00:00Z"
+  TargetPublicationDate="2018-05-15T00:00:00Z"
   TargetVersion="1.04"
 >
   <opc:Constant Name="NodeId">

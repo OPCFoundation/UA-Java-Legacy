@@ -37,6 +37,17 @@ import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 
 class InternalIdentifiers1 {
 	
+    public static final NodeId HistoryUpdateDetails_Encoding_DefaultBinary = init(679);
+    public static final NodeId HistoryUpdateDetails_Encoding_DefaultJson = init(15279);
+    public static final NodeId HistoryUpdateDetails_Encoding_DefaultXml = init(678);
+    public static final NodeId HistoryUpdateRequest = init(698);
+    public static final NodeId HistoryUpdateRequest_Encoding_DefaultBinary = init(700);
+    public static final NodeId HistoryUpdateRequest_Encoding_DefaultJson = init(15287);
+    public static final NodeId HistoryUpdateRequest_Encoding_DefaultXml = init(699);
+    public static final NodeId HistoryUpdateResponse = init(701);
+    public static final NodeId HistoryUpdateResponse_Encoding_DefaultBinary = init(703);
+    public static final NodeId HistoryUpdateResponse_Encoding_DefaultJson = init(15288);
+    public static final NodeId HistoryUpdateResponse_Encoding_DefaultXml = init(702);
     public static final NodeId HistoryUpdateResult = init(695);
     public static final NodeId HistoryUpdateResult_Encoding_DefaultBinary = init(697);
     public static final NodeId HistoryUpdateResult_Encoding_DefaultJson = init(15286);
@@ -2918,6 +2929,7 @@ class InternalIdentifiers1 {
     public static final NodeId PubSubConnectionType_WriterGroupName_Placeholder_Diagnostics_TotalInformation_DiagnosticsLevel = init(19112);
     public static final NodeId PubSubConnectionType_WriterGroupName_Placeholder_Diagnostics_TotalInformation_TimeFirstChange = init(19113);
     public static final NodeId PubSubConnectionType_WriterGroupName_Placeholder_GroupProperties = init(17486);
+    public static final NodeId PubSubConnectionType_WriterGroupName_Placeholder_HeaderLayoutUri = init(17558);
     public static final NodeId PubSubConnectionType_WriterGroupName_Placeholder_KeepAliveTime = init(17319);
     public static final NodeId PubSubConnectionType_WriterGroupName_Placeholder_LocaleIds = init(17322);
     public static final NodeId PubSubConnectionType_WriterGroupName_Placeholder_MaxNetworkMessageSize = init(17204);
@@ -4025,18 +4037,6 @@ class InternalIdentifiers1 {
     public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_TotalInformation = init(18991);
     public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_TotalInformation_Active = init(18992);
     public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_TotalInformation_Classification = init(18993);
-    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_TotalInformation_DiagnosticsLevel = init(18994);
-    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Diagnostics_TotalInformation_TimeFirstChange = init(18995);
-    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_KeyFrameCount = init(16812);
-    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_MessageSettings = init(16840);
-    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status = init(15239);
-    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status_Disable = init(15242);
-    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status_Enable = init(15241);
-    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_Status_State = init(15240);
-    public static final NodeId PublishedEventsType_DataSetWriterName_Placeholder_TransportSettings = init(15243);
-    public static final NodeId PublishedEventsType_ExtensionFields = init(15511);
-    public static final NodeId PublishedEventsType_ExtensionFields_AddExtensionField = init(15512);
-    public static final NodeId PublishedEventsType_ExtensionFields_AddExtensionField_InputArguments = init(15513);
  
 
 	static NodeId init(int value)

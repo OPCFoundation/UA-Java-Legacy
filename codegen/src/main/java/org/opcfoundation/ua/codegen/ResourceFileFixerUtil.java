@@ -22,6 +22,34 @@ public class ResourceFileFixerUtil {
 		ignoreB.add(15045); //DecimalDataType_Encoding_DefaultJson
 		ignoreB.add(17862); //DecimalDataType_Encoding_DefaultXml
 		
+		//see below fixStructures, some of these apparently are draft ids
+		ignoreB.add(16313); //AdditionalParametersType + encodings
+		ignoreB.add(17537); //AdditionalParametersType
+		ignoreB.add(17547); //AdditionalParametersType
+		ignoreB.add(17541); //AdditionalParametersType
+		ignoreB.add(17546); //EccEncryptedSecret
+		
+		ignoreB.add(17538); //OpcUa_BinarySchema_AdditionalParametersType
+		ignoreB.add(17539); //OpcUa_BinarySchema_AdditionalParametersType_DataTypeVersion
+		ignoreB.add(17540); //OpcUa_BinarySchema_AdditionalParametersType_DictionaryFragment
+		
+		ignoreB.add(17550); //OpcUa_BinarySchema_EphemeralKeyType
+		ignoreB.add(17551); //OpcUa_BinarySchema_EphemeralKeyType_DataTypeVersion
+		ignoreB.add(17552); //OpcUa_BinarySchema_EphemeralKeyType_DictionaryFragment
+		
+		ignoreB.add(17542); //OpcUa_XmlSchema_AdditionalParametersType
+		ignoreB.add(17543); //OpcUa_XmlSchema_AdditionalParametersType_DataTypeVersion
+		ignoreB.add(17544); //OpcUa_XmlSchema_AdditionalParametersType_DictionaryFragment
+		
+		ignoreB.add(17554); //OpcUa_XmlSchema_EphemeralKeyType
+		ignoreB.add(17555); //OpcUa_XmlSchema_EphemeralKeyType_DataTypeVersion
+		ignoreB.add(17556); //OpcUa_XmlSchema_EphemeralKeyType_DictionaryFragment
+		
+		ignoreB.add(17548); //EphemeralKeyType
+		ignoreB.add(17549); //EphemeralKeyType_Encoding_DefaultBinary
+		ignoreB.add(17557); //EphemeralKeyType_Encoding_DefaultJson
+		ignoreB.add(17553); //EphemeralKeyType_Encoding_DefaultXml
+		
 		ImmutableList<Integer> ignoreList = ignoreB.build();
 		
 		ImmutableList.Builder<IdentifiersUtil.Identifier> r = ImmutableList.builder();
@@ -38,8 +66,11 @@ public class ResourceFileFixerUtil {
 	static ImmutableList<DictionaryTypes2.ModelDesign.DataType> fixStructures(ImmutableList<DictionaryTypes2.ModelDesign.DataType> original){
 		
 		/*
-		 * Following Structure types are not in the spec but are present in the files,
-		 * but are not needed by this stack.
+		 * Following Structure types are not in the spec but are present in the files and/or
+		 * are not needed by this stack.
+		 * 
+		 * Some of them have NoClassGeneration true in the files, 
+		 * but also some files that we need are marked as such so it does not help.
 		 */
 		ImmutableList.Builder<String> ignoreB = ImmutableList.builder();
 		
@@ -59,6 +90,14 @@ public class ResourceFileFixerUtil {
 		ignoreB.add("VariableNode");
 		ignoreB.add("VariableTypeNode");
 		ignoreB.add("ViewNode");
+		
+		//These are not real Structures/use not the common encoding rules of Structures
+		//Some of these are assumed to behave like Decimal and must be handled in application levels
+		//or not part of the current spec
+		ignoreB.add("RsaEncryptedSecret"); //fake ExtensionObject, like Decimal
+		ignoreB.add("EphemeralKeyType"); //marked "Draft" in files
+		ignoreB.add("EccEncryptedSecret"); //marked "Draft" in files
+		ignoreB.add("AdditionalParametersType"); //marked "Draft" in files
 		
 		ImmutableList<String> ignoreList = ignoreB.build();
 		

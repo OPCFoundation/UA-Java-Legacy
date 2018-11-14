@@ -676,6 +676,7 @@ public class EncodeableSerializer extends SerializerComposition {
     				calculator.putDouble(null, null /*obj.getKeepAliveTime()*/);
     				calculator.putByte(null, null /*obj.getPriority()*/);
     				calculator.putStringArray(null, ((obj==null)?null:obj.getLocaleIds()) );
+    				calculator.putString(null,  (obj==null)?null:obj.getHeaderLayoutUri() );
     				calculator.putExtensionObject(null,  (obj==null)?null:obj.getTransportSettings() );
     				calculator.putExtensionObject(null,  (obj==null)?null:obj.getMessageSettings() );
     				calculator.putEncodeableArray(null, DataSetWriterDataType.class, (obj==null)?null:obj.getDataSetWriters());
@@ -694,6 +695,7 @@ public class EncodeableSerializer extends SerializerComposition {
     				encoder.putDouble("KeepAliveTime",  (obj==null)?null:obj.getKeepAliveTime() );
     				encoder.putByte("Priority",  (obj==null)?null:obj.getPriority() );
     				encoder.putStringArray("LocaleIds", (obj==null)?null:obj.getLocaleIds() );
+    				encoder.putString("HeaderLayoutUri",  (obj==null)?null:obj.getHeaderLayoutUri() );
     				encoder.putExtensionObject("TransportSettings",  (obj==null)?null:obj.getTransportSettings() );
     				encoder.putExtensionObject("MessageSettings",  (obj==null)?null:obj.getMessageSettings() );
     				encoder.putEncodeableArray("DataSetWriters", DataSetWriterDataType.class, (obj==null)?null:obj.getDataSetWriters());
@@ -712,6 +714,7 @@ public class EncodeableSerializer extends SerializerComposition {
     				result.setKeepAliveTime( decoder.getDouble("KeepAliveTime") );
     				result.setPriority( decoder.getByte("Priority") );
     				result.setLocaleIds( decoder.getStringArray("LocaleIds") );
+    				result.setHeaderLayoutUri( decoder.getString("HeaderLayoutUri") );
     				result.setTransportSettings( decoder.getExtensionObject("TransportSettings") );
     				result.setMessageSettings( decoder.getExtensionObject("MessageSettings") );
     				result.setDataSetWriters( decoder.getEncodeableArray("DataSetWriters", DataSetWriterDataType.class) );
@@ -923,6 +926,8 @@ public class EncodeableSerializer extends SerializerComposition {
     				calculator.putEncodeable(null, DataSetMetaDataType.class, (obj==null)?null:obj.getDataSetMetaData());
     				calculator.putUInt32(null, null /*obj.getDataSetFieldContentMask()*/);
     				calculator.putDouble(null, null /*obj.getMessageReceiveTimeout()*/);
+    				calculator.putUInt32(null, null /*obj.getKeyFrameCount()*/);
+    				calculator.putString(null,  (obj==null)?null:obj.getHeaderLayoutUri() );
     				calculator.putEnumeration(null, null /*obj.getSecurityMode()*/);
     				calculator.putString(null,  (obj==null)?null:obj.getSecurityGroupId() );
     				calculator.putEncodeableArray(null, EndpointDescription.class, (obj==null)?null:obj.getSecurityKeyServices());
@@ -941,6 +946,8 @@ public class EncodeableSerializer extends SerializerComposition {
     				encoder.putEncodeable("DataSetMetaData", DataSetMetaDataType.class, (obj==null)?null:obj.getDataSetMetaData());
     				encoder.putUInt32("DataSetFieldContentMask",  (obj==null)?null:obj.getDataSetFieldContentMask() );
     				encoder.putDouble("MessageReceiveTimeout",  (obj==null)?null:obj.getMessageReceiveTimeout() );
+    				encoder.putUInt32("KeyFrameCount",  (obj==null)?null:obj.getKeyFrameCount() );
+    				encoder.putString("HeaderLayoutUri",  (obj==null)?null:obj.getHeaderLayoutUri() );
     				encoder.putEnumeration("SecurityMode",  (obj==null)?null:obj.getSecurityMode() );
     				encoder.putString("SecurityGroupId",  (obj==null)?null:obj.getSecurityGroupId() );
     				encoder.putEncodeableArray("SecurityKeyServices", EndpointDescription.class, (obj==null)?null:obj.getSecurityKeyServices());
@@ -959,6 +966,8 @@ public class EncodeableSerializer extends SerializerComposition {
     				result.setDataSetMetaData( decoder.getEncodeable("DataSetMetaData", DataSetMetaDataType.class) );
     				result.setDataSetFieldContentMask( decoder.getUInt32("DataSetFieldContentMask") );
     				result.setMessageReceiveTimeout( decoder.getDouble("MessageReceiveTimeout") );
+    				result.setKeyFrameCount( decoder.getUInt32("KeyFrameCount") );
+    				result.setHeaderLayoutUri( decoder.getString("HeaderLayoutUri") );
     				result.setSecurityMode( decoder.getEnumeration("SecurityMode", MessageSecurityMode.class) );
     				result.setSecurityGroupId( decoder.getString("SecurityGroupId") );
     				result.setSecurityKeyServices( decoder.getEncodeableArray("SecurityKeyServices", EndpointDescription.class) );
@@ -1230,14 +1239,17 @@ public class EncodeableSerializer extends SerializerComposition {
     		new AbstractSerializer(JsonDataSetWriterMessageDataType.class, JsonDataSetWriterMessageDataType.BINARY, JsonDataSetWriterMessageDataType.XML, JsonDataSetWriterMessageDataType.ID) {
     			public void calcEncodeable(IEncodeable encodeable, IEncoder calculator) throws EncodingException {
     				JsonDataSetWriterMessageDataType obj = (JsonDataSetWriterMessageDataType) encodeable;
+    				calculator.putUInt32(null, null /*obj.getNetworkMessageContentMask()*/);
     				calculator.putUInt32(null, null /*obj.getDataSetMessageContentMask()*/);
     			}
     			public void putEncodeable(IEncodeable encodeable, IEncoder encoder) throws EncodingException {
     				JsonDataSetWriterMessageDataType obj = (JsonDataSetWriterMessageDataType) encodeable;
+    				encoder.putUInt32("NetworkMessageContentMask",  (obj==null)?null:obj.getNetworkMessageContentMask() );
     				encoder.putUInt32("DataSetMessageContentMask",  (obj==null)?null:obj.getDataSetMessageContentMask() );
     			}
     			public IEncodeable getEncodeable(IDecoder decoder) throws DecodingException {
     				JsonDataSetWriterMessageDataType result = new JsonDataSetWriterMessageDataType();
+    				result.setNetworkMessageContentMask( decoder.getUInt32("NetworkMessageContentMask") );
     				result.setDataSetMessageContentMask( decoder.getUInt32("DataSetMessageContentMask") );
     				return result;
     			}
@@ -1359,6 +1371,7 @@ public class EncodeableSerializer extends SerializerComposition {
     				calculator.putString(null,  (obj==null)?null:obj.getQueueName() );
     				calculator.putString(null,  (obj==null)?null:obj.getResourceUri() );
     				calculator.putString(null,  (obj==null)?null:obj.getAuthenticationProfileUri() );
+    				calculator.putEnumeration(null, null /*obj.getRequestedDeliveryGuarantee()*/);
     				calculator.putString(null,  (obj==null)?null:obj.getMetaDataQueueName() );
     				calculator.putDouble(null, null /*obj.getMetaDataUpdateTime()*/);
     			}
@@ -1367,6 +1380,7 @@ public class EncodeableSerializer extends SerializerComposition {
     				encoder.putString("QueueName",  (obj==null)?null:obj.getQueueName() );
     				encoder.putString("ResourceUri",  (obj==null)?null:obj.getResourceUri() );
     				encoder.putString("AuthenticationProfileUri",  (obj==null)?null:obj.getAuthenticationProfileUri() );
+    				encoder.putEnumeration("RequestedDeliveryGuarantee",  (obj==null)?null:obj.getRequestedDeliveryGuarantee() );
     				encoder.putString("MetaDataQueueName",  (obj==null)?null:obj.getMetaDataQueueName() );
     				encoder.putDouble("MetaDataUpdateTime",  (obj==null)?null:obj.getMetaDataUpdateTime() );
     			}
@@ -1375,6 +1389,7 @@ public class EncodeableSerializer extends SerializerComposition {
     				result.setQueueName( decoder.getString("QueueName") );
     				result.setResourceUri( decoder.getString("ResourceUri") );
     				result.setAuthenticationProfileUri( decoder.getString("AuthenticationProfileUri") );
+    				result.setRequestedDeliveryGuarantee( decoder.getEnumeration("RequestedDeliveryGuarantee", BrokerTransportQualityOfService.class) );
     				result.setMetaDataQueueName( decoder.getString("MetaDataQueueName") );
     				result.setMetaDataUpdateTime( decoder.getDouble("MetaDataUpdateTime") );
     				return result;

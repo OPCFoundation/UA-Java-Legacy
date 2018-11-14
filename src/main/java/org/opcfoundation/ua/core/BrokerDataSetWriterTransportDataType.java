@@ -35,6 +35,7 @@ import org.opcfoundation.ua.core.Identifiers;
 import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.common.NamespaceTable;
 
+import org.opcfoundation.ua.core.BrokerTransportQualityOfService;
 import org.opcfoundation.ua.core.DataSetWriterTransportDataType;
 
 
@@ -48,16 +49,18 @@ public class BrokerDataSetWriterTransportDataType extends DataSetWriterTransport
     protected String QueueName;
     protected String ResourceUri;
     protected String AuthenticationProfileUri;
+    protected BrokerTransportQualityOfService RequestedDeliveryGuarantee;
     protected String MetaDataQueueName;
     protected Double MetaDataUpdateTime;
     
     public BrokerDataSetWriterTransportDataType() {}
     
-    public BrokerDataSetWriterTransportDataType(String QueueName, String ResourceUri, String AuthenticationProfileUri, String MetaDataQueueName, Double MetaDataUpdateTime)
+    public BrokerDataSetWriterTransportDataType(String QueueName, String ResourceUri, String AuthenticationProfileUri, BrokerTransportQualityOfService RequestedDeliveryGuarantee, String MetaDataQueueName, Double MetaDataUpdateTime)
     {
         this.QueueName = QueueName;
         this.ResourceUri = ResourceUri;
         this.AuthenticationProfileUri = AuthenticationProfileUri;
+        this.RequestedDeliveryGuarantee = RequestedDeliveryGuarantee;
         this.MetaDataQueueName = MetaDataQueueName;
         this.MetaDataUpdateTime = MetaDataUpdateTime;
     }
@@ -92,6 +95,16 @@ public class BrokerDataSetWriterTransportDataType extends DataSetWriterTransport
         this.AuthenticationProfileUri = AuthenticationProfileUri;
     }
     
+    public BrokerTransportQualityOfService getRequestedDeliveryGuarantee()
+    {
+        return RequestedDeliveryGuarantee;
+    }
+    
+    public void setRequestedDeliveryGuarantee(BrokerTransportQualityOfService RequestedDeliveryGuarantee)
+    {
+        this.RequestedDeliveryGuarantee = RequestedDeliveryGuarantee;
+    }
+    
     public String getMetaDataQueueName()
     {
         return MetaDataQueueName;
@@ -123,6 +136,7 @@ public class BrokerDataSetWriterTransportDataType extends DataSetWriterTransport
         result.QueueName = QueueName;
         result.ResourceUri = ResourceUri;
         result.AuthenticationProfileUri = AuthenticationProfileUri;
+        result.RequestedDeliveryGuarantee = RequestedDeliveryGuarantee;
         result.MetaDataQueueName = MetaDataQueueName;
         result.MetaDataUpdateTime = MetaDataUpdateTime;
         return result;
@@ -144,6 +158,9 @@ public class BrokerDataSetWriterTransportDataType extends DataSetWriterTransport
         if (AuthenticationProfileUri==null) {
             if (other.AuthenticationProfileUri != null) return false;
         } else if (!AuthenticationProfileUri.equals(other.AuthenticationProfileUri)) return false;
+        if (RequestedDeliveryGuarantee==null) {
+            if (other.RequestedDeliveryGuarantee != null) return false;
+        } else if (!RequestedDeliveryGuarantee.equals(other.RequestedDeliveryGuarantee)) return false;
         if (MetaDataQueueName==null) {
             if (other.MetaDataQueueName != null) return false;
         } else if (!MetaDataQueueName.equals(other.MetaDataQueueName)) return false;
@@ -164,6 +181,8 @@ public class BrokerDataSetWriterTransportDataType extends DataSetWriterTransport
                 + ((ResourceUri == null) ? 0 : ResourceUri.hashCode());
         result = prime * result
                 + ((AuthenticationProfileUri == null) ? 0 : AuthenticationProfileUri.hashCode());
+        result = prime * result
+                + ((RequestedDeliveryGuarantee == null) ? 0 : RequestedDeliveryGuarantee.hashCode());
         result = prime * result
                 + ((MetaDataQueueName == null) ? 0 : MetaDataQueueName.hashCode());
         result = prime * result

@@ -46,13 +46,25 @@ public class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
 	public static final ExpandedNodeId BINARY = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.JsonDataSetWriterMessageDataType_Encoding_DefaultBinary.getValue());
 	public static final ExpandedNodeId XML = new ExpandedNodeId(null, NamespaceTable.OPCUA_NAMESPACE, Identifiers.JsonDataSetWriterMessageDataType_Encoding_DefaultXml.getValue());
 	
+    protected UnsignedInteger NetworkMessageContentMask;
     protected UnsignedInteger DataSetMessageContentMask;
     
     public JsonDataSetWriterMessageDataType() {}
     
-    public JsonDataSetWriterMessageDataType(UnsignedInteger DataSetMessageContentMask)
+    public JsonDataSetWriterMessageDataType(UnsignedInteger NetworkMessageContentMask, UnsignedInteger DataSetMessageContentMask)
     {
+        this.NetworkMessageContentMask = NetworkMessageContentMask;
         this.DataSetMessageContentMask = DataSetMessageContentMask;
+    }
+    
+    public UnsignedInteger getNetworkMessageContentMask()
+    {
+        return NetworkMessageContentMask;
+    }
+    
+    public void setNetworkMessageContentMask(UnsignedInteger NetworkMessageContentMask)
+    {
+        this.NetworkMessageContentMask = NetworkMessageContentMask;
     }
     
     public UnsignedInteger getDataSetMessageContentMask()
@@ -73,6 +85,7 @@ public class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
     public JsonDataSetWriterMessageDataType clone()
     {
         JsonDataSetWriterMessageDataType result = (JsonDataSetWriterMessageDataType) super.clone();
+        result.NetworkMessageContentMask = NetworkMessageContentMask;
         result.DataSetMessageContentMask = DataSetMessageContentMask;
         return result;
     }
@@ -84,6 +97,9 @@ public class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         JsonDataSetWriterMessageDataType other = (JsonDataSetWriterMessageDataType) obj;
+        if (NetworkMessageContentMask==null) {
+            if (other.NetworkMessageContentMask != null) return false;
+        } else if (!NetworkMessageContentMask.equals(other.NetworkMessageContentMask)) return false;
         if (DataSetMessageContentMask==null) {
             if (other.DataSetMessageContentMask != null) return false;
         } else if (!DataSetMessageContentMask.equals(other.DataSetMessageContentMask)) return false;
@@ -95,6 +111,8 @@ public class JsonDataSetWriterMessageDataType extends DataSetWriterMessageDataTy
     {
         final int prime = 31;
         int result = 1;
+        result = prime * result
+                + ((NetworkMessageContentMask == null) ? 0 : NetworkMessageContentMask.hashCode());
         result = prime * result
                 + ((DataSetMessageContentMask == null) ? 0 : DataSetMessageContentMask.hashCode());
         return result;
