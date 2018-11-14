@@ -214,6 +214,13 @@ public class ObjectUtils {
 		if (!visitedObjects.add(o) && visitedObjects.size() > 10000) 
 			return;
 		
+		
+		//#157
+		if(c.isEnum()) {
+			sb.append(o);
+			return;
+		}
+		
 		indent += "  ";
 		while (!c.equals(Object.class)) {
 			for (Field f : ReflectionUtils.getAllFields(c))
