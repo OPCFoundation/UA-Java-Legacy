@@ -984,6 +984,11 @@ public class BinaryDecoder implements IDecoder {
 			  throw new DecodingException("Unexpected encoding byte ("+encodingByte+") in ExtensionObject");
 			}
 			
+			//First check if it is decimal, that is decoded later, thus we can return now
+			if(isDecimal(tmp)) {
+				return tmp;
+			}
+			
 			//try decoding, but failing is allowed (might be e.g. unknown Structure)
 			try{
 			  Structure decoded = tmp.decode(getEncoderContext());
