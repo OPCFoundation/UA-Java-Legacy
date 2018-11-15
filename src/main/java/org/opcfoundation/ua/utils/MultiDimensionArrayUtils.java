@@ -17,7 +17,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -27,57 +26,65 @@ import org.opcfoundation.ua.encoding.EncoderContext;
 
 /**
  * Multi-dimension array utils.
- *
- * @see Array related
- * @see Arrays related
- * @see Arrays related
- * @see Collections related
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class MultiDimensionArrayUtils {
 
 	
 	/**
-	 * Format object to string
+	 * Format object to String. Does not decode ExtensionObjects (use {@link #toString(Object, EncoderContext)} for that).
 	 *
 	 * @param o a {@link java.lang.Object} object.
 	 * @return string representation of the object
 	 */
-	public static String toString(Object o)
-	{
+	public static String toString(Object o) {
+		return toString(o, null);
+	}
+	
+	/**
+	 * Format object to String, try decoding {@link ExtensionObject}s with the given context. 
+	 * Uses {@link ExtensionObject#toString()} if decoding fails.
+	 * @param o the object
+	 * @param ctx context to use for {@link ExtensionObject} decoding, can be null, in which case no decoding is attempted
+	 * @return String representation of the object
+	 */
+	public static String toString(Object o, EncoderContext ctx) {
 		if (o==null) return "" + null;
-		if (o instanceof ExtensionObject)
-			try {
-				o = ((ExtensionObject) o).decode(StackUtils.getDefaultSerializer(), EncoderContext.getDefaultInstance(), null);
-			} catch (DecodingException e) {
-				// ignore
+
+		if (!o.getClass().isArray()) {
+			if (ctx != null && o instanceof ExtensionObject) {
+				try {
+					o = ((ExtensionObject) o).decode(ctx);
+				} catch (DecodingException e) {
+					// ignore, uses toString instead
+				}
 			}
-		if (!o.getClass().isArray()) return o.toString();
+			return o.toString();
+		}
 		int[] lens = getArrayLengths(o);
 		if (lens.length==1) {
-	        if (o instanceof ExtensionObject[]) {
-	        	try {
-					Object[] objArray = (Object[]) EncoderContext.getDefaultInstance().decode((ExtensionObject[])o);
-		        	return Arrays.toString(objArray); 
+			//1-dim array
+			if (ctx != null && o instanceof ExtensionObject[]) {
+				try {
+					Object[] objArray = (Object[]) ctx.decode((ExtensionObject[]) o);
+					return Arrays.toString(objArray); 
 				} catch (DecodingException e) {
-					// ignore
-					e.printStackTrace();
+					// ignore, uses toString instead
 				}
-	        }
-	        if (o instanceof Object[]) return Arrays.toString((Object[])o); 
-	        if (o instanceof double[]) return Arrays.toString((double[])o); 
-	        if (o instanceof boolean[]) return Arrays.toString((boolean[])o); 
-	        if (o instanceof byte[]) return Arrays.toString((byte[])o); 
-	        if (o instanceof char[]) return Arrays.toString((char[])o); 
-	        if (o instanceof float[]) return Arrays.toString((float[])o); 
-	        if (o instanceof int[]) return Arrays.toString((int[])o); 
-	        if (o instanceof long[]) return Arrays.toString((long[])o); 
-	        if (o instanceof short[]) return Arrays.toString((short[])o);
+			}
+			if (o instanceof Object[]) return Arrays.toString((Object[])o); 
+			if (o instanceof double[]) return Arrays.toString((double[])o); 
+			if (o instanceof boolean[]) return Arrays.toString((boolean[])o); 
+			if (o instanceof byte[]) return Arrays.toString((byte[])o); 
+			if (o instanceof char[]) return Arrays.toString((char[])o); 
+			if (o instanceof float[]) return Arrays.toString((float[])o); 
+			if (o instanceof int[]) return Arrays.toString((int[])o); 
+			if (o instanceof long[]) return Arrays.toString((long[])o); 
+			if (o instanceof short[]) return Arrays.toString((short[])o);
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("[");
 		for (int i=0; i<lens[0]; i++)
-			sb.append(toString(Array.get(o, i)));
+			sb.append(toString(Array.get(o, i), ctx));
 		sb.append("]");
 		return sb.toString();
 	}

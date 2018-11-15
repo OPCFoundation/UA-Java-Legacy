@@ -117,5 +117,17 @@ public class MultiDimensionArrayUtilsTest {
 				{ { { 17, 18 }, { 19, 20 } }, { { 21, 22 }, { 23, 24 } } } };
 		assertTrue(Arrays.equals(sd, (int[]) MultiDimensionArrayUtils.muxArray(md)));
 	}
+	
+	@Test
+	public void testToStringOneDim() {
+		assertEquals("[5, 6, 7, 10, 2, 4, 6, 9]", MultiDimensionArrayUtils.toString(sd));
+		
+	}
 
+	@Test
+	public void testToStringMultiDim() {
+		assertEquals("[[[5, 6, 7, 10][2, 4, 6, 9]]]", MultiDimensionArrayUtils.toString(md));
+		
+	}
+	
 }
