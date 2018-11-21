@@ -188,7 +188,7 @@ public class HttpsClient implements ITransportChannel {
 		this.transportChannelSettings = tcs;
 		HttpsSettings httpsSettings = tcs.getHttpsSettings();
 		securityPolicies = httpsSettings.getHttpsSecurityPolicies();
-		if(securityPolicies == null && securityPolicies.length == 0) {
+		if(securityPolicies == null || securityPolicies.length == 0) {
 			throw new ServiceResultException( StatusCodes.Bad_SecurityChecksFailed, "No HttpsSecurityPolicies defined");
 		}
 				
