@@ -69,7 +69,6 @@ import org.opcfoundation.ua.transport.ServerConnection;
 import org.opcfoundation.ua.transport.TransportChannelSettings;
 import org.opcfoundation.ua.transport.UriUtil;
 import org.opcfoundation.ua.transport.impl.AsyncResultImpl;
-import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
 import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.opcfoundation.ua.transport.tcp.io.IConnection.IMessageListener;
 import org.opcfoundation.ua.utils.CryptoUtil;
@@ -629,8 +628,7 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 		OpenSecureChannelRequest req = new OpenSecureChannelRequest();								
 		
 		SecurityPolicy policy = SecurityPolicy.getSecurityPolicy( settings.getDescription().getSecurityPolicyUri() );
-		SecurityAlgorithm algorithm = policy.getSymmetricEncryptionAlgorithm();
-		ByteString nonce = CryptoUtil.createNonce(algorithm);
+		ByteString nonce = CryptoUtil.createNonce(policy.getSecureChannelNonceLength());
 		
 		Integer tokenLifetime = settings.getConfiguration().getSecurityTokenLifetime();
 		if (tokenLifetime==null) tokenLifetime = 3600000;

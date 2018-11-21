@@ -12,14 +12,15 @@
 
 package org.opcfoundation.ua.transport.security;
 
-import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.opcfoundation.ua.common.ServiceResultException;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.utils.CryptoUtil;
-import org.opcfoundation.ua.utils.ObjectUtils;
 
 /**
  * Security Policy determines which algorithms to use during asymmetric and
@@ -27,99 +28,83 @@ import org.opcfoundation.ua.utils.ObjectUtils;
  *
  * @see CryptoUtil for instantiating cryptographics objects
  */
-public final class SecurityPolicy {
+public enum SecurityPolicy {
 
-	private static final Charset UTF8 = Charset.forName("utf-8");
-	public static final String URI_BINARY_NONE = "http://opcfoundation.org/UA/SecurityPolicy#None";
-	public static final String URI_BINARY_BASIC128RSA15 = "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15";
-	public static final String URI_BINARY_BASIC256 = "http://opcfoundation.org/UA/SecurityPolicy#Basic256";
-	public static final String URI_BINARY_BASIC256SHA256 = "http://opcfoundation.org/UA/SecurityPolicy#Basic256Sha256";
-	public static final String URI_BINARY_AES128_SHA256_RSAOAEP = "http://opcfoundation.org/UA/SecurityPolicy#Aes128_Sha256_RsaOaep";
-	public static final String URI_BINARY_AES256_SHA256_RSAPSS = "http://opcfoundation.org/UA/SecurityPolicy#Aes256_Sha256_RsaPss";
-	public static final String URI_BINARY_PUBSUB_AES128_CTR = "http://opcfoundation.org/UA/SecurityPolicy#PubSub_Aes128_CTR";
-	public static final String URI_BINARY_PUBSUB_AES256_CTR = "http://opcfoundation.org/UA/SecurityPolicy#PubSub_Aes256_CTR";
+	NONE(SecurityPolicyUri.URI_BINARY_NONE,  null, null,
+		null, null, null, null, 0, 0, 0, 1, 1024, 2048, 0),
 
-	public static final String URI_XML_NONE = "http://opcfoundation.org/UA-Profile/Securitypolicy/None";
-	public static final String URI_XML_BASIC128RSA15 = "http://opcfoundation.org/UA-Profile/Securitypolicy/Basic128Rsa15";
-	public static final String URI_XML_BASIC256 = "http://opcfoundation.org/UA-Profile/Securitypolicy/Basic256";
-	public static final String URI_XML_PUBSUBAES128CTR = "http://opcfoundation.org/UA-Profile/Securitypolicy/PubSubAes128Ctr";
-	public static final String URI_XML_PUBSUBAES256CTR = "http://opcfoundation.org/UA-Profile/Securitypolicy/PubSubAes256Ctr";
-
-	// Global Well known Security policies //
-	public static final SecurityPolicy NONE = new SecurityPolicy(
-			SecurityPolicy.URI_BINARY_NONE,  null, null,
-			null, null, null, null, 0, 0, 0, 1, 1024, 2048, 0);
-
-	public static final SecurityPolicy BASIC128RSA15 = new SecurityPolicy(
-			SecurityPolicy.URI_BINARY_BASIC128RSA15, 
+	BASIC128RSA15(
+			SecurityPolicyUri.URI_BINARY_BASIC128RSA15, 
 			SecurityAlgorithm.HmacSha1, // Symmetric signature
 			SecurityAlgorithm.Aes128, // Symmetric encryption
 			SecurityAlgorithm.RsaSha1, // Asymmetric signature
 			SecurityAlgorithm.KwRsa15, // Asymmetric keywrap
 			SecurityAlgorithm.Rsa15, // Asymmetric encryption
 			SecurityAlgorithm.PSha1, // key derivation
-			20, 16, 16, 16, 1024, 2048, 0);
+			20, 16, 16, 16, 1024, 2048, 16),
 
-	public static final SecurityPolicy BASIC256 = new SecurityPolicy(
-			SecurityPolicy.URI_BINARY_BASIC256, 
+	BASIC256(
+			SecurityPolicyUri.URI_BINARY_BASIC256, 
 			SecurityAlgorithm.HmacSha1, // Symmetric signature
 			SecurityAlgorithm.Aes256, // Symmetric encryption
 			SecurityAlgorithm.RsaSha1, // Asymmetric signature
 			SecurityAlgorithm.KwRsaOaep,// Asymmetric keywrap
 			SecurityAlgorithm.RsaOaep, // Asymmetric encryption
 			SecurityAlgorithm.PSha1, // key derivation
-			20, 24, 32, 16, 1024, 2048, 0);
+			20, 24, 32, 16, 1024, 2048, 32),
 
-	public static final SecurityPolicy BASIC256SHA256 = new SecurityPolicy(
-			SecurityPolicy.URI_BINARY_BASIC256SHA256, 
+	BASIC256SHA256(
+			SecurityPolicyUri.URI_BINARY_BASIC256SHA256, 
 			SecurityAlgorithm.HmacSha256, // Symmetric signature
 			SecurityAlgorithm.Aes256, // Symmetric encryption
 			SecurityAlgorithm.RsaSha256, // Asymmetric signature
 			SecurityAlgorithm.KwRsaOaep,// Asymmetric keywrap
 			SecurityAlgorithm.RsaOaep, // Asymmetric encryption
 			SecurityAlgorithm.PSha256, // key derivation
-			32, 32, 32, 16, 2048, 4096, 0);
+			32, 32, 32, 16, 2048, 4096, 32),
 
-	public static final SecurityPolicy AES128_SHA256_RSAOAEP = new SecurityPolicy(
-			SecurityPolicy.URI_BINARY_AES128_SHA256_RSAOAEP, 
+	AES128_SHA256_RSAOAEP(
+			SecurityPolicyUri.URI_BINARY_AES128_SHA256_RSAOAEP, 
 			SecurityAlgorithm.HmacSha256, // Symmetric signature
-			SecurityAlgorithm.Aes256, // Symmetric encryption
+			SecurityAlgorithm.Aes128, // Symmetric encryption
 			SecurityAlgorithm.RsaSha256, // Asymmetric signature
 			SecurityAlgorithm.KwRsaOaep,// Asymmetric keywrap
 			SecurityAlgorithm.RsaOaep, // Asymmetric encryption
 			SecurityAlgorithm.PSha256, // key derivation
-			32, 32, 16, 16, 2048, 4096, 0);
+			32, 32, 16, 16, 2048, 4096, 32),
 	
-	public static final SecurityPolicy AES256_SHA256_RSAPSS = new SecurityPolicy(
-			SecurityPolicy.URI_BINARY_AES256_SHA256_RSAPSS, 
+	AES256_SHA256_RSAPSS(
+			SecurityPolicyUri.URI_BINARY_AES256_SHA256_RSAPSS, 
 			SecurityAlgorithm.HmacSha256, // Symmetric signature
 			SecurityAlgorithm.Aes256, // Symmetric encryption
 			SecurityAlgorithm.RsaPssSha256, // Asymmetric signature
 			SecurityAlgorithm.KwRsaOaep,// Asymmetric keywrap
 			SecurityAlgorithm.RsaOaep256, // Asymmetric encryption
 			SecurityAlgorithm.PSha256, // key derivation
-			32, 32, 32, 16, 2048, 4096, 0);
-
-	public static final SecurityPolicy PUBSUB_AES128_CTR = new SecurityPolicy(
-			SecurityPolicy.URI_BINARY_PUBSUB_AES128_CTR, 
-			SecurityAlgorithm.HmacSha256, // Symmetric signature
-			SecurityAlgorithm.Aes128Ctr, // Symmetric encryption
-			null, // Asymmetric signature
-			null,// Asymmetric keywrap
-			null, // Asymmetric encryption
-			SecurityAlgorithm.PSha256, // key derivation
-			32, 32, 16, 16, 0, 0, 4);
-
-	public static final SecurityPolicy PUBSUB_AES256_CTR = new SecurityPolicy(
-			SecurityPolicy.URI_BINARY_PUBSUB_AES256_CTR, 
-			SecurityAlgorithm.HmacSha256, // Symmetric signature
-			SecurityAlgorithm.Aes256Ctr, // Symmetric encryption
-			null, // Asymmetric signature
-			null,// Asymmetric keywrap
-			null, // Asymmetric encryption
-			SecurityAlgorithm.PSha256, // key derivation
-			32, 32, 32, 16, 0, 0, 4);
+			32, 32, 32, 16, 2048, 4096, 32);
 	
+	/**
+	 * Policies defined in OPC UA 1.01. Includes {@link #BASIC128RSA15} and {@link #BASIC256}. This set in unmodifiable.
+	 */
+	public static final Set<SecurityPolicy> ALL_SECURE_101 = Collections.unmodifiableSet(EnumSet.of(BASIC128RSA15, BASIC256));
+	
+	/**
+	 * Policies defined in OPC UA 1.02. Includes {@link #BASIC128RSA15}, {@link #BASIC256} and {@link #BASIC256SHA256}. This set in unmodifiable.
+	 */
+	public static final Set<SecurityPolicy> ALL_SECURE_102 = Collections.unmodifiableSet(EnumSet.of(BASIC128RSA15, BASIC256, BASIC256SHA256));
+	
+	/**
+	 * Policies defined in OPC UA 1.03. Includes {@link #BASIC128RSA15}, {@link #BASIC256} and {@link #BASIC256SHA256}. This set in unmodifiable.
+	 */
+	public static final Set<SecurityPolicy> ALL_SECURE_103 = Collections.unmodifiableSet(EnumSet.of(BASIC128RSA15, BASIC256, BASIC256SHA256)); //same as 1.02.
+	
+	/**
+	 * Policies defined in OPC UA 1.04. Includes {@link #BASIC256SHA256}, {@link #AES128_SHA256_RSAOAEP} and {@link #AES256_SHA256_RSAPSS}. This set in unmodifiable.
+	 */
+	public static final Set<SecurityPolicy> ALL_SECURE_104 = Collections.unmodifiableSet(EnumSet.of(BASIC256SHA256, AES128_SHA256_RSAOAEP, AES256_SHA256_RSAPSS));
+	
+	
+	public static final SecurityPolicy[] EMPTY_ARRAY = new SecurityPolicy[0];
 	
 	private static Map<String, SecurityPolicy> policies = new ConcurrentHashMap<String, SecurityPolicy>();
 
@@ -130,8 +115,6 @@ public final class SecurityPolicy {
 		addSecurityPolicy(BASIC256SHA256);
 		addSecurityPolicy(AES128_SHA256_RSAOAEP);
 		addSecurityPolicy(AES256_SHA256_RSAPSS);
-		addSecurityPolicy(PUBSUB_AES128_CTR);
-		addSecurityPolicy(PUBSUB_AES256_CTR);
 	}
 
 	/**
@@ -139,7 +122,7 @@ public final class SecurityPolicy {
 	 *
 	 * @param policy a {@link org.opcfoundation.ua.transport.security.SecurityPolicy} object.
 	 */
-	public static void addSecurityPolicy(SecurityPolicy policy) {
+	private static void addSecurityPolicy(SecurityPolicy policy) {
 		policies.put(policy.policyUri, policy);
 	}
 
@@ -147,9 +130,11 @@ public final class SecurityPolicy {
 	 * Get all security policies supported by the stack
 	 *
 	 * @return security policies
+	 * @deprecated use {@link SecurityPolicy#values()} instead.
 	 */
+	@Deprecated
 	public static SecurityPolicy[] getAllSecurityPolicies() {
-		return policies.values().toArray(new SecurityPolicy[policies.size()]);
+		return SecurityPolicy.values();
 	}
 
 	/**
@@ -197,7 +182,7 @@ public final class SecurityPolicy {
 	private final SecurityAlgorithm symmetricSignatureAlgorithm;
 	private final int symmetricSignatureSize;
 	
-	private final int symmetricEncryptionNonceLength;
+	private final int secureChannelNonceLength;
 	
 	SecurityPolicy(String policyUri, 
 			SecurityAlgorithm symmetricSignatureAlgorithmUri,
@@ -217,7 +202,7 @@ public final class SecurityPolicy {
 		this.policyUri = policyUri;
 		this.symmetricEncryptionAlgorithm = symmetricEncryptionAlgorithmUri;
 		this.symmetricSignatureAlgorithm = symmetricSignatureAlgorithmUri;
-		this.encodedPolicyUri = policyUri.getBytes(UTF8);
+		this.encodedPolicyUri = policyUri.getBytes(SecurityPolicyUri.UTF8);
 
 		this.symmetricSignatureSize = hmacHashSize;
 		this.signatureKeySize = signatureKeySize;
@@ -227,38 +212,9 @@ public final class SecurityPolicy {
 		this.minAsymmetricKeyLength = minAsymmetricKeyLength;
 		this.maxAsymmetricKeyLength = maxAsymmetricKeyLength;
 		
-		this.symmetricEncryptionNonceLength = symmetricEncryptionNonceLength;
+		this.secureChannelNonceLength = symmetricEncryptionNonceLength;
 	}
-	/** {@inheritDoc} */
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof SecurityPolicy))
-			return false;
-		SecurityPolicy other = (SecurityPolicy) obj;
 
-		if (!ObjectUtils.objectEquals(policyUri, other.policyUri))
-			return false;
-		if (!ObjectUtils.objectEquals(asymmetricEncryptionAlgorithm,
-				other.asymmetricEncryptionAlgorithm))
-			return false;
-		if (!ObjectUtils.objectEquals(asymmetricKeyWrapAlgorithm,
-				other.asymmetricKeyWrapAlgorithm))
-			return false;
-		if (!ObjectUtils.objectEquals(asymmetricSignatureAlgorithm,
-				other.asymmetricSignatureAlgorithm))
-			return false;
-		if (!ObjectUtils.objectEquals(keyDerivationAlgorithm,
-				other.keyDerivationAlgorithm))
-			return false;
-		if (!ObjectUtils.objectEquals(symmetricEncryptionAlgorithm,
-				other.symmetricEncryptionAlgorithm))
-			return false;
-		if (!ObjectUtils.objectEquals(symmetricSignatureAlgorithm,
-				other.symmetricSignatureAlgorithm))
-			return false;
-
-		return true;
-	}
 	/**
 	 * <p>Getter for the field <code>asymmetricEncryptionAlgorithm</code>.</p>
 	 *
@@ -364,8 +320,8 @@ public final class SecurityPolicy {
 		return symmetricEncryptionAlgorithm;
 	}
 
-	public int getSymmetricEncryptionNonceLength() {
-		return symmetricEncryptionNonceLength;
+	public int getSecureChannelNonceLength() {
+		return secureChannelNonceLength;
 	}
 	
 	/**
@@ -384,12 +340,6 @@ public final class SecurityPolicy {
 	 */
 	public int getSymmetricSignatureSize() {
 		return symmetricSignatureSize;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public int hashCode() {
-		return policyUri.hashCode();
 	}
 
 	/**

@@ -29,7 +29,11 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.opcfoundation.ua.application.Application;
@@ -58,6 +62,7 @@ import org.opcfoundation.ua.core.CreateSessionRequest;
 import org.opcfoundation.ua.core.CreateSessionResponse;
 import org.opcfoundation.ua.core.EndpointConfiguration;
 import org.opcfoundation.ua.core.EndpointDescription;
+import org.opcfoundation.ua.core.MessageSecurityMode;
 import org.opcfoundation.ua.core.MethodServiceSetHandler;
 import org.opcfoundation.ua.core.SessionServiceSetHandler;
 import org.opcfoundation.ua.core.SignatureData;
@@ -71,6 +76,7 @@ import org.opcfoundation.ua.transport.security.CertificateValidator;
 import org.opcfoundation.ua.transport.security.HttpsSecurityPolicy;
 import org.opcfoundation.ua.transport.security.KeyPair;
 import org.opcfoundation.ua.transport.security.SecurityMode;
+import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.EndpointUtil;
 import org.slf4j.Logger;
@@ -103,7 +109,7 @@ public class ClientServerExample {
     Application myClientApplication = myClient.getApplication();
     myClientApplication.getHttpsSettings().setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
     myClientApplication.getHttpsSettings().setCertificateValidator(CertificateValidator.ALLOW_ALL);
-    myClientApplication.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL);
+    myClientApplication.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
 
 
     //////////////////////////////////////
@@ -168,7 +174,7 @@ class MyServerExample extends Server implements MethodServiceSetHandler, Session
     application.getHttpsSettings().setCertificateValidator(CertificateValidator.ALLOW_ALL);
 
     // The HTTPS SecurityPolicies are defined separate from the endpoint securities
-    application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL);
+    application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
 
     // Peer verifier
     application.getHttpsSettings().setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
@@ -191,13 +197,23 @@ class MyServerExample extends Server implements MethodServiceSetHandler, Session
       bindAddress = "https://" + addr + ":8443/UAExample";
       endpointAddress = "https://" + hostname + ":8443/UAExample";
       System.out.println(endpointAddress + " bound at " + bindAddress);
-      // The HTTPS ports are using NONE OPC security
-      bind(bindAddress, endpointAddress, SecurityMode.NONE);
+      /*
+       * Please read specification 1.04 Part 6 section 7.4.1,
+       * also sign modes can be used in addition to none in HTTPS.
+       */
+      bind(bindAddress, endpointAddress, Arrays.asList(SecurityMode.NONE));
 
       bindAddress = "opc.tcp://" + addr + ":8666/UAExample";
       endpointAddress = "opc.tcp://" + hostname + ":8666/UAExample";
       System.out.println(endpointAddress + " bound at " + bindAddress);
-      bind(bindAddress, endpointAddress, SecurityMode.ALL);
+      
+      Set<SecurityPolicy> policies = new HashSet<SecurityPolicy>();
+      policies.add(SecurityPolicy.NONE);
+      policies.addAll(SecurityPolicy.ALL_SECURE_101);
+      policies.addAll(SecurityPolicy.ALL_SECURE_102);
+      policies.addAll(SecurityPolicy.ALL_SECURE_103);
+      policies.addAll(SecurityPolicy.ALL_SECURE_104);
+      bind(bindAddress, endpointAddress, SecurityMode.combinations(MessageSecurityMode.ALL, policies));
     }
 
     //////////////////////////////////////

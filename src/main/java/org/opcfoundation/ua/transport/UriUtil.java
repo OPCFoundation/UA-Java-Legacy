@@ -27,38 +27,37 @@ import org.opcfoundation.ua.core.StatusCodes;
  */
 public class UriUtil {
 		
-	/** Constant <code>OPC_TCP_PORT=6000</code> */
-	public static final int OPC_TCP_PORT = 6000;
-	/** Constant <code>HTTP_PORT=80</code> */
+
+	public static final int OPC_TCP_PORT = 4840;
+
 	public static final int HTTP_PORT = 80;
-	/** Constant <code>HTTPS_PORT=443</code> */
+
 	public static final int HTTPS_PORT = 443;
 	
-	/** Constant <code>OPC_TCP_DISCOVERY_PORT=4840</code> */
-	public static final int OPC_TCP_DISCOVERY_PORT = 4840;
-	/** Constant <code>HTTPS_DISCOVERY_PORT=4843</code> */
-	public static final int HTTPS_DISCOVERY_PORT = 4843;
-	/** Constant <code>HTTP_DISCOVERY_PORT=56201</code> */
-	public static final int HTTP_DISCOVERY_PORT = 56201;  // Alternate to 80
 
-	/** Constant <code>SCHEME_OPCTCP="opc.tcp"</code> */
-	public final static String SCHEME_OPCTCP = "opc.tcp";
-	/** Constant <code>SCHEME_HTTP="http"</code> */
-	public final static String SCHEME_HTTP = "http";
-	/** Constant <code>SCHEME_HTTPS="https"</code> */
-	public final static String SCHEME_HTTPS = "https";
+	public static final int OPC_TCP_DISCOVERY_PORT = 4840; //1.04 Part 6 section 7.6
+
+	public static final int HTTPS_DISCOVERY_PORT = 443; //1.04 Part 6 section 7.6
+
+	public static final int HTTP_DISCOVERY_PORT = 56201;  // Alternate to 80 (not in 1.04, 1.03 defined this in Part 6 section 7.4)
+
+
+	public final static String SCHEME_OPCTCP = "opc.tcp"; //1.04 Part 6, section 7.2
+
+	public final static String SCHEME_HTTP = "http"; //deprecated in 1.03/1.04
+
+	public final static String SCHEME_HTTPS = "opc.https"; //1.04 Part 6 section 7.4.1
+
+	public static final Pattern PATTERN_HTTPS = Pattern.compile( "^opc.https://([^/]+)(/.*)?$", Pattern.CASE_INSENSITIVE );
 	
-	/** Constant <code>PATTERN_HTTPS</code> */
-	public static final Pattern PATTERN_HTTPS = Pattern.compile( "^https://([^/]+)(/.*)?$", Pattern.CASE_INSENSITIVE );
-	/** Constant <code>PATTERN_HTTP</code> */
 	public static final Pattern PATTERN_HTTP = Pattern.compile( "^http://([^/]+)(/.*)?$", Pattern.CASE_INSENSITIVE );
-	/** Constant <code>PATTERN_OPCTCP</code> */
+
 	public static final Pattern PATTERN_OPCTCP = Pattern.compile( "^opc.tcp://([^/]+)(/.*)?$", Pattern.CASE_INSENSITIVE );
-	/** Constant <code>PATTERN_URI</code> */
+
 	public static final Pattern PATTERN_URI = Pattern.compile( "^(\\S+)://([^/]+)(/.*)?$", Pattern.CASE_INSENSITIVE );
 
 	public static enum MessageFormat {
-		Binary,  // UA Secure Conversion, UASC, Opc.tcp
+		Binary,  // UA Secure Conversion, UASC, Opc.tcp, opc.https
 		Xml;    // SOAP, http, https		
 	}
 	

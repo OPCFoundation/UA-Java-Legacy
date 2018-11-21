@@ -39,6 +39,7 @@ import javax.net.ssl.SSLSocket;
 
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.utils.URIUtils;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -245,7 +246,7 @@ public class HttpsClient implements ITransportChannel {
 				logger.info( "Enabled CipherSuites in SSL Engine are {}", Arrays.toString( enabledCipherSuites ) );
 				logger.info( "Client CipherSuite selection for {} is {}", securityPolicy.getPolicyUri(), Arrays.toString( cipherSuites ));
 
-				Scheme https = new Scheme("https", 443, sf);
+				Scheme https = new Scheme(UriUtil.SCHEME_HTTPS, 443, sf);
 				sr.register(https);
 			}
 			

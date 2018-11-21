@@ -15,6 +15,7 @@ package org.opcfoundation.ua.application;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -320,9 +321,13 @@ public class Server {
 	 * @return a {@link java.util.List} object.
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
 	 */
-	public List<EndpointHandle> bind(String bindAddress, String endpointUri, SecurityMode...modes) throws ServiceResultException
-	{
+	public List<EndpointHandle> bind(String bindAddress, String endpointUri, SecurityMode...modes) throws ServiceResultException {
 		Endpoint endpointAddress = new Endpoint(endpointUri, modes);
+		return bind(bindAddress, endpointAddress);
+	}
+	
+	public List<EndpointHandle> bind(String bindAddress, String endpointUri, Collection<SecurityMode> modes) throws ServiceResultException {
+		Endpoint endpointAddress = new Endpoint(endpointUri, modes.toArray(SecurityMode.EMPTY_ARRAY));
 		return bind(bindAddress, endpointAddress);
 	}
 
@@ -455,11 +460,6 @@ public class Server {
 				logger.trace("getEndpointDescriptions: keyPair={}", keypair);
 				if (logger.isTraceEnabled())
 					logger.trace("getEndpointDescriptions: securityModes={}", Arrays.toString(securityModes));
-				if ( UriUtil.SCHEME_HTTPS.equals(proto) ) {
-					securityModes = SecurityMode.NON_SECURE;
-				} else if ( UriUtil.SCHEME_HTTP.equals(proto) ) {
-					securityModes = SecurityMode.NON_SECURE;
-				}
 				
 				for (SecurityMode conf : securityModes)
 				{
@@ -469,8 +469,9 @@ public class Server {
 					int securityLevel = 0;
 					
 					if ( UriUtil.SCHEME_HTTPS.equals(proto) ) {
-						securityLevel = 2;
-						securityPolicyUri = SecurityPolicy.NONE.getPolicyUri();
+						msm = conf.getMessageSecurityMode();
+						securityLevel = msm == MessageSecurityMode.None ? 0 : msm == MessageSecurityMode.Sign ? 2 : -1;
+						securityPolicyUri = conf.getSecurityPolicy().getPolicyUri();
 						transportProfileUri = HTTPS_BINARY_TRANSPORT_PROFILE_URI;
 					} else if ( UriUtil.SCHEME_HTTP.equals(proto) ) {
 						securityLevel = 0;

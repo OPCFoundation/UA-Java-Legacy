@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import org.opcfoundation.ua.builtintypes.ServiceRequest;
 import org.opcfoundation.ua.builtintypes.ServiceResponse;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
+import org.opcfoundation.ua.common.ServiceResultException;
+import org.opcfoundation.ua.core.MessageSecurityMode;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.DecodingException;
 import org.opcfoundation.ua.encoding.EncodingException;
@@ -39,7 +41,9 @@ import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
 import org.opcfoundation.ua.transport.AsyncWrite;
 import org.opcfoundation.ua.transport.ServerSecureChannel;
 import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
-import org.opcfoundation.ua.transport.security.HttpsSecurityPolicy;
+import org.opcfoundation.ua.transport.security.SecurityMode;
+import org.opcfoundation.ua.transport.security.SecurityPolicy;
+import org.opcfoundation.ua.transport.security.SecurityPolicyUri;
 import org.opcfoundation.ua.transport.tcp.impl.ErrorMessage;
 import org.opcfoundation.ua.utils.StackUtils;
 
@@ -53,8 +57,7 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 	HttpEntity requestEntity;
 	HttpsServerSecureChannel channel;
 	
-	/** OPCUA-SecurityPolicy */
-	String securityPolicyUri;
+	SecurityPolicy securityPolicy;
 	
 	int requestId;
 	AsyncWrite write;
@@ -84,14 +87,27 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 		this.httpExchange = httpExchange;
 		this.channel = channel;		
 		
+		String securityPolicyUri = null;
 		if ( httpRequest instanceof HttpMessage ) {
 			HttpMessage msg = (HttpMessage) httpRequest;
 	        Header header = msg.getFirstHeader("OPCUA-SecurityPolicy");
 	        if ( header!=null ) {
 	        	securityPolicyUri = header.getValue();
 	        }
-	        if ( securityPolicyUri == null ) securityPolicyUri = HttpsSecurityPolicy.URI_TLS_1_0;
+	        if ( securityPolicyUri == null ) securityPolicyUri = SecurityPolicyUri.URI_BINARY_NONE; //1.04 Part 7.4.1
 		}
+		if(securityPolicyUri == null || securityPolicyUri.isEmpty()) {
+			securityPolicy = SecurityPolicy.NONE;
+		}else {
+			try {
+				securityPolicy = SecurityPolicy.getSecurityPolicy(securityPolicyUri);
+			} catch (ServiceResultException e) {
+				logger.error("Encountered unknown SecurityPolicyUri, {}", securityPolicyUri, e);
+				throw new RuntimeException();
+			}
+		}
+		
+		
 	}
 	
 	/** {@inheritDoc} */
@@ -130,6 +146,14 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
 		return write;
 	}
 
+	/**
+	 * Returns {@link SecurityPolicy} equivalent of the given String as part of the header 'OPCUA-SecurityPolicy'.
+	 * {@link SecurityPolicy#NONE} is used if the header is not set (as defined in 1.04 Part 6 section 7.4.1).
+	 */
+	public SecurityPolicy getSecurityPolicy() {
+		return securityPolicy;
+	}
+	
 	/** {@inheritDoc} */
 	@Override
 	public void run() {
@@ -256,6 +280,21 @@ class HttpsServerPendingRequest extends EndpointServiceRequest<ServiceRequest, S
     		endpoint.pendingRequests.remove(requestId);
     	}
     }
+
+	@Override
+	public SecurityMode getSecurityMode() {
+		/*
+		 * Note that this cannot be determined from the getChannel, as that is per
+		 * 1.04 Part 6 section 7.4.1. all HTTPS is treated as a single SecureChannel
+		 * and thus cannot represent the client selection.
+		 */
+		
+		if(SecurityPolicy.NONE == securityPolicy) {
+			return SecurityMode.NONE;
+		}
+		//1.04 part 6 section 7.4.1
+		return new SecurityMode(securityPolicy, MessageSecurityMode.Sign);
+	}
 	
 	
 }

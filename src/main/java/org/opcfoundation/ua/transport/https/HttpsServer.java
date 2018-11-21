@@ -376,7 +376,8 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 					}
 					public void initalize(SSLEngine sslengine) throws SSLException {
 						//Enforce client cert validation
-						sslengine.setNeedClientAuth(true);
+						//GH#159 and 1.04 Part 6 section 7.4, server shall not use HTTPS cert client auth
+						//sslengine.setNeedClientAuth(true);
 						//sslengine.setEnabledCipherSuites( calcCipherSuites() );
 					}
 			    };

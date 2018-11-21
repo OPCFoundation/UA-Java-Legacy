@@ -146,32 +146,32 @@ public class TestCrypto extends TestCase {
       }
     }
     
-    public void testEncryptDecryptPubSub128WithBc() throws Exception {
-      try {
-        // Sample values from: https://tools.ietf.org/html/rfc3686#section-6
-        byte[] key = javax.xml.bind.DatatypeConverter.parseHexBinary("7691BE035E5020A8AC6E618529F9A0DC");
-        byte[] iv = javax.xml.bind.DatatypeConverter.parseHexBinary("00E0017B27777F3F4A1786F000000001");
-        byte[] input = javax.xml.bind.DatatypeConverter.parseHexBinary("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20212223");
-        byte[] output = javax.xml.bind.DatatypeConverter.parseHexBinary("C1CF48A89F2FFDD9CF4652E9EFDB72D74540A42BDE6D7836D59A5CEAAEF3105325B2072F");
-        encryptDecryptSymm(SecurityPolicy.PUBSUB_AES128_CTR, key, iv, input, output);
-      } finally {
-          _tearDown();
-      }
-    }
-    
-    public void testEncryptDecryptPubSub256WithBc() throws Exception {
-      try {
-        // Sample values from: https://tools.ietf.org/html/rfc3686#section-6
-        byte[] key = javax.xml.bind.DatatypeConverter.parseHexBinary("FF7A617CE69148E4F1726E2F43581DE2AA62D9F805532EDFF1EED687FB54153D");
-        byte[] iv = javax.xml.bind.DatatypeConverter.parseHexBinary("001CC5B751A51D70A1C1114800000001");
-        byte[] input = javax.xml.bind.DatatypeConverter.parseHexBinary("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20212223");
-        byte[] output = javax.xml.bind.DatatypeConverter.parseHexBinary("EB6C52821D0BBBF7CE7594462ACA4FAAB407DF866569FD07F48CC0B583D6071F1EC0E6B8");
-        encryptDecryptSymm(SecurityPolicy.PUBSUB_AES256_CTR, key, iv, input, output);
-      } finally {
-          _tearDown();
-      }
-
-    }    
+//    public void testEncryptDecryptPubSub128WithBc() throws Exception {
+//      try {
+//        // Sample values from: https://tools.ietf.org/html/rfc3686#section-6
+//        byte[] key = javax.xml.bind.DatatypeConverter.parseHexBinary("7691BE035E5020A8AC6E618529F9A0DC");
+//        byte[] iv = javax.xml.bind.DatatypeConverter.parseHexBinary("00E0017B27777F3F4A1786F000000001");
+//        byte[] input = javax.xml.bind.DatatypeConverter.parseHexBinary("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20212223");
+//        byte[] output = javax.xml.bind.DatatypeConverter.parseHexBinary("C1CF48A89F2FFDD9CF4652E9EFDB72D74540A42BDE6D7836D59A5CEAAEF3105325B2072F");
+//        encryptDecryptSymm(SecurityPolicy.PUBSUB_AES128_CTR, key, iv, input, output);
+//      } finally {
+//          _tearDown();
+//      }
+//    }
+//    
+//    public void testEncryptDecryptPubSub256WithBc() throws Exception {
+//      try {
+//        // Sample values from: https://tools.ietf.org/html/rfc3686#section-6
+//        byte[] key = javax.xml.bind.DatatypeConverter.parseHexBinary("FF7A617CE69148E4F1726E2F43581DE2AA62D9F805532EDFF1EED687FB54153D");
+//        byte[] iv = javax.xml.bind.DatatypeConverter.parseHexBinary("001CC5B751A51D70A1C1114800000001");
+//        byte[] input = javax.xml.bind.DatatypeConverter.parseHexBinary("000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F20212223");
+//        byte[] output = javax.xml.bind.DatatypeConverter.parseHexBinary("EB6C52821D0BBBF7CE7594462ACA4FAAB407DF866569FD07F48CC0B583D6071F1EC0E6B8");
+//        encryptDecryptSymm(SecurityPolicy.PUBSUB_AES256_CTR, key, iv, input, output);
+//      } finally {
+//          _tearDown();
+//      }
+//
+//    }
 	
     public void encryptDecryptSymm(SecurityPolicy policy, byte[] key, byte[] iv, byte[] input, byte[] output) throws ServiceResultException {
       

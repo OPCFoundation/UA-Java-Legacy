@@ -29,10 +29,7 @@
 
 package org.opcfoundation.ua.core;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumSet;
-import java.util.List;
 
 import org.opcfoundation.ua.builtintypes.Enumeration; 
 import org.opcfoundation.ua.builtintypes.NodeId;
@@ -49,8 +46,11 @@ public enum MessageSecurityMode implements Enumeration {
     SignAndEncrypt;
 	
 	public static final NodeId ID = Identifiers.MessageSecurityMode;
-	public static EnumSet<MessageSecurityMode> NONE = EnumSet.noneOf( MessageSecurityMode.class );
-	public static EnumSet<MessageSecurityMode> ALL = EnumSet.allOf( MessageSecurityMode.class );
+
+	/**
+	 * A helper set that contains None, Sign and SignAndEncrypt.
+	 */
+	public static EnumSet<MessageSecurityMode> ALL = EnumSet.of(None, Sign, SignAndEncrypt);
 	
 	@Override
 	public int getValue() {

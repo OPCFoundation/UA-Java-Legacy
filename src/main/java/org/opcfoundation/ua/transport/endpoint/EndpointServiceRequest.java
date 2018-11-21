@@ -21,6 +21,7 @@ import org.opcfoundation.ua.core.ServiceFault;
 import org.opcfoundation.ua.transport.AsyncWrite;
 import org.opcfoundation.ua.transport.Endpoint;
 import org.opcfoundation.ua.transport.ServerSecureChannel;
+import org.opcfoundation.ua.transport.security.SecurityMode;
 
 /**
  * Asynchronous message exchange.
@@ -76,6 +77,11 @@ public abstract class EndpointServiceRequest<Request extends ServiceRequest, Res
 	public Server getServer() {
 		return server;
 	}
+	
+	/**
+	 * A SecurityMode. Only relevant when as part of the CreateSessionRequest/Response.
+	 */
+	public abstract SecurityMode getSecurityMode();
 	
 	/**
 	 * Get endpoint

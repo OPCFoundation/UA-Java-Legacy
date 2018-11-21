@@ -27,7 +27,10 @@ package org.opcfoundation.ua.examples;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.interfaces.RSAPrivateKey;
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.http.conn.ssl.SSLSocketFactory;
@@ -72,6 +75,7 @@ import org.opcfoundation.ua.core.HistoryReadResponse;
 import org.opcfoundation.ua.core.HistoryUpdateRequest;
 import org.opcfoundation.ua.core.HistoryUpdateResponse;
 import org.opcfoundation.ua.core.Identifiers;
+import org.opcfoundation.ua.core.MessageSecurityMode;
 import org.opcfoundation.ua.core.NodeManagementServiceSetHandler;
 import org.opcfoundation.ua.core.QueryFirstRequest;
 import org.opcfoundation.ua.core.QueryFirstResponse;
@@ -250,7 +254,7 @@ public class ServerExample1 {
       application.getHttpsSettings().setCertificateValidator(CertificateValidator.ALLOW_ALL);
 
       // The HTTPS SecurityPolicies are defined separate from the endpoint securities
-      application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL);
+      application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
 
       // Peer verifier
       application.getHttpsSettings().setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
@@ -273,13 +277,23 @@ public class ServerExample1 {
         bindAddress = "https://" + addr + ":8443/UAExample";
         endpointAddress = "https://" + hostname + ":8443/UAExample";
         System.out.println(endpointAddress + " bound at " + bindAddress);
-        // The HTTPS ports are using NONE OPC security
+        /*
+         * Please read specification 1.04 Part 6 section 7.4.1,
+         * also sign modes can be used in addition to none in HTTPS.
+         */
         bind(bindAddress, endpointAddress, SecurityMode.NONE);
 
         bindAddress = "opc.tcp://" + addr + ":8666/UAExample";
         endpointAddress = "opc.tcp://" + hostname + ":8666/UAExample";
         System.out.println(endpointAddress + " bound at " + bindAddress);
-        bind(bindAddress, endpointAddress, SecurityMode.ALL);
+        
+        Set<SecurityPolicy> policies = new HashSet<SecurityPolicy>();
+        policies.add(SecurityPolicy.NONE);
+        policies.addAll(SecurityPolicy.ALL_SECURE_101);
+        policies.addAll(SecurityPolicy.ALL_SECURE_102);
+        policies.addAll(SecurityPolicy.ALL_SECURE_103);
+        policies.addAll(SecurityPolicy.ALL_SECURE_104);
+        bind(bindAddress, endpointAddress, SecurityMode.combinations(MessageSecurityMode.ALL, policies));
       }
 
       //////////////////////////////////////

@@ -12,6 +12,10 @@
 
 package org.opcfoundation.ua.transport.security;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.opcfoundation.ua.core.MessageSecurityMode;
 
 /**
@@ -36,56 +40,57 @@ public final class SecurityMode {
 	public final static SecurityMode AES128_SIGN = new SecurityMode(SecurityPolicy.AES128_SHA256_RSAOAEP, MessageSecurityMode.Sign);
 	public final static SecurityMode AES256_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.AES256_SHA256_RSAPSS, MessageSecurityMode.SignAndEncrypt);
 	public final static SecurityMode AES256_SIGN = new SecurityMode(SecurityPolicy.AES256_SHA256_RSAPSS, MessageSecurityMode.Sign);
-	public final static SecurityMode PUBSUB_AES128CTR_SIGN = new SecurityMode(SecurityPolicy.PUBSUB_AES128_CTR, MessageSecurityMode.Sign);
-	public final static SecurityMode PUBSUB_AES256CTR_SIGN = new SecurityMode(SecurityPolicy.PUBSUB_AES256_CTR, MessageSecurityMode.Sign);
-	public final static SecurityMode PUBSUB_AES128CTR_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.PUBSUB_AES128_CTR, MessageSecurityMode.SignAndEncrypt);
-	public final static SecurityMode PUBSUB_AES256CTR_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.PUBSUB_AES256_CTR, MessageSecurityMode.SignAndEncrypt);
+	
+//	public final static SecurityMode PUBSUB_AES128CTR_SIGN = new SecurityMode(SecurityPolicy.PUBSUB_AES128_CTR, MessageSecurityMode.Sign);
+//	public final static SecurityMode PUBSUB_AES256CTR_SIGN = new SecurityMode(SecurityPolicy.PUBSUB_AES256_CTR, MessageSecurityMode.Sign);
+//	public final static SecurityMode PUBSUB_AES128CTR_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.PUBSUB_AES128_CTR, MessageSecurityMode.SignAndEncrypt);
+//	public final static SecurityMode PUBSUB_AES256CTR_SIGN_ENCRYPT = new SecurityMode(SecurityPolicy.PUBSUB_AES256_CTR, MessageSecurityMode.SignAndEncrypt);
 
+	//Helper for collections 
+	public final static SecurityMode[] EMPTY_ARRAY = new SecurityMode[0];
 	
 	// Unsecure Security Mode
 	public final static SecurityMode NONE = new SecurityMode(SecurityPolicy.NONE, MessageSecurityMode.None);
-	
-	// Security Mode Sets
-	// The 101-modes are the default for the time being, until all stacks add support for BASIC256SHA256
-	public final static SecurityMode[] ALL_104 = new SecurityMode[] {NONE, BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT, BASIC256SHA256_SIGN, BASIC256SHA256_SIGN_ENCRYPT, AES128_SIGN, AES128_SIGN_ENCRYPT, AES256_SIGN, AES256_SIGN_ENCRYPT}; 
-	public final static SecurityMode[] ALL_102 = new SecurityMode[] {NONE, BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT, BASIC256SHA256_SIGN, BASIC256SHA256_SIGN_ENCRYPT}; 
-	public final static SecurityMode[] ALL_101 = new SecurityMode[] {NONE, BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT}; 
-	public final static SecurityMode[] ALL = ALL_101;
-	
-	public final static SecurityMode[] SECURE_104 = new SecurityMode[] {BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT, BASIC256SHA256_SIGN, BASIC256SHA256_SIGN_ENCRYPT, AES128_SIGN, AES128_SIGN_ENCRYPT, AES256_SIGN, AES256_SIGN_ENCRYPT}; 
-	public final static SecurityMode[] SECURE_102 = new SecurityMode[] {BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT, BASIC256SHA256_SIGN, BASIC256SHA256_SIGN_ENCRYPT}; 
-	public final static SecurityMode[] SECURE_101 = new SecurityMode[] {BASIC128RSA15_SIGN, BASIC128RSA15_SIGN_ENCRYPT, BASIC256_SIGN, BASIC256_SIGN_ENCRYPT}; 
-	public final static SecurityMode[] SECURE = SECURE_101;
-	
-	public final static SecurityMode[] NON_SECURE = new SecurityMode[] {NONE};
 
 	private final SecurityPolicy securityPolicy;
 	private final MessageSecurityMode messageSecurityMode;
 	
 	/**
-	 * Create all permutations of security policies and message security modes.
-	 *
-	 * @param securityPolicies an array of {@link org.opcfoundation.ua.transport.security.SecurityPolicy} objects.
-	 * @param messageSecurityModes an array of {@link org.opcfoundation.ua.core.MessageSecurityMode} objects.
-	 * @return all permutations
+	 * Creates all sensible combinations of the given {@link MessageSecurityMode} and {@link SecurityPolicy} sets. 
+	 * Both {@link MessageSecurityMode#None} and {@link SecurityPolicy#NONE} will one by used if the other is present, and wont be combined with any others,
+	 * i.e. a {@link SecurityMode#NONE} is only present in the list, if both {@link MessageSecurityMode#None} and {@link SecurityPolicy#NONE} are present in the respective lists.
+	 * If either set is null or empty, an empty set is returned. The {@link MessageSecurityMode#Invalid} is ignored.
+	 * 
+	 * @param modes set of modes
+	 * @param policies set of policies
+	 * @return set of {@link SecurityMode}s, containing all permutations (with the None mode/policy pairing only with the other None).
 	 */
-	public static SecurityMode[] create(SecurityPolicy[] securityPolicies, MessageSecurityMode[] messageSecurityModes)
-	{
-		SecurityMode[] result = new SecurityMode[ securityPolicies.length * messageSecurityModes.length ];
-		for (int i=0; i<securityPolicies.length; i++) {
-			for (int j=0; j<messageSecurityModes.length; j++) {
-				int x = i*messageSecurityModes.length + j;
-				result[x] = new SecurityMode(securityPolicies[i], messageSecurityModes[j]);
+	public static Set<SecurityMode> combinations(Set<MessageSecurityMode> modes, Set<SecurityPolicy> policies){
+		if(modes == null || policies == null || modes.isEmpty() || policies.isEmpty()) {
+			return Collections.emptySet();
+		}
+		Set<SecurityMode> r = new HashSet<SecurityMode>();
+		if(modes.contains(MessageSecurityMode.None) && policies.contains(SecurityPolicy.NONE)) {
+			r.add(SecurityMode.NONE);
+		}
+		for(MessageSecurityMode mode : modes) {
+			if(MessageSecurityMode.None == mode || MessageSecurityMode.Invalid == mode) {
+				continue;
+			}
+			for(SecurityPolicy policy : policies) {
+				if(SecurityPolicy.NONE == policy) {
+					continue;
+				}
+				r.add(new SecurityMode(policy, mode));
 			}
 		}
-		return result;
+		return r;
 	}
-		
+	
+
 	/**
-	 * <p>Constructor for SecurityMode.</p>
-	 *
-	 * @param securityPolicy a {@link org.opcfoundation.ua.transport.security.SecurityPolicy} object.
-	 * @param messageSecurityMode a {@link org.opcfoundation.ua.core.MessageSecurityMode} object.
+	 * Constructs a new SecurityMode combination of the given {@link SecurityPolicy} and {@link MessageSecurityMode}. Note! it is recommended to use the existing constants 
+	 * or the {@link #combinations(Set, Set)} methods using the constants of the given classes instead of calling this directly.
 	 */
 	public SecurityMode(SecurityPolicy securityPolicy, MessageSecurityMode messageSecurityMode) {
 		if (securityPolicy==null || messageSecurityMode==null) 
@@ -130,20 +135,6 @@ public final class SecurityMode {
 	@Override
 	public String toString() {
 		return "["+securityPolicy.getPolicyUri()+","+messageSecurityMode+"]";
-	}
-	
-	/**
-	 * <p>join.</p>
-	 *
-	 * @param a an array of {@link org.opcfoundation.ua.transport.security.SecurityMode} objects.
-	 * @param b an array of {@link org.opcfoundation.ua.transport.security.SecurityMode} objects.
-	 * @return an array of {@link org.opcfoundation.ua.transport.security.SecurityMode} objects.
-	 */
-	public static SecurityMode[] join(SecurityMode[] a, SecurityMode[] b) {
-		SecurityMode[] result = new SecurityMode[a.length + b.length];
-		for ( int i=0; i<a.length; i++) result[i] = a[i];
-		for ( int j=0; j<b.length; j++) result[j+a.length] = b[j];
-		return result;
 	}
 	
 }

@@ -30,7 +30,7 @@ import org.opcfoundation.ua.transport.tcp.nio.OpcTcpServer;
 public interface EndpointServer extends CloseableObject, ConnectionMonitor {
 
 	/** Constant <code>discoveryEndpoint</code> */
-	public static final Endpoint discoveryEndpoint = new Endpoint("", SecurityMode.ALL);
+	public static final Endpoint discoveryEndpoint = new Endpoint("", SecurityMode.NONE);
 	
 	
 	/**

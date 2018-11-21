@@ -29,10 +29,7 @@
 
 package _PackageName_;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumSet;
-import java.util.List;
 
 import org.opcfoundation.ua.builtintypes.Enumeration; 
 import org.opcfoundation.ua.builtintypes.NodeId;
@@ -45,8 +42,11 @@ public enum _ClassName_ implements Enumeration {
 
 _Content_	
 	public static final NodeId ID = Identifiers._ClassName_;
-	public static EnumSet<_ClassName_> NONE = EnumSet.noneOf( _ClassName_.class );
-	public static EnumSet<_ClassName_> ALL = EnumSet.allOf( _ClassName_.class );
+
+	/**
+	 * A helper set that contains None, Sign and SignAndEncrypt.
+	 */
+	public static EnumSet<_ClassName_> ALL = EnumSet.of(None, Sign, SignAndEncrypt);
 	
 	@Override
 	public int getValue() {

@@ -586,7 +586,7 @@ public class EndpointUtil {
 			if (port == 0 || port == -1)
 				port = UriUtil.defaultPort(proto);
 
-			if (proto.equals("opc.tcp") || proto.equals("http") || proto.equals("https")) {
+			if (proto.equals("opc.tcp") || proto.equals("http") || proto.equals("opc.https")) {
 				// Bind to the host in endpoint uri, and to no other interface
 
 				try {

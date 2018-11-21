@@ -40,7 +40,6 @@ import org.opcfoundation.ua.transport.endpoint.AbstractServerSecureChannel;
 import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
 import org.opcfoundation.ua.transport.security.Cert;
 import org.opcfoundation.ua.transport.security.KeyPair;
-import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
 import org.opcfoundation.ua.transport.security.SecurityConfiguration;
 import org.opcfoundation.ua.transport.security.SecurityMode;
 import org.opcfoundation.ua.transport.security.SecurityPolicy;
@@ -150,13 +149,11 @@ public class OpcTcpServerSecureChannel extends AbstractServerSecureChannel {
 		getServer().getServiceHandlerComposition().serve(req);
 	}
 
-	private SecurityToken createToken(OpenSecureChannelRequest req, InputMessage mb) throws ServiceResultException
-	{
+	private SecurityToken createToken(OpenSecureChannelRequest req, InputMessage mb) throws ServiceResultException 	{
 		ByteString clientNonce = req.getClientNonce();
 		int tokenId = tokenIdCounter.incrementAndGet();
 
-		SecurityAlgorithm algo = securityConfiguration.getSecurityPolicy().getSymmetricEncryptionAlgorithm();
-		ByteString serverNonce = CryptoUtil.createNonce( algo );
+		ByteString serverNonce = CryptoUtil.createNonce(securityConfiguration.getSecurityPolicy().getSecureChannelNonceLength());
 		
 		final UnsignedInteger tokenLifetime = 
 			req.getRequestedLifetime() != null && req.getRequestedLifetime().intValue() > 0 

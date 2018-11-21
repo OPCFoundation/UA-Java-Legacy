@@ -150,11 +150,11 @@ public class ScCryptoProvider implements CryptoProvider {
 					throws ServiceResultException {
 
 		final BufferedBlockCipher cipher;
-		if(SecurityPolicy.PUBSUB_AES128_CTR.equals(policy) || SecurityPolicy.PUBSUB_AES256_CTR.equals(policy)) {
-			cipher = new BufferedBlockCipher(new SICBlockCipher(new AESEngine()));
-		}else {
+//		if(SecurityPolicy.PUBSUB_AES128_CTR.equals(policy) || SecurityPolicy.PUBSUB_AES256_CTR.equals(policy)) {
+//			cipher = new BufferedBlockCipher(new SICBlockCipher(new AESEngine()));
+//		}else {
 			cipher = new BufferedBlockCipher(new CBCBlockCipher(new AESEngine()));
-		}
+//		}
 
 		cipher.init(false, new ParametersWithIV(new KeyParameter(encryptingKey), iv));
 
@@ -217,11 +217,11 @@ public class ScCryptoProvider implements CryptoProvider {
 					throws ServiceResultException {
 
 		final BufferedBlockCipher cipher;
-		if(SecurityPolicy.PUBSUB_AES128_CTR.equals(policy) || SecurityPolicy.PUBSUB_AES256_CTR.equals(policy)) {
-			cipher = new BufferedBlockCipher(new SICBlockCipher(new AESEngine()));
-		}else {
+//		if(SecurityPolicy.PUBSUB_AES128_CTR.equals(policy) || SecurityPolicy.PUBSUB_AES256_CTR.equals(policy)) {
+//			cipher = new BufferedBlockCipher(new SICBlockCipher(new AESEngine()));
+//		}else {
 			cipher = new BufferedBlockCipher(new CBCBlockCipher(new RijndaelEngine()));
-		}
+//		}
 
 		cipher.init(true, new ParametersWithIV(new KeyParameter(encryptingKey), iv));
 

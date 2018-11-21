@@ -33,7 +33,10 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -85,6 +88,7 @@ import org.opcfoundation.ua.transport.security.CertificateValidator;
 import org.opcfoundation.ua.transport.security.HttpsSecurityPolicy;
 import org.opcfoundation.ua.transport.security.KeyPair;
 import org.opcfoundation.ua.transport.security.SecurityMode;
+import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.EndpointUtil;
 import org.slf4j.Logger;
@@ -102,12 +106,6 @@ public class BigCertificateExample {
   public static final String URL_OPCTCP = "opc.tcp://localhost:8666/UAExample";
 
   public static final String URL = URL_OPCTCP;
-
-  // Defines the client side selection of HTTPS Security Policies. The server is always initialized
-  // with HttpsSecurityPolicy.ALL
-  public static final HttpsSecurityPolicy[] TLS_1_0_ONLY = new HttpsSecurityPolicy[] {HttpsSecurityPolicy.TLS_1_0};
-  public static final HttpsSecurityPolicy[] TLS_1_1_ONLY = new HttpsSecurityPolicy[] {HttpsSecurityPolicy.TLS_1_1};
-  public static final HttpsSecurityPolicy[] httpsSecurityPolicies = HttpsSecurityPolicy.ALL;
 
   public static void main(String[] args) throws Exception {
     // Create Logger
@@ -162,7 +160,7 @@ public class BigCertificateExample {
       endpoints = EndpointUtil.select(endpoints, null, proto, null, null, null);
       if (proto.equals("https")) {
         endpoints = EndpointUtil.selectByMessageSecurityMode(endpoints, MessageSecurityMode.None);
-        myClient.getApplicationHttpsSettings().setHttpsSecurityPolicies(httpsSecurityPolicies);
+        myClient.getApplicationHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
       } else {
         endpoints = EndpointUtil.selectByMessageSecurityMode(endpoints, MessageSecurityMode.SignAndEncrypt);
       }
@@ -245,7 +243,7 @@ class MyServerExample2 extends Server implements MethodServiceSetHandler, Sessio
     application.getHttpsSettings().setCertificateValidator(CertificateValidator.ALLOW_ALL);
 
     // The HTTPS SecurityPolicies are defined separate from the endpoint securities
-    application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL);
+    application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
 
     // Peer verifier
     application.getHttpsSettings().setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
@@ -261,15 +259,25 @@ class MyServerExample2 extends Server implements MethodServiceSetHandler, Sessio
       bindAddress = "https://" + addr + ":8443/UAExample";
       endpointAddress = "https://" + hostname + ":8443/UAExample";
       System.out.println(endpointAddress + " bound at " + bindAddress);
-      // The HTTPS ports are using NONE OPC security
+      
+      /*
+       * Please read specification 1.04 Part 6 section 7.4.1,
+       * also sign modes can be used in addition to none in HTTPS.
+       */
       bind(bindAddress, endpointAddress, SecurityMode.NONE);
 
       bindAddress = "opc.tcp://" + addr + ":8666/UAExample";
       endpointAddress = "opc.tcp://" + hostname + ":8666/UAExample";
       System.out.println(endpointAddress + " bound at " + bindAddress);
 
-      // ALL_102 includes BASIC256SHA256 as well
-      bind(bindAddress, endpointAddress, SecurityMode.ALL_102);
+      // Select SecurityModes
+      Set<SecurityPolicy> policies = new HashSet<SecurityPolicy>();
+      policies.add(SecurityPolicy.NONE);
+      policies.addAll(SecurityPolicy.ALL_SECURE_101);
+      policies.addAll(SecurityPolicy.ALL_SECURE_102);
+      policies.addAll(SecurityPolicy.ALL_SECURE_103);
+      policies.addAll(SecurityPolicy.ALL_SECURE_104);
+      bind(bindAddress, endpointAddress, SecurityMode.combinations(MessageSecurityMode.ALL, policies));
     }
 
     //////////////////////////////////////

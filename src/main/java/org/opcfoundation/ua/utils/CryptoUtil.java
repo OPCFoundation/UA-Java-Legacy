@@ -47,6 +47,7 @@ import org.opcfoundation.ua.transport.security.CryptoProvider;
 import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
 import org.opcfoundation.ua.transport.security.SecurityAlgorithm.AlgorithmType;
 import org.opcfoundation.ua.transport.security.SecurityConfiguration;
+import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -170,7 +171,9 @@ public class CryptoUtil {
 	 * @param algorithm a {@link org.opcfoundation.ua.transport.security.SecurityAlgorithm} object.
 	 * @return an array of byte.
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if any.
+	 * @deprecated use {@link #createNonce(int)} and get the size from {@link SecurityPolicy#getSecureChannelNonceLength()} directly
 	 */
+	@Deprecated
 	public static ByteString createNonce(SecurityAlgorithm algorithm)
 			throws ServiceResultException {
 		return createNonce(getNonceLength(algorithm));
@@ -451,7 +454,9 @@ public class CryptoUtil {
 	 * @return the length of the nonce in bytes
 	 * @throws org.opcfoundation.ua.common.ServiceResultException
 	 *             Bad_SecurityPolicyRejected, if the algorithm is not supported
+	 * @deprecated use {@link SecurityPolicy#getSecureChannelNonceLength()} directly instead
 	 */
+	@Deprecated
 	public static int getNonceLength(SecurityAlgorithm algorithm)
 			throws ServiceResultException {
 		if (algorithm == null)

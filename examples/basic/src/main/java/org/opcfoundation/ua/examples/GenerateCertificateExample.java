@@ -24,6 +24,10 @@
 
 package org.opcfoundation.ua.examples;
 
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.opcfoundation.ua.application.Application;
 import org.opcfoundation.ua.application.Client;
@@ -80,7 +84,14 @@ public class GenerateCertificateExample {
     // Bind my server to my endpoint. This opens the port 6001 as well.
     String bindAddress = "opc.tcp://localhost:6001/UAExample";
     String endpointAddress = "opc.tcp://localhost:6001/UAExample";
-    myServer.bind(bindAddress, endpointAddress, SecurityMode.ALL);
+    
+    Set<SecurityPolicy> policies = new HashSet<SecurityPolicy>();
+    policies.add(SecurityPolicy.NONE);
+    policies.addAll(SecurityPolicy.ALL_SECURE_101);
+    policies.addAll(SecurityPolicy.ALL_SECURE_102);
+    policies.addAll(SecurityPolicy.ALL_SECURE_103);
+    policies.addAll(SecurityPolicy.ALL_SECURE_104);
+    myServer.bind(bindAddress, endpointAddress, SecurityMode.combinations(MessageSecurityMode.ALL, policies));
     //////////////////////////////////////
 
 

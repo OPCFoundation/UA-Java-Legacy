@@ -147,7 +147,7 @@ public class SampleClient {
     myClient.getApplication().getHttpsSettings().setCertificateValidator(myValidator);
 
     // The HTTPS SecurityPolicies are defined separate from the endpoint securities
-    myClient.getApplication().getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL);
+    myClient.getApplication().getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
 
     // The certificate to use for HTTPS
     KeyPair myHttpsCertificate = ExampleKeys.getHttpsCert("SampleClient");

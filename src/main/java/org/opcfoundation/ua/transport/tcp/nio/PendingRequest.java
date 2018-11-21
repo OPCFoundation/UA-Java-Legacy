@@ -19,6 +19,7 @@ import org.opcfoundation.ua.transport.AsyncWrite;
 import org.opcfoundation.ua.transport.Endpoint;
 import org.opcfoundation.ua.transport.ServerSecureChannel;
 import org.opcfoundation.ua.transport.endpoint.EndpointServiceRequest;
+import org.opcfoundation.ua.transport.security.SecurityMode;
 import org.opcfoundation.ua.transport.tcp.impl.TcpMessageType;
 
 /**
@@ -67,6 +68,12 @@ public class PendingRequest extends EndpointServiceRequest<ServiceRequest, Servi
 		write = new AsyncWrite(response);
 		sendResponse(write);
 		return write;
+	}
+
+	@Override
+	public SecurityMode getSecurityMode() {
+		//For opc.tcp each securechannel is unique and can represent client selection of the mode
+		return new SecurityMode(getChannel().getSecurityPolicy(), getChannel().getMessageSecurityMode());
 	}
 	
 }
