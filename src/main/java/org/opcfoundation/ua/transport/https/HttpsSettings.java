@@ -21,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.util.Set;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -329,6 +330,10 @@ public class HttpsSettings {
 
 	public void setHttpsSecurityPolicies(HttpsSecurityPolicy... httpsSecurityPolicy) {
 		this.httpsSecurityPolicies = httpsSecurityPolicy;
+	}
+	
+	public void setHttpsSecurityPolicies(Set<HttpsSecurityPolicy> httpsSecurityPolicies) {
+		setHttpsSecurityPolicies(httpsSecurityPolicies.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
 	}
 
 	

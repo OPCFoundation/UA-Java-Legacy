@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -95,7 +97,7 @@ public class HttpsClient implements ITransportChannel {
 	/** Connect Url */
 	String connectUrl;
 	/** Security policy */
-	HttpsSecurityPolicy securityPolicy;
+	HttpsSecurityPolicy[] securityPolicies;
 	
 	/** Executor */
 	Executor executor = StackUtils.getBlockingWorkExecutor();
@@ -185,17 +187,11 @@ public class HttpsClient implements ITransportChannel {
 		this.securityPolicyUri = tcs.getDescription().getSecurityPolicyUri();
 		this.transportChannelSettings = tcs;
 		HttpsSettings httpsSettings = tcs.getHttpsSettings();
-		HttpsSecurityPolicy[] policies = httpsSettings.getHttpsSecurityPolicies();
-		if (policies != null && policies.length > 0)
-			securityPolicy = policies[policies.length-1];
-		else
-			securityPolicy = HttpsSecurityPolicy.TLS_1_1;
-		// securityPolicy = SecurityPolicy.getSecurityPolicy( this.securityPolicyUri );
-		if ( securityPolicy != HttpsSecurityPolicy.TLS_1_0 &&
-				securityPolicy != HttpsSecurityPolicy.TLS_1_1 &&
-				securityPolicy != HttpsSecurityPolicy.TLS_1_2  &&
-				securityPolicy != HttpsSecurityPolicy.TLS_1_2_PFS)
-				throw new ServiceResultException( StatusCodes.Bad_SecurityChecksFailed, "Https Client doesn't support securityPolicy "+securityPolicy );
+		securityPolicies = httpsSettings.getHttpsSecurityPolicies();
+		if(securityPolicies == null && securityPolicies.length == 0) {
+			throw new ServiceResultException( StatusCodes.Bad_SecurityChecksFailed, "No HttpsSecurityPolicies defined");
+		}
+				
 		if (logger.isDebugEnabled()) {
 			logger.debug("initialize: url={}; settings={}", tcs.getDescription().getEndpointUrl(), ObjectUtils.printFields(tcs));
 		}
@@ -240,11 +236,19 @@ public class HttpsClient implements ITransportChannel {
 		        
 				SSLEngine sslEngine = sslcontext.createSSLEngine();
 				String[] enabledCipherSuites = sslEngine.getEnabledCipherSuites();
-				cipherSuites = CryptoUtil.filterCipherSuiteList(enabledCipherSuites, securityPolicy.getCipherSuites());		    
+				
+				Set<String> policiesChiperSuitesCombinations = new HashSet<String>();
+				for(HttpsSecurityPolicy hsp : securityPolicies) {
+					for(String cipher : hsp.getCipherSuites()) {
+						policiesChiperSuitesCombinations.add(cipher);
+					}
+				}
+				
+				cipherSuites = CryptoUtil.filterCipherSuiteList(enabledCipherSuites, policiesChiperSuitesCombinations.toArray(new String[0]));
 				
 				logger.info( "Enabled protocols in SSL Engine are {}", Arrays.toString( sslEngine.getEnabledProtocols()));
 				logger.info( "Enabled CipherSuites in SSL Engine are {}", Arrays.toString( enabledCipherSuites ) );
-				logger.info( "Client CipherSuite selection for {} is {}", securityPolicy.getPolicyUri(), Arrays.toString( cipherSuites ));
+				logger.info( "Client CipherSuite selection for {} is {}", Arrays.toString(securityPolicies), Arrays.toString( cipherSuites ));
 
 				Scheme https = new Scheme(UriUtil.SCHEME_HTTPS, 443, sf);
 				sr.register(https);

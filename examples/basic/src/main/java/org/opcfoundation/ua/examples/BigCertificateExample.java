@@ -160,7 +160,7 @@ public class BigCertificateExample {
       endpoints = EndpointUtil.select(endpoints, null, proto, null, null, null);
       if (proto.equals("https")) {
         endpoints = EndpointUtil.selectByMessageSecurityMode(endpoints, MessageSecurityMode.None);
-        myClient.getApplicationHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
+        myClient.getApplicationHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104);
       } else {
         endpoints = EndpointUtil.selectByMessageSecurityMode(endpoints, MessageSecurityMode.SignAndEncrypt);
       }
@@ -243,7 +243,7 @@ class MyServerExample2 extends Server implements MethodServiceSetHandler, Sessio
     application.getHttpsSettings().setCertificateValidator(CertificateValidator.ALLOW_ALL);
 
     // The HTTPS SecurityPolicies are defined separate from the endpoint securities
-    application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
+    application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104);
 
     // Peer verifier
     application.getHttpsSettings().setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);

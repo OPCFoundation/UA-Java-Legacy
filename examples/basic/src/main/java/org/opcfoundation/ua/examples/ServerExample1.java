@@ -254,7 +254,7 @@ public class ServerExample1 {
       application.getHttpsSettings().setCertificateValidator(CertificateValidator.ALLOW_ALL);
 
       // The HTTPS SecurityPolicies are defined separate from the endpoint securities
-      application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
+      application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104);
 
       // Peer verifier
       application.getHttpsSettings().setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);

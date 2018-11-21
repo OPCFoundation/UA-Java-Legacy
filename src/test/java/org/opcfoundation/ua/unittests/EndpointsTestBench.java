@@ -30,11 +30,14 @@
 package org.opcfoundation.ua.unittests;
 import junit.framework.TestCase;
 
+import java.util.HashSet;
+
 import org.opcfoundation.ua.application.Client;
 import org.opcfoundation.ua.application.Server;
 import org.opcfoundation.ua.transport.Endpoint;
 import org.opcfoundation.ua.transport.SecureChannel;
 import org.opcfoundation.ua.transport.security.Cert;
+import org.opcfoundation.ua.transport.security.HttpsSecurityPolicy;
 import org.opcfoundation.ua.transport.security.KeyPair;
 import org.opcfoundation.ua.transport.security.PrivKey;
 import org.opcfoundation.ua.transport.security.SecurityMode;
@@ -76,7 +79,7 @@ public abstract class EndpointsTestBench extends TestCase {
 		KeyPair myServerHttpsKeypair = UnitTestKeys.getKeyPair("https_server", 1024);
 		server.getApplication().getHttpsSettings().setKeyPair(myServerHttpsKeypair);
 		//server.getApplication().getHttpsSettings().setHttpsSecurityPolicies(new HttpsSecurityPolicy[] { httpsSecurityPolicy });
-		server.getApplication().getHttpsSettings().setHttpsSecurityPolicies(null);
+		server.getApplication().getHttpsSettings().setHttpsSecurityPolicies(new HashSet<HttpsSecurityPolicy>());
 		
 		// Create different endpoints for different network interfaces
 		String hostname = EndpointUtil.getHostname();
@@ -125,7 +128,7 @@ public abstract class EndpointsTestBench extends TestCase {
 		KeyPair myClientHttpsKeys = UnitTestKeys.getKeyPair("https_client", 1024);
 		client.getApplicationHttpsSettings().setKeyPair( myClientHttpsKeys );
 		//client.getApplication().getHttpsSettings().setHttpsSecurityPolicies(new HttpsSecurityPolicy[] { SecurityMode.NONE });
-		client.getApplication().getHttpsSettings().setHttpsSecurityPolicies(null);
+		client.getApplication().getHttpsSettings().setHttpsSecurityPolicies(new HashSet<HttpsSecurityPolicy>());
 	}
 	
 	@Override

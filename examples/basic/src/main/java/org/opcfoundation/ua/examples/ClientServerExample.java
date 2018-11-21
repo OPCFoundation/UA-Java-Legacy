@@ -109,7 +109,7 @@ public class ClientServerExample {
     Application myClientApplication = myClient.getApplication();
     myClientApplication.getHttpsSettings().setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
     myClientApplication.getHttpsSettings().setCertificateValidator(CertificateValidator.ALLOW_ALL);
-    myClientApplication.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
+    myClientApplication.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104);
 
 
     //////////////////////////////////////
@@ -174,7 +174,7 @@ class MyServerExample extends Server implements MethodServiceSetHandler, Session
     application.getHttpsSettings().setCertificateValidator(CertificateValidator.ALLOW_ALL);
 
     // The HTTPS SecurityPolicies are defined separate from the endpoint securities
-    application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104.toArray(HttpsSecurityPolicy.EMPTY_ARRAY));
+    application.getHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104);
 
     // Peer verifier
     application.getHttpsSettings().setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
