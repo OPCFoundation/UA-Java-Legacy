@@ -1643,7 +1643,19 @@ public class BinaryDecoder implements IDecoder {
 			int builtinType					= encodingMask & 0x3f;
 			boolean isArray					= (encodingMask & 0x80) == 0x80;
 			boolean hasDimensionLengths		= (encodingMask & 0x40) == 0x40;
-			boolean isNull					= builtinType == 0; // XXX Assumption. null in specs, not specified how.
+			boolean isNull					= builtinType == 0; //1.04 Part 6, section 5.2.2.16
+			
+			/*
+			 * 1.04 Part 6 section 5.2.2.16 Table 15. Built-in type id's 26->31(max value)
+			 * are not defined, and should be treated as if the Value was ByteString.
+			 * ASSUMPTION isArray and hasDimensionLengths should work as-is, and it should 
+			 * mean that an array of ByteStrings etc. is possible this way. See GH#89.
+			 * ASSUMPTION, 6 bits of info, should be 26->63 instead.
+			 */
+			if(builtinType > 25) {
+				builtinType = 15; //ByteString
+			}
+			
 			Object value					= isNull ? null : isArray ? getArrayObject(null, builtinType) : getScalarObject(null, builtinType);
 			int[] dims						= hasDimensionLengths ? getInt32Array_(null) : null;
 			boolean multiDimension			= isArray && dims != null && dims.length>1;

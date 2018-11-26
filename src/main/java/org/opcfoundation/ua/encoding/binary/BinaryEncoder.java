@@ -2479,10 +2479,16 @@ public class BinaryEncoder implements IEncoder {
 			isDecimal = true;
 		}else {
 			isDecimal = false;
-			if (Structure.class.isAssignableFrom(compositeClass))
+			if (Structure.class.isAssignableFrom(compositeClass)) {
 				builtinType = 22;
-			else
-				builtinType = BuiltinsMap.ID_MAP.get(compositeClass);
+			}else {
+				if(BuiltinsMap.ID_MAP.containsKey(compositeClass)) {
+					builtinType = BuiltinsMap.ID_MAP.get(compositeClass);
+				}else {
+					throw new EncodingException("Non-suitable composite class for Variant: "+compositeClass);
+				}
+				
+			}
 		}
 		
 		// Scalar

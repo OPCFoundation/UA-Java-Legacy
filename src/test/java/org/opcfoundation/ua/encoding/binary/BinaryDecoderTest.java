@@ -83,6 +83,38 @@ public class BinaryDecoderTest {
 	}
 	
 	@Test
+	public void unknownBuiltInTypeId() throws Exception {
+		ByteString expected = ByteString.valueOf((byte)1,(byte)2,(byte)3);
+		byte[] data = binaryEncode(new Variant(expected));
+		
+		//EncodingMask should look like 0+0+011010 (array+dimensions+typeid)
+		for(int i = 26; i<64;i++) {
+			data[0] = (byte)i;
+			BinaryDecoder sut = new BinaryDecoder(data);
+			sut.setEncoderContext(EncoderContext.getDefaultInstance());
+			ByteString actual = (ByteString) sut.getVariant(null).getValue();
+			assertEquals(expected, actual);
+		}
+	}
+	
+	@Test
+	public void unknownBuiltInTypeIdArrays() throws Exception {
+		ByteString[] expected = new ByteString[] {ByteString.valueOf((byte)1,(byte)2,(byte)3), 
+				ByteString.valueOf((byte)4,(byte)5,(byte)6)};
+		
+		byte[] data = binaryEncode(new Variant(expected));
+
+		//EncodingMask should look like 1+0+011010 (array+dimensions+typeid)
+		for(int i = 26; i<64;i++) {
+			data[0] = (byte) (i | 0x80);
+			BinaryDecoder sut = new BinaryDecoder(data);
+			sut.setEncoderContext(EncoderContext.getDefaultInstance());
+			ByteString[] actual = (ByteString[]) sut.getVariant(null).getValue();
+			assertArrayEquals(expected, actual);
+		}
+	}
+	
+	@Test
 	public void multidimBooleanArray() throws Exception {
 		//TODO refactor to test vs. already encoded data
 		Boolean[][] expected = (Boolean[][]) MultiDimensionArrayUtils.demuxArray(new Boolean[] {true,  true,  true, true}, new int[] {2,2}, Boolean.class);

@@ -23,6 +23,7 @@ import org.opcfoundation.ua.core.ObjectAttributes;
 import org.opcfoundation.ua.core.ServerState;
 import org.opcfoundation.ua.core.ServerStatusDataType;
 import org.opcfoundation.ua.encoding.EncoderContext;
+import org.opcfoundation.ua.encoding.EncodingException;
 import org.opcfoundation.ua.utils.CryptoUtil;
 
 public class BinaryEncoderTest {
@@ -45,6 +46,26 @@ public class BinaryEncoderTest {
 		final DataValue dv2 = dec.getDataValue(null);
 		
 		assertEquals(dv, dv2);
+	}
+	
+	@Test
+	public void unknownBuiltInTypeId() throws Exception {
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		BinaryEncoder enc = new BinaryEncoder(buf);
+		for(int i=26; i<64;i++) {
+			try {
+				enc.putScalar(null, i, "dataTypeDoesNotMatter");
+				fail("Should have throw exception");
+			}catch(EncodingException e) {
+				// expected
+			}
+			try {
+				enc.putArray(null, i, "dataTypeDoesNotMatter");
+				fail("Should have throw exception");
+			}catch (EncodingException e) {
+				// expected
+			}
+		}
 	}
 	
 	@Test
