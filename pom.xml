@@ -51,6 +51,9 @@
       	<configuration>
       		<archive>
       			<addMavenDescriptor>false</addMavenDescriptor>
+      			<manifestEntries>
+      				<Automatic-Module-Name>org.opcfoundation.ua.stack</Automatic-Module-Name>
+      			</manifestEntries>
       		</archive>
       	</configuration>      	
       </plugin>
