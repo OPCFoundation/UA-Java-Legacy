@@ -1,3 +1,35 @@
+1.4.0
+A major release, containing basic support for OPC UA 1.04. 
+
+Important (#159): Fixed HTTPS. Server no longer does client side TLS checks as per part 6. Note that the result means that proper UA HTTPS made with 'None' SecurityMode provides only encryption, not application level authentication. If used in conjunction with UserTokenPolicy Anonymous, anyone can access the server (but the traffic is encrypted, behaves like a normal web server/page). SecurityModes with Sign MessageSecurityMode should be used instead if application level authentication is required (and this then uses the same certs as opc.tcp). Additionally based on 1.04 Part 6, the scheme name is now 'opc.https' (instead of old 'https'), which is a breaking change. The stack 1.4.0 only supports this new scheme. Additionally added SecurityMode getter for EndpointServiceRequest to accommodate other than None modes, as the channel is shared between all HTTPS clients, and therefore cannot be used to determine client selection. Please read 1.04 specification Part 6 for more information.
+
+Important (#164): Moved SunJCE based Crypto and CertificateProvider outside of the stack. See folder 'graveyard' of the repo. They are not expected to work in modern java 9+ versions due to having dependencies to the internal api of the JRE. Additionally they did not work properly in all situations anyway nor were able to support full feature set required by the interfaces/UA. As a result the Bouncy/SpongyCastle in practice is a mandatory dependency to the stack (outside of implementing your own Crypto/CertificateProvider).
+
+Important (#121): SecurityMode constants moved to SecurityPolicy (which is also now enum). HttpsSecurityPolicy is also an enum. SecurityMode.combinations method can be used to make permutations of MessageSecurityMode+SecurityPolicy. This avoids the possible confusions on what is considered 'secure' (sign? or only signAndEncrypt?) as now the constants only define what policies which version of the specification consideres secure. Additionally removed the ALL constant, as users should make the choice about which modes to support. Please read 1.04 Part 7 and determine which policies your application supports (some of them are considered deprecated in 1.04, but are heavily used in the industry still).
+
+Fixed (#12): ExpandeNodeIds no longer defines the uri always for the 0-namespace.
+Fixed (#33): Names of threads are more descriptive, can be configured. See StackUtils class.
+Fixed (#89): Handing of unknown built-in type ids (with assumptions, see the issue)
+Fixed (#102): SpongyCastle should be picked up on android better
+Fixed (#157): Reflection should no longer provide warnings on java 9+
+Fixed (#177): Possible memory leak if StackUtils.shutdown and stack is "restarted". Removed ThreadGroups.
+Fixed (#180): ExtensionObject.binaryEncode was overriding the EncoderContext permanently.
+
+Changed (#169): Changed BinaryEncoder mode to be NonStrict by default. All usecases of the stack codebase always changed it to be NonStrict.
+Changed (#179): ExtensionObject now uses ByteString in places where it previously used byte[].
+Changed (#182): MultidimensionArrayUtils.toString does not by default decode ExtensionObjects. 
+Changed (#168): Removed EncoderCalc. Refactored logic to avoid precalc for the size where possible. 
+
+New (#136): Regenerated classes based on 1.04 resource files (with currently released amendments 1,2,3 for 1.04).
+New (#160): New UA Type Decimal, mapped to Java BigDecimal (with assumptions, see the issue).
+New (#161): Multidimensional array encoding rules outside of Variant.
+New (#163): Support for new security policies defined in 1.04
+New (#168): LimitedByteArrayOutputStream and SizeCalculationOutputStream. Can be used with BinaryEncoder in situations where EncoderCalc was previously used.
+New (#176): Added a server-side timestamp to EndpointServiceRequest.
+New (#178): Added static valueOf(String) method to the unsigned types to match jdk ones.
+New (#174): Added Automatic-Module-Name 'org.opcfoundation.ua.stack' to the manifest. Should help when running in Java 9+ module system. 
+
+
 1.3.346
 Fixed (#167): Removed redundant Message size calculation in TcpConnection.encodeMessage
 Fixed: Added .setProvider("BC") to BouncyCastleUtils.writeToPem as like in others methods of that class
