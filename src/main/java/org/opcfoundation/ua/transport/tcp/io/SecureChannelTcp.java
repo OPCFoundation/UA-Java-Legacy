@@ -1145,7 +1145,11 @@ public class SecureChannelTcp implements IMessageListener, IConnectionListener, 
 			}
 			
 			try {
-				logger.debug("{}: Error recovery reconnect", secureChannelId);				
+				logger.debug("{}: Error recovery reconnect", secureChannelId);
+			
+				if (getTransportChannel()==null)
+					throw new ServiceResultException(StatusCodes.Bad_SecureChannelClosed);
+				
 				getTransportChannel().open();
 				createSecureChannel(true);
 				
