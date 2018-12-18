@@ -158,7 +158,7 @@ public class BigCertificateExample {
       String proto = UriUtil.getTransportProtocol(URL);
       endpoints = EndpointUtil.select(endpoints, CLIENT_KEY_SIZE, CLIENT_KEY_SIZE);
       endpoints = EndpointUtil.select(endpoints, null, proto, null, null, null);
-      if (proto.equals("https")) {
+      if (proto.equals("opc.https")) {
         endpoints = EndpointUtil.selectByMessageSecurityMode(endpoints, MessageSecurityMode.None);
         myClient.getApplicationHttpsSettings().setHttpsSecurityPolicies(HttpsSecurityPolicy.ALL_104);
       } else {
@@ -256,8 +256,8 @@ class MyServerExample2 extends Server implements MethodServiceSetHandler, Sessio
     String hostname = EndpointUtil.getHostname();
     String bindAddress, endpointAddress;
     for (String addr : EndpointUtil.getInetAddressNames()) {
-      bindAddress = "https://" + addr + ":8443/UAExample";
-      endpointAddress = "https://" + hostname + ":8443/UAExample";
+      bindAddress = "opc.https://" + addr + ":8443/UAExample";
+      endpointAddress = "opc.https://" + hostname + ":8443/UAExample";
       System.out.println(endpointAddress + " bound at " + bindAddress);
       
       /*

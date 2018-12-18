@@ -117,7 +117,7 @@ public class ClientServerExample {
     // Get Endpoints like this
     String uri;
     uri = "opc.tcp://localhost:8666/UAExample";
-    // uri = "https://localhost:8443/UAExample";
+    // uri = "opc.https://localhost:8443/UAExample";
 
     SessionChannel myChannel = null;
     try {
@@ -194,8 +194,8 @@ class MyServerExample extends Server implements MethodServiceSetHandler, Session
     String hostname = EndpointUtil.getHostname();
     String bindAddress, endpointAddress;
     for (String addr : EndpointUtil.getInetAddressNames()) {
-      bindAddress = "https://" + addr + ":8443/UAExample";
-      endpointAddress = "https://" + hostname + ":8443/UAExample";
+      bindAddress = "opc.https://" + addr + ":8443/UAExample";
+      endpointAddress = "opc.https://" + hostname + ":8443/UAExample";
       System.out.println(endpointAddress + " bound at " + bindAddress);
       /*
        * Please read specification 1.04 Part 6 section 7.4.1,

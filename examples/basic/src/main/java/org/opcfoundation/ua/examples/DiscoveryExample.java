@@ -52,8 +52,8 @@ public class DiscoveryExample {
     //////// DISCOVER ENDPOINTS ////////
     String uri = "opc.tcp://localhost:8666/UAExample"; // ServerExample1
     // uri = "opc.tcp://localhost:62541/";
-    // uri = "https://localhost:62541/Quickstarts/DataAccessServer";
-    // uri = "https://localhost:62542/Quickstarts/DataAccessServer"
+    // uri = "opc.https://localhost:62541/Quickstarts/DataAccessServer";
+    // uri = "opc.https://localhost:62542/Quickstarts/DataAccessServer"
     EndpointDescription[] endpoints = myClient.discoverEndpoints(uri, "");
     for (EndpointDescription ed : endpoints) {
       System.out.println(ed);

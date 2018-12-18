@@ -67,9 +67,9 @@ public class ClientExample1 {
     // Discover server's endpoints, and choose one
     String publicHostname = InetAddress.getLocalHost().getHostName();
     String url = "opc.tcp://" + publicHostname + ":8666/UAExample"; // ServerExample1
-    // "https://"+publicHostname+":8443/UAExample"; // ServerExample1
+    // "opc.https://"+publicHostname+":8443/UAExample"; // ServerExample1
     // "opc.tcp://"+publicHostname+":51210/"; // :51210=Sample Server
-    // "https://"+publicHostname+":51212/SampleServer/"; // :51212=Sample Server
+    // "opc.https://"+publicHostname+":51212/SampleServer/"; // :51212=Sample Server
     // "opc.tcp://"+publicHostname+":62541/"; // :62541=DataAccess Server
     EndpointDescription[] endpoints = myClient.discoverEndpoints(url);
     // Filter out all but opc.tcp protocol endpoints
@@ -83,7 +83,7 @@ public class ClientExample1 {
       // beginning, the highest at the end of the array
       endpoints = sortBySecurityLevel(endpoints);
     } else {
-      endpoints = selectByProtocol(endpoints, "https");
+      endpoints = selectByProtocol(endpoints, "opc.https");
     }
 
     // Choose one endpoint

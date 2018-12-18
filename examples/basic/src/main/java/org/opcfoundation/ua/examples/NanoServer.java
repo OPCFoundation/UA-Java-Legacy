@@ -1089,8 +1089,8 @@ public class NanoServer {
       String hostname = EndpointUtil.getHostname();
       String bindAddress, endpointAddress;
       for (String addr : EndpointUtil.getInetAddressNames()) {
-        bindAddress = "https://" + addr + ":8443";
-        endpointAddress = "https://" + hostname + ":8443";
+        bindAddress = "opc.https://" + addr + ":8443";
+        endpointAddress = "opc.https://" + hostname + ":8443";
         logger.info("{} bound at {}", endpointAddress, bindAddress);
         /*
          * Please read specification 1.04 Part 6 section 7.4.1,
