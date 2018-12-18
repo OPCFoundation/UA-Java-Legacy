@@ -101,8 +101,8 @@ public class BigCertificateExample {
   // Select key size: 1024, 2048, 4096
   public static final int CLIENT_KEY_SIZE = 4096;
 
-  // Choose protocol: https or opc.tcp
-  public static final String URL_HTTPS = "https://localhost:8443/UAExample";
+  // Choose protocol: opc.https or opc.tcp
+  public static final String URL_HTTPS = "opc.https://localhost:8443/UAExample";
   public static final String URL_OPCTCP = "opc.tcp://localhost:8666/UAExample";
 
   public static final String URL = URL_OPCTCP;
@@ -171,7 +171,7 @@ public class BigCertificateExample {
       ///////// DISCOVER SERVERS /////////
       // Discover server applications
       // ApplicationDescription[] servers = myClient.discoverApplications( new
-      // URI("https://localhost:6001/") );
+      // URI("opc.https://localhost:6001/") );
       // // Choose one application
       // ApplicationDescription server = servers[0];
       // Connect the application
