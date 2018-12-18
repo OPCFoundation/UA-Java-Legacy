@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opcfoundation.ua</groupId>
   <artifactId>opc-ua-stack</artifactId>
-  <version>1.4.0-SNAPSHOT</version>
+  <version>1.4.1-SNAPSHOT</version>
   <name>OPC Foundation Unified Architecture Java Stack</name>
     <properties>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
