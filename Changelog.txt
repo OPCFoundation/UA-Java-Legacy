@@ -1,3 +1,8 @@
+1.4.1
+New (#185): Support for ReverseHello (see the ReverseHelloClientServerExample)
+New: Better configuration of initial timeouts in opc.tcp connections (see OpcTcpSettings)
+Fixed (#187): Changed the 'https' urls in examples to be 'opc.https' to match #159 changes made in 1.4.0
+
 1.4.0
 A major release, containing basic support for OPC UA 1.04. 
 
