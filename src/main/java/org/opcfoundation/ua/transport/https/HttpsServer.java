@@ -819,5 +819,11 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 
 		
 	}
+
+	@Override
+	public void bindReverse(SocketAddress addressToConnect,
+			String endpointUrl) {
+		throw new UnsupportedOperationException("HTTPS does not support ReverseHello");
+	}
 	
 }

@@ -49,6 +49,7 @@ import org.opcfoundation.ua.transport.ResultListener;
 import org.opcfoundation.ua.transport.tcp.impl.Acknowledge;
 import org.opcfoundation.ua.transport.tcp.impl.ErrorMessage;
 import org.opcfoundation.ua.transport.tcp.impl.Hello;
+import org.opcfoundation.ua.transport.tcp.impl.ReverseHello;
 import org.opcfoundation.ua.utils.asyncsocket.AsyncSelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -274,6 +275,7 @@ public class StackUtils {
 			reflectionTable.addStructureInfo( EncodeableDesc.readFromClass(Acknowledge.class, Acknowledge.getFields()) );
 			reflectionTable.addStructureInfo( EncodeableDesc.readFromClass(Hello.class, Hello.getFields()) );
 			reflectionTable.addStructureInfo( EncodeableDesc.readFromClass(ErrorMessage.class, ErrorMessage.getFields()) );
+			reflectionTable.addStructureInfo( EncodeableDesc.readFromClass(ReverseHello.class, ReverseHello.getFields()) );
 			EncodeableReflectionSerializer e = new EncodeableReflectionSerializer(reflectionTable);
 
 			serializer.addSerializer(e);

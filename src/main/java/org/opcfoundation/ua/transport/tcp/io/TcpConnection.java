@@ -28,6 +28,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
@@ -41,6 +42,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
@@ -71,6 +73,7 @@ import org.opcfoundation.ua.encoding.binary.BinaryDecoder;
 import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
 import org.opcfoundation.ua.encoding.binary.IEncodeableSerializer;
 import org.opcfoundation.ua.transport.IConnectionListener;
+import org.opcfoundation.ua.transport.ReverseTransportChannelSettings;
 import org.opcfoundation.ua.transport.SecureChannel;
 import org.opcfoundation.ua.transport.TransportChannelSettings;
 import org.opcfoundation.ua.transport.UriUtil;
@@ -91,12 +94,14 @@ import org.opcfoundation.ua.transport.tcp.impl.ChunkSymmEncryptSigner;
 import org.opcfoundation.ua.transport.tcp.impl.ChunkUtils;
 import org.opcfoundation.ua.transport.tcp.impl.ErrorMessage;
 import org.opcfoundation.ua.transport.tcp.impl.Hello;
+import org.opcfoundation.ua.transport.tcp.impl.ReverseHello;
 import org.opcfoundation.ua.transport.tcp.impl.SecurityToken;
 import org.opcfoundation.ua.transport.tcp.impl.TcpMessageType;
 import org.opcfoundation.ua.utils.CertificateUtils;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.SizeCalculationOutputStream;
 import org.opcfoundation.ua.utils.StackUtils;
+import org.opcfoundation.ua.utils.TimerUtil;
 import org.opcfoundation.ua.utils.bytebuffer.ByteBufferArrayReadable;
 import org.opcfoundation.ua.utils.bytebuffer.ByteBufferArrayWriteable2;
 import org.opcfoundation.ua.utils.bytebuffer.IBinaryReadable;
@@ -139,8 +144,7 @@ import org.opcfoundation.ua.utils.bytebuffer.OutputStreamWriteable;
  *
  * TcpConnection captures security tokens from OpenSecureChannel conversation
  * and uses them for symmetric messaging. The oldest non-expired token is used.
- *
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
+ * 
  */
 public class TcpConnection implements IConnection {
 
@@ -187,6 +191,7 @@ public class TcpConnection implements IConnection {
 	TcpConnectionLimits limits;
 	TcpQuotas quotas = TcpQuotas.DEFAULT_CLIENT_QUOTA;
 	EnumSet<OpcTcpSettings.Flag> flags = EnumSet.noneOf(OpcTcpSettings.Flag.class);
+	int connectTimeout = defaultHandshakeTimeout;
 	int handshakeTimeout = defaultHandshakeTimeout;
 	SecurityConfiguration securityConfiguration;
 
@@ -284,6 +289,14 @@ public class TcpConnection implements IConnection {
 	 * stack) are notified to the listeners
 	 */
 	List<IConnectionListener> connectionListeners = new CopyOnWriteArrayList<IConnectionListener>();
+	
+	/**
+	 * Possible ReverseHello configuration for the client side. If null, 
+	 * then operating in non-reverse mode.
+	 */
+	String reverseHelloServerUri;
+	
+	int reverseHelloAcceptTimeout = defaultReverseHelloAcceptTimeout;
 
 	private static int receiveBufferSize = 0;
 
@@ -313,6 +326,7 @@ public class TcpConnection implements IConnection {
 	}
 
 	private static int defaultHandshakeTimeout = 60000;
+	private static int defaultReverseHelloAcceptTimeout = 0;
 	
 	/**
 	 * See {@link #setDefaultHandshakeTimeout(int)}
@@ -328,6 +342,25 @@ public class TcpConnection implements IConnection {
 	 */
 	public static void setDefaultHandshakeTimeout(int defaultHandshakeTimeout) {
 		TcpConnection.defaultHandshakeTimeout = defaultHandshakeTimeout;
+	}
+
+	/**
+	 * See {@link #setDefaultReverseHelloAcceptTimeout(int)}	
+	 */
+	public static int getDefaultReverseHelloAcceptTimeout() {
+		return defaultReverseHelloAcceptTimeout;
+	}
+	
+	/**
+	 * Set the default timeout used for accepting incoming ReverseHello connections. 
+	 * NOTE! This is used to timeout {@link ServerSocket#accept()}. The timeout
+	 * for receiving a ReverseHello from the Server after a connection is accepted
+	 * is determined by {@link #getDefaultHandshakeTimeout()}. Parameter is in milliseconds.
+	 * Default value is 0, meaning infinite wait.
+	 */
+	public static void setDefaultReverseHelloAcceptTimeout(
+			int defaultReverseHelloAcceptTimeout) {
+		TcpConnection.defaultReverseHelloAcceptTimeout = defaultReverseHelloAcceptTimeout;
 	}
 
 	private static int sendBufferSize = 0;
@@ -377,6 +410,7 @@ public class TcpConnection implements IConnection {
 			// Bad_TcpEndpointUrlInvalid?
 			throw new ServiceResultException(Bad_ServerUriInvalid, e);
 		} catch (IllegalArgumentException e) {
+			logger.error("Error while TcpConnection.initialize", e);
 			throw new ServiceResultException(Bad_ServerUriInvalid);
 		}
 	}
@@ -386,7 +420,23 @@ public class TcpConnection implements IConnection {
 	public void initialize(InetSocketAddress addr, TransportChannelSettings settings, EncoderContext ctx) throws ServiceResultException {
 		lock.lock();
 		try {
+			//timeouts
+			if(settings.getOpctcpSettings().getConnectTimeout() >= 0) {
+				this.connectTimeout = settings.getOpctcpSettings().getConnectTimeout();
+			}
+			if(settings.getOpctcpSettings().getHandshakeTimeout() >= 0) {
+				this.handshakeTimeout = settings.getOpctcpSettings().getHandshakeTimeout();
+			}
+			if(settings.getOpctcpSettings().getReverseHelloAcceptTimeout() >= 0) {
+				this.reverseHelloAcceptTimeout = settings.getOpctcpSettings().getReverseHelloAcceptTimeout();
+			}
+			
 			this.addr = addr;
+			if(settings instanceof ReverseTransportChannelSettings) {
+				this.reverseHelloServerUri = ((ReverseTransportChannelSettings) settings).getReverseHelloServerUri();
+			}else {
+				this.reverseHelloServerUri = null;
+			}
 			this.endpointConfiguration = (EndpointConfiguration) settings.getConfiguration().clone();
 			this.endpointDescription = settings.getDescription().clone();
 			this.certificateValidator = settings.getOpctcpSettings().getCertificateValidator();
@@ -430,61 +480,138 @@ public class TcpConnection implements IConnection {
 			if (s != null && s.isConnected())
 				return;
 
-			// Connect
-			try {
-				logger.info("{} Connecting", addr);
-				int connectTimeout = handshakeTimeout;
-				s = new Socket();
-				// Disable Nagle's algorithm
-				s.setTcpNoDelay(true);
-				if (receiveBufferSize > 0)
-					s.setReceiveBufferSize(receiveBufferSize);
-				if (sendBufferSize > 0)
-					s.setSendBufferSize(sendBufferSize);
-				setSocket(s);
-				if (connectTimeout == 0) {
-					s.connect(addr);
-				} else {
-					s.setSoTimeout(handshakeTimeout);
-					s.connect(addr, connectTimeout);
+			boolean isReverse = reverseHelloServerUri != null;
+			
+			if(!isReverse) {
+				// Connect
+				try {
+					logger.info("{} Connecting", addr);
+					
+					s = new Socket();
+					// Disable Nagle's algorithm
+					s.setTcpNoDelay(true);
+					if (receiveBufferSize > 0)
+						s.setReceiveBufferSize(receiveBufferSize);
+					if (sendBufferSize > 0)
+						s.setSendBufferSize(sendBufferSize);
+					setSocket(s);
+					
+					if(handshakeTimeout > 0) {
+						s.setSoTimeout(handshakeTimeout);
+					}
+					
+					if (connectTimeout == 0) {
+						s.connect(addr);
+					} else {
+						s.connect(addr, connectTimeout);
+					}
+				} catch (ConnectException e) {
+					logger.info(addr + " Connect failed", e);
+					throw new ServiceResultException(Bad_ConnectionRejected, e);
+				} catch (IOException e) {
+					logger.info(addr + " Connect failed", e);
+					throw new ServiceResultException(Bad_ConnectionRejected, e);
+				} catch (IllegalArgumentException e) {
+					throw new ServiceResultException(Bad_ServerUriInvalid);
 				}
-			} catch (ConnectException e) {
-				logger.info(addr + " Connect failed", e);
-				throw new ServiceResultException(Bad_ConnectionRejected, e);
-			} catch (IOException e) {
-				logger.info(addr + " Connect failed", e);
-				throw new ServiceResultException(Bad_ConnectionRejected, e);
-			} catch (IllegalArgumentException e) {
-				throw new ServiceResultException(Bad_ServerUriInvalid);
-			}
-			logger.debug("{} Socket connected", addr);
+				logger.debug("{} Socket connected", addr);
+			}else {
+				//Reverse Connect, wait for the server-side to open socket
+				try {
+					final ServerSocket ss = new ServerSocket();
+					ss.bind(addr);
+					logger.info("Opened ServerSocket at:{}, waiting ReverseHello connection", addr);
+					if(reverseHelloAcceptTimeout > 0) {
+						// Schedule a timeout to close the ServerSocket
+						// It is closed anyway after accepting connection,
+						// therefore extra closes do not matter.
+						TimerUtil.getTimer().schedule(new TimerTask() {							
+							@Override
+							public void run() {
+								try {
+									ss.close();
+								} catch (IOException e) {
+									logger.error("Could not close ServerSocket in timeout", e);
+								}
+								
+							}
+						}, reverseHelloAcceptTimeout);
+					}
 
+					try {
+						s = ss.accept();
+					}catch(SocketException e) {
+						logger.info("ServerSocket.accept {} failed (or the socket was closed while waiting)", addr, e);
+						throw new ServiceResultException(StatusCodes.Bad_UnexpectedError, e, "ServerSocket.accept failed (or was closed, possibly due to a timeout)");
+					}
+					// Disable Nagle's algorithm
+					s.setTcpNoDelay(true);
+					if (receiveBufferSize > 0) {
+						s.setReceiveBufferSize(receiveBufferSize);
+					}
+					if (sendBufferSize > 0) {
+						s.setSendBufferSize(sendBufferSize);
+					}
+					
+					if(handshakeTimeout > 0) {
+						// Handshake timeout
+						// This is removed after handshake
+						s.setSoTimeout(handshakeTimeout);
+					}
+					setSocket(s);
+					logger.debug("{} Socket connected", s.getRemoteSocketAddress());
+					
+					//close the serversocket, we are not accepting more connections
+					ss.close();
+					logger.debug("ServerSocket closed.");
+				} catch (IOException e) {
+					logger.info(addr + " Connect failed", e);
+					throw new ServiceResultException(Bad_ConnectionRejected, e);
+				}
+				
+			}
+			
 			// Handshake
 			try {
+				initEncoderContextLimits();
+				
 				OutputStreamWriteable out = new OutputStreamWriteable(new BufferedOutputStream(s.getOutputStream()));
 				out.order(ByteOrder.LITTLE_ENDIAN);
 
 				InputStreamReadable in = new InputStreamReadable(s.getInputStream(), Long.MAX_VALUE);
 				in.order(ByteOrder.LITTLE_ENDIAN);
-
-				int maxMessageSize = Math.min(endpointConfiguration.getMaxMessageSize() != null ? endpointConfiguration.getMaxMessageSize() : Integer.MAX_VALUE, quotas.maxMessageSize);
-
-				ctx.setMaxMessageSize(maxMessageSize);
-				ctx.setMaxArrayLength(endpointConfiguration.getMaxArrayLength() != null ? endpointConfiguration.getMaxArrayLength() : 0);
-				ctx.setMaxStringLength(endpointConfiguration.getMaxStringLength() != null ? endpointConfiguration.getMaxStringLength() : 0);
-				ctx.setMaxByteStringLength(endpointConfiguration.getMaxByteStringLength() != null ? endpointConfiguration.getMaxByteStringLength() : 0);
-
+				
 				BinaryDecoder dec = new BinaryDecoder(in);
 				dec.setEncoderContext(ctx);
 
 				BinaryEncoder enc = new BinaryEncoder(out);
 				enc.setEncoderContext(ctx);
 
+				if (isReverse) {
+					//Read ReverseHello first, must match conf or connection is closed.
+					ReverseHello rh = readReverseHello(in, dec);
+					logger.debug("Got ReverseHello: {}", rh);
+					// 1.04 Part 6 section 7.1.2.6, if length exceeds 4096, must return Bad_TcpEndpointUrlInvalid
+					// Additionally, that is returned if client does not recognize the values
+					if(rh.getServerUri() == null || rh.getServerUri().length() > 4096 
+							|| !reverseHelloServerUri.equals(rh.getServerUri())) {
+						logger.error("ReverseHello did not contain correct ServerUri, or is too long, expected: {}, got:{}", reverseHelloServerUri, rh.getServerUri());
+						throw new ServiceResultException(StatusCodes.Bad_TcpEndpointUrlInvalid);
+					}
+					if(rh.getEndpointUrl() == null || rh.getEndpointUrl().length() > 4096 
+							|| !endpointDescription.getEndpointUrl().equals(rh.getEndpointUrl())) {
+						logger.error("ReverseHello did not contain correct EndpointUrl, or is too long, expected: {}, got:{}", endpointDescription.getEndpointUrl(), rh.getEndpointUrl());
+						throw new ServiceResultException(StatusCodes.Bad_TcpEndpointUrlInvalid);
+					}
+					
+					//After that continue with the normal connection procedure.
+				}
+				
 				// Hello
 				Hello h = new Hello();
 				h.setEndpointUrl(endpointDescription.getEndpointUrl());
 				h.setMaxChunkCount(UnsignedInteger.valueOf(endpointConfiguration.getMaxBufferSize() == null ? TcpMessageLimits.DefaultMaxBufferSize : endpointConfiguration.getMaxBufferSize().intValue()));
-				h.setMaxMessageSize(UnsignedInteger.valueOf(maxMessageSize));
+				h.setMaxMessageSize(UnsignedInteger.valueOf(ctx.getMaxMessageSize()));
 				h.setReceiveBufferSize(UnsignedInteger.valueOf(quotas.maxBufferSize));
 				h.setSendBufferSize(UnsignedInteger.valueOf(quotas.maxBufferSize));
 				h.setProtocolVersion(UnsignedInteger.valueOf(0));
@@ -579,7 +706,11 @@ public class TcpConnection implements IConnection {
 				// Hands are shook, We are friends now
 				s.setSoTimeout(0);
 				s.setKeepAlive(true);
-				logger.info("{} Connected", addr);
+				if(isReverse) {
+					logger.info("Connected (reverse), handshake completed, local={}, remote={}", s.getLocalSocketAddress(), s.getRemoteSocketAddress());
+				}else {
+					logger.info("Connected (non-reverse), handshake completed, local={}, remote={}", s.getLocalSocketAddress(), s.getRemoteSocketAddress());
+				}
 
 				for (IConnectionListener l : connectionListeners)
 					l.onOpen();
@@ -615,6 +746,45 @@ public class TcpConnection implements IConnection {
 		} finally {
 			lock.unlock();
 		}
+	}
+
+	private void initEncoderContextLimits() {
+		int maxMessageSize = Math.min(endpointConfiguration.getMaxMessageSize() != null ? endpointConfiguration.getMaxMessageSize() : Integer.MAX_VALUE, quotas.maxMessageSize);
+
+		ctx.setMaxMessageSize(maxMessageSize);
+		ctx.setMaxArrayLength(endpointConfiguration.getMaxArrayLength() != null ? endpointConfiguration.getMaxArrayLength() : 0);
+		ctx.setMaxStringLength(endpointConfiguration.getMaxStringLength() != null ? endpointConfiguration.getMaxStringLength() : 0);
+		ctx.setMaxByteStringLength(endpointConfiguration.getMaxByteStringLength() != null ? endpointConfiguration.getMaxByteStringLength() : 0);
+	}
+	
+	/**
+	 * Reads ReverseHello from teh given stream using the given decoder. Throws if fails.
+	 */
+	private ReverseHello readReverseHello(InputStreamReadable in,
+			BinaryDecoder dec)
+			throws IOException, ServiceResultException, DecodingException {
+		// The first value may not be available immediately, so we will
+		// retry if necessary
+		int msgType = -1;
+		while (msgType == -1) {
+			try {
+				msgType = in.getInt();
+			} catch (EOFException e) {
+				msgType = in.getInt();
+			}
+		}
+		int inLen = in.getInt();
+		// Too large for handshake
+		if (inLen < 8 || inLen > 0x1000) {
+			throw new ServiceResultException(Bad_TcpMessageTooLarge);
+		}
+		// ! (REVERSE_HELLO | FINAL)
+		if (msgType != TcpMessageType.RHEF) {
+			logger.error("Did not receive correct message type, expecting: {}, got: {}", TcpMessageType.RHEF, msgType);
+			throw new ServiceResultException(Bad_TcpMessageTypeInvalid, "Message type was " + msgType + ", expected " + (TcpMessageType.REVERSE_HELLO | TcpMessageType.FINAL));
+		}
+		ReverseHello rh = dec.getEncodeable(null, ReverseHello.class);
+		return rh;
 	}
 
 	/**
@@ -1427,6 +1597,20 @@ public class TcpConnection implements IConnection {
 	 */
 	public void setHandshakeTimeout(int handshakeTimeout) {
 		this.handshakeTimeout = handshakeTimeout;
+	}
+	
+	/**
+	 * See {@link #setDefaultReverseHelloAcceptTimeout(int)}.
+	 */
+	public int getReverseHelloAcceptTimeout() {
+		return reverseHelloAcceptTimeout;
+	}
+
+	/**
+	 * See {@link #setDefaultReverseHelloAcceptTimeout(int)}.
+	 */
+	public void setReverseHelloAcceptTimeout(int reverseHelloAcceptTimeout) {
+		this.reverseHelloAcceptTimeout = reverseHelloAcceptTimeout;
 	}
 
 	/**

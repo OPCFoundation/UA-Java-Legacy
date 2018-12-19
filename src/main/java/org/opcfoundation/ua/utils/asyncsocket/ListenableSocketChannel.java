@@ -13,7 +13,6 @@
 package org.opcfoundation.ua.utils.asyncsocket;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.SocketAddress;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.SelectableChannel;
@@ -339,26 +338,31 @@ public class ListenableSocketChannel {
 
 	Runnable connectRun = new Runnable() {
 		public void run() {
-			assert(connectHndLock.get());
 			ConnectionListener cl = getConnectListener();	
+			boolean cont = false;
 			try {
-				if (cl!=null) {
-					try {
-						boolean ok = channel.finishConnect();
-						if (cl!=null && ok) cl.onConnected(ListenableSocketChannel.this);
-						if (cl!=null && !ok) cl.onConnectFailed(ListenableSocketChannel.this, new ConnectException());						
-					} catch (IOException e) {
-						if (cl!=null) cl.onConnectFailed(ListenableSocketChannel.this, e);						
+				try {
+					boolean ok = channel.finishConnect();
+					if(ok) {
+						//connection successful
+						if(cl != null) {
+							cl.onConnected(ListenableSocketChannel.this);
+						}
+					}else {
+						//connection still not done
+						cont = true;
+					}
+				} catch (IOException e) {
+					//Connection failed.
+					if (cl!=null) {
+						cl.onConnectFailed(ListenableSocketChannel.this, e);						
 					}
 				}
 			} finally {
-				// synchronized(ListenableSocketChannel.this) {
-					connectHndLock.set(false);
-					if (executor != CurrentThreadExecutor.INSTANCE) {
-						attemptUpdateInterestOps(SelectionKey.OP_CONNECT);
-					}
-						
-				// }
+				connectHndLock.set(false);
+				if(cont) {
+					attemptUpdateInterestOps(SelectionKey.OP_CONNECT);
+				}
 			}
 		}};
 	

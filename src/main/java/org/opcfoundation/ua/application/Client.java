@@ -16,7 +16,6 @@ import static org.opcfoundation.ua.core.StatusCodes.Bad_ApplicationSignatureInva
 import static org.opcfoundation.ua.utils.EndpointUtil.select;
 
 import java.security.cert.CertificateParsingException;
-import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +44,7 @@ import org.opcfoundation.ua.core.SignatureData;
 import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.transport.ChannelService;
+import org.opcfoundation.ua.transport.ReverseTransportChannelSettings;
 import org.opcfoundation.ua.transport.SecureChannel;
 import org.opcfoundation.ua.transport.ServiceChannel;
 import org.opcfoundation.ua.transport.TransportChannelSettings;
@@ -663,6 +663,50 @@ public class Client {
 	{
 		return createSecureChannel(settings.getDescription().getEndpointUrl(), settings);
 	}	
+	
+	/**
+	 * Open a local connection accepting a ReverseHello messages sent by the server.
+	 * 
+	 * The EndpointUrl of the EndpointDescription in the given {@link TransportChannelSettings} must
+	 * be sent by the server in the ReverseHello Message.
+	 * 
+	 * @param localEndpointUrl, The client opens a server socket based on this address, listens server sent ReverseHello
+	 * @param serverApplicationUri expected Server(Application)Uri of the ReverseHello
+	 * @param settings settings used for connection (timeouts etc)
+	 * @return an open secure channel
+	 * @throws ServiceResultException if error
+	 */
+	public SecureChannel createReverseSecureChannel(String localEndpointUrl, String serverApplicationUri, TransportChannelSettings settings) throws ServiceResultException{
+		MessageFormat proto = UriUtil.getMessageFormat( localEndpointUrl );		
+		if ( proto == MessageFormat.Binary ) {			
+
+			SecureChannel sc = createSecureChannelImpl( localEndpointUrl );
+						
+			ReverseTransportChannelSettings s = new ReverseTransportChannelSettings();
+			s.setReverseHelloServerUri(serverApplicationUri);
+			s.setConfiguration( endpointConfiguration );
+			s.getHttpsSettings().readFrom(application.getHttpsSettings());
+			s.getOpctcpSettings().readFrom(application.getOpctcpSettings());
+			if ( settings != null ) s.readFrom(settings);
+			
+			KeyPair localApplicationInstanceCertificate = application.getApplicationInstanceCertificate();
+			if (localApplicationInstanceCertificate!=null && s.getDescription().needsCertificate()) {
+				s.getOpctcpSettings().setPrivKey( localApplicationInstanceCertificate.getPrivateKey() );
+				s.getOpctcpSettings().setClientCertificate( localApplicationInstanceCertificate.getCertificate() );
+			}			
+			
+			try {
+				sc.initialize(localEndpointUrl, s, getEncoderContext());
+				sc.open();
+				return sc;
+			} catch (ServiceResultException e) {
+				sc.dispose();
+				throw e;
+			}
+
+		}
+		throw new ServiceResultException("Unsupported protocol " + proto);
+	}
 
 	/**
 	 * Create a service channel to a UA Server This method first queries

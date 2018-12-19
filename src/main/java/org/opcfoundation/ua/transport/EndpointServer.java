@@ -51,6 +51,12 @@ public interface EndpointServer extends CloseableObject, ConnectionMonitor {
 	EndpointHandle bind(SocketAddress socketAddress, EndpointBinding endpointBinding) throws ServiceResultException;
 	
 	/**
+	 * Binds a ReverseHello connection point. Server shall connect to the given addresstoConnect parameter 
+	 * per the specification 1.04 Part 6 7.1.3, assuming the target is a ReverseHello-aware port.
+	 */
+	void bindReverse(SocketAddress addressToConnect, String endpointUrl) throws ServiceResultException;
+	
+	/**
 	 * <p>getBoundSocketAddresses.</p>
 	 *
 	 * @return a {@link java.util.List} object.

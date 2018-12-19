@@ -276,7 +276,7 @@ public abstract class AbstractServerConnection extends AbstractState<CloseableOb
 	@Override
 	public String toString() {
 		CloseableObjectState s = getState();
-		return "Connection (state="+s+", addr="+getRemoteAddress()+")";
+		return "Connection (state="+s+", local="+getLocalAddress()+", remote="+getRemoteAddress()+")";
 	}	
 
 	/**

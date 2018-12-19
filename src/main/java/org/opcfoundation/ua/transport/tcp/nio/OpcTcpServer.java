@@ -17,6 +17,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ import org.opcfoundation.ua.transport.ServerConnection;
 import org.opcfoundation.ua.transport.UriUtil;
 import org.opcfoundation.ua.transport.endpoint.EndpointBindingCollection;
 import org.opcfoundation.ua.transport.impl.ConnectionCollection;
+import org.opcfoundation.ua.transport.tcp.impl.ReverseHello;
 import org.opcfoundation.ua.utils.AbstractState;
 import org.opcfoundation.ua.utils.StackUtils;
 import org.opcfoundation.ua.utils.asyncsocket.AsyncServerSocket;
@@ -72,7 +74,7 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 
 	/** Endpoint handles */
 	Map<SocketAddress, SocketHandle> socketHandles = new HashMap<SocketAddress, SocketHandle>();
-
+	
 	/**
 	 * <p>getEncoderContext.</p>
 	 *
@@ -194,6 +196,51 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 		OpcTcpEndpointHandle endpointHandle = socketHandle.getOrCreate(endpointBinding);
 		return endpointHandle;
 	}
+	
+
+	@Override
+	public void bindReverse(final SocketAddress addressToConnect,
+			final String endpointUrl) {
+		if(addressToConnect == null || endpointUrl == null) {
+			throw new IllegalArgumentException();
+		}
+		ReverseSocketHandle socketHandle = new ReverseSocketHandle(addressToConnect);
+		if(socketHandle.socket == null) {
+			try {
+				socketHandle.setChannel(SocketChannel.open());
+				socketHandle.getChannel().configureBlocking(false);
+				
+				socketHandle.socket = new AsyncSocketImpl(socketHandle.getChannel(), StackUtils.getNonBlockingWorkExecutor(), StackUtils.getSelector());
+
+				ReverseHello rh = new ReverseHello();
+				rh.setEndpointUrl(endpointUrl);
+				rh.setServerUri(application.getApplicationDescription().getApplicationUri());
+				final OpcTcpServerConnection conn = new OpcTcpServerConnection(OpcTcpServer.this, socketHandle.socket, rh); 
+				connections.addConnection(conn);
+				
+				conn.addConnectionListener(new IConnectionListener() {
+					@Override
+					public void onClosed(ServiceResultException closeError) {						
+						connections.removeConnection(conn);
+							
+						//1.04 Part 6 section 7.1.3 when closed, server must restart the process
+						logger.debug("ReverseHello connection closed, rescheduling connection process");
+						bindReverse(addressToConnect, endpointUrl);
+					}
+					@Override
+					public void onOpen() {
+					}});
+				//async, do last, others listen on socket state.
+				socketHandle.socket.connect(socketHandle.socketAddress);
+			}catch(IOException e) {
+				logger.error("Failed to create a ReverseSocketHandle", e);
+				socketHandle.close();
+			}
+			
+		}
+
+	}
+	
 
 	/** {@inheritDoc} */
 	@Override
@@ -303,6 +350,48 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 	 */
 	public SocketHandle[] socketHandleSnapshot() {
 		return socketHandles.values().toArray( new SocketHandle[ socketHandles.size()] );		
+	}
+	
+	public static class ReverseSocketHandle{
+		
+		private SocketAddress socketAddress;
+		private SocketChannel channel;
+		private AsyncSocketImpl socket;
+		
+		public ReverseSocketHandle(SocketAddress socketAddress) {
+			this.socketAddress = socketAddress;
+		}
+
+		public SocketChannel getChannel() {
+			return channel;
+		}
+
+		public void setChannel(SocketChannel channel) {
+			this.channel = channel;
+		}
+
+		public SocketAddress getSocketAddress() {
+			return socketAddress;
+		}
+		
+		public AsyncSocketImpl getSocket() {
+			return socket;
+		}
+
+		public void setSocket(AsyncSocketImpl socket) {
+			this.socket = socket;
+		}
+
+		void close() {
+			SocketChannel c = channel;
+			if(c != null) {
+				try {
+					c.close();
+				} catch (IOException e) {
+					logger.error("Failure in closing ReverseSockeHandle", e);
+				}
+			}
+		}
 	}
 
 	public class SocketHandle {
@@ -443,5 +532,5 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 		}
 		return count;
 	}
-	
+
 }

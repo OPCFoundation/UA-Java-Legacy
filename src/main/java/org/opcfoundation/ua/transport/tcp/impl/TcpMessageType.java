@@ -44,7 +44,13 @@ public class TcpMessageType {
     
     /** A hello message. */
     public static final int HELLO = 0x004C4548;
+    
+    /** A ReverseHello message */
+    public static final int REVERSE_HELLO = 0x00454852;
 
+    /** REVERSE_HELLO | FINAL */
+    public static final int RHEF = REVERSE_HELLO | FINAL;
+    
     /** An acknowledge message. */
     public static final int ACKNOWLEDGE = 0x004B4341;
 

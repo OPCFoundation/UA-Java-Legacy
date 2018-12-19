@@ -11,6 +11,7 @@
 */
 package org.opcfoundation.ua.transport.tcp.io;
 
+import java.net.Socket;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.EnumSet;
@@ -20,15 +21,18 @@ import org.opcfoundation.ua.transport.security.CertificateValidator;
 import org.opcfoundation.ua.transport.security.PrivKey;
 
 /**
- * <p>OpcTcpSettings class.</p>
- *
+ * Settings used when making opc.tcp connections.
+ * 
  */
-public class OpcTcpSettings {
+public class OpcTcpSettings implements Cloneable{
 
 	PrivKey privKey;
 	Cert clientCertificate;
 	CertificateValidator certificateValidator;
-	EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);	
+	EnumSet<Flag> flags = EnumSet.noneOf(Flag.class);
+	int handshakeTimeout = -1;
+	int connectTimeout = -1;
+	int reverseHelloAcceptTimeout = -1;
 	public enum Flag {
 		/**
 		 * In multithread mode, depending on implementation, channels 
@@ -122,7 +126,51 @@ public class OpcTcpSettings {
 		this.flags = flags;
 	}	
 	
+	/**
+	 * Timeout for the initial handshake (Hello/Acknowledge exchange) after a socket connection is opened.
+	 */
+	public int getHandshakeTimeout() {
+		return handshakeTimeout;
+	}
 	
+	/**
+	 * See {@link #getHandshakeTimeout()}.
+	 */
+	public void setHandshakeTimeout(int handshakeTimeout) {
+		this.handshakeTimeout = handshakeTimeout;
+	}
+	
+	/**
+	 * Get the timeout used to listen on reverse connections, in milliseconds. 
+	 * Use -1 to use the default of {@link TcpConnection#getDefaultReverseHelloAcceptTimeout()}.
+	 * 0 is infinite.
+	 */
+	public int getReverseHelloAcceptTimeout() {
+		return reverseHelloAcceptTimeout;
+	}
+	
+	/**
+	 * See {@link #getReverseHelloAcceptTimeout()}.
+	 */
+	public void setReverseHelloAcceptTimeout(int reverseHelloListenTimeout) {
+		this.reverseHelloAcceptTimeout = reverseHelloListenTimeout;
+	}
+	
+	/**
+	 * Timeout for the initial socket connect operation, in milliseconds. NOTE! this value is passed to {@link Socket#connect(java.net.SocketAddress, int)}.
+	 * However in practice the maximum timeout is determined by the Operating System. 
+	 * If this is -1, then {@link TcpConnection#getDefaultHandshakeTimeout()} is used.
+	 */
+	public int getConnectTimeout() {
+		return connectTimeout;
+	}
+	
+	/**
+	 * See {@link #getConnectTimeout()}.
+	 */
+	public void setConnectTimeout(int connectTimeout) {
+		this.connectTimeout = connectTimeout;
+	}
 	/**
 	 * <p>readFrom.</p>
 	 *
@@ -133,6 +181,9 @@ public class OpcTcpSettings {
 		if (tcs.certificateValidator!=null) certificateValidator = tcs.certificateValidator;
 		if (tcs.privKey!=null) privKey = tcs.privKey;
 		flags = tcs.flags;
+		this.reverseHelloAcceptTimeout = tcs.reverseHelloAcceptTimeout;
+		this.handshakeTimeout = tcs.handshakeTimeout;
+		this.connectTimeout = tcs.connectTimeout;
 	}
 	
 	/** {@inheritDoc} */
@@ -145,6 +196,10 @@ public class OpcTcpSettings {
 		result.setPrivKey(privKey);
 		
 		result.flags = flags.clone();
+		
+		result.setConnectTimeout(connectTimeout);
+		result.setHandshakeTimeout(handshakeTimeout);
+		result.setReverseHelloAcceptTimeout(reverseHelloAcceptTimeout);
 		return result;
 	}	
 

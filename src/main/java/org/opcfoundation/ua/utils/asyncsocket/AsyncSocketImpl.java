@@ -214,8 +214,8 @@ public class AsyncSocketImpl extends AbstractState<SocketState, IOException> imp
 		}
 		synchronized(this) {
 			try {
-				ls.connect(addr);
 				ls.setConnectListener(cl);
+				ls.connect(addr);
 				setState(SocketState.Connecting);
 			} catch (IOException e) {
 				ls.setConnectListener(null);

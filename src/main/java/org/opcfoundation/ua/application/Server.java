@@ -12,7 +12,10 @@
 
 package org.opcfoundation.ua.application;
 
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,6 +33,7 @@ import org.opcfoundation.ua.core.ApplicationDescription;
 import org.opcfoundation.ua.core.ApplicationType;
 import org.opcfoundation.ua.core.EndpointDescription;
 import org.opcfoundation.ua.core.MessageSecurityMode;
+import org.opcfoundation.ua.core.StatusCodes;
 import org.opcfoundation.ua.core.UserTokenPolicy;
 import org.opcfoundation.ua.encoding.EncoderContext;
 import org.opcfoundation.ua.encoding.IEncodeable;
@@ -310,6 +314,39 @@ public class Server {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * Binds a "ReverseHello" pseudo-endpoint to the server. Server will connect the clients based on
+	 * Part 6 ReverseHello connection Procedure. Note that this works only for opc.tcp at the moment.
+	 * 
+	 * @param clientEndpointUrl a client address to connect to (a client running a ReverseHello server and accepting connections)
+	 * @param endpointUrlForClient the endpoint which client should connect to.
+	 * @throws ServiceResultException if any error
+	 */
+	public void bindReverse(String clientEndpointUrl, String endpointUrlForClient) throws ServiceResultException{
+		String proto = UriUtil.getTransportProtocol(clientEndpointUrl);
+		if(!"opc.tcp".equals(proto)) {
+			throw new ServiceResultException(StatusCodes.Bad_UnexpectedError, "ReverseHello is only supported for 'opc.tcp'");
+		}
+		URI uri;
+		try {
+			uri = new URI(clientEndpointUrl);
+		} catch (URISyntaxException e) {
+			throw new ServiceResultException(StatusCodes.Bad_UnexpectedError, e, "Cannot resolve the given URI: "+clientEndpointUrl);
+		}
+		
+		String host = uri.getHost();
+		if(host == null) {
+			throw new ServiceResultException(StatusCodes.Bad_UnexpectedError, "Cannot resolve host component of the given URI: "+clientEndpointUrl);
+		}
+		int port = uri.getPort();
+		if(port < 0) {
+			throw new ServiceResultException(StatusCodes.Bad_UnexpectedError, "Cannot resolve port component of the given URI: "+clientEndpointUrl);
+		}
+		
+		EndpointServer endpointServer = application.getOrCreateEndpointServer("opc.tcp");
+		endpointServer.bindReverse(new InetSocketAddress(host, port), endpointUrlForClient);
 	}
 	
 	/**

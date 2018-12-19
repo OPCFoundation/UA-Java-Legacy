@@ -69,6 +69,7 @@ import org.opcfoundation.ua.transport.tcp.impl.ChunkSymmEncryptSigner;
 import org.opcfoundation.ua.transport.tcp.impl.ChunkUtils;
 import org.opcfoundation.ua.transport.tcp.impl.ErrorMessage;
 import org.opcfoundation.ua.transport.tcp.impl.Hello;
+import org.opcfoundation.ua.transport.tcp.impl.ReverseHello;
 import org.opcfoundation.ua.transport.tcp.impl.SecurityToken;
 import org.opcfoundation.ua.transport.tcp.impl.TcpMessageType;
 import org.opcfoundation.ua.transport.tcp.nio.Channel.ChannelListener;
@@ -137,7 +138,9 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 	/** Event based asynchronous socket */
 	AsyncSocket s;
 
-
+	/** Optional ReverseHello message, if operating in ReverseHello-mode */
+	ReverseHello rh;
+	
 	/** Timer used for handshake timing */
 	Timer timer = TimerUtil.getTimer();
 
@@ -256,10 +259,29 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				}
 			}};
 
+			
+			/**
+			 * Creates a new OpcTcpConnection with the given parameters. 
+			 * 
+			 * @param endpointServer EndpointServer for opc.tcp
+			 * @param s socket
+			 */
 			OpcTcpServerConnection(OpcTcpServer endpointServer, AsyncSocketImpl s) {
+				this(endpointServer, s, null);
+			}
+			
+			/**
+			 * Creates a new OpcTcpConnection with the given parameters.
+			 * 
+			 * @param endpointServer EndpointServer for opc.tcp
+			 * @param s socket
+			 * @param rh, if null, assumes normal connection, if non-null assumes ReverseHello connection.
+			 */
+			OpcTcpServerConnection(OpcTcpServer endpointServer, AsyncSocketImpl s, final ReverseHello rh) {
 				super();
 				this.endpointServer = endpointServer;
 				this.s = s;
+				this.rh = rh;
 
 				this.encoderCtx = endpointServer.getEncoderContext();
 
@@ -283,11 +305,29 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 
 				s.getStateMonitor().addStateListener(socketListener);
 				s.getInputStream().createMonitor(8, inputListener);
-
-				timeoutTimer = TimerUtil.schedule(
-						timer, timeout,
-						StackUtils.getBlockingWorkExecutor(),
-						System.currentTimeMillis() + handshakeTimeout);
+				
+				if(rh == null) {
+					timeoutTimer = TimerUtil.schedule(
+							timer, timeout,
+							StackUtils.getBlockingWorkExecutor(),
+							System.currentTimeMillis() + handshakeTimeout);
+				}
+				if(rh != null) {
+					s.getStateMonitor().addStateListener(new StateListener<SocketState>() {
+						@Override
+						public void onStateTransition(
+								IStatefulObject<SocketState, ?> sender,
+								SocketState oldState, SocketState newState) {
+							if(oldState == SocketState.Connecting && newState == SocketState.Connected) {
+								timeoutTimer = TimerUtil.schedule(
+										timer, timeout,
+										StackUtils.getBlockingWorkExecutor(),
+										System.currentTimeMillis() + handshakeTimeout);
+								sendReverseHello(rh);
+							}							
+						}
+					});
+				}
 			}
 
 			/** {@inheritDoc} */
@@ -952,6 +992,20 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				sendChunks(chunks);
 			}
 
+			protected void sendReverseHello(ReverseHello rh) {
+				ChunkFactory rawChunkFactory = new ChunkFactory(ctx.maxSendChunkSize, 8, 0, 0, 0, 1, MessageSecurityMode.None, 0);
+				MessageToChunks mc = new MessageToChunks(rh, ctx, encoderCtx, rawChunkFactory, MessageType.Encodeable);
+				final ByteBuffer[] plaintexts = mc.call();
+				final ByteBuffer[] chunks = rawChunkFactory.expandToCompleteChunk(plaintexts);
+
+				// Set header and write
+				chunks[0].putInt(TcpMessageType.REVERSE_HELLO | TcpMessageType.FINAL);
+				chunks[0].rewind();
+				sendChunks(chunks);
+				
+				logger.debug("Sent ReverseHello: {}", rh);
+			}
+			
 			/**
 			 * {@inheritDoc}
 			 *

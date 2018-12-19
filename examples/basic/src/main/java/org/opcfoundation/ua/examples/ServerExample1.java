@@ -27,7 +27,6 @@ package org.opcfoundation.ua.examples;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.interfaces.RSAPrivateKey;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
