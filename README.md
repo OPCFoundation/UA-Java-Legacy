@@ -1,5 +1,10 @@
-# OPC Foundation UA JAVA
+# OPC Foundation UA JAVA Legacy
 
+**This repository is provided by OPC Foundation as legacy support for an Java  version for OPC UA. It will not receive further features and updates.**
+
+The OPC Foundation will continue maintenance of the .NET Stack which is based on .NET Standard. It can be found [here](https://github.com/OPCFoundation/UA-.NETStandard).
+
+---
 The OPC Foundation has formally released the Unified Architecture Java Stack and Sample Code to the community.
 
 Please review official site page (http://opcfoundation.github.io/UA-Java/) for:
