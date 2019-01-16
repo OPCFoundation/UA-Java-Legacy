@@ -7,7 +7,7 @@ The OPC Foundation will continue maintenance of the .NET Stack which is based on
 ---
 The OPC Foundation has formally released the Unified Architecture Java Stack and Sample Code to the community.
 
-Please review official site page (http://opcfoundation.github.io/UA-Java/) for:
+Please review official site page (http://opcfoundation.github.io/UA-Java-Legacy/) for:
  * Overview
  * Licensing
  * Sample Applications overview
