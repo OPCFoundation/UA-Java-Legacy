@@ -1,3 +1,6 @@
+1.4.1.1
+Fixed (#194): BouncyCastleUtils class now set the crypto provider dynamically
+
 1.4.1
 New (#185): Support for ReverseHello (see the ReverseHelloClientServerExample)
 New: Better configuration of initial timeouts in opc.tcp connections (see OpcTcpSettings)
