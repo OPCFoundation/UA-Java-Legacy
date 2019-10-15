@@ -149,11 +149,11 @@ public class BouncyCastleUtils {
 		ContentSigner signer;
 		try {
 			signer = new JcaContentSignerBuilder(CertificateUtils.getCertificateSignatureAlgorithm())
-					.setProvider("BC").build(privateKey);
+					.setProvider(CryptoUtil.getSecurityProviderName()).build(privateKey);
 		} catch (OperatorCreationException e) {
 			throw new GeneralSecurityException("Failed to sign the certificate", e);
 		}
-		return new JcaX509CertificateConverter().setProvider("BC")
+		return new JcaX509CertificateConverter().setProvider(CryptoUtil.getSecurityProviderName())
 				.getCertificate(certBldr.build(signer));
 	}
 	 
@@ -299,9 +299,9 @@ public class BouncyCastleUtils {
 		//***** generate certificate ***********/
 		try {
 			ContentSigner signer = new JcaContentSignerBuilder(
-					CertificateUtils.getCertificateSignatureAlgorithm()).setProvider("BC")
+					CertificateUtils.getCertificateSignatureAlgorithm()).setProvider(CryptoUtil.getSecurityProviderName())
 					.build(signerKey);
-			return new JcaX509CertificateConverter().setProvider("BC")
+			return new JcaX509CertificateConverter().setProvider(CryptoUtil.getSecurityProviderName())
 					.getCertificate(certBldr.build(signer));
 		} catch (OperatorCreationException e) {
 			throw new GeneralSecurityException(e);
@@ -326,7 +326,7 @@ public class BouncyCastleUtils {
 			pemWrt.writeObject(key);
 		else {
 			char[] pw = password.toCharArray();
-			PEMEncryptor encryptor = new JcePEMEncryptorBuilder(algorithm).setProvider("BC").setSecureRandom(CryptoUtil.getRandom()).build(pw);
+			PEMEncryptor encryptor = new JcePEMEncryptorBuilder(algorithm).setProvider(CryptoUtil.getSecurityProviderName()).setSecureRandom(CryptoUtil.getRandom()).build(pw);
 			
 			pemWrt.writeObject(key, encryptor);
 		}
