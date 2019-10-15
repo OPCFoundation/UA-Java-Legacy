@@ -4,6 +4,7 @@ javadoc/
 bin/
 /test-output
 target
+/.idea
 
 *.der
 *.pem
