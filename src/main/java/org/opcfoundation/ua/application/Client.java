@@ -250,7 +250,7 @@ public class Client {
 		byte[] serverCert = ByteString.asByteArray(res.getServerCertificate());
 		session.serverCertificate = serverCert == null || serverCert.length == 0 ? null
 				: new Cert(serverCert);
-		session.serverNonce = ByteString.asByteArray(res.getServerNonce());
+		session.serverNonce = res.getServerNonce();
 		session.sessionId = res.getSessionId();
 		session.authenticationToken = res.getAuthenticationToken();
 		session.sessionTimeout = res.getRevisedSessionTimeout();
