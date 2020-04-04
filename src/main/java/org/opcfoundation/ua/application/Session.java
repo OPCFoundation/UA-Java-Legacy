@@ -34,7 +34,7 @@ public class Session {
 	/** Session ID */
 	NodeId sessionId;
 	/** Server nonce */
-	byte[] serverNonce;
+	ByteString serverNonce;
 	/** Client nonce */
 	ByteString clientNonce;
 	/** NodeId that contains SessionDiagnosticsInfo, see {@link SessionDiagnosticsDataType} */
@@ -55,6 +55,7 @@ public class Session {
 	PrivKey clientPrivateKey;
 	/** Server private key (optional) */
 	PrivKey serverPrivateKey;
+	boolean serverNoncesAreNotUnique;
 
 	Session() {}
 
@@ -85,7 +86,7 @@ public class Session {
 	 *
 	 * @return an array of byte.
 	 */
-	public byte[] getServerNonce() {
+	public ByteString getServerNonce() {
 		return serverNonce;
 	}
 

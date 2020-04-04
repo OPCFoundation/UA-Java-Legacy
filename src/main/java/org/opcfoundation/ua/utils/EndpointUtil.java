@@ -319,9 +319,9 @@ public class EndpointUtil {
 	 * @param password a {@link java.lang.String} object.
 	 * @return user identity token
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support UserName token policy
-	 * @param senderNonce an array of byte.
+	 * @param byteString an array of byte.
 	 */
-	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, byte[] senderNonce, String username, String password)	
+	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, ByteString byteString, String username, String password)	
 	throws ServiceResultException
 	{
 		UserTokenPolicy policy = ep.findUserTokenPolicy(UserTokenType.UserName);
@@ -345,9 +345,9 @@ public class EndpointUtil {
 			try {
 				byte[] c = ByteString.asByteArray(ep.getServerCertificate());
 				Cert serverCert = (c == null || c.length == 0) ? null : new Cert(c);
-				if (senderNonce != null)
+				if (byteString != null)
 					pw = ByteBufferUtils.concatenate(toArray(pw.length
-							+ senderNonce.length), pw, senderNonce);
+							+ byteString.getLength()), pw, byteString.getValue());
 				else
 					pw = ByteBufferUtils.concatenate(toArray(pw.length), pw);
 				pw = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
@@ -383,12 +383,12 @@ public class EndpointUtil {
 	 * Create user identity token based on an issued token
 	 *
 	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
-	 * @param senderNonce an array of byte.
+	 * @param byteString an array of byte.
 	 * @param issuedIdentityToken an array of byte.
 	 * @return user identity token
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support UserName token policy
 	 */
-	public static UserIdentityToken createIssuedIdentityToken(EndpointDescription ep, byte[] senderNonce, byte[] issuedIdentityToken)	
+	public static UserIdentityToken createIssuedIdentityToken(EndpointDescription ep, ByteString byteString, byte[] issuedIdentityToken)	
 	throws ServiceResultException
 	{
 		UserTokenPolicy policy = ep.findUserTokenPolicy(UserTokenType.IssuedToken);
@@ -408,11 +408,11 @@ public class EndpointUtil {
 			Cert serverCert = new Cert(ByteString.asByteArray(ep.getServerCertificate()));
 			cipher.init(Cipher.ENCRYPT_MODE, serverCert.getCertificate());
 			byte[] tokenData = issuedIdentityToken;
-			if (senderNonce != null)
+			if (byteString != null)
 				tokenData = ByteBufferUtils
 						.concatenate(toArray(issuedIdentityToken.length
-								+ senderNonce.length), issuedIdentityToken,
-								senderNonce);
+								+ byteString.getLength()), issuedIdentityToken,
+								byteString.getValue());
 			token.setTokenData(ByteString.valueOf(cipher.doFinal(tokenData)));
 			token.setEncryptionAlgorithm(algorithmUri.getUri());
 			

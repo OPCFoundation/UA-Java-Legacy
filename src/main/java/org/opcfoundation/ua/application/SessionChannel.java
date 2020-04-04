@@ -16,6 +16,11 @@ import java.security.interfaces.RSAPrivateKey;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.opcfoundation.ua.application.Session;
+import org.opcfoundation.ua.core.AnonymousIdentityToken;
+import org.opcfoundation.ua.core.UserNameIdentityToken;
+
 import org.opcfoundation.ua.builtintypes.ByteString;
 import org.opcfoundation.ua.builtintypes.DateTime;
 import org.opcfoundation.ua.builtintypes.ExtensionObject;
@@ -45,6 +50,7 @@ import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
 import org.opcfoundation.ua.transport.security.SecurityPolicy;
 import org.opcfoundation.ua.utils.CryptoUtil;
 import org.opcfoundation.ua.utils.EndpointUtil;
+import org.opcfoundation.ua.utils.ObjectUtils;
 import org.opcfoundation.ua.utils.bytebuffer.ByteBufferUtils;
 
 
@@ -67,7 +73,47 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	 */
 	static Logger LOGGER = LoggerFactory.getLogger(SessionChannel.class);
 	
-	/** Client */
+	 static void validateServerNonce(final Session session, final UserIdentityToken identity,
+		      final SignatureData identitySignature) throws ServiceResultException {
+		    if (identity instanceof AnonymousIdentityToken) {
+		      return; // no need to validate
+		    }
+
+		    if (identity instanceof UserNameIdentityToken) {
+		      UserNameIdentityToken userNameIdentity = (UserNameIdentityToken) identity;
+		      if (userNameIdentity.getEncryptionAlgorithm() == null || userNameIdentity.getEncryptionAlgorithm().isEmpty()) {
+		        return; // no need to validate, the password is not encrypted
+		      }
+		    }
+
+		    if (identity instanceof X509IdentityToken) {
+		      // Check if the signature has an encryption algorithm
+		      if (identitySignature.getAlgorithm() == null || identitySignature.getAlgorithm().isEmpty()) {
+		        return; // not signed, no need to validate
+		      }
+		    }
+
+		    if (identity instanceof IssuedIdentityToken) {
+		      IssuedIdentityToken issuedIdentity = (IssuedIdentityToken) identity;
+		      if (issuedIdentity.getEncryptionAlgorithm() == null || issuedIdentity.getEncryptionAlgorithm().isEmpty()) {
+		        return; // no need to validate, the password is not encrypted
+		      }
+		    }
+
+		    // In all other cases we need to validate that the nonce is suitable for signing/encryption.
+		    if ((session.getServerNonce() == null || session.getServerNonce().getLength() < 32)) {
+		      throw new ServiceResultException(StatusCodes.Bad_NonceInvalid,
+		          "ServerNonce from previous CreateSessionResponse or ActivateSessionResponse"
+		              + " was not valid (must be at least 32 bytes): " + session.getServerNonce());
+		    }
+		    if (session.serverNoncesAreNotUnique) {
+		      throw new ServiceResultException(StatusCodes.Bad_NonceInvalid,
+		          "ServerNonce based on previous CreateSessionResponse or ActivateSessionResponse"
+		              + " is not unique, calling ActivateSession is not safe:" + session.getServerNonce());
+		    }
+		  }
+	 
+	 /** Client */
 	Client client;
 	/** Session */
 	Session session;
@@ -154,7 +200,13 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 						+ policyId
 						+ "\" is not supported by the given endpoint");
 		}
-		// 1. Sign certificate + nonce
+	    /*
+	     * 0. Validate session.getServerNonce(), which is from the previous createSession or
+	     * activateSession.
+	     */
+	    validateServerNonce(session, identity, identitySignature);
+	    
+	    // 1. Sign certificate + nonce
 		SignatureData clientSignature = null;
 		if (!MessageSecurityMode.None.equals(channel.getMessageSecurityMode())) {
 			SecurityPolicy securityPolicy = channel.getSecurityPolicy();
@@ -165,7 +217,7 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 			byte[] dataToSign = session.getServerCertificate().getEncoded();
 			if (session.getServerNonce() != null)
 				dataToSign = ByteBufferUtils.concatenate(dataToSign,
-						session.getServerNonce());
+						session.getServerNonce().getValue());
 			
 			clientSignature = new SignatureData(algorithm.getUri(), ByteString.valueOf(CryptoUtil.getCryptoProvider().signAsymm(signerKey, algorithm, dataToSign)));
 
@@ -179,7 +231,46 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 		asreq.setUserTokenSignature( identitySignature );				
 		
 		ActivateSessionResponse asres = ActivateSession(asreq);
-		session.serverNonce = ByteString.asByteArray(asres.getServerNonce());
+		
+	    // Check that we got 32 bytes of nonce or more if secure channel
+	    // It can be skipped, if SecurityMode is None+Anonymous, but we log a warning in that case.
+	    ByteString oldNonce = session.getServerNonce();
+	    ByteString newNonce = asres.getServerNonce();
+	    final boolean isNotUnique = ObjectUtils.equals(oldNonce, newNonce);
+	    if (isNotUnique) {
+	      // We want to still store was it unique if we later would need it and warn if invalid
+	      session.serverNoncesAreNotUnique = true;
+	    }
+	    final boolean isNotValid = newNonce == null || newNonce.getLength() < 32;
+
+	    if (MessageSecurityMode.None.equals(channel.getMessageSecurityMode())
+	        && (identity instanceof AnonymousIdentityToken)) {
+	      if (isNotUnique) {
+	        LOGGER.warn("ServerNonce from ActivateSessionResponse was not unique (equals to previous ServerNonce): {}",
+	            newNonce);
+	      }
+	      if (isNotValid) {
+	        LOGGER.warn("ServerNonce from ActivateSessionResponse was not valid (must be at least 32 bytes): {}", newNonce);
+	      }
+	    } else {
+	      if (isNotValid) {
+	        throw new ServiceResultException(StatusCodes.Bad_NonceInvalid,
+	            "ServerNonce from ActivateSessionResponse was not valid (must be at least 32 bytes): " + newNonce);
+	      }
+	      if (isNotUnique) {
+	        if (MessageSecurityMode.SignAndEncrypt.equals(channel.getMessageSecurityMode())
+	            || (identity instanceof AnonymousIdentityToken)) {
+	          throw new ServiceResultException(StatusCodes.Bad_NonceInvalid,
+	              "ServerNonce from ActivateSessionResponse was not unique (equals to previous ServerNonce): " + newNonce);
+	        } else {
+	          throw new ServiceResultException(StatusCodes.Bad_NonceInvalid,
+	              "ServerNonce from ActivateSessionResponse was not unique (equals to previous ServerNonce): " + newNonce
+	                  + " WARNING, credentials might be compromized");
+	        }
+	      }
+	    }
+	    
+	    session.serverNonce = asres.getServerNonce();
 		return asres;
 	}	
 	
