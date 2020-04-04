@@ -92,10 +92,10 @@
             			-->
             			<!-- these are for javadoc:fix goal -->
             			<fixTags>param,return,throws</fixTags>
-						<!-- use this is additionalparam is not allowed
+
 						<additionalJOption>${javadoc.arg}</additionalJOption>
-						-->
-            			<additionalparam>${javadoc.arg}</additionalparam>
+
+<!--            			<additionalparam>${javadoc.arg}</additionalparam>-->
             	<archive>
             		<addMavenDescriptor>false</addMavenDescriptor>
             	</archive>
