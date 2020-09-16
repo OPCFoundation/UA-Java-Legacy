@@ -829,6 +829,7 @@ public class Client {
 			GetEndpointsRequest req = new GetEndpointsRequest(null, discoveryEndpointUri, new String[0], new String[0]);
 			req.setRequestHeader( new RequestHeader() );
 			req.getRequestHeader().setTimeoutHint( UnsignedInteger.valueOf( getTimeout() ) );
+			req.getRequestHeader().setTimestamp(new DateTime());
 			GetEndpointsResponse res = chan.GetEndpoints(req);
 			
 			EndpointDescription[] result = res.getEndpoints();
@@ -938,6 +939,7 @@ public class Client {
 					startingRecordId, maxRecordsToReturn, serverCapabilities);
 			req.setRequestHeader( new RequestHeader() );
 			req.getRequestHeader().setTimeoutHint( UnsignedInteger.valueOf( getTimeout() ) );
+			req.getRequestHeader().setTimestamp(new DateTime());
 			FindServersOnNetworkResponse res = chan.FindServersOnNetwork(req);
 			return res;
 		} finally {
