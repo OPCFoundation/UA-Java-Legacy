@@ -337,7 +337,7 @@ public final class NodeId implements Comparable<NodeId> {
 		
 		m = NONE_INT.matcher(nodeIdRef);
 		if (m.matches()) {			
-			Integer obj = Integer.valueOf( m.group(1) );
+			UnsignedInteger obj = UnsignedInteger.valueOf( m.group(1) );
 			return new NodeId(0, obj);
 		}
 		
