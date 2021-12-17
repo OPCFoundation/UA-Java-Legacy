@@ -10,10 +10,10 @@ List of samples:
 * NanoServer is a an example of a minimal working UA server. This server is intended to conform to Nano Embedded Device Server Profile.
 
 ## Using
+
 Import this Maven project to your IDE. Assuming your IDE can match the main stack project and this example one, you can start the samples within the IDE directly (works on eclipse). Assuming not or if you want to build the samples using maven, you need to first build the Stack and install/deploy it to your local/internal repository. 
 
 Alternatively to use from command line: ```mvn clean install``` the main project and then ```mvn clean package``` this project. Bat/sh scripts used for starting the samples are generated to 'target/assemblies/bin'.
-
 
 ## Certificates
 
@@ -30,20 +30,20 @@ See the org.opcfoundation.ua.examples.certs.Examples.java for details on how the
 
 Also see the section "Certificate validation" on how to define your own validators.
 
-
 ## Certificate key size
 
-The default key size for new certificates is 1024 bits. You may extend this to 2048 or 4096 with CertificateUtils.setKeySize() before creating the certificates.
+The default key size for new certificates is 2048 bits. You may change this to 1024 or 4096 with CertificateUtils.setKeySize() before creating the certificates, if necessary.
 
 Note that the different security policies have limitations, regarding to the certificate keys size:
-* Basic128Rsa16 and Basic256 require a certificate of 1024 or 2048 bits
-* Basic256Sha256 requires a certificate of 2048 or 4096 bits  
+* Basic128Rsa16 and Basic256 require a certificate of 1024 or 2048 bits (NOTE THAT THESE ARE DEPRECATED SINCE OPC UA 1.04)
+* Basic256Sha256, Aes128Sha256RsaOaep & Aes256Sha256RsaPss require a certificate of 2048 or 4096 bits  
 
 In order to enable all security protocols, you must define a key size of 2048 bits or enable two application instance certificates. 
 You can use Application.addApplicationInstanceCertificate() to add new certificates as necessary. The stack will automatically use the 
 correct certificate depending on the security policy used for communications. 
 
 ## HTTPS certificates and .NET client applications
+
 The client applications built with the OPC Foundation .NET stack require that the server's HTTPS certificate is signed by a trusted CA certificate. Therefore, the samples create a SampleCA certificate, which they use to sign the HTTPS certificate. In order to define a certificate (e.g. the SampleCA) as Trusted Root Certificate, you must install that into the respective Windows certificate store. 
 
 The following instructions define how to do that:
@@ -57,6 +57,7 @@ Or you can just
 * "Browse..." for the "Trusted Root Certificate Authorities"
 
 ## Certificate validation
+
 The application object is initialized to accept all certificates with the following definitions:
 ``` 
 getOpctcpSettings().setCertificateValidator( CertificateValidator.ALLOW_ALL );
@@ -64,6 +65,13 @@ getHttpsSettings().setCertificateValidator( CertificateValidator.ALLOW_ALL );
 ```
 You can replace the validators with your own implementation (of CertificateValidator) by assigning them to these properties of
 your Application instance.
+
+## Logging
+
+The stack is written against SLF4J, which enables a free selection of backend logging libraries to be used. By default, 
+the example projects use logback 1.2, which is a native SLF4J implementation and supports Java 6.
+
+You can find the logging configuration from src/main/resources/logback.xml
 
 ## Common Problems - OPC UA Java Stack
 

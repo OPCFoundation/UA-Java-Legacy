@@ -409,7 +409,7 @@ public class StackUtils {
 	/**
 	 * Define the handler that is called, if any of the worker threads encounter an exception that is not handled.
 	 * <p>
-	 * The default handler will just log the exception as an Error to the log4j log.
+	 * The default handler will just log the exception as an ERROR to the logger.
 	 * <p>
 	 * Set the handler to provide custom behavior in your application.
 	 * <p>

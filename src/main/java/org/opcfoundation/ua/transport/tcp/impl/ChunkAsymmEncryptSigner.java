@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 public class ChunkAsymmEncryptSigner implements Runnable {
 
 	/**
-	 * Log4J Error logger. 
 	 * Security failures are logged with INFO level.
 	 * Security settings are logged with DEBUG level.
 	 * Unexpected errors are logged with ERROR level. 

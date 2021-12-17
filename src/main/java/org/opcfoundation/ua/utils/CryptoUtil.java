@@ -59,7 +59,7 @@ import org.slf4j.LoggerFactory;
 public class CryptoUtil {
 
 	/**
-	 * Log4J Error logger. Security failures are logged with INFO level.
+	 * Security failures are logged with INFO level.
 	 * Security info are printed with DEBUG level. Unexpected errors are logged
 	 * with ERROR level.
 	 */

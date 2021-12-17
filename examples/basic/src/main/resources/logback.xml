@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="stdout"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!-- # The conversion pattern uses format specifiers. You might want to 
+				# change the pattern an watch the output format change. -->
+			<pattern>%-4r %-5p [%t] %37c - %m%n</pattern>
+		</encoder>
+	</appender>
+	<!-- Change to WARN/ERROR to see less or DEBUG/TRACE to see more of the stack action -->
+	<logger name="org.opcfoundation.ua" level="INFO" />
+	<root level="INFO">
+		<appender-ref ref="stdout" />
+	</root>
+</configuration>

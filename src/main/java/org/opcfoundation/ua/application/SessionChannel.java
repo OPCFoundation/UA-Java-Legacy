@@ -67,7 +67,6 @@ import org.opcfoundation.ua.utils.bytebuffer.ByteBufferUtils;
 public class SessionChannel extends ChannelService implements RequestChannel {
 
 	/**
-	 * Log4J Error logger. 
 	 * Security settings are logged with DEBUG level.
 	 * Unexpected errors are logged with ERROR level. 
 	 */

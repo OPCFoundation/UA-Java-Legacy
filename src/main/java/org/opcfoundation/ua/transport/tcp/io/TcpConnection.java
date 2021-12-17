@@ -174,7 +174,7 @@ public class TcpConnection implements IConnection {
 	}
 
 	/**
-	 * Log4J Error logger. Security settings are logged with DEBUG level.
+	 * Security settings are logged with DEBUG level.
 	 * Unexpected errors are logged with ERROR level.
 	 */
 	static Logger logger = LoggerFactory.getLogger(TcpConnection.class);

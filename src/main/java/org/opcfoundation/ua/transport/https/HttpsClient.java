@@ -82,11 +82,6 @@ public class HttpsClient implements ITransportChannel {
 	static final ServiceResultException BAD_TIMEOUT = new ServiceResultException( Bad_Timeout );
 	static final Charset UTF8 = Charset.forName("UTF-8");
 	
-	/**
-	 * Log4J Error logger. 
-	 * Security settings are logged with DEBUG level.
-	 * Unexpected errors are logged with ERROR level. 
-	 */
 	static final Logger logger = LoggerFactory.getLogger(HttpsClient.class);
 
 	/** Request Id Counter */

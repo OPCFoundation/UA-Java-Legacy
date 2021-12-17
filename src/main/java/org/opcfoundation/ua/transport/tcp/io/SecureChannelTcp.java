@@ -97,7 +97,6 @@ import org.opcfoundation.ua.utils.TimerUtil;
 public class SecureChannelTcp implements IMessageListener, IConnectionListener, ITransportChannel, org.opcfoundation.ua.transport.SecureChannel {
 
 	/**
-	 * Log4J Error logger. 
 	 * Security settings are logged with DEBUG level.
 	 * Unexpected errors are logged with ERROR level. 
 	 */
