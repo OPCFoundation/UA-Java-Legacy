@@ -206,7 +206,11 @@ public class IncubationQueue<T> {
 	public synchronized T getNext()
 	throws InterruptedException
 	{
-		while(orderList.isEmpty()) wait();
+		while(orderList.isEmpty()) {
+	      wait(5000);
+	      if (orderList.isEmpty())
+	    	throw new InterruptedException("Maximum wait time reached, incubation queue still empty");
+	    }
 		return orderList.getFirst();		
 	}
 	
