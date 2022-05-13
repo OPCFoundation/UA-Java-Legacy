@@ -39,11 +39,15 @@ import java.util.Map;
  *  q.removeNextHatchedIfAvailable(); // returns null
  *  q.hatch("c");
  *  q.removeNextHatched(); // returns "c"
- *
- * @author Toni Kalajainen (toni.kalajainen@iki.fi)
  */
 public class IncubationQueue<T> {
 
+	/**
+	* Maximum wait time in milliseconds for blocking operations, such as {@link #getNext()} and
+	* {@link #waitUntilIncubated(Object)}. Default 60000 (ms).
+	*/
+	public static int maxWaitTime = 60000;
+	 
 	Map<T, T> hatchMap; // value=key, if null it is hatched
 	LinkedList<T> orderList = new LinkedList<T>();
 	
@@ -206,7 +210,13 @@ public class IncubationQueue<T> {
 	public synchronized T getNext()
 	throws InterruptedException
 	{
-		while(orderList.isEmpty()) wait();
+	    long start = System.currentTimeMillis();
+	    while (orderList.isEmpty()) {
+	    	wait(1000);
+	    	if ((System.currentTimeMillis() - start) > maxWaitTime && orderList.isEmpty()) {
+	    		throw new InterruptedException("Maximum wait time reached, incubation queue still empty");
+	    	}
+	    }
 		return orderList.getFirst();		
 	}
 	
@@ -290,7 +300,13 @@ public class IncubationQueue<T> {
 	public synchronized void waitUntilIncubated(T o) 
 	throws InterruptedException
 	{
-		while (isIncubating(o)) wait();
+	    long start = System.currentTimeMillis();
+	    while (isIncubating(o)) {
+	    	wait(1000);
+	    	if ((System.currentTimeMillis() - start) > maxWaitTime && isIncubating(o)) {
+	    		throw new InterruptedException("Maximum wait time reached; didn't incubate in time");
+	    	}
+	    }
 	}
 	
 }

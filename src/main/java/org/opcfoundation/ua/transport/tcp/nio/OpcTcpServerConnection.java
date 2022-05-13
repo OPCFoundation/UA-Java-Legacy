@@ -817,7 +817,11 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 					}
 				}
 				logger.debug("handleSymmChunk: {}", secureMessageBuilder);
-				if (secureMessageBuilder!=null && !secureMessageBuilder.moreChunksRequired()) secureMessageBuilder = null;
+				if (secureMessageBuilder!=null && !secureMessageBuilder.moreChunksRequired()) {
+				      // Ensures streams eventually close by putting a "poison pill" there
+				      secureMessageBuilder.softClose();
+				      secureMessageBuilder = null;
+				}
 				if (secureMessageBuilder==null) {
 					secureMessageBuilder = new SecureInputMessageBuilder(token/*channel*/, messageListener, ctx, encoderCtx, channel.recvSequenceNumber);
 					logger.debug("handleSymmChunk: secureMessageBuilder={}", secureMessageBuilder);

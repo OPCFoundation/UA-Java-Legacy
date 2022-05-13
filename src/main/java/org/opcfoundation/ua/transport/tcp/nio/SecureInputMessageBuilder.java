@@ -190,6 +190,13 @@ public class SecureInputMessageBuilder implements InputMessage {
 		}		
 		
 		chunkSink.incubate(chunk);
+		
+		// IF it was the final chunk, "close" the buffer so that it knows no more data is to
+	    // come for it. Note that all the data still comes from the sink, this just stops it after that
+	    if (!acceptsChunks) {
+	      chunkSink.close();
+	    }
+		
 		Runnable handleChunkRun = new Runnable() {
 			public void run() {
 				if (hasError()) return;
@@ -251,7 +258,8 @@ public class SecureInputMessageBuilder implements InputMessage {
 		StackUtils.getNonBlockingWorkExecutor().execute(handleChunkRun);
 		
 		// Start decoding message
-		if (chunkNumber==0)
+	    // only after the final chunk has been received
+	    if (!acceptsChunks)
 			StackUtils.getBlockingWorkExecutor().execute(messageDecoderRun);		
 	}	
 	
@@ -341,7 +349,11 @@ public class SecureInputMessageBuilder implements InputMessage {
 		chunkSink.forceClose();
 	}
 	
-	/**
+	public void softClose() {
+	    chunkSink.close();
+	}
+
+	  /**
 	 * <p>getMessage.</p>
 	 *
 	 * @return a {@link org.opcfoundation.ua.encoding.IEncodeable} object.

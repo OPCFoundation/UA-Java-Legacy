@@ -25,8 +25,6 @@ import org.opcfoundation.ua.utils.IncubationQueue;
  * The data in ByteBuffers in read in the order they are "incubated"
  * The data becomes available when the ByteBuffers are "hatched"
  * Input stream blocks until data becomes available.
- *
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class IncubationBuffer extends InputStream {
 
@@ -34,6 +32,8 @@ public class IncubationBuffer extends InputStream {
 	protected final static ByteBuffer CLOSED_MARKER = ByteBuffer.allocate(0);
 	protected IncubationQueue<ByteBuffer> queue = new IncubationQueue<ByteBuffer>(true);
 	protected ByteBuffer cur;
+	private boolean closed = false;
+	private boolean forceClosed = false;
 	
 	/**
 	 * <p>Constructor for IncubationBuffer.</p>
@@ -43,14 +43,21 @@ public class IncubationBuffer extends InputStream {
 	}
 	
 	/**
-	 * Submits a byte buffer to the use of input stream
-	 *
-	 * @param buf byte buffer to offer for use
+	 * Submits a byte buffer to the use of input stream, it can only be used once
+	 * {@link #hatch(ByteBuffer)} has been called for the same buffer.
 	 */
 	public void incubate(ByteBuffer buf)
 	{
+	    // Here compared to hatch we can prevent any new buffers, as the stream already contains all the
+		// data it can (some of which might not yet be hatched though).
+		if (closed || forceClosed) {
+			return;
+		}
 		synchronized(queue) {
-		queue.incubate(buf);
+			if (closed || forceClosed) {
+				return;
+			}
+			queue.incubate(buf);
 		}
 	}
 	
@@ -61,8 +68,16 @@ public class IncubationBuffer extends InputStream {
 	 */
 	public void hatch(ByteBuffer buf)
 	{
+	    // Note that close here must not prevent hatching, since that happens in async manner. Only
+		// forceClose should prevent it,as that has already removed data.
+		if (forceClosed) {
+			return;
+		}
 		synchronized(queue) {
-		queue.hatch(buf);
+			if (forceClosed) {
+				return;
+			}
+			queue.hatch(buf);
 		}
 	}
 	
@@ -71,9 +86,16 @@ public class IncubationBuffer extends InputStream {
 	 */
 	public void close()
 	{
+	    if (closed) {
+	    	return;
+	    }
 		synchronized(queue) {
-		queue.incubate(CLOSED_MARKER);
-		queue.hatch(CLOSED_MARKER);
+		    if (closed) {
+			      return;
+			}
+		    queue.incubate(CLOSED_MARKER);
+		    queue.hatch(CLOSED_MARKER); // will notifyAll
+		    closed = true;
 		}
 	}
 	
@@ -82,10 +104,16 @@ public class IncubationBuffer extends InputStream {
 	 */
 	public void forceClose()
 	{
+	    if (forceClosed) {
+	    	return;
+	    }
 		synchronized(queue) {
-		queue.clear();
-		queue.incubate(CLOSED_MARKER);
-		queue.hatch(CLOSED_MARKER);
+		    if (forceClosed) {
+		    	return;
+		    }
+		    queue.clear(); // will notifyAll
+		    forceClosed = true;
+		    closed = true;
 		}
 	}
 	
@@ -96,7 +124,7 @@ public class IncubationBuffer extends InputStream {
 	private ByteBuffer getByteBuffer() 
 	throws InterruptedIOException {
 		synchronized(queue) {
-		if (cur==CLOSED_MARKER) return null;
+		if (cur==CLOSED_MARKER || forceClosed) return null;
 		if (cur!=null && cur.hasRemaining()) return cur;
 		if (cur!=null && !cur.hasRemaining()) cur = null;
 		try {
