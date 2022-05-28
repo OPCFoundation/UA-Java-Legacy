@@ -10,7 +10,7 @@ The OPC Foundation has formally released the Unified Architecture Java Stack and
 Please review official site page (http://opcfoundation.github.io/UA-Java-Legacy/) for:
  * Overview
  * Licensing
- * Sample Applications overview
+ * Sample Applications overview 22222
 
 ## Recommended Development Environment
 Note these are recommended, earlier versions might work.
