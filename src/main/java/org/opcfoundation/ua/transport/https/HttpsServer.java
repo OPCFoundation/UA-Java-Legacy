@@ -133,6 +133,10 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 	AtomicInteger secureChannelCounter = new AtomicInteger();
 	/** Server Socket */
 	AsyncServerSocket socket;
+
+	int maxConnections;
+	private boolean initialized = false;
+	  
 	/** Endpoint bindings */
 	EndpointBindingCollection endpointBindings = new EndpointBindingCollection();
 	/** Connection listeners */
@@ -215,6 +219,25 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 	           	connMap.put(conn, httpsConnection);
 	           	connections.addConnection( httpsConnection );
 	            super.connected(conn);
+
+
+	            // Check for connection count limits
+	            List<ServerConnection> conns = new ArrayList<ServerConnection>();
+	            connections.getConnections(conns);
+
+	            log.trace("Checking maximum number of connections, limit: {}, current: {}", maxConnections, conns.size());
+
+	            // at limit is enough per the 5.5.2
+	            if (conns.size() >= maxConnections) {
+	              int delta = maxConnections - conns.size() + 1;
+	              log.trace("We are at max or over limit, closing this connection");
+	              try {
+	                conn.shutdown();
+	                connections.removeConnection(httpsConnection); // ensure it is removed
+	              } catch (IOException e) {
+	                log.error("Cannot close opc.https connection properly", e);
+	              }
+	            }
 	        }
 
 	        @Override
@@ -340,6 +363,18 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 		}
 	}
 	
+	private void init() {
+		if (!initialized) {
+			int maxConnections = application.getHttpsSettings().getMaxConnections();
+			if (maxConnections <= 0) {
+				throw new IllegalStateException("Maximum number of connections was not configured; must be greater than 0");
+			}
+			this.maxConnections = maxConnections;
+
+			initialized = true;
+		}
+	}
+	  
 	/**
 	 * <p>initReactor.</p>
 	 *
@@ -456,7 +491,9 @@ public class HttpsServer extends AbstractState<CloseableObjectState, ServiceResu
 	public EndpointHandle bind(SocketAddress socketAddress, EndpointBinding endpointBinding) throws ServiceResultException {
 		if ( endpointBinding == null || socketAddress == null || endpointBinding.endpointServer!=this )
 			throw new IllegalArgumentException();
-		String url = endpointBinding.endpointAddress.getEndpointUrl();
+	    init();
+	    
+	    String url = endpointBinding.endpointAddress.getEndpointUrl();
 		
 		// Start endpoint handler
 		{

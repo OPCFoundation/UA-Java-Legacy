@@ -72,6 +72,8 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 	
 	private int receiveBufferSize = 0;
 
+	private boolean initialized = false;
+	
 	/** Endpoint handles */
 	Map<SocketAddress, SocketHandle> socketHandles = new HashMap<SocketAddress, SocketHandle>();
 	
@@ -135,8 +137,69 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 				public void onOpen() {
 				}});
 			
-		}};
+	          // Check for connection count limits
+	          // Per 1.05 Part 4 section 5.5.2, To protect against misbehaving Clients and denial of
+	          // service attacks, the Server shall close the oldest unused SecureChannelthat has no
+	          // Session assigned before reaching the maximum number of supported SecureChannels.
+
+
+	          List<ServerConnection> conns = new ArrayList<ServerConnection>();
+	          connections.getConnections(conns);
+
+	          logger.trace("Checking maximum number of connections, limit: {}, current: {}", maxConnections, conns.size());
+
+	          // at limit is enough per the 5.5.2
+	          if (conns.size() >= maxConnections) {
+	            int delta = maxConnections - conns.size() + 1;
+	            logger.trace("We are at max or over limit, number of connections to purge if possible: {}", delta);
+	            // TODO ordering based on timestamps of creation
+	            int purged = 0;
+	            for (ServerConnection tmp : conns) {
+	              if (tmp instanceof OpcTcpServerConnection) {
+	                // Every connection should be of this type in this OpcTcpServer)
+	                OpcTcpServerConnection opcTcpTmp = (OpcTcpServerConnection) tmp;
+
+	                // We are itself part of the connections as well. Skip ourselves here (that is
+	                // handled at the end of this method). If we remove ourselves here, and would be the
+	                // "final legit" connection (and then we would be at max capacity), we would be
+	                // closed before we can ActivateSession.
+	                if (conn == opcTcpTmp) {
+	                  continue;
+	                }
+
+	                if (opcTcpTmp.isPurgeEligible()) {
+	                  opcTcpTmp.close();
+	                  purged++;
+	                  if (purged >= delta) {
+	                    break;
+	                  }
+	                }
+	              }
+	            }
+	            logger.trace("We are at max or over limit, purged {} old connections", purged);
+	          }
+	          // It is possible that we were not able to purge anything, if we happen to be at max
+	          // connections that all have activated sessions, in this case, close this connection
+	          // instead.
+	          List<ServerConnection> tmp = new ArrayList<ServerConnection>();
+	          connections.getConnections(tmp);
+	          /*
+	           * But! This connection itself is within the connections, if we are exactly at max, that
+	           * is still OK here. But if we are over (i.e. we already had at max and none cannot be
+	           * removed), then remove this connection.
+	           */
+	          if (tmp.size() > maxConnections) {
+	            logger.trace("We are at over limit, unable to purge enough old connections, closing this connection");
+	            conn.close();
+	          } else if (tmp.size() == maxConnections) {
+	            logger.trace("We are exactly at maximum connections (including this connection). "
+	                + "No older connections could be purged. Keeping this connection open.");
+	          }
+	    }};
 	ConnectionCollection connections = new ConnectionCollection(this);	
+	
+	int maxConnections;
+	int maxSecureChannelsPerConnection;	
 	
 	/**
 	 * <p>Constructor for OpcTcpServer.</p>
@@ -166,6 +229,8 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 	public EndpointHandle bind(SocketAddress socketAddress, EndpointBinding endpointBinding) throws ServiceResultException {
 		if ( endpointBinding == null || socketAddress == null || endpointBinding.endpointServer!=this )
 			throw new IllegalArgumentException();
+		
+		init();
 		
 		String scheme = UriUtil.getTransportProtocol( endpointBinding.endpointAddress.getEndpointUrl() );
 		if ( !"opc.tcp".equals(scheme) ) throw new ServiceResultException(StatusCodes.Bad_UnexpectedError, "Cannot bind "+scheme+" to opc.tcp server");
@@ -204,6 +269,8 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 		if(addressToConnect == null || endpointUrl == null) {
 			throw new IllegalArgumentException();
 		}
+		init();
+		
 		ReverseSocketHandle socketHandle = new ReverseSocketHandle(addressToConnect);
 		if(socketHandle.socket == null) {
 			try {
@@ -518,6 +585,24 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 		}
 	}
 
+	private void init() {
+		if (!initialized) {
+			int maxConnections = application.getOpctcpSettings().getMaxConnections();
+			if (maxConnections <= 0) {
+				throw new IllegalStateException("Maximum number of connections was not configured; must be greater than 0");
+			}
+			this.maxConnections = maxConnections;
+
+			int maxSecureChannelsPerConnection = application.getOpctcpSettings().getMaxSecureChannelsPerConnection();
+			if (maxSecureChannelsPerConnection <= 0) {
+				throw new IllegalStateException(
+		            "Maximum number of secure channels per connection was not configured; must be greater than 0");
+			}
+			this.maxSecureChannelsPerConnection = maxSecureChannelsPerConnection;
+			initialized = true;
+		}
+	}
+	  
 	List<OpcTcpEndpointHandle> findEndpoints(String forUri) {
 		List<OpcTcpEndpointHandle> result = new ArrayList<OpcTcpEndpointHandle>();
 		for (SocketHandle sh : socketHandleSnapshot() ) sh.endpointHandleSnapshot(result);

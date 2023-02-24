@@ -43,6 +43,9 @@ public class HttpsSettings {
 	X509KeyManager keyManager;
 	/** Trust managers */
 	TrustManager trustManager;
+	
+	int maxConnections = 100;
+	  
 	/** Verifies whether the target hostname matches the names stored inside 
 	 * the server's X.509 certificate, once the connection has been established. 
 	 * This verification can provide additional guarantees of authenticity of 
@@ -280,7 +283,10 @@ public class HttpsSettings {
 		return password;
 	}
 	
-	
+	public int getMaxConnections() {
+	    return maxConnections;
+	}
+
 	public HttpParams getHttpParams() {
 		return httpParams;
 	}
@@ -297,6 +303,10 @@ public class HttpsSettings {
 		this.password = password;
 	}
 
+	public void setMaxConnections(int maxConnections) {
+		this.maxConnections = maxConnections;
+	}
+	  
 	public void readFrom(HttpsSettings src) {
 		if (src.hostnameVerifier!=null) hostnameVerifier = src.hostnameVerifier;
 		if (src.trustManager!=null) this.trustManager = src.trustManager;
@@ -307,6 +317,7 @@ public class HttpsSettings {
 		}
 		if ( src.httpParams != null ) this.httpParams = src.httpParams;
 		if ( src.httpsSecurityPolicies != null ) this.httpsSecurityPolicies = src.httpsSecurityPolicies;
+	    this.maxConnections = src.maxConnections;
 	}
 	
 	@Override

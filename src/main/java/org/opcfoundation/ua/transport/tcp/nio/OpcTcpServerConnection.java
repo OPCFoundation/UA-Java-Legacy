@@ -31,11 +31,13 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.opcfoundation.ua.builtintypes.StatusCode;
 import org.opcfoundation.ua.builtintypes.UnsignedInteger;
 import org.opcfoundation.ua.common.ServiceResultException;
+import org.opcfoundation.ua.core.ActivateSessionResponse;
 import org.opcfoundation.ua.core.CloseSecureChannelRequest;
 import org.opcfoundation.ua.core.EndpointConfiguration;
 import org.opcfoundation.ua.core.MessageSecurityMode;
@@ -141,6 +143,12 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 	/** Optional ReverseHello message, if operating in ReverseHello-mode */
 	ReverseHello rh;
 	
+	/**
+	 * Tracks if this connection has ever been successfully SessionActivated at least once. Impl note:
+	 * once set to true, shall be never set to false.
+	 */
+	AtomicBoolean hasBeenSuccessfullySessionActivated = new AtomicBoolean(false);
+	  
 	/** Timer used for handshake timing */
 	Timer timer = TimerUtil.getTimer();
 
@@ -341,7 +349,9 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 			/** {@inheritDoc} */
 			@Override
 			public synchronized CloseableObject close() {
-				try {
+			    // clear timeout timer, if exist, otherwise it will keep this object alive GC-wise.
+			    cancelTimeoutTimer();
+			    try {
 					setState(CloseableObjectState.Closing);
 				} finally {
 					try {
@@ -368,6 +378,36 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				if (socket==null) return null;
 				return socket.getRemoteSocketAddress();
 			}
+			
+			/**
+			 * Returns true if this connection has (or had) a Session that was successfully Activated at least
+			 * once. Returns false in other cases.
+			 */
+			public boolean hasBeenSuccessfullySessionActivated() {
+				return hasBeenSuccessfullySessionActivated.get();
+			}
+
+			/**
+			 * Returns true if this connection is eligble to be purged if we approach max number of
+			 * connections, false if this connection is valid and should not be purged. Per 1.05 Part 4
+			 * section 5.5.2 "To protect against misbehaving Clientsand denial of service attacks, the
+			 * Servershall close the oldest unused SecureChannelthat has no Sessionassigned before reaching
+			 * the maximum number of supported SecureChannels.". However, in addition if the connection was
+			 * formed via a ReverseHello, it is not considered to be eligible as server was the one initiating
+			 * the connection. Thus this returns true, if this connection is neither a reverse connection and
+			 * also has not yet been activated by a Session.
+			 */
+			public boolean isPurgeEligible() {
+				return !isReverse() && !hasBeenSuccessfullySessionActivated();
+			}
+
+			/**
+			 * Return true if this connection is a reverse connection i.e. where the server send a
+			 * ReverseHello to a Client to initiate the connection.
+			 */
+			public boolean isReverse() {
+				return rh != null;
+			}			
 
 			/** {@inheritDoc} */
 			@Override
@@ -377,6 +417,12 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 				cancelTimeoutTimer();
 			}
 
+			private void checkSecureChannelLimit() throws ServiceResultException {
+				if (secureChannels.size() >= endpointServer.maxSecureChannelsPerConnection) {
+					throw new ServiceResultException(StatusCodes.Bad_TcpNotEnoughResources);
+				}
+			}
+			
 			/**
 			 * @param uri
 			 * @return
@@ -393,10 +439,12 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 			 * <p>cancelTimeoutTimer.</p>
 			 */
 			protected void cancelTimeoutTimer() {
-				// Cancel hand-shake time-out
-				if (timeoutTimer!=null) {
-					timeoutTimer.cancel();
-					timeoutTimer = null;
+			    // Cancel hand-shake time-out, note that this can never be started again, thus it wont hurt if
+			    // this happens multiple times
+			    final TimerTask tmp = timeoutTimer; // multithread-guard
+			    if (tmp != null) {
+			    	tmp.cancel();
+			    	timeoutTimer = null;
 					timeout = null;
 				}
 			}
@@ -604,7 +652,10 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 
 				EndpointBindingCollection c = endpointServer.getEndpointBindings();
 				if (c==null) throw new ServiceResultException(Bad_UnexpectedError);
-				String url = trimUrl(h.getEndpointUrl());
+
+			    checkSecureChannelLimit();
+			    
+			    String url = trimUrl(h.getEndpointUrl());
 
 				logger.debug("onHello: url={}", url);
 
@@ -703,6 +754,8 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 
 				if (req.getRequestType() == SecurityTokenRequestType.Issue)
 				{
+					checkSecureChannelLimit();
+				      
 					OpcTcpServerSecureChannel channel = new OpcTcpServerSecureChannel( this, endpointServer.secureChannelCounter.incrementAndGet() );
 					logger.debug("handleOpenSecureChannelRequest: endpointServer={} SecureChannelId={}", endpointServer, channel.getSecureChannelId());
 					channel.handleOpenChannel(mb, req);
@@ -1172,6 +1225,19 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 					public void run() {
 						try {
 							enc.putMessage(msg.getMessage());
+
+							// If the message was ActivateSessionResponse, which was Good, then mark that this
+							// connection has a successful activated session (and thus is not removed when we are at
+							// max connections. If we are at max connections, per 1.05 Part 4 5.5.2: "To protect
+							// against misbehaving Clients and denial of service attacks, the Server shall close the
+							// oldest unused SecureChannelthat has no Session assigned before reaching the maximum
+							// number of supported SecureChannels. ")
+							if (msg.getMessage() instanceof ActivateSessionResponse) {
+								ActivateSessionResponse res = (ActivateSessionResponse) msg.getMessage();
+								if (res.getResponseHeader().getServiceResult().isGood()) {
+									hasBeenSuccessfullySessionActivated.set(true);
+								}
+							}
 						} catch (ServiceResultException e) {
 							msg.setError( StackUtils.toServiceResultException(e) );
 						}

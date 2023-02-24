@@ -33,6 +33,9 @@ public class OpcTcpSettings implements Cloneable{
 	int handshakeTimeout = -1;
 	int connectTimeout = -1;
 	int reverseHelloAcceptTimeout = -1;
+	int maxConnections = 100;
+	int maxSecureChannelsPerConnection = 1;
+	
 	public enum Flag {
 		/**
 		 * In multithread mode, depending on implementation, channels 
@@ -201,6 +204,19 @@ public class OpcTcpSettings implements Cloneable{
 		result.setHandshakeTimeout(handshakeTimeout);
 		result.setReverseHelloAcceptTimeout(reverseHelloAcceptTimeout);
 		return result;
+	}
+	public int getMaxConnections() {
+		return maxConnections;
+	}
+	public void setMaxConnections(int maxConnections) {
+		this.maxConnections = maxConnections;
+	}
+	public int getMaxSecureChannelsPerConnection() {
+		return maxSecureChannelsPerConnection;
+	}
+	public void setMaxSecureChannelsPerConnection(
+			int maxSecureChannelsPerConnection) {
+		this.maxSecureChannelsPerConnection = maxSecureChannelsPerConnection;
 	}	
 
 
