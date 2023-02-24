@@ -85,6 +85,8 @@ import org.opcfoundation.ua.core.ReadResponse;
 import org.opcfoundation.ua.core.ReadValueId;
 import org.opcfoundation.ua.core.RegisterNodesRequest;
 import org.opcfoundation.ua.core.RegisterNodesResponse;
+import org.opcfoundation.ua.core.RequestHeader;
+import org.opcfoundation.ua.core.ResponseHeader;
 import org.opcfoundation.ua.core.ServiceFault;
 import org.opcfoundation.ua.core.SessionServiceSetHandler;
 import org.opcfoundation.ua.core.SignatureData;
@@ -118,20 +120,20 @@ public class ServerExample1 {
   static class MyAttributeServiceHandler implements AttributeServiceSetHandler {
 
     @Override
-    public void onHistoryRead(EndpointServiceRequest<HistoryReadRequest, HistoryReadResponse> req)
+    public void onHistoryRead(EndpointServiceRequest<HistoryReadRequest, HistoryReadResponse> msgExchange)
         throws ServiceFaultException {
-
+      throw new ServiceFaultException(ServiceFault.createServiceFault(StatusCodes.Bad_NotImplemented));
     }
 
     @Override
-    public void onHistoryUpdate(EndpointServiceRequest<HistoryUpdateRequest, HistoryUpdateResponse> req)
+    public void onHistoryUpdate(EndpointServiceRequest<HistoryUpdateRequest, HistoryUpdateResponse> msgExchange)
         throws ServiceFaultException {
-
+      throw new ServiceFaultException(ServiceFault.createServiceFault(StatusCodes.Bad_NotImplemented));
     }
 
     @Override
-    public void onRead(EndpointServiceRequest<ReadRequest, ReadResponse> req) throws ServiceFaultException {
-      ReadRequest request = req.getRequest();
+    public void onRead(EndpointServiceRequest<ReadRequest, ReadResponse> msgExchange) throws ServiceFaultException {
+      ReadRequest request = msgExchange.getRequest();
       ReadValueId[] nodesToRead = request.getNodesToRead();
 
       DataValue[] results = new DataValue[nodesToRead.length];
@@ -149,12 +151,14 @@ public class ServerExample1 {
         }
       }
       ReadResponse response = new ReadResponse(null, results, null);
-      req.sendResponse(response);
+      ResponseHeader responseHeader = createResponseHeader(msgExchange.getRequest().getRequestHeader());
+      response.setResponseHeader(responseHeader);
+      msgExchange.sendResponse(response);
     }
 
     @Override
-    public void onWrite(EndpointServiceRequest<WriteRequest, WriteResponse> req) throws ServiceFaultException {
-
+    public void onWrite(EndpointServiceRequest<WriteRequest, WriteResponse> msgExchange) throws ServiceFaultException {
+      throw new ServiceFaultException(ServiceFault.createServiceFault(StatusCodes.Bad_NotImplemented));
     }
 
   };
@@ -258,6 +262,12 @@ public class ServerExample1 {
       // Peer verifier
       application.getHttpsSettings().setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
+      // Optionally limit the number of connections - note that if you limit sessions, these should
+      // be at least that big. By default, both values are 100
+
+      // application.getOpctcpSettings().setMaxConnections(1);
+      // application.getHttpsSettings().setMaxConnections(1);
+
       // Load Servers's Application Instance Certificate...
       KeyPair myServerApplicationInstanceCertificate = ExampleKeys.getCert("ServerExample1");
       application.addApplicationInstanceCertificate(myServerApplicationInstanceCertificate);
@@ -277,15 +287,15 @@ public class ServerExample1 {
         endpointAddress = "opc.https://" + hostname + ":8443/UAExample";
         System.out.println(endpointAddress + " bound at " + bindAddress);
         /*
-         * Please read specification 1.04 Part 6 section 7.4.1,
-         * also sign modes can be used in addition to none in HTTPS.
+         * Please read specification 1.04 Part 6 section 7.4.1, also sign modes can be used in
+         * addition to none in HTTPS.
          */
         bind(bindAddress, endpointAddress, SecurityMode.NONE);
 
         bindAddress = "opc.tcp://" + addr + ":8666/UAExample";
         endpointAddress = "opc.tcp://" + hostname + ":8666/UAExample";
         System.out.println(endpointAddress + " bound at " + bindAddress);
-        
+
         Set<SecurityPolicy> policies = new HashSet<SecurityPolicy>();
         policies.add(SecurityPolicy.NONE);
         policies.addAll(SecurityPolicy.ALL_SECURE_101);
@@ -301,53 +311,59 @@ public class ServerExample1 {
     @Override
     public void onActivateSession(EndpointServiceRequest<ActivateSessionRequest, ActivateSessionResponse> msgExchange)
         throws ServiceFaultException {
-      ActivateSessionResponse res = new ActivateSessionResponse();
-      res.setServerNonce(CryptoUtil.createNonce(32));
-      res.setResults(new StatusCode[] {StatusCode.GOOD});
-      msgExchange.sendResponse(res);
+      ActivateSessionResponse response = new ActivateSessionResponse();
+      ResponseHeader responseHeader = createResponseHeader(msgExchange.getRequest().getRequestHeader());
+      response.setResponseHeader(responseHeader);
+      response.setServerNonce(CryptoUtil.createNonce(32));
+      msgExchange.sendResponse(response);
     }
 
     @Override
     public void onCancel(EndpointServiceRequest<CancelRequest, CancelResponse> msgExchange)
         throws ServiceFaultException {
-
+      throw new ServiceFaultException(ServiceFault.createServiceFault(StatusCodes.Bad_NotImplemented));
     }
 
     @Override
     public void onCloseSession(EndpointServiceRequest<CloseSessionRequest, CloseSessionResponse> msgExchange)
         throws ServiceFaultException {
-      CloseSessionResponse res = new CloseSessionResponse();
-      msgExchange.sendResponse(res);
+      CloseSessionResponse response = new CloseSessionResponse();
+      ResponseHeader responseHeader = createResponseHeader(msgExchange.getRequest().getRequestHeader());
+      response.setResponseHeader(responseHeader);
+      msgExchange.sendResponse(response);
     }
 
     @Override
     public void onCreateSession(EndpointServiceRequest<CreateSessionRequest, CreateSessionResponse> msgExchange)
         throws ServiceFaultException {
-      CreateSessionRequest req = msgExchange.getRequest();
-      CreateSessionResponse res = new CreateSessionResponse();
+      CreateSessionRequest request = msgExchange.getRequest();
+      CreateSessionResponse response = new CreateSessionResponse();
+      ResponseHeader responseHeader = createResponseHeader(msgExchange.getRequest().getRequestHeader());
+      response.setResponseHeader(responseHeader);
+
       byte[] token = new byte[32];
       byte[] nonce = new byte[32];
       Random r = new Random();
       r.nextBytes(nonce);
       r.nextBytes(token);
-      res.setAuthenticationToken(new NodeId(0, token));
+      response.setAuthenticationToken(new NodeId(0, token));
       EndpointConfiguration endpointConfiguration = EndpointConfiguration.defaults();
-      res.setMaxRequestMessageSize(UnsignedInteger
-          .valueOf(Math.max(endpointConfiguration.getMaxMessageSize(), req.getMaxResponseMessageSize().longValue())));
-      res.setRevisedSessionTimeout(Math.max(req.getRequestedSessionTimeout(), 60 * 1000));
+      response.setMaxRequestMessageSize(UnsignedInteger.valueOf(
+          Math.max(endpointConfiguration.getMaxMessageSize(), request.getMaxResponseMessageSize().longValue())));
+      response.setRevisedSessionTimeout(Math.max(request.getRequestedSessionTimeout(), 60 * 1000));
       KeyPair cert = getApplication().getApplicationInstanceCertificates()[0];
-      res.setServerCertificate(ByteString.valueOf(cert.getCertificate().getEncoded()));
-      res.setServerEndpoints(this.getEndpointDescriptions());
-      res.setServerNonce(ByteString.valueOf(nonce));
-      ByteString clientCertificate = req.getClientCertificate();
-      ByteString clientNonce = req.getClientNonce();
+      response.setServerCertificate(ByteString.valueOf(cert.getCertificate().getEncoded()));
+      response.setServerEndpoints(this.getEndpointDescriptions());
+      response.setServerNonce(ByteString.valueOf(nonce));
+      ByteString clientCertificate = request.getClientCertificate();
+      ByteString clientNonce = request.getClientNonce();
       SecurityPolicy securityPolicy = msgExchange.getChannel().getSecurityPolicy();
-      res.setServerSignature(
+      response.setServerSignature(
           getServerSignature(clientCertificate, clientNonce, securityPolicy, cert.getPrivateKey().getPrivateKey()));
 
-      res.setServerSoftwareCertificates(getApplication().getSoftwareCertificates());
-      res.setSessionId(new NodeId(0, "Session-" + UUID.randomUUID()));
-      msgExchange.sendResponse(res);
+      response.setServerSoftwareCertificates(getApplication().getSoftwareCertificates());
+      response.setSessionId(new NodeId(0, "Session-" + UUID.randomUUID()));
+      msgExchange.sendResponse(response);
     }
 
     private SignatureData getServerSignature(ByteString clientCertificate, ByteString clientNonce,
@@ -379,6 +395,13 @@ public class ServerExample1 {
       }
       return null;
     }
+  }
+
+  public static ResponseHeader createResponseHeader(RequestHeader requestHeader) {
+    ResponseHeader responseHeader = new ResponseHeader();
+    responseHeader.setServiceResult(StatusCode.GOOD);
+    responseHeader.setRequestHandle(requestHeader.getRequestHandle());
+    return responseHeader;
   }
 
   public static void main(String[] args) throws Exception {

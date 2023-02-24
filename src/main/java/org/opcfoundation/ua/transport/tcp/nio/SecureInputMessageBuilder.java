@@ -77,6 +77,13 @@ public class SecureInputMessageBuilder implements InputMessage {
 	AtomicInteger								expectedSequenceNumber;
 	static Logger 								log = LoggerFactory.getLogger(SecureInputMessageBuilder.class);
 
+	/*
+	 * Total number of bytes added via addChunk. This is a long because our max message size is an
+	 * int, so this avoids theoretical overflow cases. Since SecureInputMessageBuilders are not
+	 * re-used, there is no need to reset this counter.
+	 */
+	long byteCount = 0;
+	  
 	public interface MessageListener {
 		/**
 		 * On message completed or error occured. 
@@ -172,6 +179,16 @@ public class SecureInputMessageBuilder implements InputMessage {
 	public synchronized void addChunk(final ByteBuffer chunk) throws ServiceResultException
 	{
 		if (!acceptsChunks) throw new ServiceResultException(StatusCodes.Bad_UnexpectedError, "Final chunk added to message builder");
+
+	    // prevent messages larger than our max limit
+		byteCount = byteCount + chunk.remaining();
+	    log.trace("Current message size via chunks: {}", byteCount);
+	    if (byteCount > encoderCtx.getMaxMessageSize()) {
+	      log.trace("Max message limits ({}) exceeded, at {}, stopping accepting chunks", encoderCtx.getMaxMessageSize(),
+	          byteCount);
+	      throw new ServiceResultException(StatusCodes.Bad_RequestTooLarge);
+	    }		
+	    
 		final int chunkNumber = chunksAdded++;	
 		chunkSequenceNumbers.add(null);
 		int type = ChunkUtils.getMessageType(chunk);
