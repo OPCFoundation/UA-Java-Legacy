@@ -180,6 +180,12 @@ public class SampleClient {
         new ReadValueId(new NodeId(1, "Boolean"), Attributes.Value, null, null));
     System.out.println(res4);
 
+    // Press enter to shutdown
+    System.out.println("Enter 'x' to shutdown");
+    while (System.in.read() != 'x') {
+      ;
+    }
+
     ///////////// SHUTDOWN /////////////
     mySession.close();
     mySession.closeAsync();
