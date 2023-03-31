@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.opcfoundation.ua.transport.ConnectionMonitor;
 import org.opcfoundation.ua.transport.ServerConnection;
@@ -27,7 +28,7 @@ import org.opcfoundation.ua.transport.ServerConnection;
  */
 public class ConnectionCollection implements ConnectionMonitor {
 
-	Set<ServerConnection> connections = new HashSet<ServerConnection>(); 
+	Set<ServerConnection> connections = new CopyOnWriteArraySet<ServerConnection>(); 
 	CopyOnWriteArrayList<ConnectListener> listeners = new CopyOnWriteArrayList<ConnectListener>();
 	Object sender;	
 
