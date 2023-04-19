@@ -22,6 +22,10 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;		   
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -45,6 +49,7 @@ import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.util.Arrays;
+import java.util.Base64;						
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -255,14 +260,42 @@ public class CertificateUtils {
 				keyStore = KeyStore.getInstance("PKCS12");
 			}
 			logger.debug("loadFromKeyStore: keyStore Provider={}", keyStore.getProvider());
-			keyStore.load(is, password == null ? null : password.toCharArray());
+			
+			//If the user has passed password in plain text, then decoding will result in exception and the password string
+			//will be used as it is, hence maintaining the backward compatibility
+			char[] passwordArray;
+			try {
+				byte[] pwTemp = Base64.getDecoder().decode(password.getBytes());
+				
+				//Using CharsetDecoder to convert byte array to character array and support UTF-8 encoding
+				Charset charset = Charset.forName("UTF-8");
+		        CharsetDecoder decoder = charset.newDecoder();
+		        CharBuffer cb = decoder.decode(ByteBuffer.wrap(pwTemp));
+		        
+		        passwordArray = new char[cb.limit()];
+		        cb.get(passwordArray);
+		        
+				//Cleaning the array in memory so that, it will not be visible in dump.
+				for(int p=0; p<pwTemp.length; p++) {
+					pwTemp[p] = 0;
+				}
+			}
+			catch(IllegalArgumentException e) {
+				passwordArray = password.toCharArray();			
+			}
+			
+			keyStore.load(is, password == null ? null : passwordArray);
 			Enumeration<String> aliases = keyStore.aliases();
 
 			Key key = null;
 			while (aliases.hasMoreElements()) {
 				String a = (String) aliases.nextElement();
-				key = keyStore.getKey(a, password == null ? null : password.toCharArray());
+				key = keyStore.getKey(a, password == null ? null : passwordArray);
 			}
+
+			//Cleaning the array in memory so that, it will not be visible in dump.
+			for(int p=0; p<passwordArray.length; p++) 
+				passwordArray[p] = '-';
 
 			return (RSAPrivateKey) key;
 		} finally {

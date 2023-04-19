@@ -338,21 +338,40 @@ public class EndpointUtil {
 		// Encrypt the password, unless no security is defined
 		SecurityAlgorithm algorithm = securityPolicy.getAsymmetricEncryptionAlgorithm();
 		logger.debug("createUserNameIdentityToken: algorithm={}", algorithm);
-		byte[] pw = password.getBytes(BinaryEncoder.UTF8);
-		if (algorithm == null)
+		byte pwTemp[] = null;
+		byte[] pw = null;
+		//If the user has passed password in plain text, then decoding will result in exception and the password string
+		//will be used as it is, hence maintaining the backward compatibility
+		try {
+			pwTemp = Base64.getDecoder().decode(password.getBytes(BinaryEncoder.UTF8));
+		}
+		catch(IllegalArgumentException e) {
+			pwTemp = password.getBytes(BinaryEncoder.UTF8);
+		}
+		if (algorithm == null){
 			token.setPassword(ByteString.valueOf(pw));
+			//Cleaning the array in memory so that, it will not be visible in dump.
+			for(int i=0; i<pwTemp.length; i++)
+				pwTemp[i] = 0;
 		else {
 			try {
 				byte[] c = ByteString.asByteArray(ep.getServerCertificate());
 				Cert serverCert = (c == null || c.length == 0) ? null : new Cert(c);
 				if (byteString != null)
-					pw = ByteBufferUtils.concatenate(toArray(pw.length
-							+ byteString.getLength()), pw, byteString.getValue());
+					pw = ByteBufferUtils.concatenate(toArray(pwTemp.length
+							+ byteString.getLength()), pwTemp, byteString.getValue());
 				else
-					pw = ByteBufferUtils.concatenate(toArray(pw.length), pw);
-				pw = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
+					pw = ByteBufferUtils.concatenate(toArray(pwTemp.length), pwTemp);
+				//Cleaning the array in memory so that, it will not be visible in dump.
+				for(int i=0; i<pwTemp.length; i++)
+					pwTemp[i] = 0;
+				
+				byte[] pw1 = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
 						.getPublicKey(), algorithm);
-				token.setPassword(ByteString.valueOf(pw));
+				token.setPassword(ByteString.valueOf(pw1));
+				//Cleaning the array in memory so that, it will not be visible in dump.
+				for(int i=0; i<pw.length; i++)
+					pw[i] = 0;
 
 			} catch (InvalidKeyException e) {
 				// Server certificate does not have encrypt usage
