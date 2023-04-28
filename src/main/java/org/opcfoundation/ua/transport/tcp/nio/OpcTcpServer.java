@@ -191,9 +191,13 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 	          if (tmp.size() > maxConnections) {
 	            logger.trace("We are at over limit, unable to purge enough old connections, closing this connection");
 	            conn.close();
-	          } else if (tmp.size() == maxConnections) {
-	            logger.trace("We are exactly at maximum connections (including this connection). "
-	                + "No older connections could be purged. Keeping this connection open.");
+	          } else {
+	        	  if (tmp.size() == maxConnections) {
+	        		logger.trace("We are exactly at maximum connections (including this connection). ")	;
+	        	  } else {
+	        		logger.trace("We are below maximum connection limit");
+	        	  }
+	              conn.init();	        	  
 	          }
 	    }};
 	ConnectionCollection connections = new ConnectionCollection(this);	
@@ -297,6 +301,8 @@ public class OpcTcpServer extends AbstractState<CloseableObjectState, ServiceRes
 					@Override
 					public void onOpen() {
 					}});
+		        // start listening to messages
+				conn.init();
 				//async, do last, others listen on socket state.
 				socketHandle.socket.connect(socketHandle.socketAddress);
 			}catch(IOException e) {
