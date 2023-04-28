@@ -311,15 +311,27 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 
 				setState(CloseableObjectState.Opening);
 
+			}
+			
+			/**
+			 * Start listening for data from the connection, note that data might be processed already before
+			 * this method returns.
+			 */
+			public void init() {
 				s.getStateMonitor().addStateListener(socketListener);
-				s.getInputStream().createMonitor(8, inputListener);
 				
+			    // must set timeout timer here, because it might be canceled before the below monitor
+			    // is triggered
 				if(rh == null) {
 					timeoutTimer = TimerUtil.schedule(
 							timer, timeout,
 							StackUtils.getBlockingWorkExecutor(),
 							System.currentTimeMillis() + handshakeTimeout);
 				}
+
+			    // Start listening for the Hello (the inputListener will schedule itself again)
+				s.getInputStream().createMonitor(8, inputListener);
+
 				if(rh != null) {
 					s.getStateMonitor().addStateListener(new StateListener<SocketState>() {
 						@Override
@@ -335,8 +347,8 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 							}							
 						}
 					});
-				}
-			}
+				}	
+			  }			
 
 			/** {@inheritDoc} */
 			@Override
@@ -1234,7 +1246,8 @@ public class OpcTcpServerConnection extends AbstractServerConnection {
 							// number of supported SecureChannels. ")
 							if (msg.getMessage() instanceof ActivateSessionResponse) {
 								ActivateSessionResponse res = (ActivateSessionResponse) msg.getMessage();
-								if (res.getResponseHeader().getServiceResult().isGood()) {
+								if ((res.getResponseHeader() != null) && (res.getResponseHeader().getServiceResult() != null) && 
+										(res.getResponseHeader().getServiceResult().isGood())) {
 									hasBeenSuccessfullySessionActivated.set(true);
 								}
 							}
