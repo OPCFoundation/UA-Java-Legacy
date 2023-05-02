@@ -77,6 +77,12 @@ public class ScCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
+	public byte[] base64Decode(char[] stringChars) {
+		return Base64.decode(StringUtils.removeWhitespace(new String(stringChars)));
+	}
+	
+	/** {@inheritDoc} */
+	@Override
 	public String base64Encode(byte[] bytes) {
 		try {
 			return new String(Base64.encode(bytes), "UTF-8");

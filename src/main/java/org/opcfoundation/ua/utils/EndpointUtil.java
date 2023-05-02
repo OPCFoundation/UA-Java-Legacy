@@ -343,7 +343,7 @@ public class EndpointUtil {
 		//If the user has passed password in plain text, then decoding will result in exception and the password string
 		//will be used as it is, hence maintaining the backward compatibility
 		try {
-			pwTemp = Base64.getDecoder().decode(password.getBytes(BinaryEncoder.UTF8));
+			pwTemp = CryptoUtil.base64Decode(password.toCharArray());
 		}
 		catch(IllegalArgumentException e) {
 			pwTemp = password.getBytes(BinaryEncoder.UTF8);
@@ -351,8 +351,8 @@ public class EndpointUtil {
 		if (algorithm == null){
 			token.setPassword(ByteString.valueOf(pw));
 			//Cleaning the array in memory so that, it will not be visible in dump.
-			for(int i=0; i<pwTemp.length; i++)
-				pwTemp[i] = 0;
+			Arrays.fill(pwTemp, (byte)0);
+		}
 		else {
 			try {
 				byte[] c = ByteString.asByteArray(ep.getServerCertificate());
@@ -363,15 +363,13 @@ public class EndpointUtil {
 				else
 					pw = ByteBufferUtils.concatenate(toArray(pwTemp.length), pwTemp);
 				//Cleaning the array in memory so that, it will not be visible in dump.
-				for(int i=0; i<pwTemp.length; i++)
-					pwTemp[i] = 0;
+				Arrays.fill(pwTemp, (byte)0);
 				
 				byte[] pw1 = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
 						.getPublicKey(), algorithm);
 				token.setPassword(ByteString.valueOf(pw1));
 				//Cleaning the array in memory so that, it will not be visible in dump.
-				for(int i=0; i<pw.length; i++)
-					pw[i] = 0;
+				Arrays.fill(pw, (byte)0);
 
 			} catch (InvalidKeyException e) {
 				// Server certificate does not have encrypt usage

@@ -48,8 +48,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
-import java.util.Arrays;
-import java.util.Base64;						
+import java.util.Arrays;					
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -265,7 +264,7 @@ public class CertificateUtils {
 			//will be used as it is, hence maintaining the backward compatibility
 			char[] passwordArray;
 			try {
-				byte[] pwTemp = Base64.getDecoder().decode(password.getBytes());
+				byte[] pwTemp = CryptoUtil.base64Decode(password.toCharArray());
 				
 				//Using CharsetDecoder to convert byte array to character array and support UTF-8 encoding
 				Charset charset = Charset.forName("UTF-8");
@@ -274,11 +273,13 @@ public class CertificateUtils {
 		        
 		        passwordArray = new char[cb.limit()];
 		        cb.get(passwordArray);
-		        
+
+		    	  //Cleaning character buffer so that, it will not be visible in dump.
+		        for(int i=0; i<cb.limit(); i++)
+		        	cb.put(i,'-');
+
 				//Cleaning the array in memory so that, it will not be visible in dump.
-				for(int p=0; p<pwTemp.length; p++) {
-					pwTemp[p] = 0;
-				}
+				Arrays.fill(pwTemp, (byte)0);
 			}
 			catch(IllegalArgumentException e) {
 				passwordArray = password.toCharArray();			
@@ -294,8 +295,7 @@ public class CertificateUtils {
 			}
 
 			//Cleaning the array in memory so that, it will not be visible in dump.
-			for(int p=0; p<passwordArray.length; p++) 
-				passwordArray[p] = '-';
+			Arrays.fill(passwordArray, '-');
 
 			return (RSAPrivateKey) key;
 		} finally {

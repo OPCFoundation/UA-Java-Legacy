@@ -125,6 +125,10 @@ public class CryptoUtil {
 	public static byte[] base64Decode(String string) {
 		return getCryptoProvider().base64Decode(string);
 	}
+	//Overloaded base64Decode Function to accept character array
+	public static byte[] base64Decode(char[] stringChars) {
+		return getCryptoProvider().base64Decode(stringChars);
+	}
 
 	/**
 	 * <p>base64Encode a byte array to string</p>
