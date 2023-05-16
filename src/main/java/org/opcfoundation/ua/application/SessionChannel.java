@@ -160,6 +160,11 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 		UserIdentityToken token = EndpointUtil.createUserNameIdentityToken(session.getEndpoint(), session.getServerNonce(), username, password);
 		return activate(token, null);	
 	}
+	public ActivateSessionResponse activate(String username, char[] password) throws ServiceResultException
+	{
+		UserIdentityToken token = EndpointUtil.createUserNameIdentityToken(session.getEndpoint(), session.getServerNonce(), username, password);
+		return activate(token, null);	
+	}
 
 	/**
 	 * Activate session using identity token.

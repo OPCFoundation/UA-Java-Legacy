@@ -23,6 +23,9 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -338,38 +341,21 @@ public class EndpointUtil {
 		// Encrypt the password, unless no security is defined
 		SecurityAlgorithm algorithm = securityPolicy.getAsymmetricEncryptionAlgorithm();
 		logger.debug("createUserNameIdentityToken: algorithm={}", algorithm);
-		byte pwTemp[] = null;
-		byte[] pw = null;
-		//If the user has passed password in plain text, then decoding will result in exception and the password string
-		//will be used as it is, hence maintaining the backward compatibility
-		try {
-			pwTemp = CryptoUtil.base64Decode(password.toCharArray());
-		}
-		catch(IllegalArgumentException e) {
-			pwTemp = password.getBytes(BinaryEncoder.UTF8);
-		}
-		if (algorithm == null){
+		byte[] pw = password.getBytes(BinaryEncoder.UTF8);
+		if (algorithm == null)
 			token.setPassword(ByteString.valueOf(pw));
-			//Cleaning the array in memory so that, it will not be visible in dump.
-			Arrays.fill(pwTemp, (byte)0);
-		}
 		else {
 			try {
 				byte[] c = ByteString.asByteArray(ep.getServerCertificate());
 				Cert serverCert = (c == null || c.length == 0) ? null : new Cert(c);
 				if (byteString != null)
-					pw = ByteBufferUtils.concatenate(toArray(pwTemp.length
-							+ byteString.getLength()), pwTemp, byteString.getValue());
+					pw = ByteBufferUtils.concatenate(toArray(pw.length
+							+ byteString.getLength()), pw, byteString.getValue());
 				else
-					pw = ByteBufferUtils.concatenate(toArray(pwTemp.length), pwTemp);
-				//Cleaning the array in memory so that, it will not be visible in dump.
-				Arrays.fill(pwTemp, (byte)0);
-				
-				byte[] pw1 = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
+					pw = ByteBufferUtils.concatenate(toArray(pw.length), pw);
+				pw = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
 						.getPublicKey(), algorithm);
-				token.setPassword(ByteString.valueOf(pw1));
-				//Cleaning the array in memory so that, it will not be visible in dump.
-				Arrays.fill(pw, (byte)0);
+				token.setPassword(ByteString.valueOf(pw));
 
 			} catch (InvalidKeyException e) {
 				// Server certificate does not have encrypt usage
@@ -395,6 +381,80 @@ public class EndpointUtil {
 		}
 		return token;		
 	}
+	
+	//Overloaded method createUserNameIdentityToken to accept password in char array format
+	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, ByteString byteString, String username, char[] password)	
+			throws ServiceResultException
+			{
+				UserTokenPolicy policy = ep.findUserTokenPolicy(UserTokenType.UserName);
+				if (policy==null) throw new ServiceResultException(StatusCodes.Bad_IdentityTokenRejected,  "UserName not supported");
+				String securityPolicyUri = policy.getSecurityPolicyUri();
+				if (securityPolicyUri==null) securityPolicyUri = ep.getSecurityPolicyUri();
+				SecurityPolicy securityPolicy = SecurityPolicy.getSecurityPolicy( securityPolicyUri );
+				if (securityPolicy==null) securityPolicy = SecurityPolicy.NONE;
+				UserNameIdentityToken token = new UserNameIdentityToken();
+				
+				token.setUserName( username );
+				token.setPolicyId( policy.getPolicyId() );
+				
+				// Encrypt the password, unless no security is defined
+				SecurityAlgorithm algorithm = securityPolicy.getAsymmetricEncryptionAlgorithm();
+				logger.debug("createUserNameIdentityToken: algorithm={}", algorithm);
+				
+				//Convert character array to byte array
+				CharBuffer charBuffer = CharBuffer.wrap(chars);
+				ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
+				byte[] pwTemp = Arrays.copyOfRange(byteBuffer.array(),byteBuffer.position(), byteBuffer.limit());
+				Arrays.fill(byteBuffer.array(), (byte) 0); // clear sensitive data
+				
+				if (algorithm == null)
+				{
+					token.setPassword(ByteString.valueOf(pwTemp));
+					//Clear sensitive data from memory
+					Arrays.fill(pwTemp, (byte)0);
+				}
+				else {
+					try {
+						byte[] pw = null;
+						byte[] c = ByteString.asByteArray(ep.getServerCertificate());
+						Cert serverCert = (c == null || c.length == 0) ? null : new Cert(c);
+						if (byteString != null)
+							pw = ByteBufferUtils.concatenate(toArray(pwTemp.length
+									+ byteString.getLength()), pwTemp, byteString.getValue());
+						else
+							pw = ByteBufferUtils.concatenate(toArray(pwTemp.length), pwTemp);
+						//Clear sensitive data from memory
+						Arrays.fill(pwTemp, (byte)0);
+						byte[] pw1 = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
+								.getPublicKey(), algorithm);
+						token.setPassword(ByteString.valueOf(pw1));
+						//Clear sensitive data from memory
+						Arrays.fill(pw, (byte)0);
+
+					} catch (InvalidKeyException e) {
+						// Server certificate does not have encrypt usage
+						throw new ServiceResultException(
+								StatusCodes.Bad_CertificateInvalid,
+								"Server certificate in endpoint is invalid: "
+										+ e.getMessage());
+					} catch (IllegalBlockSizeException e) {
+						throw new ServiceResultException(
+								StatusCodes.Bad_SecurityPolicyRejected, e.getClass()
+										.getName() + ":" + e.getMessage());
+					} catch (BadPaddingException e) {
+						throw new ServiceResultException(
+								StatusCodes.Bad_CertificateInvalid,
+								"Server certificate in endpoint is invalid: "
+										+ e.getMessage());
+					} catch (NoSuchAlgorithmException e) {
+						throw new ServiceResultException(StatusCodes.Bad_InternalError, e);
+					} catch (NoSuchPaddingException e) {
+						throw new ServiceResultException(StatusCodes.Bad_InternalError, e);
+					}
+					token.setEncryptionAlgorithm(algorithm.getUri());
+				}
+				return token;		
+			}
 
 	/**
 	 * Create user identity token based on an issued token

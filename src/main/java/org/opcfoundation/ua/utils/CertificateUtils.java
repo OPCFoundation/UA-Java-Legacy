@@ -259,43 +259,53 @@ public class CertificateUtils {
 				keyStore = KeyStore.getInstance("PKCS12");
 			}
 			logger.debug("loadFromKeyStore: keyStore Provider={}", keyStore.getProvider());
-			
-			//If the user has passed password in plain text, then decoding will result in exception and the password string
-			//will be used as it is, hence maintaining the backward compatibility
-			char[] passwordArray;
-			try {
-				byte[] pwTemp = CryptoUtil.base64Decode(password.toCharArray());
-				
-				//Using CharsetDecoder to convert byte array to character array and support UTF-8 encoding
-				Charset charset = Charset.forName("UTF-8");
-		        CharsetDecoder decoder = charset.newDecoder();
-		        CharBuffer cb = decoder.decode(ByteBuffer.wrap(pwTemp));
-		        
-		        passwordArray = new char[cb.limit()];
-		        cb.get(passwordArray);
-
-		    	  //Cleaning character buffer so that, it will not be visible in dump.
-		        for(int i=0; i<cb.limit(); i++)
-		        	cb.put(i,'-');
-
-				//Cleaning the array in memory so that, it will not be visible in dump.
-				Arrays.fill(pwTemp, (byte)0);
-			}
-			catch(IllegalArgumentException e) {
-				passwordArray = password.toCharArray();			
-			}
-			
-			keyStore.load(is, password == null ? null : passwordArray);
+			keyStore.load(is, password == null ? null : password.toCharArray());
 			Enumeration<String> aliases = keyStore.aliases();
 
 			Key key = null;
 			while (aliases.hasMoreElements()) {
 				String a = (String) aliases.nextElement();
-				key = keyStore.getKey(a, password == null ? null : passwordArray);
+				key = keyStore.getKey(a, password == null ? null : password.toCharArray());
 			}
 
-			//Cleaning the array in memory so that, it will not be visible in dump.
-			Arrays.fill(passwordArray, '-');
+			return (RSAPrivateKey) key;
+		} finally {
+			is.close();
+		}
+	}
+	public static RSAPrivateKey loadFromKeyStore(URL keystoreUrl,
+			char[] password) throws IOException, NoSuchAlgorithmException,
+			CertificateException, KeyStoreException, UnrecoverableKeyException {
+		logger.debug("loadFromKeyStore: keystoreUrl={}", keystoreUrl);
+		// Open pfx-certificate
+		URLConnection connection = keystoreUrl.openConnection();
+		InputStream is = connection.getInputStream();
+		try {
+			// Open key store and load the key
+			if (logger.isDebugEnabled())
+				logger.debug("getproviders={}", Arrays.toString(Security.getProviders()));
+			KeyStore keyStore;
+			try {
+				try {
+					// Prefer the Sun KeyStore implementation!
+					// TODO Check if the new BC works better nowadays
+					keyStore = KeyStore.getInstance("PKCS12", "SunJSSE");
+				} catch (NoSuchProviderException e) {
+					keyStore = KeyStore.getInstance("PKCS12", CryptoUtil.getSecurityProviderName(KeyStore.class));
+				}
+			} catch (NoSuchProviderException e) {
+				keyStore = KeyStore.getInstance("PKCS12");
+			}
+			logger.debug("loadFromKeyStore: keyStore Provider={}", keyStore.getProvider());
+			
+			keyStore.load(is, password == null ? null : password);
+			Enumeration<String> aliases = keyStore.aliases();
+
+			Key key = null;
+			while (aliases.hasMoreElements()) {
+				String a = (String) aliases.nextElement();
+				key = keyStore.getKey(a, password == null ? null : password);
+			}
 
 			return (RSAPrivateKey) key;
 		} finally {

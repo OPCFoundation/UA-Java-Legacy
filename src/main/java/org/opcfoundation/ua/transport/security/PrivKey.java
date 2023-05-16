@@ -78,6 +78,11 @@ public class PrivKey {
 		RSAPrivateKey key = CertificateUtils.loadFromKeyStore(keystoreUrl, password);
 		return new PrivKey(key);
 	}	
+	public static PrivKey loadFromKeyStore(URL keystoreUrl, char[] password) throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
+	{
+		RSAPrivateKey key = CertificateUtils.loadFromKeyStore(keystoreUrl, password);
+		return new PrivKey(key);
+	}	
 
 	/**
 	 * Load private key from a PEM encoded file
@@ -280,7 +285,10 @@ public class PrivKey {
 	{
 		return loadFromKeyStore( file.toURI().toURL(), password );
 	}
-	
+	public static PrivKey loadFromKeyStore(File file, char[] password) throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
+	{
+		return loadFromKeyStore( file.toURI().toURL(), password );
+	}
 	/**
 	 * Save the key in a binary file. Note that the file is not secured by a password.
 	 *

@@ -54,6 +54,13 @@ public final class KeyPair {
 		PrivKey privKey = PrivKey.loadFromKeyStore(privateKeyFile, privateKeyPassword);
 		return new KeyPair(cert, privKey);
 	}
+	public static KeyPair load(URL certificateFile, URL privateKeyFile, char[] privateKeyPassword) 
+	throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
+	{
+		Cert cert = Cert.load(certificateFile);
+		PrivKey privKey = PrivKey.loadFromKeyStore(privateKeyFile, privateKeyPassword);
+		return new KeyPair(cert, privKey);
+	}
 	
 	/**
 	 * Load Certificate and Private key pair from X.509 and keystore file
@@ -69,6 +76,13 @@ public final class KeyPair {
 	 * @throws java.security.UnrecoverableKeyException if any.
 	 */
 	public static KeyPair load(File certificateFile, File privateKeyFile, String privateKeyPassword) 
+	throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
+	{
+		Cert cert = Cert.load(certificateFile);
+		PrivKey privKey = PrivKey.loadFromKeyStore(privateKeyFile, privateKeyPassword);
+		return new KeyPair(cert, privKey);
+	}
+	public static KeyPair load(File certificateFile, File privateKeyFile, char[] privateKeyPassword) 
 	throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
 	{
 		Cert cert = Cert.load(certificateFile);
