@@ -238,41 +238,10 @@ public class CertificateUtils {
 	public static RSAPrivateKey loadFromKeyStore(URL keystoreUrl,
 			String password) throws IOException, NoSuchAlgorithmException,
 			CertificateException, KeyStoreException, UnrecoverableKeyException {
-		logger.debug("loadFromKeyStore: keystoreUrl={}", keystoreUrl);
-		// Open pfx-certificate
-		URLConnection connection = keystoreUrl.openConnection();
-		InputStream is = connection.getInputStream();
-		try {
-			// Open key store and load the key
-			if (logger.isDebugEnabled())
-				logger.debug("getproviders={}", Arrays.toString(Security.getProviders()));
-			KeyStore keyStore;
-			try {
-				try {
-					// Prefer the Sun KeyStore implementation!
-					// TODO Check if the new BC works better nowadays
-					keyStore = KeyStore.getInstance("PKCS12", "SunJSSE");
-				} catch (NoSuchProviderException e) {
-					keyStore = KeyStore.getInstance("PKCS12", CryptoUtil.getSecurityProviderName(KeyStore.class));
-				}
-			} catch (NoSuchProviderException e) {
-				keyStore = KeyStore.getInstance("PKCS12");
-			}
-			logger.debug("loadFromKeyStore: keyStore Provider={}", keyStore.getProvider());
-			keyStore.load(is, password == null ? null : password.toCharArray());
-			Enumeration<String> aliases = keyStore.aliases();
-
-			Key key = null;
-			while (aliases.hasMoreElements()) {
-				String a = (String) aliases.nextElement();
-				key = keyStore.getKey(a, password == null ? null : password.toCharArray());
-			}
-
-			return (RSAPrivateKey) key;
-		} finally {
-			is.close();
-		}
+		return loadFromKeyStore(keystoreUrl,password.toCharArray());
 	}
+	
+	//Overloaded method to accept password as character array
 	public static RSAPrivateKey loadFromKeyStore(URL keystoreUrl,
 			char[] password) throws IOException, NoSuchAlgorithmException,
 			CertificateException, KeyStoreException, UnrecoverableKeyException {

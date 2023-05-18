@@ -327,59 +327,7 @@ public class EndpointUtil {
 	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, ByteString byteString, String username, String password)	
 	throws ServiceResultException
 	{
-		UserTokenPolicy policy = ep.findUserTokenPolicy(UserTokenType.UserName);
-		if (policy==null) throw new ServiceResultException(StatusCodes.Bad_IdentityTokenRejected,  "UserName not supported");
-		String securityPolicyUri = policy.getSecurityPolicyUri();
-		if (securityPolicyUri==null) securityPolicyUri = ep.getSecurityPolicyUri();
-		SecurityPolicy securityPolicy = SecurityPolicy.getSecurityPolicy( securityPolicyUri );
-		if (securityPolicy==null) securityPolicy = SecurityPolicy.NONE;
-		UserNameIdentityToken token = new UserNameIdentityToken();
-		
-		token.setUserName( username );
-		token.setPolicyId( policy.getPolicyId() );
-		
-		// Encrypt the password, unless no security is defined
-		SecurityAlgorithm algorithm = securityPolicy.getAsymmetricEncryptionAlgorithm();
-		logger.debug("createUserNameIdentityToken: algorithm={}", algorithm);
-		byte[] pw = password.getBytes(BinaryEncoder.UTF8);
-		if (algorithm == null)
-			token.setPassword(ByteString.valueOf(pw));
-		else {
-			try {
-				byte[] c = ByteString.asByteArray(ep.getServerCertificate());
-				Cert serverCert = (c == null || c.length == 0) ? null : new Cert(c);
-				if (byteString != null)
-					pw = ByteBufferUtils.concatenate(toArray(pw.length
-							+ byteString.getLength()), pw, byteString.getValue());
-				else
-					pw = ByteBufferUtils.concatenate(toArray(pw.length), pw);
-				pw = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
-						.getPublicKey(), algorithm);
-				token.setPassword(ByteString.valueOf(pw));
-
-			} catch (InvalidKeyException e) {
-				// Server certificate does not have encrypt usage
-				throw new ServiceResultException(
-						StatusCodes.Bad_CertificateInvalid,
-						"Server certificate in endpoint is invalid: "
-								+ e.getMessage());
-			} catch (IllegalBlockSizeException e) {
-				throw new ServiceResultException(
-						StatusCodes.Bad_SecurityPolicyRejected, e.getClass()
-								.getName() + ":" + e.getMessage());
-			} catch (BadPaddingException e) {
-				throw new ServiceResultException(
-						StatusCodes.Bad_CertificateInvalid,
-						"Server certificate in endpoint is invalid: "
-								+ e.getMessage());
-			} catch (NoSuchAlgorithmException e) {
-				throw new ServiceResultException(StatusCodes.Bad_InternalError, e);
-			} catch (NoSuchPaddingException e) {
-				throw new ServiceResultException(StatusCodes.Bad_InternalError, e);
-			}
-			token.setEncryptionAlgorithm(algorithm.getUri());
-		}
-		return token;		
+		return createUserNameIdentityToken(ep, byteString, username, password.toCharArray());		
 	}
 	
 	//Overloaded method createUserNameIdentityToken to accept password in char array format
