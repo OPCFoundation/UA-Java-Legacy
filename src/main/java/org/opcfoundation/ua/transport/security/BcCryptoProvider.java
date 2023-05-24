@@ -77,8 +77,8 @@ public class BcCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public byte[] base64Decode(char[] stringChars) {
-		return Base64.decode(StringUtils.removeWhitespace(new String(stringChars)));
+	public byte[] base64Decode(byte[] bytes) {
+		return Base64.decode(bytes);
 	}
 	
 	/** {@inheritDoc} */

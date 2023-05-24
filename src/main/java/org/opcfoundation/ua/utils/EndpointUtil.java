@@ -319,7 +319,7 @@ public class EndpointUtil {
 	 *
 	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
 	 * @param username a {@link java.lang.String} object.
-	 * @param password a {@link java.lang.String} object.
+	 * @param password the clear text password as {@link java.lang.String}.
 	 * @return user identity token
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support UserName token policy
 	 * @param byteString an array of byte.
@@ -327,10 +327,19 @@ public class EndpointUtil {
 	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, ByteString byteString, String username, String password)	
 	throws ServiceResultException
 	{
-		return createUserNameIdentityToken(ep, byteString, username, password.toCharArray());		
+		return createUserNameIdentityToken(ep, byteString, username, password == null ? null : password.toCharArray());		
 	}
 	
-	//Overloaded method createUserNameIdentityToken to accept password in char array format
+	/**
+	 * Create user identity token based on username and password
+	 *
+	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 * @param username a {@link java.lang.String} object.
+	 * @param password the clear text password as char array.
+	 * @return user identity token
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support UserName token policy
+	 * @param byteString an array of byte.
+	 */
 	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, ByteString byteString, String username, char[] password)	
 			throws ServiceResultException
 			{
@@ -348,18 +357,14 @@ public class EndpointUtil {
 				// Encrypt the password, unless no security is defined
 				SecurityAlgorithm algorithm = securityPolicy.getAsymmetricEncryptionAlgorithm();
 				logger.debug("createUserNameIdentityToken: algorithm={}", algorithm);
-				
-				//Convert character array to byte array
-				CharBuffer charBuffer = CharBuffer.wrap(chars);
-				ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
-				byte[] pwTemp = Arrays.copyOfRange(byteBuffer.array(),byteBuffer.position(), byteBuffer.limit());
-				Arrays.fill(byteBuffer.array(), (byte) 0); // clear sensitive data
+							
+				byte[] pwTemp = CryptoUtil.toBytes(password);
 				
 				if (algorithm == null)
 				{
 					token.setPassword(ByteString.valueOf(pwTemp));
 					//Clear sensitive data from memory
-					Arrays.fill(pwTemp, (byte)0);
+					ByteBufferUtils.clear(pwTemp);
 				}
 				else {
 					try {
@@ -372,12 +377,12 @@ public class EndpointUtil {
 						else
 							pw = ByteBufferUtils.concatenate(toArray(pwTemp.length), pwTemp);
 						//Clear sensitive data from memory
-						Arrays.fill(pwTemp, (byte)0);
+						ByteBufferUtils.clear(pwTemp);
 						byte[] pw1 = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
 								.getPublicKey(), algorithm);
 						token.setPassword(ByteString.valueOf(pw1));
 						//Clear sensitive data from memory
-						Arrays.fill(pw, (byte)0);
+						ByteBufferUtils.clear(pwTemp);
 
 					} catch (InvalidKeyException e) {
 						// Server certificate does not have encrypt usage

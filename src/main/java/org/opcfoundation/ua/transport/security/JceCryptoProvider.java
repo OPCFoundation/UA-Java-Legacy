@@ -68,8 +68,8 @@ public class JceCryptoProvider implements CryptoProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public byte[] base64Decode(char[] stringChars) {
-		return CertificateUtils.base64Decode(new String(stringChars));
+	public byte[] base64Decode(byte[] bytes) {
+		return CertificateUtils.base64Decode(bytes);
 	}
 	
 	/** {@inheritDoc} */
