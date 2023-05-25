@@ -12,9 +12,6 @@
 
 package org.opcfoundation.ua.utils;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -128,14 +125,9 @@ public class CryptoUtil {
 	public static byte[] base64Decode(String string) {
 		return getCryptoProvider().base64Decode(string);
 	}
-	
-	/**
-	 * Overloaded base64Decode Function to accept byte array
-	 * @param bytes the bytes to decode
-	 * @return an array of byte
-	 */
-	public static byte[] base64Decode(byte[] bytes) {
-		return getCryptoProvider().base64Decode(bytes);
+	//Overloaded base64Decode Function to accept character array
+	public static byte[] base64Decode(char[] stringChars) {
+		return getCryptoProvider().base64Decode(stringChars);
 	}
 
 	/**
@@ -729,22 +721,6 @@ public class CryptoUtil {
 		}
 		return sb.toString();
 	}
-
-	/** 
-	 * Convert Char Array to Byte Array without String to avoid leaving traces of the intermediate results in the memory.
-	 * 
-	 * If chars is null, returns an empty byte array.
-	 */
-	public static byte[] toBytes(char[] chars) {
-		  if (chars == null)
-		      return new byte[0];
-		  CharBuffer charBuffer = CharBuffer.wrap(chars);
-		  ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
-		  byte[] bytes = Arrays.copyOfRange(byteBuffer.array(),
-		            byteBuffer.position(), byteBuffer.limit());
-		  Arrays.fill(byteBuffer.array(), (byte) 0); // clear sensitive data
-		  return bytes;
-		}	
 
 	/**
 	 * Verify a signature.

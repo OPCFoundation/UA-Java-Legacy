@@ -13,7 +13,7 @@
 package org.opcfoundation.ua.utils.bytebuffer;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
+
 /**
  * <p>ByteBufferUtils class.</p>
  *
@@ -72,14 +72,5 @@ public class ByteBufferUtils {
 		return result;
 	}
 	
-	/**
-	 * Fill the byte array with 0 values. 
-	 *
-	 * @param value an array of byte.
-	 */
-	public static void clear(byte[] value)
-	{
-		Arrays.fill(value, (byte)0);
-	}
 	
 }

@@ -32,8 +32,6 @@ public interface CertificateProvider {
 
 	public byte[] base64Decode(String string);
 
-	public byte[] base64Decode(byte[] bytes);
-	
 	public String base64Encode(byte[] bytes);
 	
 	public X509Certificate generateCertificate(String domainName,

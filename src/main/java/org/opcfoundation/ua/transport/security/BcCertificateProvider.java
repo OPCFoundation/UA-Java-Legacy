@@ -287,12 +287,6 @@ public class BcCertificateProvider implements CertificateProvider {
 
 	/** {@inheritDoc} */
 	@Override
-	public byte[] base64Decode(byte[] bytes) {
-		return Base64.decode(bytes);
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public String base64Encode(byte[] bytes) {
 		try {
 			return new String(Base64.encode(bytes), "UTF-8");

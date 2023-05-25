@@ -23,6 +23,9 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -56,6 +59,7 @@ import org.opcfoundation.ua.core.UserNameIdentityToken;
 import org.opcfoundation.ua.core.UserTokenPolicy;
 import org.opcfoundation.ua.core.UserTokenType;
 import org.opcfoundation.ua.core.X509IdentityToken;
+import org.opcfoundation.ua.encoding.binary.BinaryEncoder;
 import org.opcfoundation.ua.transport.UriUtil;
 import org.opcfoundation.ua.transport.security.Cert;
 import org.opcfoundation.ua.transport.security.SecurityAlgorithm;
@@ -315,7 +319,7 @@ public class EndpointUtil {
 	 *
 	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
 	 * @param username a {@link java.lang.String} object.
-	 * @param password the clear text password as {@link java.lang.String}.
+	 * @param password a {@link java.lang.String} object.
 	 * @return user identity token
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support UserName token policy
 	 * @param byteString an array of byte.
@@ -323,19 +327,10 @@ public class EndpointUtil {
 	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, ByteString byteString, String username, String password)	
 	throws ServiceResultException
 	{
-		return createUserNameIdentityToken(ep, byteString, username, password == null ? null : password.toCharArray());		
+		return createUserNameIdentityToken(ep, byteString, username, password.toCharArray());		
 	}
 	
-	/**
-	 * Create user identity token based on username and password
-	 *
-	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
-	 * @param username a {@link java.lang.String} object.
-	 * @param password the clear text password as char array.
-	 * @return user identity token
-	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support UserName token policy
-	 * @param byteString an array of byte.
-	 */
+	//Overloaded method createUserNameIdentityToken to accept password in char array format
 	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, ByteString byteString, String username, char[] password)	
 			throws ServiceResultException
 			{
@@ -354,13 +349,17 @@ public class EndpointUtil {
 				SecurityAlgorithm algorithm = securityPolicy.getAsymmetricEncryptionAlgorithm();
 				logger.debug("createUserNameIdentityToken: algorithm={}", algorithm);
 				
-				byte[] pwTemp = CryptoUtil.toBytes(password);
+				//Convert character array to byte array
+				CharBuffer charBuffer = CharBuffer.wrap(chars);
+				ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
+				byte[] pwTemp = Arrays.copyOfRange(byteBuffer.array(),byteBuffer.position(), byteBuffer.limit());
+				Arrays.fill(byteBuffer.array(), (byte) 0); // clear sensitive data
 				
 				if (algorithm == null)
 				{
 					token.setPassword(ByteString.valueOf(pwTemp));
 					//Clear sensitive data from memory
-					ByteBufferUtils.clear(pwTemp);
+					Arrays.fill(pwTemp, (byte)0);
 				}
 				else {
 					try {
@@ -373,12 +372,12 @@ public class EndpointUtil {
 						else
 							pw = ByteBufferUtils.concatenate(toArray(pwTemp.length), pwTemp);
 						//Clear sensitive data from memory
-						ByteBufferUtils.clear(pwTemp);
+						Arrays.fill(pwTemp, (byte)0);
 						byte[] pw1 = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
 								.getPublicKey(), algorithm);
 						token.setPassword(ByteString.valueOf(pw1));
 						//Clear sensitive data from memory
-						ByteBufferUtils.clear(pw);
+						Arrays.fill(pw, (byte)0);
 
 					} catch (InvalidKeyException e) {
 						// Server certificate does not have encrypt usage
