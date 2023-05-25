@@ -382,7 +382,7 @@ public class EndpointUtil {
 								.getPublicKey(), algorithm);
 						token.setPassword(ByteString.valueOf(pw1));
 						//Clear sensitive data from memory
-						ByteBufferUtils.clear(pwTemp);
+						ByteBufferUtils.clear(pw);
 
 					} catch (InvalidKeyException e) {
 						// Server certificate does not have encrypt usage
