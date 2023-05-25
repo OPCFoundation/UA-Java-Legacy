@@ -316,7 +316,7 @@ public class EndpointUtil {
 	 *
 	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
 	 * @param username a {@link java.lang.String} object.
-	 * @param password a {@link java.lang.String} object.
+	 * @param password the clear text password as {@link java.lang.String}.
 	 * @return user identity token
 	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support UserName token policy
 	 * @param byteString an array of byte.
@@ -324,60 +324,87 @@ public class EndpointUtil {
 	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, ByteString byteString, String username, String password)	
 	throws ServiceResultException
 	{
-		UserTokenPolicy policy = ep.findUserTokenPolicy(UserTokenType.UserName);
-		if (policy==null) throw new ServiceResultException(StatusCodes.Bad_IdentityTokenRejected,  "UserName not supported");
-		String securityPolicyUri = policy.getSecurityPolicyUri();
-		if (securityPolicyUri==null) securityPolicyUri = ep.getSecurityPolicyUri();
-		SecurityPolicy securityPolicy = SecurityPolicy.getSecurityPolicy( securityPolicyUri );
-		if (securityPolicy==null) securityPolicy = SecurityPolicy.NONE;
-		UserNameIdentityToken token = new UserNameIdentityToken();
-		
-		token.setUserName( username );
-		token.setPolicyId( policy.getPolicyId() );
-		
-		// Encrypt the password, unless no security is defined
-		SecurityAlgorithm algorithm = securityPolicy.getAsymmetricEncryptionAlgorithm();
-		logger.debug("createUserNameIdentityToken: algorithm={}", algorithm);
-		byte[] pw = password.getBytes(BinaryEncoder.UTF8);
-		if (algorithm == null)
-			token.setPassword(ByteString.valueOf(pw));
-		else {
-			try {
-				byte[] c = ByteString.asByteArray(ep.getServerCertificate());
-				Cert serverCert = (c == null || c.length == 0) ? null : new Cert(c);
-				if (byteString != null)
-					pw = ByteBufferUtils.concatenate(toArray(pw.length
-							+ byteString.getLength()), pw, byteString.getValue());
-				else
-					pw = ByteBufferUtils.concatenate(toArray(pw.length), pw);
-				pw = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
-						.getPublicKey(), algorithm);
-				token.setPassword(ByteString.valueOf(pw));
-
-			} catch (InvalidKeyException e) {
-				// Server certificate does not have encrypt usage
-				throw new ServiceResultException(
-						StatusCodes.Bad_CertificateInvalid,
-						"Server certificate in endpoint is invalid: "
-								+ e.getMessage());
-			} catch (IllegalBlockSizeException e) {
-				throw new ServiceResultException(
-						StatusCodes.Bad_SecurityPolicyRejected, e.getClass()
-								.getName() + ":" + e.getMessage());
-			} catch (BadPaddingException e) {
-				throw new ServiceResultException(
-						StatusCodes.Bad_CertificateInvalid,
-						"Server certificate in endpoint is invalid: "
-								+ e.getMessage());
-			} catch (NoSuchAlgorithmException e) {
-				throw new ServiceResultException(StatusCodes.Bad_InternalError, e);
-			} catch (NoSuchPaddingException e) {
-				throw new ServiceResultException(StatusCodes.Bad_InternalError, e);
-			}
-			token.setEncryptionAlgorithm(algorithm.getUri());
-		}
-		return token;		
+		return createUserNameIdentityToken(ep, byteString, username, password == null ? null : password.toCharArray());		
 	}
+	
+	/**
+	 * Create user identity token based on username and password
+	 *
+	 * @param ep a {@link org.opcfoundation.ua.core.EndpointDescription} object.
+	 * @param username a {@link java.lang.String} object.
+	 * @param password the clear text password as char array.
+	 * @return user identity token
+	 * @throws org.opcfoundation.ua.common.ServiceResultException if endpoint or the stack doesn't support UserName token policy
+	 * @param byteString an array of byte.
+	 */
+	public static UserIdentityToken createUserNameIdentityToken(EndpointDescription ep, ByteString byteString, String username, char[] password)	
+			throws ServiceResultException
+			{
+				UserTokenPolicy policy = ep.findUserTokenPolicy(UserTokenType.UserName);
+				if (policy==null) throw new ServiceResultException(StatusCodes.Bad_IdentityTokenRejected,  "UserName not supported");
+				String securityPolicyUri = policy.getSecurityPolicyUri();
+				if (securityPolicyUri==null) securityPolicyUri = ep.getSecurityPolicyUri();
+				SecurityPolicy securityPolicy = SecurityPolicy.getSecurityPolicy( securityPolicyUri );
+				if (securityPolicy==null) securityPolicy = SecurityPolicy.NONE;
+				UserNameIdentityToken token = new UserNameIdentityToken();
+				
+				token.setUserName( username );
+				token.setPolicyId( policy.getPolicyId() );
+				
+				// Encrypt the password, unless no security is defined
+				SecurityAlgorithm algorithm = securityPolicy.getAsymmetricEncryptionAlgorithm();
+				logger.debug("createUserNameIdentityToken: algorithm={}", algorithm);
+							
+				byte[] pwTemp = CryptoUtil.toBytes(password);
+				
+				if (algorithm == null)
+				{
+					token.setPassword(ByteString.valueOf(pwTemp));
+					//Clear sensitive data from memory
+					ByteBufferUtils.clear(pwTemp);
+				}
+				else {
+					try {
+						byte[] pw = null;
+						byte[] c = ByteString.asByteArray(ep.getServerCertificate());
+						Cert serverCert = (c == null || c.length == 0) ? null : new Cert(c);
+						if (byteString != null)
+							pw = ByteBufferUtils.concatenate(toArray(pwTemp.length
+									+ byteString.getLength()), pwTemp, byteString.getValue());
+						else
+							pw = ByteBufferUtils.concatenate(toArray(pwTemp.length), pwTemp);
+						//Clear sensitive data from memory
+						ByteBufferUtils.clear(pwTemp);
+						byte[] pw1 = CryptoUtil.encryptAsymm(pw, serverCert.getCertificate()
+								.getPublicKey(), algorithm);
+						token.setPassword(ByteString.valueOf(pw1));
+						//Clear sensitive data from memory
+						ByteBufferUtils.clear(pw);
+
+					} catch (InvalidKeyException e) {
+						// Server certificate does not have encrypt usage
+						throw new ServiceResultException(
+								StatusCodes.Bad_CertificateInvalid,
+								"Server certificate in endpoint is invalid: "
+										+ e.getMessage());
+					} catch (IllegalBlockSizeException e) {
+						throw new ServiceResultException(
+								StatusCodes.Bad_SecurityPolicyRejected, e.getClass()
+										.getName() + ":" + e.getMessage());
+					} catch (BadPaddingException e) {
+						throw new ServiceResultException(
+								StatusCodes.Bad_CertificateInvalid,
+								"Server certificate in endpoint is invalid: "
+										+ e.getMessage());
+					} catch (NoSuchAlgorithmException e) {
+						throw new ServiceResultException(StatusCodes.Bad_InternalError, e);
+					} catch (NoSuchPaddingException e) {
+						throw new ServiceResultException(StatusCodes.Bad_InternalError, e);
+					}
+					token.setEncryptionAlgorithm(algorithm.getUri());
+				}
+				return token;		
+			}
 
 	/**
 	 * Create user identity token based on an issued token

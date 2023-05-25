@@ -75,6 +75,12 @@ public class PrivKey {
 	 */
 	public static PrivKey loadFromKeyStore(URL keystoreUrl, String password) throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
 	{
+		return loadFromKeyStore(keystoreUrl, password.toCharArray());
+	}	
+	
+	//Overloaded method to accept password as character array
+	public static PrivKey loadFromKeyStore(URL keystoreUrl, char[] password) throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
+	{
 		RSAPrivateKey key = CertificateUtils.loadFromKeyStore(keystoreUrl, password);
 		return new PrivKey(key);
 	}	
@@ -281,6 +287,11 @@ public class PrivKey {
 		return loadFromKeyStore( file.toURI().toURL(), password );
 	}
 	
+	//Overloaded method to accept password as character array
+	public static PrivKey loadFromKeyStore(File file, char[] password) throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
+	{
+		return loadFromKeyStore( file.toURI().toURL(), password );
+	}
 	/**
 	 * Save the key in a binary file. Note that the file is not secured by a password.
 	 *

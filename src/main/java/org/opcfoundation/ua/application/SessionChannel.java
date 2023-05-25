@@ -157,6 +157,12 @@ public class SessionChannel extends ChannelService implements RequestChannel {
 	 */
 	public ActivateSessionResponse activate(String username, String password) throws ServiceResultException
 	{
+		return activate(username, password.toCharArray());	
+	}
+	
+	//Overloaded function to accept password as character array
+	public ActivateSessionResponse activate(String username, char[] password) throws ServiceResultException
+	{
 		UserIdentityToken token = EndpointUtil.createUserNameIdentityToken(session.getEndpoint(), session.getServerNonce(), username, password);
 		return activate(token, null);	
 	}

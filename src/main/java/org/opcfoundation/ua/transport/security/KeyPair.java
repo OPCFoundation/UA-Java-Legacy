@@ -50,6 +50,13 @@ public final class KeyPair {
 	public static KeyPair load(URL certificateFile, URL privateKeyFile, String privateKeyPassword) 
 	throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
 	{
+		return load(certificateFile, privateKeyFile, privateKeyPassword.toCharArray());
+	}
+	
+	//Overloaded method to accept password as character array
+	public static KeyPair load(URL certificateFile, URL privateKeyFile, char[] privateKeyPassword) 
+	throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
+	{
 		Cert cert = Cert.load(certificateFile);
 		PrivKey privKey = PrivKey.loadFromKeyStore(privateKeyFile, privateKeyPassword);
 		return new KeyPair(cert, privKey);
@@ -69,6 +76,13 @@ public final class KeyPair {
 	 * @throws java.security.UnrecoverableKeyException if any.
 	 */
 	public static KeyPair load(File certificateFile, File privateKeyFile, String privateKeyPassword) 
+	throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
+	{
+		return load(certificateFile, privateKeyFile, privateKeyPassword.toCharArray());
+	}
+	
+	//Overloaded method to accept password as character array
+	public static KeyPair load(File certificateFile, File privateKeyFile, char[] privateKeyPassword) 
 	throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
 	{
 		Cert cert = Cert.load(certificateFile);

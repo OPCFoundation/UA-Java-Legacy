@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URL;
-import java.net.URLConnection;
+import java.net.URLConnection;	   
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -44,7 +44,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
-import java.util.Arrays;
+import java.util.Arrays;					
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -80,6 +80,16 @@ public class CertificateUtils {
 	 */
 	public static byte[] base64Decode(String string) {
 		return getCertificateProvider().base64Decode(string);
+	}
+
+	/**
+	 * <p>base64Decode.</p>
+	 *
+	 * @param bytes the array of bytes to convert.
+	 * @return an array of byte.
+	 */
+	public static byte[] base64Decode(byte[] bytes) {
+		return getCertificateProvider().base64Decode(bytes);
 	}
 
 	/**
@@ -234,6 +244,13 @@ public class CertificateUtils {
 	public static RSAPrivateKey loadFromKeyStore(URL keystoreUrl,
 			String password) throws IOException, NoSuchAlgorithmException,
 			CertificateException, KeyStoreException, UnrecoverableKeyException {
+		return loadFromKeyStore(keystoreUrl,password.toCharArray());
+	}
+	
+	//Overloaded method to accept password as character array
+	public static RSAPrivateKey loadFromKeyStore(URL keystoreUrl,
+			char[] password) throws IOException, NoSuchAlgorithmException,
+			CertificateException, KeyStoreException, UnrecoverableKeyException {
 		logger.debug("loadFromKeyStore: keystoreUrl={}", keystoreUrl);
 		// Open pfx-certificate
 		URLConnection connection = keystoreUrl.openConnection();
@@ -255,13 +272,14 @@ public class CertificateUtils {
 				keyStore = KeyStore.getInstance("PKCS12");
 			}
 			logger.debug("loadFromKeyStore: keyStore Provider={}", keyStore.getProvider());
-			keyStore.load(is, password == null ? null : password.toCharArray());
+			
+			keyStore.load(is, password == null ? null : password);
 			Enumeration<String> aliases = keyStore.aliases();
 
 			Key key = null;
 			while (aliases.hasMoreElements()) {
 				String a = (String) aliases.nextElement();
-				key = keyStore.getKey(a, password == null ? null : password.toCharArray());
+				key = keyStore.getKey(a, password == null ? null : password);
 			}
 
 			return (RSAPrivateKey) key;

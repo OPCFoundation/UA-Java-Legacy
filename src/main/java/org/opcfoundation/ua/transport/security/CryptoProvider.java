@@ -25,6 +25,8 @@ import org.opcfoundation.ua.common.ServiceResultException;
 public interface CryptoProvider {
 
 	public byte[] base64Decode(String string);
+	
+	public byte[] base64Decode(byte[] bytes);
 
 	public String base64Encode(byte[] bytes);
 	
