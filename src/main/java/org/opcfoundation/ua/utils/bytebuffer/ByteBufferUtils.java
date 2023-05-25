@@ -13,11 +13,10 @@
 package org.opcfoundation.ua.utils.bytebuffer;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 /**
  * <p>ByteBufferUtils class.</p>
- *
- * @author Toni Kalajainen (toni.kalajainen@vtt.fi)
  */
 public class ByteBufferUtils {
 
@@ -50,7 +49,7 @@ public class ByteBufferUtils {
 		src.limit(srcLimit);
 		dst.limit(dstLimit);		
 	}		
-	
+
 	/**
 	 * Concatenate two arrays to one
 	 *
@@ -70,6 +69,16 @@ public class ByteBufferUtils {
 			pos += chunk.length;			
 		}
 		return result;
+	}
+	
+	/**
+	 * Fill the byte array with 0 values. 
+	 *
+	 * @param value an array of byte.
+	 */
+	public static void clear(byte[] value)
+	{
+		Arrays.fill(value, (byte)0);
 	}
 	
 	

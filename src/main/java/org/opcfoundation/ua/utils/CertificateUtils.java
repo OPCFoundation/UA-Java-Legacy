@@ -87,6 +87,16 @@ public class CertificateUtils {
 	}
 
 	/**
+	 * <p>base64Decode.</p>
+	 *
+	 * @param bytes the array of bytes to convert.
+	 * @return an array of byte.
+	 */
+	public static byte[] base64Decode(byte[] bytes) {
+		return getCertificateProvider().base64Decode(bytes);
+	}
+
+	/**
 	 * <p>base64Encode a byte array to string</p>
 	 *
 	 * @param bytes the array of byte to convert.
