@@ -432,6 +432,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("Boolean"))
 			{
 				values.add(getBoolean("Boolean"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -487,6 +488,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("Byte"))
 			{
 				values.add(getByte("Byte"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -570,6 +572,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("ByteString"))
 			{
 				values.add(getByteString("ByteString"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -630,6 +633,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("DataValue"))
 			{
 				values.add(getDataValue("DataValue"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -695,6 +699,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("DateTime"))
 			{
 				values.add(getDateTime("DateTime"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -798,6 +803,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("DiagnosticInfo"))
 			{
 				values.add(getDiagnosticInfo("DiagnosticInfo"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -879,6 +885,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("Double"))
 			{
 				values.add(getDouble("Double"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -977,6 +984,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement(name))
 			{
 				encodeables.add(getEncodeable(name, encodeableClass));
+				assertArrayLength(encodeables.size());
 			}
 
 			// check the length.
@@ -1134,6 +1142,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement(name));
 			{
 				enums.add(getEnumeration(name, enumerationClass));
+				assertArrayLength(enums.size());
 			}
 
 			// check the length.
@@ -1202,6 +1211,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("ExpandedNodeId"))
 			{
 				values.add(getExpandedNodeId("ExpandedNodeId"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -1305,6 +1315,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("ExtensionObject"))
 			{
 				values.add(getExtensionObject("ExtensionObject"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -1448,6 +1459,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("Float"))
 			{
 				values.add(getFloat("Float"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -1502,6 +1514,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("Guid"))
 			{
 				values.add(getGuid("Guid"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -1557,6 +1570,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("Int16"))
 			{
 				values.add(getInt16("Int16"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -1611,6 +1625,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("Int32"))
 			{
 				values.add(getInt32("Int32"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -1703,6 +1718,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("Int64"))
 			{
 				values.add(getInt64("Int64"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -1781,6 +1797,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("LocalizedText"))
 			{
 				values.add(getLocalizedText("LocalizedText"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -1960,6 +1977,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("NodeId"))
 			{
 				values.add(getNodeId("NodeId"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -2037,6 +2055,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("QualifiedName"))
 			{
 				values.add(getQualifiedName("QualifiedName"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -2091,6 +2110,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("SByte"))
 			{
 				values.add(getSByte("SByte"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -2206,6 +2226,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("StatusCode"))
 			{
 				values.add(getStatusCode("StatusCode"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -2261,6 +2282,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("String"))
 			{
 				values.add(getString("String"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -2316,6 +2338,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("Structure"))
 			{
 				values.add(getStructure(null));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -2378,6 +2401,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("UInt16"))
 			{
 				values.add(getUInt16("UInt16"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -2433,6 +2457,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("UInt32"))
 			{
 				values.add(getUInt32("UInt32"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -2488,6 +2513,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("UInt64"))
 			{
 				values.add(getUInt64("UInt64"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -2552,6 +2578,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("Variant"))
 			{
 				values.add(getVariant("Variant"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -2731,6 +2758,7 @@ public class XmlDecoder implements IDecoder {
 			while (moveToElement("XmlElement"))
 			{
 				values.add(getXmlElement("XmlElement"));
+				assertArrayLength(values.size());
 			}
 
 			// check the length.
@@ -3015,6 +3043,16 @@ public class XmlDecoder implements IDecoder {
 		}
 		return r;
 	}
+	
+	private void assertArrayLength(int len) throws DecodingException {
+	    if (len < -1) {
+	        throw new DecodingException(StatusCodes.Bad_DecodingError, "Illegal array length " + len);
+	      }
+	      int maxLen = encoderContext.getMaxArrayLength();
+	      if (maxLen > 0 && len > maxLen) {
+	        throw new DecodingException(StatusCodes.Bad_EncodingLimitsExceeded, "MaxArrayLength=" + maxLen + " < " + len);
+	      }
+	}	
 	
 	private boolean isDecimal(ExtensionObject value) {
 		return getEncoderContext().getNamespaceTable().nodeIdEquals(Identifiers.Decimal, value.getTypeId());

@@ -464,6 +464,7 @@ public class BinaryDecoder implements IDecoder {
 		//handle 1-dim array
 		if(dims == 1) {
 			final int len = getInt32(null);
+			assertArrayLength(len);
 			if(len == -1) {
 				//null array
 				return null;
@@ -498,6 +499,7 @@ public class BinaryDecoder implements IDecoder {
 			//NOTE that if any is 0, total is 0, which is what spec says.
 			totalElements = totalElements * dimLen;
 		}
+		assertArrayLength(totalElements);
 		//can cast; actual type does not change
 		Object[] arr = (Object[]) Array.newInstance(componentType, totalElements);
 		@SuppressWarnings("unchecked")
@@ -508,6 +510,16 @@ public class BinaryDecoder implements IDecoder {
 		@SuppressWarnings("unchecked")
 		T r = (T) MultiDimensionArrayUtils.demuxArray(arr, arrDims, componentType);
 		return r;
+	}
+
+	private void assertArrayLength(int len) throws DecodingException {
+	    if (len < -1) {
+	        throw new DecodingException(StatusCodes.Bad_DecodingError, "Illegal array length " + len);
+	      }
+	      int maxLen = ctx.getMaxArrayLength();
+	      if (maxLen > 0 && len > maxLen) {
+	        throw new DecodingException(StatusCodes.Bad_EncodingLimitsExceeded, "MaxArrayLength=" + maxLen + " < " + len);
+	      }
 	}
 
 	/** {@inheritDoc} */
