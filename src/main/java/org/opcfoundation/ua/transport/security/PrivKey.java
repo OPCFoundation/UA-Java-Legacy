@@ -223,7 +223,9 @@ public class PrivKey {
 	private static byte[] generateDerivedKey(
 	        int bytesNeeded, byte[] password, byte[] salt) throws NoSuchAlgorithmException
 	    {
-	        MessageDigest digest = MessageDigest.getInstance("MD5");
+			//Git issue 241
+			//https://cwe.mitre.org/data/definitions/325.html
+	        MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			byte[]  buf = new byte[digest.getDigestLength()];
 	        byte[]  key = new byte[bytesNeeded];
 	        int     offset = 0;
