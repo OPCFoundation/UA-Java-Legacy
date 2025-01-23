@@ -121,10 +121,8 @@ public enum SecurityAlgorithm {
 		this.transformation = transformation;
 		String[] parts = transformation.split("/");
 		this.standardName = parts[0];
-		//Git issue 2359
-		//Suggestion provided by CWE link (https://cwe.mitre.org/data/definitions/327.html)
-		this.mode = parts.length > 1 ? parts[1] : "GCM";
-		this.padding = parts.length > 2 ? parts[2] : "NoPadding";
+		this.mode = parts.length > 1 ? parts[1] : "EBC";
+		this.padding = parts.length > 2 ? parts[2] : "PKCS5Padding";
 		this.keySize = keySize;
 		
 	}
