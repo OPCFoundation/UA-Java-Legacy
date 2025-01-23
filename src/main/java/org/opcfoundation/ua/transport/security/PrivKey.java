@@ -75,12 +75,6 @@ public class PrivKey {
 	 */
 	public static PrivKey loadFromKeyStore(URL keystoreUrl, String password) throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
 	{
-		return loadFromKeyStore(keystoreUrl, password.toCharArray());
-	}	
-	
-	//Overloaded method to accept password as character array
-	public static PrivKey loadFromKeyStore(URL keystoreUrl, char[] password) throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
-	{
 		RSAPrivateKey key = CertificateUtils.loadFromKeyStore(keystoreUrl, password);
 		return new PrivKey(key);
 	}	
@@ -210,7 +204,9 @@ public class PrivKey {
 				byte[] sKey = generateDerivedKey(keyBits / 8,
 						pw, salt);
 				SecretKeySpec keySpec = new SecretKeySpec(sKey, alg);
-				Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+				//Git issue 2359
+				//Suggestion provided by CWE link (https://cwe.mitre.org/data/definitions/327.html)
+				Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
 				cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
 				keyBytes = cipher.doFinal(keyBytes);
 			}
@@ -221,7 +217,8 @@ public class PrivKey {
 	private static byte[] generateDerivedKey(
 	        int bytesNeeded, byte[] password, byte[] salt) throws NoSuchAlgorithmException
 	    {
-	        MessageDigest digest = MessageDigest.getInstance("MD5");
+			//GitId 2303, Changing the encryption from MD5 to SHA-256 (Vulnerability reported by Contrast tool)
+	        MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			byte[]  buf = new byte[digest.getDigestLength()];
 	        byte[]  key = new byte[bytesNeeded];
 	        int     offset = 0;
@@ -287,11 +284,6 @@ public class PrivKey {
 		return loadFromKeyStore( file.toURI().toURL(), password );
 	}
 	
-	//Overloaded method to accept password as character array
-	public static PrivKey loadFromKeyStore(File file, char[] password) throws IOException, UnrecoverableKeyException, NoSuchAlgorithmException, CertificateException, KeyStoreException
-	{
-		return loadFromKeyStore( file.toURI().toURL(), password );
-	}
 	/**
 	 * Save the key in a binary file. Note that the file is not secured by a password.
 	 *
