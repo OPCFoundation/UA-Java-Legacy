@@ -415,9 +415,12 @@ public class BcCryptoProvider implements CryptoProvider {
 					throws ServiceResultException {
 
 		Signer signer = null;
-		if (algorithm.equals(SecurityAlgorithm.RsaSha1)) {
-			signer = new RSADigestSigner(new SHA1Digest());
-		} else if (algorithm.equals(SecurityAlgorithm.RsaSha256)) {
+		//Git issue 241
+		//Suggestion provided by CWE link (https://cwe.mitre.org/data/definitions/325.html)
+		//if (algorithm.equals(SecurityAlgorithm.RsaSha1)) {
+		//	signer = new RSADigestSigner(new SHA1Digest());
+		//}
+		if (algorithm.equals(SecurityAlgorithm.RsaSha256)) {
 			signer = new RSADigestSigner(new SHA256Digest());
 		} else if (algorithm.equals(SecurityAlgorithm.RsaPssSha256)) {
 			signer = new PSSSigner(new RSAEngine(), new SHA256Digest(), 32);

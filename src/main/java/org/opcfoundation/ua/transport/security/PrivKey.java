@@ -210,7 +210,9 @@ public class PrivKey {
 				byte[] sKey = generateDerivedKey(keyBits / 8,
 						pw, salt);
 				SecretKeySpec keySpec = new SecretKeySpec(sKey, alg);
-				Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+				//Git issue 241
+				//Suggestion provided by CWE link (https://cwe.mitre.org/data/definitions/327.html)
+				Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
 				cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
 				keyBytes = cipher.doFinal(keyBytes);
 			}
