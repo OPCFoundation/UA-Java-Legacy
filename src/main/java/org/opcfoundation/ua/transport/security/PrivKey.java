@@ -210,9 +210,7 @@ public class PrivKey {
 				byte[] sKey = generateDerivedKey(keyBits / 8,
 						pw, salt);
 				SecretKeySpec keySpec = new SecretKeySpec(sKey, alg);
-				//Git issue 241
-				//Suggestion provided by CWE link (https://cwe.mitre.org/data/definitions/327.html)
-				Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+				Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 				cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
 				keyBytes = cipher.doFinal(keyBytes);
 			}
@@ -223,9 +221,7 @@ public class PrivKey {
 	private static byte[] generateDerivedKey(
 	        int bytesNeeded, byte[] password, byte[] salt) throws NoSuchAlgorithmException
 	    {
-			//Git issue 241
-			//https://cwe.mitre.org/data/definitions/325.html
-	        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+	        MessageDigest digest = MessageDigest.getInstance("MD5");
 			byte[]  buf = new byte[digest.getDigestLength()];
 	        byte[]  key = new byte[bytesNeeded];
 	        int     offset = 0;
