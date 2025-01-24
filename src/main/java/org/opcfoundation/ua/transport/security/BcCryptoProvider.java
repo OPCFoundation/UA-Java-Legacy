@@ -417,8 +417,7 @@ public class BcCryptoProvider implements CryptoProvider {
 		Signer signer = null;
 		if (algorithm.equals(SecurityAlgorithm.RsaSha1)) {
 			signer = new RSADigestSigner(new SHA1Digest());
-		}
-		else if (algorithm.equals(SecurityAlgorithm.RsaSha256)) {
+		} else if (algorithm.equals(SecurityAlgorithm.RsaSha256)) {
 			signer = new RSADigestSigner(new SHA256Digest());
 		} else if (algorithm.equals(SecurityAlgorithm.RsaPssSha256)) {
 			signer = new PSSSigner(new RSAEngine(), new SHA256Digest(), 32);
