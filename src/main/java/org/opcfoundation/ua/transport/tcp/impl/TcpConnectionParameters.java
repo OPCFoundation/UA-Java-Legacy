@@ -33,7 +33,7 @@ public class TcpConnectionParameters implements Cloneable {
 	@Override
 	//Git issue 245
 	//Suggestion provided by CWE link (http://cwe.mitre.org/data/definitions/491.html)
-	public TcpConnectionParameters clone() {
+	public final TcpConnectionParameters clone() {
 		try {
 			return (TcpConnectionParameters) super.clone();
 		} catch (CloneNotSupportedException e) {
