@@ -191,7 +191,9 @@ public class OpcTcpSettings implements Cloneable{
 	
 	/** {@inheritDoc} */
 	@Override
-	public OpcTcpSettings clone() {
+	//Git issue 245
+	//Suggestion provided by CWE link (http://cwe.mitre.org/data/definitions/491.html)
+	public final OpcTcpSettings clone() {
 		OpcTcpSettings result = new OpcTcpSettings();
 
 		result.setClientCertificate(clientCertificate);

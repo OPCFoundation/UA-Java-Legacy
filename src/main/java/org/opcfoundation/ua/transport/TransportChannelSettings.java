@@ -208,7 +208,9 @@ public class TransportChannelSettings implements Cloneable {
 	
 	/** {@inheritDoc} */
 	@Override
-	public TransportChannelSettings clone() {
+	//Git issue 245
+	//Suggestion provided by CWE link (http://cwe.mitre.org/data/definitions/491.html)
+	public final TransportChannelSettings clone() {
 		TransportChannelSettings result = new TransportChannelSettings();
 		if (description!=null)
 			result.setDescription(description.clone());

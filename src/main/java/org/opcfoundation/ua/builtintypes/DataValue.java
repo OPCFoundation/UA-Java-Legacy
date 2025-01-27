@@ -274,7 +274,9 @@ public class DataValue implements Cloneable {
 
 	/** {@inheritDoc} */
 	@Override
-	public Object clone() {
+    //Git issue 245
+    //Suggestion provided by CWE link (http://cwe.mitre.org/data/definitions/491.html)
+	public final Object clone() {
 		return new DataValue(getValue(),
 				getStatusCode(), getSourceTimestamp(),
 				getServerPicoseconds(),

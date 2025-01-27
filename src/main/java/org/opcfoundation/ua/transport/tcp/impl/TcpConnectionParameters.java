@@ -31,7 +31,9 @@ public class TcpConnectionParameters implements Cloneable {
 
 	/** {@inheritDoc} */
 	@Override
-	public TcpConnectionParameters clone() {
+	//Git issue 245
+	//Suggestion provided by CWE link (http://cwe.mitre.org/data/definitions/491.html)
+	public final TcpConnectionParameters clone() {
 		try {
 			return (TcpConnectionParameters) super.clone();
 		} catch (CloneNotSupportedException e) {

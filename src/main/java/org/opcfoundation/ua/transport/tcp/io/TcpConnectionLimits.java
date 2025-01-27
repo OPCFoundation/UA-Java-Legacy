@@ -28,7 +28,9 @@ public class TcpConnectionLimits implements Cloneable {
 
 	/** {@inheritDoc} */
 	@Override
-	public TcpConnectionLimits clone() {
+	//Git issue 245
+	//Suggestion provided by CWE link (http://cwe.mitre.org/data/definitions/491.html)
+	public final TcpConnectionLimits clone() {
 		try {
 			return (TcpConnectionLimits) super.clone();
 		} catch (CloneNotSupportedException e) {
